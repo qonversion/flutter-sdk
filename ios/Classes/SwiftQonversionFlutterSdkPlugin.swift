@@ -11,7 +11,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? [String: Any] else {
-                return result("Could not find call arguments. Make sure you pass Map as call arguments")
+            return result("Could not find call arguments. Make sure you pass Map as call arguments")
         }
         switch call.method {
         case "launchWithKeyCompletion":
@@ -20,12 +20,14 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
             }
             return launch(with: key, result)
         case "launchWithKeyUserId":
-            guard let key = args["key"] as? String, let userID = args["userID"] as? String else {
+            guard let key = args["key"] as? String,
+                let userID = args["userID"] as? String else {
                 return result("Could not find either API key or userID, please make sure you pass a valid value")
             }
             return launch(with: key, userID: userID, result)
         case "launchWithKeyAutoTrackPurchasesCompletion":
-            guard let key = args["key"] as? String, let autoTrackPurchases = args["autoTrackPurchases"] as? Bool else {
+            guard let key = args["key"] as? String,
+                let autoTrackPurchases = args["autoTrackPurchases"] as? Bool else {
                     return result("Could not find either key or autoTrackPurchases boolean value, make sure you pass it as a {\"autoTrackPurchases\": autoTrackPurchases} key-value pair to call arguments")
             }
             return launch(with: key, autoTrackPurchases: autoTrackPurchases, result)
