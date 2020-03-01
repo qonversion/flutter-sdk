@@ -1,7 +1,9 @@
 package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 
+import android.app.Application
 import androidx.annotation.NonNull;
 import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingResult
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -12,27 +14,46 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 import com.qonversion.android.sdk.Qonversion;
 import com.qonversion.android.sdk.QonversionBillingBuilder
 import com.qonversion.android.sdk.QonversionCallback
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 
 /** QonversionFlutterSdkPlugin */
-public class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): FlutterPlugin, MethodCallHandler {
+class QonversionFlutterSdkPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   private lateinit var channel : MethodChannel
-  private val registrar: Registrar = registrar
+  private var application: Application? = null
+
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "qonversion_flutter_sdk")
     channel.setMethodCallHandler(this);
   }
 
+  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+    channel.setMethodCallHandler(null)
+  }
+
+  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+    this.application = binding.activity.application
+  }
+
+  override fun onDetachedFromActivityForConfigChanges() {
+    this.application = null
+  }
+
+  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+    this.application = binding.activity.application
+  }
+
+  override fun onDetachedFromActivity() {
+    this.application = null
+  }
+
   companion object {
     @JvmStatic
     fun registerWith(registrar: Registrar) {
       val channel = MethodChannel(registrar.messenger(), "qonversion_flutter_sdk")
-      channel.setMethodCallHandler(QonversionFlutterSdkPlugin(registrar))
+      channel.setMethodCallHandler(QonversionFlutterSdkPlugin())
     }
-  }
-
-  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-    channel.setMethodCallHandler(null)
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -69,8 +90,10 @@ public class QonversionFlutterSdkPlugin internal constructor(registrar: Registra
       }
     }
 
+    val app = application ?: return
+
     Qonversion.initialize(
-            registrar.activity().application,
+            app,
             key,
             internalUserId ?: "",
             billingBuilder,
@@ -84,5 +107,8 @@ public class QonversionFlutterSdkPlugin internal constructor(registrar: Registra
             .enablePendingPurchases()
             .setChildDirected(BillingClient.ChildDirected.CHILD_DIRECTED)
             .setUnderAgeOfConsent(BillingClient.UnderAgeOfConsent.UNSPECIFIED)
+            .setListener { billingResult, purchases ->
+              // your purchases update logic
+            }
   }
 }
