@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:qonversion_flutter_sdk/qonversion_flutter_sdk.dart';
+import 'package:qonversion/qonversion.dart';
 
 void main() => runApp(MyApp());
 

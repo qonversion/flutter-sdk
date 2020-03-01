@@ -10,7 +10,9 @@ class Qonversion {
   static const MethodChannel _channel =
       const MethodChannel('qonversion_flutter_sdk');
 
-  /// Launches Qonversion SDK with the given API [key], you can get one in your account on qonversion.io.
+  /// Launches Qonversion SDK with the given API keys for each platform:
+  /// [androidApiKey] and [iosApiKey] respectively,
+  /// you can get one in your account on qonversion.io.
   ///
   /// [onComplete] will return `uid` for Ads integrations.
   ///
@@ -30,7 +32,9 @@ class Qonversion {
     return onComplete(uid);
   }
 
-  /// Launches Qonversion SDK with the given API [key], you can get one in your account on qonversion.io.
+  /// Launches Qonversion SDK with the given API keys for each platform:
+  /// [androidApiKey] and [iosApiKey] respectively,
+  /// you can get one in your account on qonversion.io.
   ///
   /// Sets client side [userid] (instead of Qonversion user-id) that will be used for matching data in the third party data.
   static Future<void> launchWithClientSideUserId(
@@ -52,7 +56,9 @@ class Qonversion {
   /// **Don't use with autoTrackPurchases: false** now.
   /// Functionality is under development yet.
   ///
-  /// Launches Qonversion SDK with the given API [key], you can get one in your account on qonversion.io.
+  /// Launches Qonversion SDK with the given API keys for each platform:
+  /// [androidApiKey] and [iosApiKey] respectively,
+  /// you can get one in your account on qonversion.io.
   ///
   /// With [autoTrackPurchases] parameter turned off you need to call `trackPurchase:transaction:` method.
   /// [onComplete] will return `uid` for Ads integrations.
