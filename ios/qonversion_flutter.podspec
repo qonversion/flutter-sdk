@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.description      = <<-DESC
   Powerful yet simple subscription analytics
                        DESC
-  s.homepage         = 'http://qonversion.io'
+  s.homepage         = 'https://qonversion.io'
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Qonversion Inc.' => 'hi@qonversion.io' }
   s.source           = { :path => '.' }
