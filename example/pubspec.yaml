@@ -1,5 +1,5 @@
-name: qonversion_flutter_sdk_example
-description: Demonstrates how to use the qonversion_flutter_sdk plugin.
+name: qonversion_example
+description: Demonstrates how to use the qonversion plugin.
 publish_to: 'none'
 
 environment:
@@ -17,7 +17,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  qonversion_flutter_sdk:
+  qonversion_flutter:
     path: ../
 
 # For information on the generic Dart part of this file, see the
