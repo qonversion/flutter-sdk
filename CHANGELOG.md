@@ -1,3 +1,7 @@
+## 0.2.3
+
+* Bump required Flutter version up
+
 ## 0.2.2
 
 * Add link to GitHub repository to pubspec.yaml
