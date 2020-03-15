@@ -10,24 +10,27 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        guard let args = call.arguments as? [String: Any],
-            let key = args["key"] as? String else {
-                return result("Could not find either call arguments or API key. Make sure you pass Map as call arguments with necessary pair of {\"key\": apiKey}")
-                
+        guard let args = call.arguments as? [String: Any] else {
+            return result("Could not find call arguments. Make sure you pass Map as call arguments")
         }
         switch call.method {
         case "launchWithKeyCompletion":
-            launch(with: key, result)
+            guard let key = args["key"] as? String else {
+                return result("Could not find API key, please make sure you pass a valid value")
+            }
+            return launch(with: key, result)
         case "launchWithKeyUserId":
-            if let userID = args["userID"] as? String {
-                return launch(with: key, userID: userID, result)
+            guard let key = args["key"] as? String,
+                let userID = args["userID"] as? String else {
+                return result("Could not find either API key or userID, please make sure you pass a valid value")
             }
-            return result("Could not find userID, make sure you pass it as a {\"userID\": userID} key-value pair to call arguments")
+            return launch(with: key, userID: userID, result)
         case "launchWithKeyAutoTrackPurchasesCompletion":
-            if let autoTrackPurchases = args["autoTrackPurchases"] as? Bool  {
-                return launch(with: key, autoTrackPurchases: autoTrackPurchases, result)
+            guard let key = args["key"] as? String,
+                let autoTrackPurchases = args["autoTrackPurchases"] as? Bool else {
+                    return result("Could not find either key or autoTrackPurchases boolean value, make sure you pass it as a {\"autoTrackPurchases\": autoTrackPurchases} key-value pair to call arguments")
             }
-            return result("Could not find autoTrackPurchases boolean value, make sure you pass it as a {\"autoTrackPurchases\": autoTrackPurchases} key-value pair to call arguments")
+            return launch(with: key, autoTrackPurchases: autoTrackPurchases, result)
         case "addAttributionData":
             return addAttributionData(args: args, result)
         default:
