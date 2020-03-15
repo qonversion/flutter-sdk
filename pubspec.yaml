@@ -1,8 +1,8 @@
 name: qonversion_flutter
 description: Powerful yet simple subscription analytics
 version: 0.2.0
-author:
-homepage:
+author: 'Qonversion Inc.'
+homepage: 'https://qonversion.io'
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

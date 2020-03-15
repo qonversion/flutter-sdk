@@ -35,24 +35,11 @@ import 'package:qonversion/qonversion.dart';
 @override
 void initState() {
   super.initState();
-  initPlatformState();
-}
-
-Future<void> initPlatformState() async {
-  String uid;
-  try {
-    await Qonversion.launchWith(
-      iosApiKey: 'YOUR_IOS_API_KEY',
-      androidApiKey: 'YOUR_ANDROID_API_KEY',
-      onComplete: (uid) => print(uid),
-    );
-  } on PlatformException {
-    // handle error
-  }
-
-  if (!mounted) return;
-
-  setState(() => _uid = uid);
+  Qonversion.launchWith(
+    iosApiKey: 'YOUR_IOS_API_KEY',
+    androidApiKey: 'YOUR_ANDROID_API_KEY',
+    onComplete: (uid) => print(uid),
+  );
 }
 
 ...
