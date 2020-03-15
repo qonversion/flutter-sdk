@@ -9,14 +9,14 @@ Get access to the powerful yet simple subscription analytics:
 * Conversion from install to paying user, MRR, LTV, churn and other metrics.
 * Feed the advertising and analytics tools you are already using with the data on high-value users to improve your ads targeting and marketing ROAS.
 
-[![Pub](https://img.shields.io/pub/v/qonversion.svg)](https://pub.dev/packages/qonversion)
+[![Pub](https://img.shields.io/pub/v/qonversion_flutter.svg)](https://pub.dev/packages/qonversion_flutter)
 
 ## Installation
 To use Qonversion in your Flutter app, add `qonversion` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/): 
 
 ```
 dependencies:
-  qonversion: ^0.2
+  qonversion_flutter: ^0.2
 ```
 
 Run `flutter pub get` to install dependency.
@@ -28,7 +28,7 @@ For example, launch Qonversion in `initState` of your top level widget:
 
 ```
 ...
-import 'package:qonversion/qonversion.dart';
+import 'package:qonversion_flutter/qonversion.dart';
 
 ...
 

@@ -1,7 +1,6 @@
 name: qonversion_flutter
 description: Powerful yet simple subscription analytics
-version: 0.2.0
-author: 'Qonversion Inc.'
+version: 0.2.1
 homepage: 'https://qonversion.io'
 
 environment:
@@ -17,5 +16,9 @@ dev_dependencies:
 
 flutter:
   plugin:
-    androidPackage: com.qonversion.flutter.sdk.qonversion_flutter_sdk
-    pluginClass: QonversionFlutterSdkPlugin
+    platforms:
+      android:
+        pluginClass: QonversionFlutterSdkPlugin
+        package: com.qonversion.flutter.sdk.qonversion_flutter_sdk
+      ios:
+        pluginClass: QonversionFlutterSdkPlugin
