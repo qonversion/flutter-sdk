@@ -1,3 +1,7 @@
+## 0.2.4
+
+* Bump Android SDK Version
+
 ## 0.2.3
 
 * Bump required Flutter version up
