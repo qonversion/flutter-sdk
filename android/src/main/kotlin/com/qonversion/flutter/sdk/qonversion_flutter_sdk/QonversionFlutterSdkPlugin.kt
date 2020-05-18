@@ -86,7 +86,7 @@ class QonversionFlutterSdkPlugin: FlutterPlugin, MethodCallHandler, ActivityAwar
       }
 
       override fun onError(t: Throwable) {
-        result.error("1", t.localizedMessage, t.cause)
+        result.error("1", t.localizedMessage, t.cause.toString())
       }
     }
 
@@ -107,8 +107,6 @@ class QonversionFlutterSdkPlugin: FlutterPlugin, MethodCallHandler, ActivityAwar
             .enablePendingPurchases()
             .setChildDirected(BillingClient.ChildDirected.CHILD_DIRECTED)
             .setUnderAgeOfConsent(BillingClient.UnderAgeOfConsent.UNSPECIFIED)
-            .setListener { billingResult, purchases ->
-              // your purchases update logic
-            }
+            .setListener { _, _ -> }
   }
 }
