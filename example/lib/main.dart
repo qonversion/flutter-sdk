@@ -31,8 +31,9 @@ class _MyAppState extends State<MyApp> {
           print(uid);
         },
       );
-    } on PlatformException {
+    } catch (e) {
       print('Failed to obtain uid from Qonversion.');
+      print(e);
     }
     if (!mounted) return;
 

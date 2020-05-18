@@ -27,8 +27,7 @@ class Qonversion {
         androidApiKey: androidApiKey, iosApiKey: iosApiKey);
 
     final args = {'key': key};
-    final uid =
-        await _channel.invokeMethod<String>('launchWithKeyCompletion', args);
+    final uid = await _channel.invokeMethod('launchWithKeyCompletion', args);
     return onComplete(uid);
   }
 
