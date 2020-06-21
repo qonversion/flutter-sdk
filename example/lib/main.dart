@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:qonversion_flutter/qonversion.dart';
 
 void main() => runApp(MyApp());
@@ -23,14 +22,11 @@ class _MyAppState extends State<MyApp> {
   Future<void> initPlatformState() async {
     String uid;
     try {
-      await Qonversion.launchWith(
+      uid = await Qonversion.launch(
         iosApiKey: '',
         androidApiKey: '',
-        onComplete: (receivedUid) {
-          uid = receivedUid;
-          print(uid);
-        },
       );
+      print(uid);
     } catch (e) {
       print('Failed to obtain uid from Qonversion.');
       print(e);

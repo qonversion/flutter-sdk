@@ -7,6 +7,7 @@ class Constants {
   static const kProvider = 'provider';
 
   // MethodChannel methods names
+  static const mLaunch = 'launch';
   static const mLaunchWithKeyCompletion = 'launchWithKeyCompletion';
   static const mLaunchWithKeyUserId = 'launchWithKeyUserId';
   static const mLaunchWithKeyAutoTrackPurchasesCompletion =
