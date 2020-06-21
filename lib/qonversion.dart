@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import 'src/constants.dart';
+
 enum QAttributionProvider { appsFlyer, branch }
 
 class Qonversion {
@@ -24,11 +26,15 @@ class Qonversion {
     void Function(String) onComplete,
   }) async {
     final key = _obtainPlatformApiKey(
-        androidApiKey: androidApiKey, iosApiKey: iosApiKey);
+      androidApiKey: androidApiKey,
+      iosApiKey: iosApiKey,
+    );
 
-    final args = {'key': key};
-    final uid = await _channel.invokeMethod('launchWithKeyCompletion', args);
-    return onComplete(uid);
+    final args = {Constants.kApiKey: key};
+    final uid =
+        await _channel.invokeMethod(Constants.mLaunchWithKeyCompletion, args);
+
+    onComplete(uid);
   }
 
   /// Launches Qonversion SDK with the given API keys for each platform:
@@ -40,16 +46,16 @@ class Qonversion {
     String userID, {
     String androidApiKey,
     String iosApiKey,
-  }) async {
+  }) {
     final key = _obtainPlatformApiKey(
         androidApiKey: androidApiKey, iosApiKey: iosApiKey);
 
     final args = {
-      'key': key,
-      'userID': userID,
+      Constants.kApiKey: key,
+      Constants.kUserId: userID,
     };
 
-    return await _channel.invokeMethod('launchWithKeyUserId', args);
+    return _channel.invokeMethod(Constants.mLaunchWithKeyUserId, args);
   }
 
   /// **Don't use with autoTrackPurchases: false** now.
@@ -75,12 +81,13 @@ class Qonversion {
         androidApiKey: androidApiKey, iosApiKey: iosApiKey);
 
     final args = {
-      'key': key,
-      'autoTrackPurchases': autoTrackPurchases,
+      Constants.kApiKey: key,
+      Constants.kAutoTrackPurchases: autoTrackPurchases,
     };
     final uid = await _channel.invokeMethod<String>(
-        'launchWithKeyAutoTrackPurchasesCompletion', args);
-    return onComplete(uid);
+        Constants.mLaunchWithKeyAutoTrackPurchasesCompletion, args);
+
+    onComplete(uid);
   }
 
   /// Sends your attribution [data] to the [provider].
@@ -90,14 +97,14 @@ class Qonversion {
     Map<dynamic, dynamic> data,
     QAttributionProvider provider, {
     String userID,
-  }) async {
+  }) {
     final args = {
-      'data': data,
-      'provider': describeEnum(provider),
-      'userID': userID,
+      Constants.kData: data,
+      Constants.kProvider: describeEnum(provider),
+      Constants.kUserId: userID,
     };
 
-    return await _channel.invokeMethod('addAttributionData', args);
+    return _channel.invokeMethod(Constants.mAddAttributionData, args);
   }
 
   static String _obtainPlatformApiKey({
