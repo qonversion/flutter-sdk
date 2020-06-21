@@ -32,7 +32,7 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
                 "There was no arguments in method call")
 
         val key = args["key"] as? String
-        val internalUserId = args["userID"] as? String
+        val internalUserId = args["userID"] as? String ?: ""
         val autoTrackPurchases = args["autoTrackPurchases"] as? Boolean ?: true
 
         when (call.method) {
@@ -45,8 +45,8 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
     }
 
     private fun launchWith(key: String?,
-                           internalUserId: String?,
-                           autoTrackPurchases: Boolean,
+                           internalUserId: String = "",
+                           autoTrackPurchases: Boolean = true,
                            result: Result) {
         if (key == null) {
           return result.error("1", "Could not find API key", "Please provide valid API key")
