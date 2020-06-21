@@ -94,14 +94,10 @@ class Qonversion {
   ///
   /// [userID], if specified, will also be sent to the provider
   static Future<void> addAttributionData(
-    Map<dynamic, dynamic> data,
-    QAttributionProvider provider, {
-    String userID,
-  }) {
+      Map<dynamic, dynamic> data, QAttributionProvider provider) {
     final args = {
       Constants.kData: data,
       Constants.kProvider: describeEnum(provider),
-      Constants.kUserId: userID,
     };
 
     return _channel.invokeMethod(Constants.mAddAttributionData, args);
