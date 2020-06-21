@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'qonversion_flutter'
-  s.version          = '0.2'
+  s.version          = '0.2.5'
   s.summary          = 'Flutter Qonversion SDK'
   s.description      = <<-DESC
   Powerful yet simple subscription analytics
