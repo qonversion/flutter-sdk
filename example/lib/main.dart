@@ -31,6 +31,7 @@ class _MyAppState extends State<MyApp> {
       print('Failed to obtain uid from Qonversion.');
       print(e);
     }
+
     if (!mounted) return;
 
     setState(() => _uid = uid);
