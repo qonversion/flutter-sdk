@@ -1,9 +1,9 @@
 PODS:
   - Flutter (1.0.0)
-  - Qonversion (0.7.1)
-  - qonversion_flutter (0.2):
+  - Qonversion (1.1.1)
+  - qonversion_flutter (0.2.5):
     - Flutter
-    - Qonversion (~> 0.7)
+    - Qonversion (~> 1.1)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -21,9 +21,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  Qonversion: 27e98ee044e9599f99e9298e06262b9750cde7d1
-  qonversion_flutter: bf09c40e9f6ca527e0ac542a85bb6eab4bc7f582
+  Qonversion: 1ac66d060c738afae7f5e887c429080b535118ae
+  qonversion_flutter: 68b8acf71284672ee502878ecfc9e2d751c433d7
 
 PODFILE CHECKSUM: 083258d7f5e80b42ea9bfee905fe93049bc04c64
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.1
