@@ -34,23 +34,25 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
         case "addAttributionData":
             return addAttributionData(args: args, result)
         default:
-            return result(FlutterMethodNotImplemented)
+            result(FlutterMethodNotImplemented)
         }
     }
     
     private func launch(with key: String, _ result: @escaping FlutterResult) {
         Qonversion.launch(withKey: key) { uid in
-            return result(uid)
+            result(uid)
         }
     }
     
     private func launch(with key: String, userID: String, _ result: @escaping FlutterResult) {
-        return result(Qonversion.launch(withKey: key, userID: userID))
+        Qonversion.launch(withKey: key, userID: userID)
+        
+        result(nil)
     }
     
     private func launch(with key: String, autoTrackPurchases: Bool, _ result: @escaping FlutterResult) {
-        return Qonversion.launch(withKey: key, autoTrackPurchases: autoTrackPurchases) { uid in
-            return result(uid)
+        Qonversion.launch(withKey: key, autoTrackPurchases: autoTrackPurchases) { uid in
+            result(uid)
         }
     }
     
@@ -68,8 +70,8 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
             break
         }
         
-        let userId = args["userID"] as? String
+        Qonversion.addAttributionData(data, from: castedProvider)
         
-        return result(Qonversion.addAttributionData(data, from: castedProvider, userID: userId))
+        result(nil)
     }
 }
