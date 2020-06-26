@@ -16,7 +16,7 @@ To use Qonversion in your Flutter app, add `qonversion` as a [dependency in your
 
 ```
 dependencies:
-  qonversion_flutter: ^0.2
+  qonversion_flutter: ^0.3.0
 ```
 
 Run `flutter pub get` to install dependency.
@@ -32,53 +32,36 @@ import 'package:qonversion_flutter/qonversion.dart';
 
 ...
 
+String _qonversionUserId;
+
 @override
 void initState() {
   super.initState();
-  Qonversion.launchWith(
+  
+  _launchQonversion();
+}
+
+Future<String> _launchQonversion() async {
+  _qonversionUserId = await Qonversion.launch(
     iosApiKey: 'YOUR_IOS_API_KEY',
     androidApiKey: 'YOUR_ANDROID_API_KEY',
-    onComplete: (uid) => print(uid),
   );
 }
 
 ...
 ```
 
-Usually Qonversion will track purchases automatically.
+Qonversion will track purchases automatically.
 
-Still, there are few ways to launch Qonversion:
-
-1. Launches Qonversion SDK with the given API keys for each platform: [androidApiKey] and [iosApiKey] respectively.
-[onComplete] will return `uid` for Ads integrations.
-
-```subscriptions, basic purchases) automatically.
-static Future<void> launchWith({
-  String androidApiKey,
-  String iosApiKey,
-  void Function(String) onComplete,
-})
-```
-
-2. Same as previous but allows you to specify client side `userid` (instead of Qonversion user-id) that will be used for matching data in the third party data:
+You can also specify your client side `userId` (instead of Qonversion user-id) that will be used for matching data in the third party data:
 
 ```
-static Future<void> launchWithClientSideUserId(
-    String userID, {
-    String androidApiKey,
-    String iosApiKey,
-})
-```
-
-3. **Under development**. Same as previous but allows you to turn off auto tracking purchases and track it manually.
-
-```
-static Future<void> launchWithAutoTrackPurchases(
-    bool autoTrackPurchases, {
-    String androidApiKey,
-    String iosApiKey,
-    void Function(String) onComplete,
-})
+final userId = 'CLIENT_SIDE_USER_ID';
+Qonversion.launch(
+  iosApiKey: 'YOUR_IOS_API_KEY',
+  androidApiKey: 'YOUR_ANDROID_API_KEY',
+  userId: userId,
+);
 ```
 
 ## License
