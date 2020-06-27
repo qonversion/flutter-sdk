@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import 'src/constants.dart';
+
 enum QAttributionProvider { appsFlyer, branch }
 
 class Qonversion {
@@ -14,21 +16,54 @@ class Qonversion {
   /// [androidApiKey] and [iosApiKey] respectively,
   /// you can get one in your account on qonversion.io.
   ///
+  /// Returns `userId` for Ads integrations.
+  ///
+  /// **Warning**:
+  /// Qonversion will track any purchase events (trials, subscriptions, basic purchases) automatically.
+  static Future<String> launch({
+    @required String androidApiKey,
+    @required String iosApiKey,
+    String userId,
+  }) async {
+    final apiKey = _obtainPlatformApiKey(
+      androidApiKey: androidApiKey,
+      iosApiKey: iosApiKey,
+    );
+
+    final args = {
+      Constants.kApiKey: apiKey,
+      Constants.kUserId: userId,
+    };
+
+    final uid = await _channel.invokeMethod(Constants.mLaunch, args);
+
+    return uid;
+  }
+
+  /// Launches Qonversion SDK with the given API keys for each platform:
+  /// [androidApiKey] and [iosApiKey] respectively,
+  /// you can get one in your account on qonversion.io.
+  ///
   /// [onComplete] will return `uid` for Ads integrations.
   ///
   /// **Warning**:
   /// Qonversion will track any purchase events (trials, subscriptions, basic purchases) automatically.
+  @Deprecated("Use `launch` method instead")
   static Future<void> launchWith({
     String androidApiKey,
     String iosApiKey,
     void Function(String) onComplete,
   }) async {
     final key = _obtainPlatformApiKey(
-        androidApiKey: androidApiKey, iosApiKey: iosApiKey);
+      androidApiKey: androidApiKey,
+      iosApiKey: iosApiKey,
+    );
 
-    final args = {'key': key};
-    final uid = await _channel.invokeMethod('launchWithKeyCompletion', args);
-    return onComplete(uid);
+    final args = {Constants.kApiKey: key};
+    final uid =
+        await _channel.invokeMethod(Constants.mLaunchWithKeyCompletion, args);
+
+    onComplete(uid);
   }
 
   /// Launches Qonversion SDK with the given API keys for each platform:
@@ -36,20 +71,21 @@ class Qonversion {
   /// you can get one in your account on qonversion.io.
   ///
   /// Sets client side [userid] (instead of Qonversion user-id) that will be used for matching data in the third party data.
+  @Deprecated("Use `launch` method instead")
   static Future<void> launchWithClientSideUserId(
     String userID, {
     String androidApiKey,
     String iosApiKey,
-  }) async {
+  }) {
     final key = _obtainPlatformApiKey(
         androidApiKey: androidApiKey, iosApiKey: iosApiKey);
 
     final args = {
-      'key': key,
-      'userID': userID,
+      Constants.kApiKey: key,
+      Constants.kUserId: userID,
     };
 
-    return await _channel.invokeMethod('launchWithKeyUserId', args);
+    return _channel.invokeMethod(Constants.mLaunchWithKeyUserId, args);
   }
 
   /// **Don't use with autoTrackPurchases: false** now.
@@ -65,6 +101,7 @@ class Qonversion {
   /// Will track any purchase events (trials, subscriptions, basic purchases) automatically.
   /// But if `autoTrackPurchases` disabled you need to call `trackPurchase:transaction:` method (under development yet).
   /// Otherwise, purchases tracking won't work.
+  @Deprecated("Use `launch` method instead")
   static Future<void> launchWithAutoTrackPurchases(
     bool autoTrackPurchases, {
     String androidApiKey,
@@ -75,29 +112,26 @@ class Qonversion {
         androidApiKey: androidApiKey, iosApiKey: iosApiKey);
 
     final args = {
-      'key': key,
-      'autoTrackPurchases': autoTrackPurchases,
+      Constants.kApiKey: key,
+      Constants.kAutoTrackPurchases: autoTrackPurchases,
     };
     final uid = await _channel.invokeMethod<String>(
-        'launchWithKeyAutoTrackPurchasesCompletion', args);
-    return onComplete(uid);
+        Constants.mLaunchWithKeyAutoTrackPurchasesCompletion, args);
+
+    onComplete(uid);
   }
 
   /// Sends your attribution [data] to the [provider].
   ///
   /// [userID], if specified, will also be sent to the provider
   static Future<void> addAttributionData(
-    Map<dynamic, dynamic> data,
-    QAttributionProvider provider, {
-    String userID,
-  }) async {
+      Map<dynamic, dynamic> data, QAttributionProvider provider) {
     final args = {
-      'data': data,
-      'provider': describeEnum(provider),
-      'userID': userID,
+      Constants.kData: data,
+      Constants.kProvider: describeEnum(provider),
     };
 
-    return await _channel.invokeMethod('addAttributionData', args);
+    return _channel.invokeMethod(Constants.mAddAttributionData, args);
   }
 
   static String _obtainPlatformApiKey({

@@ -11,53 +11,90 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? [String: Any] else {
-            return result("Could not find call arguments. Make sure you pass Map as call arguments")
+            result(FlutterError.noArgs)
+            return
         }
+        
+        guard let apiKey = args["key"] as? String, !apiKey.isEmpty else {
+            result(FlutterError.noApiKey)
+            return
+        }
+        
         switch call.method {
+        case "launch":
+            launch(with: apiKey, args, result)
+            
         case "launchWithKeyCompletion":
-            guard let key = args["key"] as? String else {
-                return result("Could not find API key, please make sure you pass a valid value")
-            }
-            return launch(with: key, result)
+            launch(with: apiKey, result)
+            
         case "launchWithKeyUserId":
-            guard let key = args["key"] as? String,
-                let userID = args["userID"] as? String else {
-                return result("Could not find either API key or userID, please make sure you pass a valid value")
+            guard let userID = args["userID"] as? String else {
+                result(FlutterError.noUserId)
+                return
             }
-            return launch(with: key, userID: userID, result)
+            
+            launch(with: apiKey, userID: userID, result)
+            
         case "launchWithKeyAutoTrackPurchasesCompletion":
-            guard let key = args["key"] as? String,
-                let autoTrackPurchases = args["autoTrackPurchases"] as? Bool else {
-                    return result("Could not find either key or autoTrackPurchases boolean value, make sure you pass it as a {\"autoTrackPurchases\": autoTrackPurchases} key-value pair to call arguments")
+            guard let autoTrackPurchases = args["autoTrackPurchases"] as? Bool else {
+                result(FlutterError.noAutoTrackPurchases)
+                return
             }
-            return launch(with: key, autoTrackPurchases: autoTrackPurchases, result)
+            
+            launch(with: apiKey, autoTrackPurchases: autoTrackPurchases, result)
+            
         case "addAttributionData":
-            return addAttributionData(args: args, result)
+            addAttributionData(args: args, result)
+            
         default:
-            return result(FlutterMethodNotImplemented)
+            result(FlutterMethodNotImplemented)
+        }
+    }
+    
+    private func launch(with apiKey: String,
+                        _ args: [String: Any],
+                        _ result: @escaping FlutterResult) {
+        let userId = args["userID"] as? String
+        
+        if let userId = userId {
+            Qonversion.launch(withKey: apiKey, userID: userId)
+            result(userId)
+        } else {
+            Qonversion.launch(withKey: apiKey) { uid in
+                result(uid)
+            }
         }
     }
     
     private func launch(with key: String, _ result: @escaping FlutterResult) {
         Qonversion.launch(withKey: key) { uid in
-            return result(uid)
+            result(uid)
         }
     }
     
     private func launch(with key: String, userID: String, _ result: @escaping FlutterResult) {
-        return result(Qonversion.launch(withKey: key, userID: userID))
+        Qonversion.launch(withKey: key, userID: userID)
+        
+        result(nil)
     }
     
     private func launch(with key: String, autoTrackPurchases: Bool, _ result: @escaping FlutterResult) {
-        return Qonversion.launch(withKey: key, autoTrackPurchases: autoTrackPurchases) { uid in
-            return result(uid)
+        Qonversion.launch(withKey: key, autoTrackPurchases: autoTrackPurchases) { uid in
+            result(uid)
         }
     }
     
     private func addAttributionData(args: [String: Any], _ result: @escaping FlutterResult) {
-        guard let data = args["data"] as? [AnyHashable: Any], let provider = args["provider"] as? String else {
+        guard let data = args["data"] as? [AnyHashable: Any] else {
+            result(FlutterError.noData)
             return
         }
+        
+        guard let provider = args["provider"] as? String else {
+            result(FlutterError.noProvider)
+            return
+        }
+        
         // Using appsFlyer by default since there are only 2 cases in an enum yet.
         var castedProvider = QAttributionProvider.appsFlyer
         
@@ -68,8 +105,8 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
             break
         }
         
-        let userId = args["userID"] as? String
+        Qonversion.addAttributionData(data, from: castedProvider)
         
-        return result(Qonversion.addAttributionData(data, from: castedProvider, userID: userId))
+        result(nil)
     }
 }
