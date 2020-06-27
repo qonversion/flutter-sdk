@@ -1,3 +1,8 @@
+## 0.3.0
+
+* API update: new `launch` method, deprecate all old `launch...` methods
+* Fix Android init
+
 ## 0.2.5
 
 * Fix Android error handling
