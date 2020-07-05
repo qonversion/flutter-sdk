@@ -18,7 +18,10 @@ class Qonversion {
   /// Returns `userId` for Ads integrations.
   ///
   /// **Warning**:
-  /// Qonversion will track any purchase events (trials, subscriptions, basic purchases) automatically.
+  /// On iOS Qonversion will track any purchase events (trials, subscriptions, basic purchases) automatically.
+  ///
+  /// On Android you will have to call `Qonversion.trackPurchase(details, purchase)` method to track all
+  /// purchases manually.
   static Future<String> launch({
     @required String androidApiKey,
     @required String iosApiKey,
@@ -39,8 +42,18 @@ class Qonversion {
     return uid;
   }
 
+  /// Tracks purchases manually on Android.
+  ///
+  /// Returns `null` if `!Platform.isAndroid`.
+  ///
+  /// You can use [official in_app_purchase package](https://pub.dev/packages/in_app_purchase) and its
+  /// [SkuDetailsWrapper](https://github.com/flutter/plugins/blob/master/packages/in_app_purchase/lib/src/billing_client_wrappers/sku_details_wrapper.dart)
+  /// and [PurchaseWrapper](https://github.com/flutter/plugins/blob/master/packages/in_app_purchase/lib/src/billing_client_wrappers/purchase_wrapper.dart)
+  /// to pass [details] and [purchase] arguments.
   Future<String> trackPurchase(
       Map<String, dynamic> details, Map<String, dynamic> purchase) async {
+    if (!Platform.isAndroid) return null;
+
     final args = {
       Constants.kDetails: details,
       Constants.kPurchase: purchase,
