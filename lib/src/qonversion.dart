@@ -8,30 +8,28 @@ import 'constants.dart';
 import 'qa_provider.dart';
 
 class Qonversion {
-  static const MethodChannel _channel =
-      const MethodChannel('qonversion_flutter_sdk');
+  static const MethodChannel _channel = MethodChannel('qonversion_flutter_sdk');
 
-  /// Launches Qonversion SDK with the given API keys for each platform:
-  /// [androidApiKey] and [iosApiKey] respectively,
-  /// you can get one in your account on qonversion.io.
-  ///
-  /// Returns `userId` for Ads integrations.
-  ///
   /// **Warning**:
-  /// On iOS Qonversion will track any purchase events (trials, subscriptions, basic purchases) automatically.
-  ///
   /// On Android you will have to call `Qonversion.trackPurchase(details, purchase)` method to track all
   /// purchases manually.
-  static Future<String> launch({
-    @required String androidApiKey,
-    @required String iosApiKey,
+  ///
+  /// On iOS Qonversion will track any purchase events (trials, subscriptions, basic purchases) automatically.
+  ///
+  /// ================
+  ///
+  /// Initializes Qonversion SDK with the given API key.
+  /// You can get one in your account on qonversion.io.
+  /// If you're using different API keys for iOS and Android, please
+  /// contact us at hi@qonversion.io since we [now can merge them into one](https://qonversion.io/docs/crossplatform-project).
+  ///
+  /// You can provide your own client-side [userId] if needed.
+  ///
+  /// Returns `userId` for Ads integrations.
+  static Future<String> launch(
+    String apiKey, {
     String userId,
   }) async {
-    final apiKey = _obtainPlatformApiKey(
-      androidApiKey: androidApiKey,
-      iosApiKey: iosApiKey,
-    );
-
     final args = {
       Constants.kApiKey: apiKey,
       Constants.kUserId: userId,
@@ -82,27 +80,5 @@ class Qonversion {
     };
 
     return _channel.invokeMethod(Constants.mAddAttributionData, args);
-  }
-
-  static String _obtainPlatformApiKey({
-    String androidApiKey,
-    String iosApiKey,
-  }) {
-    String key;
-
-    if (Platform.isAndroid) {
-      key = androidApiKey;
-    } else if (Platform.isIOS) {
-      key = iosApiKey;
-    } else {
-      throw Exception('Unsupported platform');
-    }
-
-    if (key == null) {
-      throw Exception(
-          'Please provide API key for the platform you are running an app on');
-    }
-
-    return key;
   }
 }

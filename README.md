@@ -22,6 +22,9 @@ dependencies:
 Run `flutter pub get` to install dependency.
 
 ## Usage 
+
+### Setup
+
 You need to configure Qonversion once at a starting point of your app. 
 
 For example, launch Qonversion in `initState` of your top level widget: 
@@ -42,26 +45,40 @@ void initState() {
 }
 
 Future<String> _launchQonversion() async {
-  _qonversionUserId = await Qonversion.launch(
-    iosApiKey: 'YOUR_IOS_API_KEY',
-    androidApiKey: 'YOUR_ANDROID_API_KEY',
-  );
+  _qonversionUserId = await Qonversion.launch('YOUR_API_KEY');
 }
 
 ...
 ```
 
-Qonversion will track purchases automatically.
+**IMPORTANT**
+
+On Android you must call `Qonversion.trackPurchase(skuDetails, purchase)` method on each purchase success in order to track purchases.
+
+On iOS Qonversion will track purchases automatically.
 
 You can also specify your client side `userId` (instead of Qonversion user-id) that will be used for matching data in the third party data:
 
 ```
 final userId = 'CLIENT_SIDE_USER_ID';
 Qonversion.launch(
-  iosApiKey: 'YOUR_IOS_API_KEY',
-  androidApiKey: 'YOUR_ANDROID_API_KEY',
+  'YOUR_API_KEY',
   userId: userId,
 );
+```
+
+### Attribution
+You need to have AppsFlyer SDK integrated in your app before starting with this integration. If you do not have Appsflyer integration yet, please use [this docs](https://pub.dev/packages/appsflyer_sdk#-readme-tab-). 
+
+On iOS you can also use Branch integration. 
+
+Use `addAttributionData(data, provider, userId)` method to pass attribution data dictionary: 
+```
+Qonversion.addAttributionData(
+  data, 
+  QAttributionProvider.appsFlyer,
+  'USER_ID',
+)
 ```
 
 ## License
