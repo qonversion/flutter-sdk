@@ -13,7 +13,6 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 import com.qonversion.android.sdk.Qonversion
-import com.qonversion.android.sdk.QonversionBillingBuilder
 import com.qonversion.android.sdk.QonversionCallback
 
 /** QonversionFlutterSdkPlugin */
