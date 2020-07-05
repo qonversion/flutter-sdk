@@ -22,10 +22,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> initPlatformState() async {
     String uid;
     try {
-      uid = await Qonversion.launch(
-        iosApiKey: '',
-        androidApiKey: '',
-      );
+      uid = await Qonversion.initialize('');
       print(uid);
     } catch (e) {
       print('Failed to obtain uid from Qonversion.');
