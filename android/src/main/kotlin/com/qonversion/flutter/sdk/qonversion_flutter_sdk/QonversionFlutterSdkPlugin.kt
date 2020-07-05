@@ -35,17 +35,9 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
             return result.noArgsError()
         }
 
-        val internalUserId = args["userID"] as? String ?: ""
-        val autoTrackPurchases = args["autoTrackPurchases"] as? Boolean ?: true
-
         when (call.method) {
             "launch" -> launch(args, result)
             "trackPurchase" -> trackPurchase(args, result)
-
-            // TODO remove when old methods get removed on Dart side
-            "launchWithKeyCompletion",
-            "launchWithKeyUserId",
-            "launchWithKeyAutoTrackPurchasesCompletion" -> launchWith(args["key"] as String, internalUserId, autoTrackPurchases, result)
             "addAttributionData" -> result.notImplemented() // since there is no such method in Android SDK
             else -> result.notImplemented()
         }
@@ -70,39 +62,6 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
                 application,
                 apiKey,
                 userId,
-                callback
-        )
-    }
-
-    // TODO remove when old methods get removed on Dart side
-    private fun launchWith(key: String?,
-                           internalUserId: String = "",
-                           autoTrackPurchases: Boolean = true,
-                           result: Result) {
-        if (key == null) {
-          return result.error("1", "Could not find API key", "Please provide valid API key")
-        }
-
-        val billingBuilder = QonversionBillingBuilder()
-                .enablePendingPurchases()
-                .setListener { _, _ ->  }
-
-        val callback = object: QonversionCallback {
-            override fun onSuccess(uid: String) {
-                result.success(uid)
-            }
-
-            override fun onError(t: Throwable) {
-                result.qonversionError(t.localizedMessage, t.cause.toString())
-            }
-        }
-
-        Qonversion.initialize(
-                application,
-                key,
-                internalUserId,
-                billingBuilder,
-                autoTrackPurchases,
                 callback
         )
     }
