@@ -1,3 +1,10 @@
+## 1.0.0
+
+* API update: new `launch` method with just one API key argument for both platforms. Contact us at hi@qonversion.io to merge your old API keys into one, [we can do it now](https://qonversion.io/docs/crossplatform-project).
+* API update: Remove old `launch` method; remove all old `launch...` methods.
+* Add `trackPurchase` method to track Android purchases manually.
+* Add `addAttributionData` method implementation for Android.
+
 ## 0.3.0
 
 * API update: new `launch` method, deprecate all old `launch...` methods

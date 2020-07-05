@@ -2,15 +2,17 @@ package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 
 import android.app.Activity
 import android.app.Application
-import androidx.annotation.NonNull;
+import androidx.annotation.NonNull
+import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.SkuDetails
+import com.qonversion.android.sdk.AttributionSource
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
-import com.qonversion.android.sdk.Qonversion;
-import com.qonversion.android.sdk.QonversionBillingBuilder
+import com.qonversion.android.sdk.Qonversion
 import com.qonversion.android.sdk.QonversionCallback
 
 /** QonversionFlutterSdkPlugin */
@@ -27,40 +29,24 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-        val args = call.arguments<Map<String, Any>>()
+        val args = call.arguments() as? Map<String, Any> ?: return result.noArgsError()
 
-        if (args == null || args.isEmpty()) {
-            result.noArgsError()
-            return
+        if (args.isEmpty()) {
+            return result.noArgsError()
         }
-
-        val apiKey = call.argument<String>("key")
-        if (apiKey == null) {
-            result.noApiKeyError()
-            return
-        }
-
-        val internalUserId = args["userID"] as? String ?: ""
-        val autoTrackPurchases = args["autoTrackPurchases"] as? Boolean ?: true
 
         when (call.method) {
-            "launch" -> launch(apiKey, args, result)
-
-            // TODO remove when old methods get removed on Dart side
-            "launchWithKeyCompletion",
-            "launchWithKeyUserId",
-            "launchWithKeyAutoTrackPurchasesCompletion" -> launchWith(apiKey, internalUserId, autoTrackPurchases, result)
-            "addAttributionData" -> result.notImplemented() // since there is no such method in Android SDK
+            "launch" -> launch(args, result)
+            "trackPurchase" -> trackPurchase(args, result)
+            "addAttributionData" -> addAttributionData(args, result)
             else -> result.notImplemented()
         }
     }
 
-    private fun launch(apiKey: String, args: Map<String, Any>, result: Result) {
-        val userId = args["userID"] as? String ?: ""
+    private fun launch(args: Map<String, Any>, result: Result) {
+        val apiKey = args["key"] as? String ?: return result.noApiKeyError()
 
-        val billingBuilder = QonversionBillingBuilder()
-                .enablePendingPurchases()
-                .setListener { _, _ ->  }
+        val userId = args["userID"] as? String ?: ""
 
         val callback = object: QonversionCallback {
             override fun onSuccess(uid: String) {
@@ -76,24 +62,18 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
                 application,
                 apiKey,
                 userId,
-                billingBuilder,
-                true,
                 callback
         )
     }
 
-    // TODO remove when old methods get removed on Dart side
-    private fun launchWith(key: String?,
-                           internalUserId: String = "",
-                           autoTrackPurchases: Boolean = true,
-                           result: Result) {
-        if (key == null) {
-          return result.error("1", "Could not find API key", "Please provide valid API key")
-        }
+    private fun trackPurchase(args: Map<String, Any>, result: Result) {
+        @Suppress("UNCHECKED_CAST")
+        val detailsMap = args["details"] as Map<String, Any>
+        @Suppress("UNCHECKED_CAST")
+        val purchaseMap = args["purchase"] as Map<String, Any>
 
-        val billingBuilder = QonversionBillingBuilder()
-                .enablePendingPurchases()
-                .setListener { _, _ ->  }
+        val details = createSkuDetails(detailsMap)
+        val purchase = createPurchase(purchaseMap)
 
         val callback = object: QonversionCallback {
             override fun onSuccess(uid: String) {
@@ -105,13 +85,40 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
             }
         }
 
-        Qonversion.initialize(
-                application,
-                key,
-                internalUserId,
-                billingBuilder,
-                autoTrackPurchases,
-                callback
-        )
+        Qonversion.instance?.purchase(details, purchase, callback)
+    }
+
+    private fun addAttributionData(args: Map<String, Any>, result: Result) {
+        @Suppress("UNCHECKED_CAST")
+        val data = args["data"] as? Map<String, Any> ?: return result.noDataError()
+
+        if (data.isEmpty()) {
+            return result.noDataError()
+        }
+
+        val provider = args["provider"] as? String ?: return result.noProviderError()
+
+        val uid = args["userId"] as? String ?: return result.noUserIdError()
+
+        val castedProvider = when (provider) {
+            "appsFlyer" -> AttributionSource.APPSFLYER
+            else -> null
+        }
+                ?: return result.success(null)
+
+        Qonversion.instance?.attribution(data, castedProvider, uid)
+
+        result.success(null)
+    }
+
+    private fun createSkuDetails(map: Map<String, Any>): SkuDetails {
+        val json = map.toString()
+        return SkuDetails(json)
+    }
+
+    private fun createPurchase(map: Map<String, Any>): Purchase {
+        val json = map.toString()
+        val signature = map["signature"] as String
+        return Purchase(json, signature)
     }
 }

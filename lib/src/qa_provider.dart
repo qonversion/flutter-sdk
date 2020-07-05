@@ -1,0 +1,1 @@
+enum QAttributionProvider { appsFlyer, branch }
