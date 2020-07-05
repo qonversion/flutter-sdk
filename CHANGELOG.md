@@ -1,6 +1,6 @@
 ## 1.0.0
 
-* API update: new `initialize` method with just one API key argument for both platforms; deprecate `launch` method; remove all old `launch...` methods.
+* API update: new `launch` method with just one API key argument for both platforms; remove old `launch` method; remove all old `launch...` methods.
 * Add `trackPurchase` method to track Android purchases manually.
 * Add `addAttributionData` method implementation for Android.
 

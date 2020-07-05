@@ -26,42 +26,10 @@ class Qonversion {
   /// You can provide your own client-side [userId] if needed.
   ///
   /// Returns `userId` for Ads integrations.
-  static Future<String> initialize(
+  static Future<String> launch(
     String apiKey, {
     String userId,
   }) async {
-    final args = {
-      Constants.kApiKey: apiKey,
-      Constants.kUserId: userId,
-    };
-
-    final uid = await _channel.invokeMethod(Constants.mLaunch, args);
-
-    return uid;
-  }
-
-  /// Launches Qonversion SDK with the given API keys for each platform:
-  /// [androidApiKey] and [iosApiKey] respectively,
-  /// you can get one in your account on qonversion.io.
-  ///
-  /// Returns `userId` for Ads integrations.
-  ///
-  /// **Warning**:
-  /// On iOS Qonversion will track any purchase events (trials, subscriptions, basic purchases) automatically.
-  ///
-  /// On Android you will have to call `Qonversion.trackPurchase(details, purchase)` method to track all
-  /// purchases manually.
-  @Deprecated('Use Qonversion.initialize with just one API key instead')
-  static Future<String> launch({
-    @required String androidApiKey,
-    @required String iosApiKey,
-    String userId,
-  }) async {
-    final apiKey = _obtainPlatformApiKey(
-      androidApiKey: androidApiKey,
-      iosApiKey: iosApiKey,
-    );
-
     final args = {
       Constants.kApiKey: apiKey,
       Constants.kUserId: userId,
@@ -112,27 +80,5 @@ class Qonversion {
     };
 
     return _channel.invokeMethod(Constants.mAddAttributionData, args);
-  }
-
-  static String _obtainPlatformApiKey({
-    String androidApiKey,
-    String iosApiKey,
-  }) {
-    String key;
-
-    if (Platform.isAndroid) {
-      key = androidApiKey;
-    } else if (Platform.isIOS) {
-      key = iosApiKey;
-    } else {
-      throw Exception('Unsupported platform');
-    }
-
-    if (key == null) {
-      throw Exception(
-          'Please provide API key for the platform you are running an app on');
-    }
-
-    return key;
   }
 }

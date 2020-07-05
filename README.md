@@ -45,7 +45,7 @@ void initState() {
 }
 
 Future<String> _launchQonversion() async {
-  _qonversionUserId = await Qonversion.initialize('YOUR_API_KEY');
+  _qonversionUserId = await Qonversion.launch('YOUR_API_KEY');
 }
 
 ...
@@ -61,7 +61,7 @@ You can also specify your client side `userId` (instead of Qonversion user-id) t
 
 ```
 final userId = 'CLIENT_SIDE_USER_ID';
-Qonversion.initialize(
+Qonversion.launch(
   'YOUR_API_KEY',
   userId: userId,
 );
