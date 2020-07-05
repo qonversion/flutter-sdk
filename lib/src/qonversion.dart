@@ -21,7 +21,7 @@ class Qonversion {
   /// Initializes Qonversion SDK with the given API key.
   /// You can get one in your account on qonversion.io.
   /// If you're using different API keys for iOS and Android, please
-  /// contact us at hi@qonversion.io since we [now can merge them into one](https://headwayapp.co/qonversion-io-changelog/single-project-for-ios-and-android-platforms-156926).
+  /// contact us at hi@qonversion.io since we [now can merge them into one](https://qonversion.io/docs/crossplatform-project).
   ///
   /// You can provide your own client-side [userId] if needed.
   ///
