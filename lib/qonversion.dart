@@ -40,6 +40,18 @@ class Qonversion {
     return uid;
   }
 
+  Future<String> trackPurchase(
+      Map<String, dynamic> details, Map<String, dynamic> purchase) async {
+    final args = {
+      Constants.kDetails: details,
+      Constants.kPurchase: purchase,
+    };
+
+    final uid = await _channel.invokeMethod(Constants.mTrackPurchase, args);
+
+    return uid;
+  }
+
   /// Launches Qonversion SDK with the given API keys for each platform:
   /// [androidApiKey] and [iosApiKey] respectively,
   /// you can get one in your account on qonversion.io.
