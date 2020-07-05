@@ -8,8 +8,37 @@ import 'constants.dart';
 import 'qa_provider.dart';
 
 class Qonversion {
-  static const MethodChannel _channel =
-      const MethodChannel('qonversion_flutter_sdk');
+  static const MethodChannel _channel = MethodChannel('qonversion_flutter_sdk');
+
+  /// **Warning**:
+  /// On Android you will have to call `Qonversion.trackPurchase(details, purchase)` method to track all
+  /// purchases manually.
+  ///
+  /// On iOS Qonversion will track any purchase events (trials, subscriptions, basic purchases) automatically.
+  ///
+  /// ================
+  ///
+  /// Initializes Qonversion SDK with the given API key.
+  /// You can get one in your account on qonversion.io.
+  /// If you're using different API keys for iOS and Android, please
+  /// contact us at hi@qonversion.io since we [now can merge them into one](https://headwayapp.co/qonversion-io-changelog/single-project-for-ios-and-android-platforms-156926).
+  ///
+  /// You can provide your own client-side [userId] if needed.
+  ///
+  /// Returns `userId` for Ads integrations.
+  static Future<String> initialize(
+    String apiKey, {
+    String userId,
+  }) async {
+    final args = {
+      Constants.kApiKey: apiKey,
+      Constants.kUserId: userId,
+    };
+
+    final uid = await _channel.invokeMethod(Constants.mLaunch, args);
+
+    return uid;
+  }
 
   /// Launches Qonversion SDK with the given API keys for each platform:
   /// [androidApiKey] and [iosApiKey] respectively,
@@ -22,6 +51,7 @@ class Qonversion {
   ///
   /// On Android you will have to call `Qonversion.trackPurchase(details, purchase)` method to track all
   /// purchases manually.
+  @Deprecated('Use Qonversion.initialize with just one API key instead')
   static Future<String> launch({
     @required String androidApiKey,
     @required String iosApiKey,
