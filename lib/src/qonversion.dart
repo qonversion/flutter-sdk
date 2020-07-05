@@ -66,12 +66,19 @@ class Qonversion {
 
   /// Sends your attribution [data] to the [provider].
   ///
-  /// [userID], if specified, will also be sent to the provider
+  /// [userId], if specified, will also be sent to the provider.
+  /// Note that you can pass `null` as [userId] on iOS.
+  ///
+  /// On Android [userId] is non-nullable.
   static Future<void> addAttributionData(
-      Map<dynamic, dynamic> data, QAttributionProvider provider) {
+    Map<dynamic, dynamic> data, {
+    @required QAttributionProvider provider,
+    @required String userId,
+  }) {
     final args = {
       Constants.kData: data,
       Constants.kProvider: describeEnum(provider),
+      Constants.kUserId: userId,
     };
 
     return _channel.invokeMethod(Constants.mAddAttributionData, args);

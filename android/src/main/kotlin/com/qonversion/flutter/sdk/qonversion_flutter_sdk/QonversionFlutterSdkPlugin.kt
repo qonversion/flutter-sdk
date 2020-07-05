@@ -5,6 +5,7 @@ import android.app.Application
 import androidx.annotation.NonNull
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
+import com.qonversion.android.sdk.AttributionSource
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -12,7 +13,6 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 import com.qonversion.android.sdk.Qonversion
-import com.qonversion.android.sdk.QonversionBillingBuilder
 import com.qonversion.android.sdk.QonversionCallback
 
 /** QonversionFlutterSdkPlugin */
@@ -35,18 +35,10 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
             return result.noArgsError()
         }
 
-        val internalUserId = args["userID"] as? String ?: ""
-        val autoTrackPurchases = args["autoTrackPurchases"] as? Boolean ?: true
-
         when (call.method) {
             "launch" -> launch(args, result)
             "trackPurchase" -> trackPurchase(args, result)
-
-            // TODO remove when old methods get removed on Dart side
-            "launchWithKeyCompletion",
-            "launchWithKeyUserId",
-            "launchWithKeyAutoTrackPurchasesCompletion" -> launchWith(args["key"] as String, internalUserId, autoTrackPurchases, result)
-            "addAttributionData" -> result.notImplemented() // since there is no such method in Android SDK
+            "addAttributionData" -> addAttributionData(args, result)
             else -> result.notImplemented()
         }
     }
@@ -74,39 +66,6 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         )
     }
 
-    // TODO remove when old methods get removed on Dart side
-    private fun launchWith(key: String?,
-                           internalUserId: String = "",
-                           autoTrackPurchases: Boolean = true,
-                           result: Result) {
-        if (key == null) {
-          return result.error("1", "Could not find API key", "Please provide valid API key")
-        }
-
-        val billingBuilder = QonversionBillingBuilder()
-                .enablePendingPurchases()
-                .setListener { _, _ ->  }
-
-        val callback = object: QonversionCallback {
-            override fun onSuccess(uid: String) {
-                result.success(uid)
-            }
-
-            override fun onError(t: Throwable) {
-                result.qonversionError(t.localizedMessage, t.cause.toString())
-            }
-        }
-
-        Qonversion.initialize(
-                application,
-                key,
-                internalUserId,
-                billingBuilder,
-                autoTrackPurchases,
-                callback
-        )
-    }
-
     private fun trackPurchase(args: Map<String, Any>, result: Result) {
         @Suppress("UNCHECKED_CAST")
         val detailsMap = args["details"] as Map<String, Any>
@@ -126,7 +85,30 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
             }
         }
 
-        Qonversion.instance!!.purchase(details, purchase, callback)
+        Qonversion.instance?.purchase(details, purchase, callback)
+    }
+
+    private fun addAttributionData(args: Map<String, Any>, result: Result) {
+        @Suppress("UNCHECKED_CAST")
+        val data = args["data"] as? Map<String, Any> ?: return result.noDataError()
+
+        if (data.isEmpty()) {
+            return result.noDataError()
+        }
+
+        val provider = args["provider"] as? String ?: return result.noProviderError()
+
+        val uid = args["userId"] as? String ?: return result.noUserIdError()
+
+        val castedProvider = when (provider) {
+            "appsFlyer" -> AttributionSource.APPSFLYER
+            else -> null
+        }
+                ?: return result.success(null)
+
+        Qonversion.instance?.attribution(data, castedProvider, uid)
+
+        result.success(null)
     }
 
     private fun createSkuDetails(map: Map<String, Any>): SkuDetails {
