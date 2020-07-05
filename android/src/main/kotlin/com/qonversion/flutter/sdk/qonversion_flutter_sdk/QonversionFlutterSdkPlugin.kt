@@ -5,6 +5,7 @@ import android.app.Application
 import androidx.annotation.NonNull
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
+import com.qonversion.android.sdk.AttributionSource
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -38,7 +39,7 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         when (call.method) {
             "launch" -> launch(args, result)
             "trackPurchase" -> trackPurchase(args, result)
-            "addAttributionData" -> result.notImplemented() // since there is no such method in Android SDK
+            "addAttributionData" -> addAttributionData(args, result)
             else -> result.notImplemented()
         }
     }
@@ -85,7 +86,30 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
             }
         }
 
-        Qonversion.instance!!.purchase(details, purchase, callback)
+        Qonversion.instance?.purchase(details, purchase, callback)
+    }
+
+    private fun addAttributionData(args: Map<String, Any>, result: Result) {
+        @Suppress("UNCHECKED_CAST")
+        val data = args["data"] as? Map<String, Any> ?: return result.noDataError()
+
+        if (data.isEmpty()) {
+            return result.noDataError()
+        }
+
+        val provider = args["provider"] as? String ?: return result.noProviderError()
+
+        val uid = args["userId"] as? String ?: return result.noUserIdError()
+
+        val castedProvider = when (provider) {
+            "appsFlyer" -> AttributionSource.APPSFLYER
+            else -> null
+        }
+                ?: return result.success(null)
+
+        Qonversion.instance?.attribution(data, castedProvider, uid)
+
+        result.success(null)
     }
 
     private fun createSkuDetails(map: Map<String, Any>): SkuDetails {

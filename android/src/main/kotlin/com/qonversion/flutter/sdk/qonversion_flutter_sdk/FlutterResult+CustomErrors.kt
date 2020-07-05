@@ -18,6 +18,14 @@ fun MethodChannel.Result.noAutoTrackPurchasesError() {
     return this.error("3", "Could not find autoTrackPurchases boolean value", "Make sure you pass Map as call arguments")
 }
 
+fun MethodChannel.Result.noDataError() {
+    return this.error("4", "Could not find data", "Please make sure you pass a valid value")
+}
+
+fun MethodChannel.Result.noProviderError() {
+    return this.error("5", "Could not find provider", "Please make sure you pass a valid value")
+}
+
 fun MethodChannel.Result.qonversionError(message: String, cause: String) {
     return this.error("9", message, cause)
 }
