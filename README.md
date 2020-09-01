@@ -16,7 +16,7 @@ To use Qonversion in your Flutter app, add `qonversion` as a [dependency in your
 
 ```
 dependencies:
-  qonversion_flutter: ^1.0.0
+  qonversion_flutter: ^1.0.1
 ```
 
 Run `flutter pub get` to install dependency.
