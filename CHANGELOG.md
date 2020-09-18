@@ -1,3 +1,6 @@
+## 1.1.1
+* Update docs
+
 ## 1.1.0
 * Add convenient `manualTrackPurchase` method to easily track purchases on Android
 

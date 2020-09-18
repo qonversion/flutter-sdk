@@ -16,7 +16,7 @@ To use Qonversion in your Flutter app, add `qonversion` as a [dependency in your
 
 ```
 dependencies:
-  qonversion_flutter: ^1.0.1
+  qonversion_flutter: ^1.1.1
 ```
 
 Run `flutter pub get` to install dependency.
@@ -51,12 +51,6 @@ Future<String> _launchQonversion() async {
 ...
 ```
 
-**IMPORTANT**
-
-On Android you must call `Qonversion.trackPurchase(skuDetails, purchase)` method on each purchase success in order to track purchases.
-
-On iOS Qonversion will track purchases automatically.
-
 You can also specify your client side `userId` (instead of Qonversion user-id) that will be used for matching data in the third party data:
 
 ```
@@ -66,6 +60,15 @@ Qonversion.launch(
   userId: userId,
 );
 ```
+
+### Purchase tracking
+
+#### Android
+On Android you must call `Qonversion.manualTrackPurchase(skuDetails, purchase)` method on each purchase success in order to track purchases.
+If you're not using official [in_app_purchase plugin](https://pub.dev/packages/in_app_purchase), you can use fallback method `trackPurchase` and pass it correct SkuDetails and ProductDetails Maps.
+
+#### iOS
+On iOS Qonversion will track purchases automatically.
 
 ### Attribution
 You need to have AppsFlyer SDK integrated in your app before starting with this integration. If you do not have Appsflyer integration yet, please use [this docs](https://pub.dev/packages/appsflyer_sdk#-readme-tab-). 
