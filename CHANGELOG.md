@@ -1,3 +1,6 @@
+## 1.1.0
+* Add convenient `manualTrackPurchase` method to easily track purchases on Android
+
 ## 1.0.1
 * Downgrade Android Qonversion SDK to version 1.0.4 in order to use Android Billing Library ver. 2.2.0 instead of ver. 3.0.0 since Flutter in_app_purchases does not support it.
 
