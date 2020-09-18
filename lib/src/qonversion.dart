@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:qonversion_flutter/src/serializer.dart';
 
 import 'constants.dart';
 import 'qa_provider.dart';
@@ -40,26 +42,45 @@ class Qonversion {
     return uid;
   }
 
+  /// This is a fallback method if you're not using [official in_app_purchase plugin](https://pub.dev/packages/in_app_purchase).
+  ///
+  /// Use it only if you have to build SkuDetails and PurchaseDetails maps manually on your side.
+  ///
+  /// Tracks purchases manually on Android.
+  ///
+  /// Returns `null` if `!Platform.isAndroid`.
+  static Future<String> trackPurchase(Map<String, dynamic> skuDetails,
+      Map<String, dynamic> purchaseDetails) async {
+    if (!Platform.isAndroid) return null;
+
+    final args = {
+      Constants.kDetails: skuDetails,
+      Constants.kPurchase: purchaseDetails,
+    };
+
+    return _channel.invokeMethod(Constants.mTrackPurchase, args);
+  }
+
   /// Tracks purchases manually on Android.
   ///
   /// Returns `null` if `!Platform.isAndroid`.
   ///
-  /// You can use [official in_app_purchase package](https://pub.dev/packages/in_app_purchase) and its
-  /// [SkuDetailsWrapper](https://github.com/flutter/plugins/blob/master/packages/in_app_purchase/lib/src/billing_client_wrappers/sku_details_wrapper.dart)
-  /// and [PurchaseWrapper](https://github.com/flutter/plugins/blob/master/packages/in_app_purchase/lib/src/billing_client_wrappers/purchase_wrapper.dart)
-  /// to pass [details] and [purchase] arguments.
-  Future<String> trackPurchase(
-      Map<String, dynamic> details, Map<String, dynamic> purchase) async {
+  /// You have to use [official in_app_purchase plugin](https://pub.dev/packages/in_app_purchase) and instances of its
+  /// [ProductDetails] and [PurchaseDetails] classes received on purchase success to track purchase with Qonversion.
+  static Future<String> manualTrackPurchase(
+      ProductDetails productDetails, PurchaseDetails purchaseDetails) async {
     if (!Platform.isAndroid) return null;
 
+    final skuDetails = QDetailsSerializer.buildSkuMap(productDetails.skuDetail);
+    final billingClientPurchaseDetails = QDetailsSerializer.buildPurchaseMap(
+        purchaseDetails.billingClientPurchase);
+
     final args = {
-      Constants.kDetails: details,
-      Constants.kPurchase: purchase,
+      Constants.kDetails: skuDetails,
+      Constants.kPurchase: billingClientPurchaseDetails,
     };
 
-    final uid = await _channel.invokeMethod(Constants.mTrackPurchase, args);
-
-    return uid;
+    return _channel.invokeMethod(Constants.mTrackPurchase, args);
   }
 
   /// Sends your attribution [data] to the [provider].
