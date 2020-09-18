@@ -1,6 +1,6 @@
 name: qonversion_flutter
 description: In-App Subscription Infrastructure to grow your subscription business
-version: 1.0.1
+version: 1.1.0
 homepage: 'https://qonversion.io'
 repository: 'https://github.com/qonversion/flutter-sdk'
 
@@ -11,6 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  in_app_purchase: ^0.3.4+8
 
 dev_dependencies:
   flutter_test:
