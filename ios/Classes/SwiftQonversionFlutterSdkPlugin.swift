@@ -22,7 +22,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
         
         switch call.method {
         case "launch":
-            launch(with: apiKey, args, result)
+            launch(with: apiKey, result)
             
         case "addAttributionData":
             addAttributionData(args: args, result)
@@ -32,24 +32,15 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
         }
     }
     
-    private func launch(with apiKey: String,
-                        _ args: [String: Any],
-                        _ result: @escaping FlutterResult) {
-        let userId = args["userID"] as? String
-        
-        if let userId = userId {
-            Qonversion.launch(withKey: apiKey)
-            result(userId)
-        } else {
-            Qonversion.launch(withKey: apiKey) { launchResult, error in
-                if let error = error {
-                  result(FlutterError.failedToLaunchSdk(error.localizedDescription))
-                  return
-                }
-                result(launchResult.uid)
-            }
-        }
+  private func launch(with apiKey: String, _ result: @escaping FlutterResult) {
+    Qonversion.launch(withKey: apiKey) { launchResult, error in
+      if let error = error {
+        result(FlutterError.failedToLaunchSdk(error.localizedDescription))
+        return
+      }
+      result(launchResult.toMap())
     }
+  }
     
     private func addAttributionData(args: [String: Any], _ result: @escaping FlutterResult) {
         guard let data = args["data"] as? [AnyHashable: Any] else {

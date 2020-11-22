@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'constants.dart';
+import 'models/launch_result.dart';
 import 'qa_provider.dart';
 
 class Qonversion {
@@ -11,19 +12,17 @@ class Qonversion {
 
   /// Initializes Qonversion SDK with the given API key.
   /// You can get one in your account on qonversion.io.
-  /// If you're using different API keys for iOS and Android, please
-  /// contact us at hi@qonversion.io since we [now can merge them into one](https://qonversion.io/docs/crossplatform-project).
-  ///
-  /// You can provide your own client-side [userId] if needed.
-  ///
-  /// Returns `userId` for Ads integrations.
-  static Future<String> launch(
+  static Future<QLaunchResult> launch(
     String apiKey, {
-    String userId,
+    @required bool isObserveMode,
   }) async {
-    final uid = await _channel.invokeMethod(Constants.mLaunch, apiKey);
+    final args = {
+      Constants.kApiKey: apiKey,
+      Constants.kObserveMode: isObserveMode,
+    };
+    final rawResult = await _channel.invokeMethod(Constants.mLaunch, args);
 
-    return uid;
+    return QLaunchResult.fromJson(Map<String, dynamic>.from(rawResult));
   }
 
   /// Sends your attribution [data] to the [provider].

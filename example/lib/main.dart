@@ -11,27 +11,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _uid = 'Not Initialized Qonversion Yet';
+  QLaunchResult _qLaunchResult;
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
-  }
-
-  Future<void> initPlatformState() async {
-    String uid;
-    try {
-      uid = await Qonversion.launch('PV77YHL7qnGvsdmpTs7gimsxUvY-Znl2');
-      print(uid);
-    } catch (e) {
-      print('Failed to obtain uid from Qonversion.');
-      print(e);
-    }
-
-    if (!mounted) return;
-
-    setState(() => _uid = uid);
   }
 
   @override
@@ -42,23 +27,90 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Qonversion example app'),
         ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Qonversion uid: \n$_uid\n',
-                textAlign: TextAlign.center,
-              ),
-              FlatButton(
-                child: Text('Track'),
-                color: Colors.blue,
-                textColor: Colors.white,
-                onPressed: () {},
-              ),
-            ],
-          ),
+          child: _qLaunchResult == null
+              ? CircularProgressIndicator()
+              : ListView(
+                  children: [
+                    Padding(padding: EdgeInsets.only(top: 20)),
+                    ListTile(
+                      title: Text('UID'),
+                      subtitle: Text(_qLaunchResult.uid),
+                    ),
+                    ListTile(
+                      title: Text('DateTime'),
+                      subtitle: Text(_qLaunchResult.date.toString()),
+                    ),
+                    ListTile(title: Text('PRODUCTS:')),
+                    ..._productsFromMap(_qLaunchResult.products),
+                    ListTile(title: Text('PERMISSIONS:')),
+                    ..._permissionsFromMap(_qLaunchResult.permissions),
+                    ListTile(title: Text('USER PRODUCTS:')),
+                    ..._productsFromMap(_qLaunchResult.userProducts),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: FlatButton(
+                        child: Text('Track'),
+                        color: Colors.blue,
+                        textColor: Colors.white,
+                        onPressed: () {},
+                      ),
+                    ),
+                  ],
+                ),
         ),
       ),
     );
+  }
+
+  Future<void> initPlatformState() async {
+    _qLaunchResult = await Qonversion.launch(
+      'PV77YHL7qnGvsdmpTs7gimsxUvY-Znl2',
+      isObserveMode: true,
+    );
+
+    setState(() {});
+  }
+
+  List<Widget> _productsFromMap(Map<String, QProduct> products) {
+    return products.entries
+        .map<Widget>(
+          (e) => ListTile(
+            title: Text(e.key),
+            subtitle: Text(
+              e.value.qonversionId +
+                  '\n' +
+                  e.value.storeId +
+                  '\n' +
+                  e.value.duration.toString() +
+                  '\n' +
+                  e.value.type.toString() +
+                  '\n',
+            ),
+          ),
+        )
+        .toList();
+  }
+
+  List<Widget> _permissionsFromMap(Map<String, QPermission> permissions) {
+    return permissions.entries
+        .map<Widget>(
+          (e) => ListTile(
+            title: Text(e.key),
+            subtitle: Text(
+              e.value.productId +
+                  '\n' +
+                  e.value.permissionId +
+                  '\n' +
+                  e.value.renewState.toString() +
+                  '\n' +
+                  e.value.startedDate.toString() +
+                  '\n' +
+                  e.value.expirationDate?.toString() +
+                  '\n' +
+                  e.value.isActive.toString(),
+            ),
+          ),
+        )
+        .toList();
   }
 }
