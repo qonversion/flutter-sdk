@@ -10,6 +10,7 @@ class Constants {
 
   // MethodChannel methods names
   static const mLaunch = 'launch';
+  static const mProducts = 'products';
   static const mSetUserId = 'setUserId';
   static const mSyncPurchases = 'syncPurchases';
   static const mAddAttributionData = 'addAttributionData';

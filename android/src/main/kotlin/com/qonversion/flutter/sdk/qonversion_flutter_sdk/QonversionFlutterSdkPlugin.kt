@@ -5,17 +5,15 @@ import android.app.Application
 import androidx.annotation.NonNull
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
-import com.qonversion.android.sdk.AttributionSource
+import com.qonversion.android.sdk.*
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
-import com.qonversion.android.sdk.Qonversion
-import com.qonversion.android.sdk.QonversionError
-import com.qonversion.android.sdk.QonversionLaunchCallback
 import com.qonversion.android.sdk.dto.QLaunchResult
+import com.qonversion.android.sdk.dto.QProduct
 
 /** QonversionFlutterSdkPlugin */
 class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): MethodCallHandler {
@@ -31,16 +29,23 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-        if (call.method == "syncPurchases") {
-            syncPurchases(result)
-            return
+
+        // Methods without args
+
+        when (call.method) {
+            "products" -> {
+                products(result)
+                return
+            }
+            "syncPurchases" -> {
+                syncPurchases(result)
+                return
+            }
         }
+
+        // Methods with args
 
         val args = call.arguments() as? Map<String, Any> ?: return result.noArgsError()
-
-        if (args.isEmpty()) {
-            return result.noArgsError()
-        }
 
         when (call.method) {
             "launch" -> launch(args, result)
@@ -55,22 +60,32 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         val apiKey = args["key"] as? String ?: return result.noApiKeyError()
         val isObserveMode = args["isObserveMode"] as? Boolean ?: return result.noArgsError()
 
-        val callback = object: QonversionLaunchCallback {
-            override fun onSuccess(launchResult: QLaunchResult) {
-                result.success(launchResult.toMap())
+        Qonversion.launch(
+                application,
+                apiKey,
+                isObserveMode,
+                callback = object: QonversionLaunchCallback {
+                    override fun onSuccess(launchResult: QLaunchResult) {
+                        result.success(launchResult.toMap())
+                    }
+
+                    override fun onError(error: QonversionError) {
+                        result.qonversionError(error.description, error.additionalMessage)
+                    }
+                }
+        )
+    }
+
+    private fun products(result: Result) {
+        Qonversion.products(callback = object: QonversionProductsCallback {
+            override fun onSuccess(products: Map<String, QProduct>) {
+                result.success(products.mapValues { it.value.toMap() })
             }
 
             override fun onError(error: QonversionError) {
                 result.qonversionError(error.description, error.additionalMessage)
             }
-        }
-
-        Qonversion.launch(
-                application,
-                apiKey,
-                isObserveMode,
-                callback
-        )
+        })
     }
 
     private fun setUserId(userId: String?, result: Result) {

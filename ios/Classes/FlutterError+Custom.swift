@@ -37,4 +37,10 @@ extension FlutterError {
                  message: "Failed to launch Qonversion SDK",
                  details: description)
   }
+  
+  static func failedToGetProducts(_ description: String) -> FlutterError {
+    FlutterError(code: "7",
+                 message: "Failed to get products",
+                 details: description)
+  }
 }

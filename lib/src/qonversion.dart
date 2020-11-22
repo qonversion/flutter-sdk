@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:qonversion_flutter/qonversion_flutter.dart';
+import 'package:qonversion_flutter/src/models/utils/mapper.dart';
 
 import 'constants.dart';
 import 'models/launch_result.dart';
@@ -43,6 +45,15 @@ class Qonversion {
     }
 
     return null;
+  }
+
+  /// Returns Qonversion Products in assoсiation with Google Play Store Products.
+  ///
+  /// See [Product Center](https://qonversion.io/docs/product-center)
+  static Future<Map<String, QProduct>> products() async {
+    final rawResult = await _channel.invokeMethod(Constants.mProducts);
+
+    return QMapper.productsFromJson(rawResult);
   }
 
   /// Sends your attribution [data] to the [provider].
