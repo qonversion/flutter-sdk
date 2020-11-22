@@ -13,7 +13,9 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 import com.qonversion.android.sdk.Qonversion
-import com.qonversion.android.sdk.QonversionCallback
+import com.qonversion.android.sdk.QonversionError
+import com.qonversion.android.sdk.QonversionLaunchCallback
+import com.qonversion.android.sdk.dto.QLaunchResult
 
 /** QonversionFlutterSdkPlugin */
 class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): MethodCallHandler {
@@ -46,46 +48,46 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
     private fun launch(args: Map<String, Any>, result: Result) {
         val apiKey = args["key"] as? String ?: return result.noApiKeyError()
 
-        val userId = args["userID"] as? String ?: ""
-
-        val callback = object: QonversionCallback {
-            override fun onSuccess(uid: String) {
-                result.success(uid)
+        val callback = object: QonversionLaunchCallback {
+            override fun onSuccess(launchResult: QLaunchResult) {
+                result.success(launchResult.uid)
             }
 
-            override fun onError(t: Throwable) {
-                result.qonversionError(t.localizedMessage, t.cause.toString())
+            override fun onError(error: QonversionError) {
+                result.qonversionError(error.description, error.additionalMessage)
             }
         }
 
-        Qonversion.initialize(
+        Qonversion.launch(
                 application,
                 apiKey,
-                userId,
+                true,
                 callback
         )
     }
 
     private fun trackPurchase(args: Map<String, Any>, result: Result) {
-        @Suppress("UNCHECKED_CAST")
-        val detailsMap = args["details"] as Map<String, Any>
-        @Suppress("UNCHECKED_CAST")
-        val purchaseMap = args["purchase"] as Map<String, Any>
+//        @Suppress("UNCHECKED_CAST")
+//        val detailsMap = args["details"] as Map<String, Any>
+//        @Suppress("UNCHECKED_CAST")
+//        val purchaseMap = args["purchase"] as Map<String, Any>
+//
+//        val details = createSkuDetails(detailsMap)
+//        val purchase = createPurchase(purchaseMap)
+//
+//        val callback = object: QonversionCallback {
+//            override fun onSuccess(uid: String) {
+//                result.success(uid)
+//            }
+//
+//            override fun onError(t: Throwable) {
+//                result.qonversionError(t.localizedMessage, t.cause.toString())
+//            }
+//        }
+//
+//        Qonversion.instance?.purchase(details, purchase, callback)
 
-        val details = createSkuDetails(detailsMap)
-        val purchase = createPurchase(purchaseMap)
-
-        val callback = object: QonversionCallback {
-            override fun onSuccess(uid: String) {
-                result.success(uid)
-            }
-
-            override fun onError(t: Throwable) {
-                result.qonversionError(t.localizedMessage, t.cause.toString())
-            }
-        }
-
-        Qonversion.instance?.purchase(details, purchase, callback)
+        result.qonversionError("trackPurchase", "not implemented")
     }
 
     private fun addAttributionData(args: Map<String, Any>, result: Result) {
@@ -106,7 +108,7 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         }
                 ?: return result.success(null)
 
-        Qonversion.instance?.attribution(data, castedProvider, uid)
+        Qonversion.attribution(data, castedProvider, uid)
 
         result.success(null)
     }
