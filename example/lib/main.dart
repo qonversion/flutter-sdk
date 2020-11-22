@@ -55,11 +55,7 @@ class _MyAppState extends State<MyApp> {
                 child: Text('Track'),
                 color: Colors.blue,
                 textColor: Colors.white,
-                onPressed: () async {
-                  final uid = await Qonversion.manualTrackPurchase(
-                      getProductDetails(), getPurchaseDetails());
-                  print(uid);
-                },
+                onPressed: () {},
               ),
             ],
           ),

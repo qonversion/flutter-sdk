@@ -11,11 +11,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  in_app_purchase: ^0.3.4+8
+  json_annotation: ^3.1.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: ^1.0.0
+  json_serializable: ^3.5.0
 
 flutter:
   plugin:

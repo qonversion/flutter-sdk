@@ -10,5 +10,4 @@ class Constants {
   // MethodChannel methods names
   static const mLaunch = 'launch';
   static const mAddAttributionData = 'addAttributionData';
-  static const mTrackPurchase = 'trackPurchase';
 }
