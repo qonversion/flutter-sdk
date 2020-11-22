@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -27,6 +28,22 @@ class Qonversion {
 
   static Future<void> setUserId(String userId) =>
       _channel.invokeMethod(Constants.mSetUserId, {Constants.kUserId: userId});
+
+  /// This method will send all purchases to the Qonversion backend. Call this every time when purchase is handled by you own implementation.
+  ///
+  /// **Warning!**
+  ///
+  /// This method works for Android only.
+  /// It should only be called if you're using Qonversion SDK in observer mode.
+  ///
+  /// See [Observer mode for Android SDK](https://documentation.qonversion.io/docs/observer-mode#android-sdk-only)
+  static Future<void> syncPurchases() {
+    if (Platform.isAndroid) {
+      return _channel.invokeMethod(Constants.mSyncPurchases);
+    }
+
+    return null;
+  }
 
   /// Sends your attribution [data] to the [provider].
   ///

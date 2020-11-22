@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
@@ -46,8 +47,8 @@ class _MyAppState extends State<MyApp> {
                     ..._permissionsFromMap(_qLaunchResult.permissions),
                     ListTile(title: Text('USER PRODUCTS:')),
                     ..._productsFromMap(_qLaunchResult.userProducts),
-                    Align(
-                      alignment: Alignment.bottomCenter,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: FlatButton(
                         child: Text('Set custom userId'),
                         color: Colors.blue,
@@ -55,6 +56,16 @@ class _MyAppState extends State<MyApp> {
                         onPressed: () => Qonversion.setUserId('userId'),
                       ),
                     ),
+                    if (Platform.isAndroid)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FlatButton(
+                          child: Text('Sync Purchases'),
+                          color: Colors.orange,
+                          textColor: Colors.white,
+                          onPressed: () => Qonversion.syncPurchases(),
+                        ),
+                      ),
                   ],
                 ),
         ),

@@ -31,6 +31,11 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+        if (call.method == "syncPurchases") {
+            syncPurchases(result)
+            return
+        }
+
         val args = call.arguments() as? Map<String, Any> ?: return result.noArgsError()
 
         if (args.isEmpty()) {
@@ -75,6 +80,11 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         }
 
         Qonversion.setUserID(userId)
+        result.success(null)
+    }
+
+    private fun syncPurchases(result: Result) {
+        Qonversion.syncPurchases()
         result.success(null)
     }
 
