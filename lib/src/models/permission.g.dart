@@ -8,17 +8,17 @@ part of 'permission.dart';
 
 QPermission _$QPermissionFromJson(Map<String, dynamic> json) {
   return QPermission(
-    json['permission_id'] as String,
-    json['product_id'] as String,
+    json['id'] as String,
+    json['associated_product'] as String,
     _$enumDecodeNullable(_$QProductRenewStateEnumMap, json['renew_state'],
         unknownValue: QProductRenewState.unknown),
-    json['started_date'] == null
+    json['started_timestamp'] == null
         ? null
-        : DateTime.parse(json['started_date'] as String),
-    json['expiration_date'] == null
+        : DateTime.parse(json['started_timestamp'] as String),
+    json['expiration_timestamp'] == null
         ? null
-        : DateTime.parse(json['expiration_date'] as String),
-    json['is_active'] as bool,
+        : DateTime.parse(json['expiration_timestamp'] as String),
+    json['active'] as bool,
   );
 }
 

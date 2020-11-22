@@ -46,7 +46,6 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
                   result(FlutterError.failedToLaunchSdk(error.localizedDescription))
                   return
                 }
-                
                 result(launchResult.uid)
             }
         }

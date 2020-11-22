@@ -10,7 +10,7 @@ class QProduct {
   /// Product ID created in Qonversion Dashboard.
   ///
   /// See [Create Products](https://qonversion.io/docs/create-products)
-  @JsonKey(name: 'q_id')
+  @JsonKey(name: 'id')
   final String qonversionId;
 
   /// Apple Store Product ID.

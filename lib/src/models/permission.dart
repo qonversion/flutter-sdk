@@ -8,13 +8,13 @@ class QPermission {
   /// Qonversion Permission ID, like premium.
   ///
   /// See [Create Permission](https://qonversion.io/docs/create-permission)
-  @JsonKey(name: 'permission_id')
+  @JsonKey(name: 'id')
   final String permissionId;
 
   /// Product ID created in Qonversion Dashboard.
   ///
   /// See [Create Products](https://qonversion.io/docs/create-products)
-  @JsonKey(name: 'product_id')
+  @JsonKey(name: 'associated_product')
   final String productId;
 
   /// A renew state for an associate product that unlocked permission
@@ -25,17 +25,17 @@ class QPermission {
   final QProductRenewState renewState;
 
   /// Purchase date
-  @JsonKey(name: 'started_date')
+  @JsonKey(name: 'started_timestamp')
   final DateTime startedDate;
 
   /// Expiration date for subscription
-  @JsonKey(name: 'expiration_date')
+  @JsonKey(name: 'expiration_timestamp')
   final DateTime expirationDate;
 
   /// Use for checking permission for current user.
   /// Pay attention, isActive == true does not mean that subscription is renewable.
   /// Subscription could be canceled, but the user could still have a permission
-  @JsonKey(name: 'is_active')
+  @JsonKey(name: 'active')
   final bool isActive;
 
   const QPermission(

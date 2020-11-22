@@ -12,7 +12,7 @@ class QLaunchResult {
   final String uid;
 
   /// Original Server response time
-  @JsonKey(name: 'date')
+  @JsonKey(name: 'timestamp')
   final DateTime date;
 
   /// All products

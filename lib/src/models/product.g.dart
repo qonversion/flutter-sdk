@@ -8,7 +8,7 @@ part of 'product.dart';
 
 QProduct _$QProductFromJson(Map<String, dynamic> json) {
   return QProduct(
-    json['q_id'] as String,
+    json['id'] as String,
     json['store_id'] as String,
     _$enumDecodeNullable(_$QProductTypeEnumMap, json['type'],
         unknownValue: QProductType.unknown),
