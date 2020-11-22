@@ -47,10 +47,11 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
 
     private fun launch(args: Map<String, Any>, result: Result) {
         val apiKey = args["key"] as? String ?: return result.noApiKeyError()
+        val isObserveMode = args["isObserveMode"] as? Boolean ?: return result.noArgsError()
 
         val callback = object: QonversionLaunchCallback {
             override fun onSuccess(launchResult: QLaunchResult) {
-                result.success(launchResult.uid)
+                result.success(launchResult.toMap())
             }
 
             override fun onError(error: QonversionError) {
@@ -61,7 +62,7 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         Qonversion.launch(
                 application,
                 apiKey,
-                true,
+                isObserveMode,
                 callback
         )
     }
