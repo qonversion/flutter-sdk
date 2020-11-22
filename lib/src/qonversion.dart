@@ -25,6 +25,9 @@ class Qonversion {
     return QLaunchResult.fromJson(Map<String, dynamic>.from(rawResult));
   }
 
+  static Future<void> setUserId(String userId) =>
+      _channel.invokeMethod(Constants.mSetUserId, {Constants.kUserId: userId});
+
   /// Sends your attribution [data] to the [provider].
   ///
   /// [userId], if specified, will also be sent to the provider.

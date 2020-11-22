@@ -49,10 +49,10 @@ class _MyAppState extends State<MyApp> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: FlatButton(
-                        child: Text('Track'),
+                        child: Text('Set custom userId'),
                         color: Colors.blue,
                         textColor: Colors.white,
-                        onPressed: () {},
+                        onPressed: () => Qonversion.setUserId('userId'),
                       ),
                     ),
                   ],

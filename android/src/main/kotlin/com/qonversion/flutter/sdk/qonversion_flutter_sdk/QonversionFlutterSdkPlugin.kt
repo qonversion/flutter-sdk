@@ -39,6 +39,7 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
 
         when (call.method) {
             "launch" -> launch(args, result)
+            "setUserId" -> setUserId(args["userId"] as? String, result)
             "trackPurchase" -> trackPurchase(args, result)
             "addAttributionData" -> addAttributionData(args, result)
             else -> result.notImplemented()
@@ -65,6 +66,16 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
                 isObserveMode,
                 callback
         )
+    }
+
+    private fun setUserId(userId: String?, result: Result) {
+        if (userId == null) {
+            result.noUserIdError()
+            return
+        }
+
+        Qonversion.setUserID(userId)
+        result.success(null)
     }
 
     private fun trackPurchase(args: Map<String, Any>, result: Result) {
