@@ -58,7 +58,8 @@ class Qonversion {
   }
 
   static Future<QPurchaseResult> purchase(String productId) async {
-    final rawResult = await _channel.invokeMethod(Constants.mPurchase, '');
+    final rawResult = await _channel
+        .invokeMethod(Constants.mPurchase, {Constants.kProductId: productId});
 
     final purchaseResult =
         QPurchaseResult.fromJson(Map<String, dynamic>.from(rawResult));
