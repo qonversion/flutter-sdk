@@ -7,6 +7,20 @@
 
 import Qonversion
 
+struct PurchaseResult {
+  let permissions: [String : Qonversion.Permission]
+  let error: Error?
+  let isCancelled: Bool
+  
+  func toMap() -> Dictionary<String, Any?> {
+    return [
+      "permissions": permissions.mapValues { $0.toMap() },
+      "error": error?.localizedDescription,
+      "is_cancelled": isCancelled,
+    ]
+  }
+}
+
 extension Qonversion.LaunchResult {
   func toMap() -> Dictionary<String, Any> {
     return [

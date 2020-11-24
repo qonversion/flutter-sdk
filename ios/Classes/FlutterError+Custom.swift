@@ -43,4 +43,8 @@ extension FlutterError {
                  message: "Failed to get products",
                  details: description)
   }
+  
+  static let noProductId = FlutterError(code: "8",
+                                       message: "Could not find productId value",
+                                       details: "Please provide valid productId")
 }

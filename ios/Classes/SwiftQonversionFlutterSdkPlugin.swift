@@ -30,6 +30,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     switch call.method {
     case "launch":
       return launch(with: args["key"] as? String, result)
+    
+    case "purchase":
+      return purchase(args["productId"] as? String, result)
       
     case "setUserId":
       return setUserId(args["userId"] as? String, result)
@@ -67,6 +70,19 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       let productsMap = products.mapValues { $0.toMap() }
       
       result(productsMap)
+    }
+  }
+  
+  private func purchase(_ productId: String?, _ result: @escaping FlutterResult) {
+    guard let productId = productId else {
+      return result(FlutterError.noProductId)
+    }
+    
+    Qonversion.purchase(productId) { (permissions, error, isCancelled) in
+      let purchaseResult = PurchaseResult(permissions: permissions,
+                                          error: error,
+                                          isCancelled: isCancelled)
+      result(purchaseResult.toMap())
     }
   }
   
