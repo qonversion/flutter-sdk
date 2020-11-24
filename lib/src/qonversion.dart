@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
+import 'package:qonversion_flutter/src/models/purchase_result.dart';
 import 'package:qonversion_flutter/src/models/utils/mapper.dart';
 
 import 'constants.dart';
@@ -54,6 +55,19 @@ class Qonversion {
     final rawResult = await _channel.invokeMethod(Constants.mProducts);
 
     return QMapper.productsFromJson(rawResult);
+  }
+
+  static Future<QPurchaseResult> purchase(String productId) async {
+    final rawResult = await _channel.invokeMethod(Constants.mPurchase, '');
+
+    final purchaseResult =
+        QPurchaseResult.fromJson(Map<String, dynamic>.from(rawResult));
+
+    if (purchaseResult.error != null) {
+      throw Exception(purchaseResult.error);
+    }
+
+    return purchaseResult;
   }
 
   /// Sends your attribution [data] to the [provider].
