@@ -26,6 +26,10 @@ fun MethodChannel.Result.noProviderError() {
     return this.error("5", "Could not find provider", "Please make sure you pass a valid value")
 }
 
+fun MethodChannel.Result.noProductIdError() {
+    return this.error("8", "Could not find productId value", "Please provide valid productId")
+}
+
 fun MethodChannel.Result.qonversionError(message: String, cause: String) {
     return this.error("9", message, cause)
 }

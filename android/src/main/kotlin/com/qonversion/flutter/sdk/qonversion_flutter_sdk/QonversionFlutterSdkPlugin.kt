@@ -13,6 +13,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 import com.qonversion.android.sdk.dto.QLaunchResult
+import com.qonversion.android.sdk.dto.QPermission
 import com.qonversion.android.sdk.dto.QProduct
 
 /** QonversionFlutterSdkPlugin */
@@ -49,6 +50,7 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
 
         when (call.method) {
             "launch" -> launch(args, result)
+            "purchase" -> purchase(args["productId"] as? String, result)
             "setUserId" -> setUserId(args["userId"] as? String, result)
             "trackPurchase" -> trackPurchase(args, result)
             "addAttributionData" -> addAttributionData(args, result)
@@ -74,6 +76,23 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
                     }
                 }
         )
+    }
+
+    private fun purchase(productId: String?, result: Result) {
+        if (productId == null) {
+            result.noProductIdError()
+            return
+        }
+
+        Qonversion.purchase(activity, productId, callback = object: QonversionPermissionsCallback {
+            override fun onSuccess(permissions: Map<String, QPermission>) {
+                result.success(PurchaseResult(permissions).toMap())
+            }
+
+            override fun onError(error: QonversionError) {
+                result.success(PurchaseResult(error = error).toMap())
+            }
+        })
     }
 
     private fun products(result: Result) {

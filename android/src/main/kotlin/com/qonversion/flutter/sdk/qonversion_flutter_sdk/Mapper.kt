@@ -1,8 +1,18 @@
 package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 
+import com.qonversion.android.sdk.QonversionError
 import com.qonversion.android.sdk.dto.QLaunchResult
 import com.qonversion.android.sdk.dto.QPermission
 import com.qonversion.android.sdk.dto.QProduct
+
+data class PurchaseResult(val permissions: Map<String, QPermission>? = null, val error: QonversionError? = null) {
+    fun toMap(): Map<String, Any?> {
+        return mapOf(
+                "permissions" to permissions?.mapValues { it.value.toMap() },
+                "error" to (error?.description ?: error?.additionalMessage)
+        )
+    }
+}
 
 fun QLaunchResult.toMap(): Map<String, Any> {
     return mapOf(
