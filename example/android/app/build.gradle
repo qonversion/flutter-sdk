@@ -46,11 +46,30 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            File propertiesFile = project.rootProject.file('local.properties')
+            if (propertiesFile.exists()) {
+                Properties properties = new Properties()
+                properties.load(propertiesFile.newDataInputStream())
+                storeFile file(properties.getProperty('storeFile'))
+                keyAlias properties.getProperty('keyAlias')
+                storePassword properties.getProperty('storePassword')
+                keyPassword properties.getProperty('keyPassword')
+            }
+
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
+        }
+        debug {
+            signingConfig signingConfigs.release
+            debuggable true
         }
     }
 }

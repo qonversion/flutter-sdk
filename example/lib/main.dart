@@ -16,7 +16,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var _mockTrack = true;
+  var _mockTrack = false;
   String _uid = 'Not Initialized Qonversion Yet';
   StreamSubscription<List<PurchaseDetails>> _subscription;
   List<ProductDetails> _products = [];
@@ -115,7 +115,7 @@ class _MyAppState extends State<MyApp> {
 
     print(response.productDetails);
 
-    _products = response.productDetails;
+    setState(() => _products = response.productDetails);
   }
 
   void _handlePurchaseUpdates(List<PurchaseDetails> purchases) async {
