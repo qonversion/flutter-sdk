@@ -5,7 +5,10 @@ import 'package:in_app_purchase/billing_client_wrappers.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  InAppPurchaseConnection.enablePendingPurchases();
+  runApp(MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -13,7 +16,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  var _mockTrack = true;
   String _uid = 'Not Initialized Qonversion Yet';
+  StreamSubscription<List<PurchaseDetails>> _subscription;
+  List<ProductDetails> _products = [];
 
   @override
   void initState() {
@@ -21,19 +27,10 @@ class _MyAppState extends State<MyApp> {
     initPlatformState();
   }
 
-  Future<void> initPlatformState() async {
-    String uid;
-    try {
-      uid = await Qonversion.launch('PV77YHL7qnGvsdmpTs7gimsxUvY-Znl2');
-      print(uid);
-    } catch (e) {
-      print('Failed to obtain uid from Qonversion.');
-      print(e);
-    }
-
-    if (!mounted) return;
-
-    setState(() => _uid = uid);
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -51,21 +48,103 @@ class _MyAppState extends State<MyApp> {
                 'Qonversion uid: \n$_uid\n',
                 textAlign: TextAlign.center,
               ),
+              if (_products.isNotEmpty)
+                Column(
+                  children: [
+                    for (final p in _products) Text(p.id),
+                  ],
+                ),
+              StreamBuilder<List<PurchaseDetails>>(
+                stream: InAppPurchaseConnection.instance.purchaseUpdatedStream,
+                initialData: [],
+                builder: (context, snapshot) {
+                  final details = <Widget>[];
+                  if (snapshot.hasData) {
+                    for (final detail in snapshot.data) {
+                      if (detail.status == PurchaseStatus.error) {
+                        continue;
+                      }
+                      details.add(Text(detail.productID));
+                    }
+                  }
+
+                  return Column(children: details);
+                },
+              ),
               FlatButton(
                 child: Text('Track'),
                 color: Colors.blue,
                 textColor: Colors.white,
-                onPressed: () async {
-                  final uid = await Qonversion.manualTrackPurchase(
-                      getProductDetails(), getPurchaseDetails());
-                  print(uid);
-                },
+                onPressed: makePurchase,
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> initPlatformState() async {
+    String uid;
+    try {
+      uid = await Qonversion.launch('PV77YHL7qnGvsdmpTs7gimsxUvY-Znl2');
+      print(uid);
+    } catch (e) {
+      print('Failed to obtain uid from Qonversion.');
+      print(e);
+    }
+
+    if (!mounted) return;
+
+    setState(() => _uid = uid);
+
+    final purchaseUpdates =
+        InAppPurchaseConnection.instance.purchaseUpdatedStream;
+    _subscription = purchaseUpdates.listen((purchases) {
+      _handlePurchaseUpdates(purchases);
+    });
+
+    final available = await InAppPurchaseConnection.instance.isAvailable();
+    if (!available) {
+      print('Store is not available');
+    }
+
+    final _kIds = Set<String>.from(['qonversion_subs_monthly']);
+    final response =
+        await InAppPurchaseConnection.instance.queryProductDetails(_kIds);
+
+    print(response.productDetails);
+
+    _products = response.productDetails;
+  }
+
+  void _handlePurchaseUpdates(List<PurchaseDetails> purchases) async {
+    for (var i = 0; i < purchases.length; i++) {
+      if (purchases[i].status == PurchaseStatus.error) {
+        print('Bad purchase status');
+        continue;
+      }
+
+      final uid =
+          await Qonversion.manualTrackPurchase(_products[0], purchases[0]);
+      print(uid);
+    }
+  }
+
+  void makePurchase() async {
+    if (_mockTrack) {
+      final uid = await Qonversion.manualTrackPurchase(
+          getProductDetails(), getPurchaseDetails());
+      print(uid);
+      return;
+    }
+    final productDetails = _products[0];
+    final purchaseParam = PurchaseParam(productDetails: productDetails);
+
+    final res = await InAppPurchaseConnection.instance
+        .buyNonConsumable(purchaseParam: purchaseParam);
+
+    print('Item purchased, result: $res');
   }
 
   ProductDetails getProductDetails() {
