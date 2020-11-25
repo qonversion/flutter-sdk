@@ -38,11 +38,16 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
         let userId = args["userID"] as? String
         
         if let userId = userId {
-            Qonversion.launch(withKey: apiKey, userID: userId)
+            Qonversion.launch(withKey: apiKey)
             result(userId)
         } else {
-            Qonversion.launch(withKey: apiKey) { uid in
-                result(uid)
+            Qonversion.launch(withKey: apiKey) { launchResult, error in
+                if let error = error {
+                  result(FlutterError.failedToLaunchSdk(error.localizedDescription))
+                  return
+                }
+                
+                result(launchResult.uid)
             }
         }
     }
@@ -58,22 +63,17 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
             return
         }
         
-        guard let userId = args["userId"] as? String else {
-            result(FlutterError.noUserId)
-            return
-        }
-        
         // Using appsFlyer by default since there are only 2 cases in an enum yet.
-        var castedProvider = QAttributionProvider.appsFlyer
+        var castedProvider = Qonversion.AttributionProvider.appsFlyer
         
         switch provider {
         case "branch":
-            castedProvider = QAttributionProvider.branch
+            castedProvider = Qonversion.AttributionProvider.branch
         default:
             break
         }
         
-        Qonversion.addAttributionData(data, from: castedProvider, userID: userId)
+        Qonversion.addAttributionData(data, from: castedProvider)
         
         result(nil)
     }
