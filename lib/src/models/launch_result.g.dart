@@ -9,9 +9,9 @@ part of 'launch_result.dart';
 QLaunchResult _$QLaunchResultFromJson(Map<String, dynamic> json) {
   return QLaunchResult(
     json['uid'] as String,
-    _dateTimeFromTimestamp(json['timestamp'] as int),
-    _productsFromJson(json['products']),
-    _permissionsFromJson(json['permissions']),
-    _productsFromJson(json['user_products']),
+    QMapper.dateTimeFromTimestamp(json['timestamp'] as int),
+    QMapper.productsFromJson(json['products']),
+    QMapper.permissionsFromJson(json['permissions']),
+    QMapper.productsFromJson(json['user_products']),
   );
 }

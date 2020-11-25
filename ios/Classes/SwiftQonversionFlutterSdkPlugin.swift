@@ -10,6 +10,18 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
   }
   
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    
+    // MARK: - Calls without arguments
+    
+    switch (call.method) {
+    case "products":
+      return products(result)
+    default:
+      break
+    }
+    
+    // MARK: - Calls with arguments
+    
     guard let args = call.arguments as? [String: Any] else {
       result(FlutterError.noArgs)
       return
@@ -17,16 +29,16 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     
     switch call.method {
     case "launch":
-      launch(with: args["key"] as? String, result)
+      return launch(with: args["key"] as? String, result)
       
     case "setUserId":
-      setUserId(args["userId"] as? String, result)
+      return setUserId(args["userId"] as? String, result)
       
     case "addAttributionData":
-      addAttributionData(args: args, result)
+      return addAttributionData(args: args, result)
       
     default:
-      result(FlutterMethodNotImplemented)
+      return result(FlutterMethodNotImplemented)
     }
   }
   
@@ -42,6 +54,19 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
         return
       }
       result(launchResult.toMap())
+    }
+  }
+  
+  private func products(_ result: @escaping FlutterResult) {
+    Qonversion.products { (products, error) in
+      if let error = error {
+        result(FlutterError.failedToGetProducts(error.localizedDescription))
+        return
+      }
+      
+      let productsMap = products.mapValues { $0.toMap() }
+      
+      result(productsMap)
     }
   }
   
