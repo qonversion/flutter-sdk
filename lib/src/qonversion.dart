@@ -3,84 +3,46 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:qonversion_flutter/src/serializer.dart';
 
 import 'constants.dart';
+import 'models/launch_result.dart';
 import 'qa_provider.dart';
 
 class Qonversion {
   static const MethodChannel _channel = MethodChannel('qonversion_flutter_sdk');
 
-  /// **Warning**:
-  /// On Android you will have to call `Qonversion.trackPurchase(details, purchase)` method to track all
-  /// purchases manually.
-  ///
-  /// On iOS Qonversion will track any purchase events (trials, subscriptions, basic purchases) automatically.
-  ///
-  /// ================
-  ///
   /// Initializes Qonversion SDK with the given API key.
   /// You can get one in your account on qonversion.io.
-  /// If you're using different API keys for iOS and Android, please
-  /// contact us at hi@qonversion.io since we [now can merge them into one](https://qonversion.io/docs/crossplatform-project).
-  ///
-  /// You can provide your own client-side [userId] if needed.
-  ///
-  /// Returns `userId` for Ads integrations.
-  static Future<String> launch(
+  static Future<QLaunchResult> launch(
     String apiKey, {
-    String userId,
+    @required bool isObserveMode,
   }) async {
     final args = {
       Constants.kApiKey: apiKey,
-      Constants.kUserId: userId,
+      Constants.kObserveMode: isObserveMode,
     };
+    final rawResult = await _channel.invokeMethod(Constants.mLaunch, args);
 
-    final uid = await _channel.invokeMethod(Constants.mLaunch, args);
-
-    return uid;
+    return QLaunchResult.fromJson(Map<String, dynamic>.from(rawResult));
   }
 
-  /// This is a fallback method if you're not using [official in_app_purchase plugin](https://pub.dev/packages/in_app_purchase).
+  static Future<void> setUserId(String userId) =>
+      _channel.invokeMethod(Constants.mSetUserId, {Constants.kUserId: userId});
+
+  /// This method will send all purchases to the Qonversion backend. Call this every time when purchase is handled by you own implementation.
   ///
-  /// Use it only if you have to build SkuDetails and PurchaseDetails maps manually on your side.
+  /// **Warning!**
   ///
-  /// Tracks purchases manually on Android.
+  /// This method works for Android only.
+  /// It should only be called if you're using Qonversion SDK in observer mode.
   ///
-  /// Returns `null` if `!Platform.isAndroid`.
-  static Future<String> trackPurchase(Map<String, dynamic> skuDetails,
-      Map<String, dynamic> purchaseDetails) async {
-    if (!Platform.isAndroid) return null;
+  /// See [Observer mode for Android SDK](https://documentation.qonversion.io/docs/observer-mode#android-sdk-only)
+  static Future<void> syncPurchases() {
+    if (Platform.isAndroid) {
+      return _channel.invokeMethod(Constants.mSyncPurchases);
+    }
 
-    final args = {
-      Constants.kDetails: skuDetails,
-      Constants.kPurchase: purchaseDetails,
-    };
-
-    return _channel.invokeMethod(Constants.mTrackPurchase, args);
-  }
-
-  /// Tracks purchases manually on Android.
-  ///
-  /// Returns `null` if `!Platform.isAndroid`.
-  ///
-  /// You have to use [official in_app_purchase plugin](https://pub.dev/packages/in_app_purchase) and instances of its
-  /// [ProductDetails] and [PurchaseDetails] classes received on purchase success to track purchase with Qonversion.
-  static Future<String> manualTrackPurchase(
-      ProductDetails productDetails, PurchaseDetails purchaseDetails) async {
-    if (!Platform.isAndroid) return null;
-
-    final skuDetails = QDetailsSerializer.buildSkuMap(productDetails.skuDetail);
-    final billingClientPurchaseDetails = QDetailsSerializer.buildPurchaseMap(
-        purchaseDetails.billingClientPurchase);
-
-    final args = {
-      Constants.kDetails: skuDetails,
-      Constants.kPurchase: billingClientPurchaseDetails,
-    };
-
-    return _channel.invokeMethod(Constants.mTrackPurchase, args);
+    return null;
   }
 
   /// Sends your attribution [data] to the [provider].

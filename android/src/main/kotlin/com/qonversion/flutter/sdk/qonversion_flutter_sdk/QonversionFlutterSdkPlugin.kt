@@ -31,6 +31,11 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+        if (call.method == "syncPurchases") {
+            syncPurchases(result)
+            return
+        }
+
         val args = call.arguments() as? Map<String, Any> ?: return result.noArgsError()
 
         if (args.isEmpty()) {
@@ -39,6 +44,7 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
 
         when (call.method) {
             "launch" -> launch(args, result)
+            "setUserId" -> setUserId(args["userId"] as? String, result)
             "trackPurchase" -> trackPurchase(args, result)
             "addAttributionData" -> addAttributionData(args, result)
             else -> result.notImplemented()
@@ -47,10 +53,11 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
 
     private fun launch(args: Map<String, Any>, result: Result) {
         val apiKey = args["key"] as? String ?: return result.noApiKeyError()
+        val isObserveMode = args["isObserveMode"] as? Boolean ?: return result.noArgsError()
 
         val callback = object: QonversionLaunchCallback {
             override fun onSuccess(launchResult: QLaunchResult) {
-                result.success(launchResult.uid)
+                result.success(launchResult.toMap())
             }
 
             override fun onError(error: QonversionError) {
@@ -61,9 +68,24 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         Qonversion.launch(
                 application,
                 apiKey,
-                true,
+                isObserveMode,
                 callback
         )
+    }
+
+    private fun setUserId(userId: String?, result: Result) {
+        if (userId == null) {
+            result.noUserIdError()
+            return
+        }
+
+        Qonversion.setUserID(userId)
+        result.success(null)
+    }
+
+    private fun syncPurchases(result: Result) {
+        Qonversion.syncPurchases()
+        result.success(null)
     }
 
     private fun trackPurchase(args: Map<String, Any>, result: Result) {
