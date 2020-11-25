@@ -154,7 +154,7 @@ class _MyAppState extends State<MyApp> {
       freeTrialPeriod: 'freeTrialPeriod',
       introductoryPrice: 'introductoryPrice',
       introductoryPriceMicros: 'introductoryPriceMicros',
-      introductoryPriceCycles: 'introductoryPriceCycles',
+      introductoryPriceCycles: null,
       introductoryPricePeriod: 'introductoryPricePeriod',
       price: 'price',
       priceAmountMicros: 1000,

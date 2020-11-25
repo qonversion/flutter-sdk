@@ -67,13 +67,12 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
     }
 
     private fun trackPurchase(args: Map<String, Any>, result: Result) {
-        @Suppress("UNCHECKED_CAST")
-        val detailsMap = args["details"] as Map<String, Any>
-        @Suppress("UNCHECKED_CAST")
-        val purchaseMap = args["purchase"] as Map<String, Any>
+        val detailsJson = args["details"] as String
+        val purchaseJson = args["purchase"] as String
+        val signature = args["signature"] as String
 
-        val details = createSkuDetails(detailsMap)
-        val purchase = createPurchase(purchaseMap)
+        val details = createSkuDetails(detailsJson)
+        val purchase = createPurchase(purchaseJson, signature)
 
         val callback = object: QonversionCallback {
             override fun onSuccess(uid: String) {
@@ -89,7 +88,6 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
     }
 
     private fun addAttributionData(args: Map<String, Any>, result: Result) {
-        @Suppress("UNCHECKED_CAST")
         val data = args["data"] as? Map<String, Any> ?: return result.noDataError()
 
         if (data.isEmpty()) {
@@ -111,14 +109,11 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         result.success(null)
     }
 
-    private fun createSkuDetails(map: Map<String, Any>): SkuDetails {
-        val json = map.toString()
+    private fun createSkuDetails(json: String): SkuDetails {
         return SkuDetails(json)
     }
 
-    private fun createPurchase(map: Map<String, Any>): Purchase {
-        val json = map.toString()
-        val signature = map["signature"] as String
+    private fun createPurchase(json: String, signature: String): Purchase {
         return Purchase(json, signature)
     }
 }

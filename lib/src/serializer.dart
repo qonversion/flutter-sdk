@@ -20,7 +20,7 @@ class QDetailsSerializer {
       'isRewarded': original.isRewarded,
       'originalPrice': original.originalPrice,
       'originalPriceAmountMicros': original.originalPriceAmountMicros,
-    };
+    }..removeWhere((key, value) => value == null);
   }
 
   /// Returns [Map] from billing client's [PurchaseWrapper]
@@ -42,6 +42,6 @@ class QDetailsSerializer {
       'developerPayload': original.developerPayload,
       'purchaseState': _purchaseStateWrapperEnumMap[original.purchaseState],
       'isAcknowledged': original.isAcknowledged,
-    };
+    }..removeWhere((key, value) => value == null);
   }
 }

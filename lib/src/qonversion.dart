@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -76,8 +77,9 @@ class Qonversion {
         purchaseDetails.billingClientPurchase);
 
     final args = {
-      Constants.kDetails: skuDetails,
-      Constants.kPurchase: billingClientPurchaseDetails,
+      Constants.kDetails: jsonEncode(skuDetails),
+      Constants.kPurchase: jsonEncode(billingClientPurchaseDetails),
+      Constants.kSignature: purchaseDetails.billingClientPurchase.signature,
     };
 
     return _channel.invokeMethod(Constants.mTrackPurchase, args);
