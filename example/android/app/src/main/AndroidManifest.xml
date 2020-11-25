@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.qonversion.flutter.sdk.qonversion_flutter_sdk_example">
+    package="com.qonversion.sample">
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
@@ -11,7 +11,7 @@
     <uses-permission android:name="com.android.vending.BILLING"/>
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="qonversion_flutter_sdk_example"
+        android:label="com.qonversion.sample"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
