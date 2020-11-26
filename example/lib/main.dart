@@ -125,9 +125,15 @@ class _MyAppState extends State<MyApp> {
         continue;
       }
 
+      if (!purchases[i].billingClientPurchase.isAcknowledged) {
+        print('Going to acknowledge purchase ${purchases[i].productID}');
+        await InAppPurchaseConnection.instance.completePurchase(purchases[i]);
+        print('Successfully acknowledged purchase ${purchases[i].productID}');
+      }
+
       final uid =
           await Qonversion.manualTrackPurchase(_products[0], purchases[0]);
-      print(uid);
+      print('Qonversion uid: $uid');
     }
   }
 
