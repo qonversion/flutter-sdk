@@ -4,11 +4,11 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
-import 'package:qonversion_flutter/src/models/purchase_result.dart';
 import 'package:qonversion_flutter/src/models/utils/mapper.dart';
 
 import 'constants.dart';
 import 'models/launch_result.dart';
+import 'models/purchase_exception.dart';
 import 'qa_provider.dart';
 
 class Qonversion {
@@ -58,17 +58,23 @@ class Qonversion {
   }
 
   /// Starts a process of purchasing product with [productId].
-  static Future<QPurchaseResult> purchase(String productId) async {
+  ///
+  /// Throws `QPurchaseException` in case of error in purchase flow.
+  static Future<Map<String, QPermission>> purchase(String productId) async {
     final rawResult = await _channel
         .invokeMethod(Constants.mPurchase, {Constants.kProductId: productId});
 
     final resultMap = Map<String, dynamic>.from(rawResult);
 
-    if (resultMap['error'] != null) {
-      throw Exception(resultMap['error']);
+    final error = resultMap[Constants.kError];
+    if (error != null) {
+      throw QPurchaseException(
+        error,
+        isUserCancelled: resultMap[Constants.kIsCancelled] ?? false,
+      );
     }
 
-    return QPurchaseResult.fromJson(resultMap);
+    return QMapper.permissionsFromJson(resultMap[Constants.kPermissions]);
   }
 
   /// Android only. Returns `null` if called on iOS.
@@ -88,7 +94,6 @@ class Qonversion {
       Constants.kNewProductId: newProductId,
       Constants.kOldProductId: oldProductId,
     });
-
     return QMapper.permissionsFromJson(rawResult);
   }
 

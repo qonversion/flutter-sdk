@@ -9,6 +9,9 @@ class Constants {
   static const kProductId = 'productId';
   static const kNewProductId = 'newProductId';
   static const kOldProductId = 'oldProductId';
+  static const kError = 'error';
+  static const kIsCancelled = 'is_cancelled';
+  static const kPermissions = 'permissions';
 
   // MethodChannel methods names
   static const mLaunch = 'launch';

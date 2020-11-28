@@ -59,7 +59,7 @@ class _ProductsViewState extends State<ProductsView> {
             textColor: Colors.white,
             onPressed: () async {
               final res = await Qonversion.purchase(product.qonversionId);
-              print(res.permissions[product.qonversionId]?.isActive);
+              print(res[product.qonversionId]?.isActive);
             },
           ),
         ),
