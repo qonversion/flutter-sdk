@@ -7,11 +7,14 @@ class Constants {
   static const kProvider = 'provider';
   static const kDetails = 'details';
   static const kProductId = 'productId';
+  static const kNewProductId = 'newProductId';
+  static const kOldProductId = 'oldProductId';
 
   // MethodChannel methods names
   static const mLaunch = 'launch';
   static const mProducts = 'products';
   static const mPurchase = 'purchase';
+  static const mUpdatePurchase = 'updatePurchase';
   static const mSetUserId = 'setUserId';
   static const mSyncPurchases = 'syncPurchases';
   static const mAddAttributionData = 'addAttributionData';

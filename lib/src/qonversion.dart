@@ -71,6 +71,27 @@ class Qonversion {
     return QPurchaseResult.fromJson(resultMap);
   }
 
+  /// Android only. Returns `null` if called on iOS.
+  ///
+  /// Upgrading, downgrading, or changing a subscription on Google Play Store requires calling updatePurchase() function.
+  ///
+  /// See [Google Play Documentation](https://developer.android.com/google/play/billing/subscriptions#upgrade-downgrade) for more details.
+  static Future<Map<String, QPermission>> updatePurchase({
+    @required String newProductId,
+    @required String oldProductId,
+  }) async {
+    if (!Platform.isAndroid) {
+      return null;
+    }
+
+    final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchase, {
+      Constants.kNewProductId: newProductId,
+      Constants.kOldProductId: oldProductId,
+    });
+
+    return QMapper.permissionsFromJson(rawResult);
+  }
+
   /// Sends your attribution [data] to the [provider].
   ///
   /// [userId], if specified, will also be sent to the provider.

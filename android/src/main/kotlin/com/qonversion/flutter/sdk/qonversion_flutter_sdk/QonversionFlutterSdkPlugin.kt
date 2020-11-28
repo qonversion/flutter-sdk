@@ -51,6 +51,7 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         when (call.method) {
             "launch" -> launch(args, result)
             "purchase" -> purchase(args["productId"] as? String, result)
+            "updatePurchase" -> updatePurchase(args, result)
             "setUserId" -> setUserId(args["userId"] as? String, result)
             "trackPurchase" -> trackPurchase(args, result)
             "addAttributionData" -> addAttributionData(args, result)
@@ -91,6 +92,21 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
 
             override fun onError(error: QonversionError) {
                 result.success(PurchaseResult(error = error).toMap())
+            }
+        })
+    }
+
+    private fun updatePurchase(args: Map<String, Any>, result: Result) {
+        val newProductId = args["newProductId"] as? String ?: return result.noNewProductIdError()
+        val oldProductId = args["oldProductId"] as? String ?: return result.noOldProductIdError()
+
+        Qonversion.updatePurchase(activity, newProductId, oldProductId, callback = object: QonversionPermissionsCallback {
+            override fun onSuccess(permissions: Map<String, QPermission>) {
+                result.success(permissions.mapValues { it.value.toMap() })
+            }
+
+            override fun onError(error: QonversionError) {
+                result.qonversionError(error.description, error.additionalMessage)
             }
         })
     }
