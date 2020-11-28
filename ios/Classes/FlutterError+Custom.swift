@@ -32,19 +32,19 @@ extension FlutterError {
                                        message: "Could not find provider",
                                        details: "Please make sure you pass a valid value")
   
-  static func failedToLaunchSdk(_ description: String) -> FlutterError {
-    FlutterError(code: "6",
-                 message: "Failed to launch Qonversion SDK",
-                 details: description)
-  }
-  
   static func failedToGetProducts(_ description: String) -> FlutterError {
-    FlutterError(code: "7",
-                 message: "Failed to get products",
-                 details: description)
+    return FlutterError(code: "7",
+                        message: "Failed to get products",
+                        details: description)
   }
   
   static let noProductId = FlutterError(code: "8",
-                                       message: "Could not find productId value",
-                                       details: "Please provide valid productId")
+                                        message: "Could not find productId value",
+                                        details: "Please provide valid productId")
+  
+  static func qonversionError(_ description: String) -> FlutterError {
+    return FlutterError(code: "9",
+                        message: "Qonversion Error",
+                        details: description)
+  }
 }
