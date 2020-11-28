@@ -88,7 +88,7 @@ class _MyAppState extends State<MyApp> {
     String uid;
     try {
       uid = await Qonversion.launch('PV77YHL7qnGvsdmpTs7gimsxUvY-Znl2');
-      print(uid);
+      print('Did launch Q with uid: $uid');
     } catch (e) {
       print('Failed to obtain uid from Qonversion.');
       print(e);
@@ -109,11 +109,13 @@ class _MyAppState extends State<MyApp> {
       print('Store is not available');
     }
 
-    final _kIds = Set<String>.from(['qonversion_subs_monthly']);
+    final _kIds = Set<String>.from(['qonversion_inapp_consumable']);
     final response =
         await InAppPurchaseConnection.instance.queryProductDetails(_kIds);
 
-    print(response.productDetails);
+    for (final detail in response.productDetails) {
+      print(detail.id);
+    }
 
     setState(() => _products = response.productDetails);
   }
@@ -148,7 +150,7 @@ class _MyAppState extends State<MyApp> {
     final purchaseParam = PurchaseParam(productDetails: productDetails);
 
     final res = await InAppPurchaseConnection.instance
-        .buyNonConsumable(purchaseParam: purchaseParam);
+        .buyConsumable(purchaseParam: purchaseParam);
 
     print('Item purchased, result: $res');
   }

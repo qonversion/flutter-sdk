@@ -73,8 +73,8 @@ class Qonversion {
     if (!Platform.isAndroid) return null;
 
     final skuDetails = QDetailsSerializer.buildSkuMap(productDetails.skuDetail);
-    final billingClientPurchaseDetails = QDetailsSerializer.buildPurchaseMap(
-        purchaseDetails.billingClientPurchase);
+    final billingClientPurchaseDetails =
+        QDetailsSerializer.buildPurchaseMap(purchaseDetails);
 
     final args = {
       Constants.kDetails: jsonEncode(skuDetails),

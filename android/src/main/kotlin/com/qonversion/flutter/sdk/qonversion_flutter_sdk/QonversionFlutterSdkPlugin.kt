@@ -71,8 +71,8 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         val purchaseJson = args["purchase"] as String
         val signature = args["signature"] as String
 
-        val details = createSkuDetails(detailsJson)
-        val purchase = createPurchase(purchaseJson, signature)
+        val details = SkuDetails(detailsJson)
+        val purchase = Purchase(purchaseJson, signature)
 
         val callback = object: QonversionCallback {
             override fun onSuccess(uid: String) {
@@ -107,13 +107,5 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         Qonversion.instance?.attribution(data, castedProvider, uid)
 
         result.success(null)
-    }
-
-    private fun createSkuDetails(json: String): SkuDetails {
-        return SkuDetails(json)
-    }
-
-    private fun createPurchase(json: String, signature: String): Purchase {
-        return Purchase(json, signature)
     }
 }
