@@ -42,6 +42,10 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
                 syncPurchases(result)
                 return
             }
+            "checkPermissions" -> {
+                checkPermissions(result)
+                return
+            }
         }
 
         // Methods with args
@@ -101,6 +105,18 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         val oldProductId = args["oldProductId"] as? String ?: return result.noOldProductIdError()
 
         Qonversion.updatePurchase(activity, newProductId, oldProductId, callback = object: QonversionPermissionsCallback {
+            override fun onSuccess(permissions: Map<String, QPermission>) {
+                result.success(permissions.mapValues { it.value.toMap() })
+            }
+
+            override fun onError(error: QonversionError) {
+                result.qonversionError(error.description, error.additionalMessage)
+            }
+        })
+    }
+
+    private fun checkPermissions(result: Result) {
+        Qonversion.checkPermissions(object: QonversionPermissionsCallback {
             override fun onSuccess(permissions: Map<String, QPermission>) {
                 result.success(permissions.mapValues { it.value.toMap() })
             }
