@@ -15,6 +15,7 @@ class Constants {
   static const mProducts = 'products';
   static const mPurchase = 'purchase';
   static const mUpdatePurchase = 'updatePurchase';
+  static const mCheckPermissions = 'checkPermissions';
   static const mSetUserId = 'setUserId';
   static const mSyncPurchases = 'syncPurchases';
   static const mAddAttributionData = 'addAttributionData';

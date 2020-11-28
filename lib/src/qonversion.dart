@@ -92,6 +92,17 @@ class Qonversion {
     return QMapper.permissionsFromJson(rawResult);
   }
 
+  /// You need to call the checkPermissions method at the start of your app to check if a user has the required permission.
+  ///
+  /// This method will check the user receipt and will return the current permissions.
+  ///
+  /// If Apple or Google servers are not responding at the time of the request, Qonversion provides the latest permissions data from its database.
+  static Future<Map<String, QPermission>> checkPermissions() async {
+    final rawResult = await _channel.invokeMethod(Constants.mCheckPermissions);
+
+    return QMapper.permissionsFromJson(rawResult);
+  }
+
   /// Sends your attribution [data] to the [provider].
   ///
   /// [userId], if specified, will also be sent to the provider.
