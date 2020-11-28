@@ -26,4 +26,10 @@ class QMapper {
 
   static DateTime dateTimeFromTimestamp(int timestamp) =>
       DateTime.fromMillisecondsSinceEpoch((timestamp * 1000).abs());
+
+  static DateTime dateTimeTryParse(dynamic json) {
+    if (json == null) return null;
+
+    return DateTime.tryParse(json as String);
+  }
 }
