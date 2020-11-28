@@ -62,14 +62,13 @@ class Qonversion {
     final rawResult = await _channel
         .invokeMethod(Constants.mPurchase, {Constants.kProductId: productId});
 
-    final purchaseResult =
-        QPurchaseResult.fromJson(Map<String, dynamic>.from(rawResult));
+    final resultMap = Map<String, dynamic>.from(rawResult);
 
-    if (purchaseResult.error != null) {
-      throw Exception(purchaseResult.error);
+    if (resultMap['error'] != null) {
+      throw Exception(resultMap['error']);
     }
 
-    return purchaseResult;
+    return QPurchaseResult.fromJson(resultMap);
   }
 
   /// Sends your attribution [data] to the [provider].

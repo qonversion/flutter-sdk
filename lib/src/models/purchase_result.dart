@@ -13,23 +13,14 @@ class QPurchaseResult {
   @JsonKey(name: 'permissions', fromJson: QMapper.permissionsFromJson)
   final Map<String, QPermission> permissions;
 
-  /// Optional error.
-  ///
-  /// If exists, something went wrong with purchasing an item.
-  ///
-  /// If doesn't exist, everything's fine and you're free to check `permissions` Map.
-  @JsonKey(name: 'error')
-  final String error;
-
   /// iOS only.
   ///
-  /// `true` if user explicitly canceled the purchasing process.
+  /// `true` if user explicitly cancelled the purchasing process.
   @JsonKey(name: 'is_cancelled')
   final bool isCancelled;
 
   const QPurchaseResult(
     this.permissions,
-    this.error,
     this.isCancelled,
   );
 

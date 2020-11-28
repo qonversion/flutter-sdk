@@ -9,7 +9,6 @@ part of 'purchase_result.dart';
 QPurchaseResult _$QPurchaseResultFromJson(Map<String, dynamic> json) {
   return QPurchaseResult(
     QMapper.permissionsFromJson(json['permissions']),
-    json['error'] as String,
     json['is_cancelled'] as bool,
   );
 }
