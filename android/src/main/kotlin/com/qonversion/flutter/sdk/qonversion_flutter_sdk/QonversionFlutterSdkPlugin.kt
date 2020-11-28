@@ -35,16 +35,16 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
 
         when (call.method) {
             "products" -> {
-                products(result)
-                return
+                return products(result)
             }
             "syncPurchases" -> {
-                syncPurchases(result)
-                return
+                return syncPurchases(result)
             }
             "checkPermissions" -> {
-                checkPermissions(result)
-                return
+                return checkPermissions(result)
+            }
+            "restore" -> {
+                return restore(result)
             }
         }
 
@@ -117,6 +117,18 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
 
     private fun checkPermissions(result: Result) {
         Qonversion.checkPermissions(object: QonversionPermissionsCallback {
+            override fun onSuccess(permissions: Map<String, QPermission>) {
+                result.success(permissions.mapValues { it.value.toMap() })
+            }
+
+            override fun onError(error: QonversionError) {
+                result.qonversionError(error.description, error.additionalMessage)
+            }
+        })
+    }
+
+    private fun restore(result: Result) {
+        Qonversion.restore(object: QonversionPermissionsCallback {
             override fun onSuccess(permissions: Map<String, QPermission>) {
                 result.success(permissions.mapValues { it.value.toMap() })
             }
