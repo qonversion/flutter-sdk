@@ -57,6 +57,7 @@ class Qonversion {
     return QMapper.productsFromJson(rawResult);
   }
 
+  /// Starts a process of purchasing product with [productId].
   static Future<QPurchaseResult> purchase(String productId) async {
     final rawResult = await _channel
         .invokeMethod(Constants.mPurchase, {Constants.kProductId: productId});
