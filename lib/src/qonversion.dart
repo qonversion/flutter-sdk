@@ -103,6 +103,14 @@ class Qonversion {
     return QMapper.permissionsFromJson(rawResult);
   }
 
+  /// Restoring purchases restores users purchases in your app, to maintain access to purchased content.
+  /// Users sometimes need to restore purchased content, such as when they upgrade to a new phone.
+  static Future<Map<String, QPermission>> restore() async {
+    final rawResult = await _channel.invokeMethod(Constants.mRestore);
+
+    return QMapper.permissionsFromJson(rawResult);
+  }
+
   /// Sends your attribution [data] to the [provider].
   ///
   /// [userId], if specified, will also be sent to the provider.
