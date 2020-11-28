@@ -20,6 +20,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     case "checkPermissions":
       return checkPermissions(result)
       
+    case "restore":
+      return restore(result)
+      
     default:
       break
     }
@@ -88,6 +91,17 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
   
   private func checkPermissions(_ result: @escaping FlutterResult) {
     Qonversion.checkPermissions { (permissions, error) in
+      if let error = error {
+        return result(FlutterError.qonversionError(error.localizedDescription))
+      }
+      
+      let permissionsDict = permissions.mapValues { $0.toMap() }
+      result(permissionsDict)
+    }
+  }
+  
+  private func restore(_ result: @escaping FlutterResult) {
+    Qonversion.restore { (permissions, error) in
       if let error = error {
         return result(FlutterError.qonversionError(error.localizedDescription))
       }
