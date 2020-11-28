@@ -12,8 +12,9 @@ QPermission _$QPermissionFromJson(Map<String, dynamic> json) {
     json['associated_product'] as String,
     _$enumDecodeNullable(_$QProductRenewStateEnumMap, json['renew_state'],
         unknownValue: QProductRenewState.unknown),
-    QMapper.dateTimeTryParse(json['started_timestamp']),
-    QMapper.dateTimeTryParse(json['expiration_timestamp']),
+    QMapper.dateTimeFromSecondsTimestamp(json['started_timestamp'] as double),
+    QMapper.dateTimeFromSecondsTimestamp(
+        json['expiration_timestamp'] as double),
     json['active'] as bool,
   );
 }

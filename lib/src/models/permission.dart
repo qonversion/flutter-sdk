@@ -26,11 +26,17 @@ class QPermission {
   final QProductRenewState renewState;
 
   /// Purchase date
-  @JsonKey(name: 'started_timestamp', fromJson: QMapper.dateTimeTryParse)
+  @JsonKey(
+    name: 'started_timestamp',
+    fromJson: QMapper.dateTimeFromSecondsTimestamp,
+  )
   final DateTime startedDate;
 
   /// Expiration date for subscription
-  @JsonKey(name: 'expiration_timestamp', fromJson: QMapper.dateTimeTryParse)
+  @JsonKey(
+    name: 'expiration_timestamp',
+    fromJson: QMapper.dateTimeFromSecondsTimestamp,
+  )
   final DateTime expirationDate;
 
   /// Use for checking permission for current user.

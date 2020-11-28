@@ -17,7 +17,7 @@ data class PurchaseResult(val permissions: Map<String, QPermission>? = null, val
 fun QLaunchResult.toMap(): Map<String, Any> {
     return mapOf(
             "uid" to uid,
-            "timestamp" to date.time / 1000, // since iOS returns seconds since epoch
+            "timestamp" to date.time.toDouble(),
             "products" to products.mapValues { it.value.toMap() },
             "permissions" to permissions.mapValues { it.value.toMap() },
             "user_products" to userProducts.mapValues { it.value.toMap() }
@@ -38,8 +38,8 @@ fun QPermission.toMap(): Map<String, Any?> {
             "id" to permissionID,
             "associated_product" to productID,
             "renew_state" to renewState.type,
-            "started_timestamp" to startedDate.toString(),
-            "expiration_timestamp" to expirationDate?.toString(),
+            "started_timestamp" to startedDate.time.toDouble(),
+            "expiration_timestamp" to expirationDate?.time?.toDouble(),
             "active" to isActive()
     )
 }

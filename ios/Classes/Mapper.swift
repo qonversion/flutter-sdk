@@ -25,7 +25,7 @@ extension Qonversion.LaunchResult {
   func toMap() -> Dictionary<String, Any> {
     return [
       "uid": uid,
-      "timestamp": timestamp,
+      "timestamp": Double(timestamp * 1000),
       "products": products.mapValues { $0.toMap() },
       "permissions": permissions.mapValues { $0.toMap() },
       "user_products": userPoducts.mapValues { $0.toMap() },
@@ -50,8 +50,8 @@ extension Qonversion.Permission {
       "id": permissionID,
       "associated_product": productID,
       "renew_state": renewState.rawValue,
-      "started_timestamp": startedDate,
-      "expiration_timestamp": expirationDate,
+      "started_timestamp": startedDate.timeIntervalSince1970 * 1000,
+      "expiration_timestamp": expirationDate?.timeIntervalSince1970 != nil ? expirationDate!.timeIntervalSince1970 * 1000 : nil,
       "active": isActive,
     ]
   }
