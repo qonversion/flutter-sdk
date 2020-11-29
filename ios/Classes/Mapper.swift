@@ -29,7 +29,7 @@ extension Qonversion.LaunchResult {
   func toMap() -> Dictionary<String, Any> {
     return [
       "uid": uid,
-      "timestamp": Double(timestamp * 1000),
+      "timestamp": NSNumber(value: timestamp).intValue * 1000,
       "products": products.mapValues { $0.toMap() },
       "permissions": permissions.mapValues { $0.toMap() },
       "user_products": userPoducts.mapValues { $0.toMap() },

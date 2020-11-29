@@ -66,7 +66,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       if let error = error {
         return result(FlutterError.qonversionError(error.localizedDescription))
       }
-      result(launchResult.toMap())
+      
+      let resultMap = launchResult.toMap()
+      result(resultMap)
     }
   }
   
