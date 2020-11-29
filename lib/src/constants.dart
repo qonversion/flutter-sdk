@@ -12,6 +12,8 @@ class Constants {
   static const kError = 'error';
   static const kIsCancelled = 'is_cancelled';
   static const kPermissions = 'permissions';
+  static const kProperty = 'property';
+  static const kValue = 'value';
 
   // MethodChannel methods names
   static const mLaunch = 'launch';
@@ -21,6 +23,8 @@ class Constants {
   static const mCheckPermissions = 'checkPermissions';
   static const mRestore = 'restore';
   static const mSetUserId = 'setUserId';
+  static const mSetProperty = 'setProperty';
+  static const mSetUserProperty = 'setUserProperty';
   static const mSyncPurchases = 'syncPurchases';
   static const mAddAttributionData = 'addAttributionData';
 }
