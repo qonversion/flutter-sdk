@@ -43,3 +43,15 @@ fun MethodChannel.Result.noNewProductIdError() {
 fun MethodChannel.Result.noOldProductIdError() {
     return this.error("11", "Could not find new product id", passValidValue)
 }
+
+fun MethodChannel.Result.parsingError(message: String?) {
+    return this.error("12", "Arguments Parsing Error", message)
+}
+
+fun MethodChannel.Result.noProperty() {
+    return this.error("13", "Could not find property", passValidValue)
+}
+
+fun MethodChannel.Result.noPropertyValue() {
+    return this.error("14", "Could not find property value", passValidValue)
+}
