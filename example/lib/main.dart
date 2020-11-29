@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:qonversion_example/products_view.dart';
 
 import 'home.dart';
+import 'params_view.dart';
+import 'products_view.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (_) => HomeView(),
         'products': (_) => ProductsView(),
+        'params': (_) => ParamsView()
       },
     );
   }

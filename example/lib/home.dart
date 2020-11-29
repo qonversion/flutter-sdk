@@ -66,6 +66,20 @@ class _HomeViewState extends State<HomeView> {
                           Navigator.of(context).pushNamed('products'),
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 8,
+                      right: 8,
+                      bottom: 8,
+                    ),
+                    child: FlatButton(
+                      child: Text('Open ParamsView'),
+                      color: Colors.brown,
+                      textColor: Colors.white,
+                      onPressed: () =>
+                          Navigator.of(context).pushNamed('params'),
+                    ),
+                  ),
                   if (Platform.isAndroid)
                     Padding(
                       padding: const EdgeInsets.only(
