@@ -24,7 +24,7 @@ class QMapper {
     });
   }
 
-  static DateTime dateTimeFromSecondsTimestamp(double timestamp) {
+  static DateTime dateTimeFromSecondsTimestamp(num timestamp) {
     if (timestamp == null) return null;
 
     final intAbsTimestamp = timestamp.toInt().abs();
