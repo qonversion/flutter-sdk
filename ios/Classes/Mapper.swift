@@ -7,6 +7,10 @@
 
 import Qonversion
 
+enum ParsingError: Error {
+    case runtimeError(String)
+}
+
 struct PurchaseResult {
   let permissions: [String : Qonversion.Permission]
   let error: Error?
@@ -54,5 +58,29 @@ extension Qonversion.Permission {
       "expiration_timestamp": expirationDate?.timeIntervalSince1970 != nil ? expirationDate!.timeIntervalSince1970 * 1000 : nil,
       "active": isActive,
     ]
+  }
+}
+
+extension Qonversion.Property {
+  static func fromString(_ string: String) throws -> Self {
+    switch string {
+    case "Email":
+      return .email
+    
+    case "Name":
+      return .name
+    
+    case "AppsFlyerUserId":
+      return .appsFlyerUserID
+    
+    case "AdjustAdId":
+      return .adjustUserID
+      
+    case "KochavaDeviceId":
+      return .kochavaDeviceID
+      
+    default:
+      throw ParsingError.runtimeError("Could not parse Qonversion.Property")
+    }
   }
 }
