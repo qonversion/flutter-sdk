@@ -103,8 +103,9 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
     private fun updatePurchase(args: Map<String, Any>, result: Result) {
         val newProductId = args["newProductId"] as? String ?: return result.noNewProductIdError()
         val oldProductId = args["oldProductId"] as? String ?: return result.noOldProductIdError()
-
-        Qonversion.updatePurchase(activity, newProductId, oldProductId, callback = object: QonversionPermissionsCallback {
+        val prorationMode = args["proration_mode"] as? Int
+        
+        Qonversion.updatePurchase(activity, newProductId, oldProductId, prorationMode, callback = object: QonversionPermissionsCallback {
             override fun onSuccess(permissions: Map<String, QPermission>) {
                 result.success(permissions.mapValues { it.value.toMap() })
             }

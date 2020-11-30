@@ -85,6 +85,7 @@ class Qonversion {
   static Future<Map<String, QPermission>> updatePurchase({
     @required String newProductId,
     @required String oldProductId,
+    ProrationMode prorationMode,
   }) async {
     if (!Platform.isAndroid) {
       return null;
@@ -93,6 +94,7 @@ class Qonversion {
     final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchase, {
       Constants.kNewProductId: newProductId,
       Constants.kOldProductId: oldProductId,
+      Constants.kProrationMode: prorationMode.index,
     });
     return QMapper.permissionsFromJson(rawResult);
   }

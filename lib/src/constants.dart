@@ -12,6 +12,7 @@ class Constants {
   static const kError = 'error';
   static const kIsCancelled = 'is_cancelled';
   static const kPermissions = 'permissions';
+  static const kProrationMode = 'proration_mode';
 
   // MethodChannel methods names
   static const mLaunch = 'launch';
