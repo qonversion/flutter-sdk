@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -72,12 +73,13 @@ class Qonversion {
     if (!Platform.isAndroid) return null;
 
     final skuDetails = QDetailsSerializer.buildSkuMap(productDetails.skuDetail);
-    final billingClientPurchaseDetails = QDetailsSerializer.buildPurchaseMap(
-        purchaseDetails.billingClientPurchase);
+    final billingClientPurchaseDetails =
+        QDetailsSerializer.buildPurchaseMap(purchaseDetails);
 
     final args = {
-      Constants.kDetails: skuDetails,
-      Constants.kPurchase: billingClientPurchaseDetails,
+      Constants.kDetails: jsonEncode(skuDetails),
+      Constants.kPurchase: jsonEncode(billingClientPurchaseDetails),
+      Constants.kSignature: purchaseDetails.billingClientPurchase.signature,
     };
 
     return _channel.invokeMethod(Constants.mTrackPurchase, args);

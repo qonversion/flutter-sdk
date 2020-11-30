@@ -18,7 +18,7 @@ if (flutterVersionCode == null) {
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
+    flutterVersionName = '1.0.0'
 }
 
 apply plugin: 'com.android.application'
@@ -38,7 +38,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.qonversion.flutter.sdk.qonversion_flutter_sdk_example"
+        applicationId "com.qonversion.sample"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
@@ -46,11 +46,27 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            File propertiesFile = project.rootProject.file('local.properties')
+            if (propertiesFile.exists()) {
+                Properties properties = new Properties()
+                properties.load(propertiesFile.newDataInputStream())
+                storeFile file(properties.getProperty('storeFile'))
+                keyAlias properties.getProperty('keyAlias')
+                storePassword properties.getProperty('storePassword')
+                keyPassword properties.getProperty('keyPassword')
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
+            debuggable true
         }
     }
 }
