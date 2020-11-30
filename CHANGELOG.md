@@ -1,3 +1,7 @@
+## 1.1.2
+* Fix Android `manualTrackPurchase` args parsing
+* Update Example app
+
 ## 1.1.1
 * Update docs
 

@@ -6,6 +6,7 @@ class Constants {
   static const kProvider = 'provider';
   static const kDetails = 'details';
   static const kPurchase = 'purchase';
+  static const kSignature = 'signature';
 
   // MethodChannel methods names
   static const mLaunch = 'launch';
