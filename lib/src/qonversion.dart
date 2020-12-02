@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
+import 'package:qonversion_flutter/src/models/user_property.dart';
 import 'package:qonversion_flutter/src/models/utils/mapper.dart';
+import 'package:qonversion_flutter/src/utils/string.dart';
 
 import 'constants.dart';
 import 'models/launch_result.dart';
@@ -28,9 +30,6 @@ class Qonversion {
 
     return QLaunchResult.fromJson(Map<String, dynamic>.from(rawResult));
   }
-
-  static Future<void> setUserId(String userId) =>
-      _channel.invokeMethod(Constants.mSetUserId, {Constants.kUserId: userId});
 
   /// This method will send all purchases to the Qonversion backend. Call this every time when purchase is handled by you own implementation.
   ///
@@ -117,6 +116,36 @@ class Qonversion {
 
     return QMapper.permissionsFromJson(rawResult);
   }
+
+  /// Qonversion SDK provides an asynchronous method to set your side User ID that can be used to match users in third-party integrations.
+  ///
+  /// See more in [documentation](https://documentation.qonversion.io/docs/user-identifiers)
+  static Future<void> setUserId(String userId) =>
+      _channel.invokeMethod(Constants.mSetUserId, {Constants.kUserId: userId});
+
+  /// Sets user property for pre-defined case property.
+  ///
+  /// User properties are attributes you can set on a user level.
+  /// You can send user properties to third party platforms as well as use them in Qonversion for customer segmentation and analytics.
+  ///
+  /// See more in [documentation](https://documentation.qonversion.io/docs/user-properties)
+  static Future<void> setProperty(QUserProperty property, String value) =>
+      _channel.invokeMethod(Constants.mSetProperty, {
+        Constants.kProperty: StringUtils.capitalize(describeEnum(property)),
+        Constants.kValue: value,
+      });
+
+  /// Adds custom user property.
+  ///
+  /// User properties are attributes you can set on a user level.
+  /// You can send user properties to third party platforms as well as use them in Qonversion for customer segmentation and analytics.
+  ///
+  /// See more in [documentation](https://documentation.qonversion.io/docs/user-properties)
+  static Future<void> setUserProperty(String property, String value) =>
+      _channel.invokeMethod(Constants.mSetUserProperty, {
+        Constants.kProperty: property,
+        Constants.kValue: value,
+      });
 
   /// Sends your attribution [data] to the [provider].
   ///
