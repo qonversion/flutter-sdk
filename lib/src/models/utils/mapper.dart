@@ -24,6 +24,10 @@ class QMapper {
     });
   }
 
-  static DateTime dateTimeFromTimestamp(int timestamp) =>
-      DateTime.fromMillisecondsSinceEpoch((timestamp * 1000).abs());
+  static DateTime dateTimeFromSecondsTimestamp(num timestamp) {
+    if (timestamp == null) return null;
+
+    final intAbsTimestamp = timestamp.toInt().abs();
+    return DateTime.fromMillisecondsSinceEpoch(intAbsTimestamp);
+  }
 }

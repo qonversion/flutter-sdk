@@ -35,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
                   ),
                   ListTile(
                     title: Text('DateTime'),
-                    subtitle: Text(_qLaunchResult.date.toString()),
+                    subtitle: Text(_qLaunchResult.date?.toString() ?? 'n/a'),
                   ),
                   ListTile(title: Text('PRODUCTS:')),
                   ...productsFromMap(_qLaunchResult.products),
@@ -107,9 +107,9 @@ class _HomeViewState extends State<HomeView> {
                   '\n' +
                   e.value.renewState.toString() +
                   '\n' +
-                  e.value.startedDate.toString() +
+                  (e.value.startedDate?.toString() ?? 'n/a') +
                   '\n' +
-                  e.value.expirationDate?.toString() +
+                  (e.value.expirationDate?.toString() ?? 'n/a') +
                   '\n' +
                   e.value.isActive.toString(),
             ),

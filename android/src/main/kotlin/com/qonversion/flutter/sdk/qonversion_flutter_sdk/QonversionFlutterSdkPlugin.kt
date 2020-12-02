@@ -13,6 +13,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 import com.qonversion.android.sdk.dto.QLaunchResult
+import com.qonversion.android.sdk.dto.QPermission
 import com.qonversion.android.sdk.dto.QProduct
 
 /** QonversionFlutterSdkPlugin */
@@ -34,12 +35,16 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
 
         when (call.method) {
             "products" -> {
-                products(result)
-                return
+                return products(result)
             }
             "syncPurchases" -> {
-                syncPurchases(result)
-                return
+                return syncPurchases(result)
+            }
+            "checkPermissions" -> {
+                return checkPermissions(result)
+            }
+            "restore" -> {
+                return restore(result)
             }
         }
 
@@ -49,6 +54,8 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
 
         when (call.method) {
             "launch" -> launch(args, result)
+            "purchase" -> purchase(args["productId"] as? String, result)
+            "updatePurchase" -> updatePurchase(args, result)
             "setUserId" -> setUserId(args["userId"] as? String, result)
             "trackPurchase" -> trackPurchase(args, result)
             "addAttributionData" -> addAttributionData(args, result)
@@ -74,6 +81,63 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
                     }
                 }
         )
+    }
+
+    private fun purchase(productId: String?, result: Result) {
+        if (productId == null) {
+            result.noProductIdError()
+            return
+        }
+
+        Qonversion.purchase(activity, productId, callback = object: QonversionPermissionsCallback {
+            override fun onSuccess(permissions: Map<String, QPermission>) {
+                result.success(PurchaseResult(permissions).toMap())
+            }
+
+            override fun onError(error: QonversionError) {
+                result.success(PurchaseResult(error = error).toMap())
+            }
+        })
+    }
+
+    private fun updatePurchase(args: Map<String, Any>, result: Result) {
+        val newProductId = args["newProductId"] as? String ?: return result.noNewProductIdError()
+        val oldProductId = args["oldProductId"] as? String ?: return result.noOldProductIdError()
+        val prorationMode = args["proration_mode"] as? Int
+        
+        Qonversion.updatePurchase(activity, newProductId, oldProductId, prorationMode, callback = object: QonversionPermissionsCallback {
+            override fun onSuccess(permissions: Map<String, QPermission>) {
+                result.success(permissions.mapValues { it.value.toMap() })
+            }
+
+            override fun onError(error: QonversionError) {
+                result.qonversionError(error.description, error.additionalMessage)
+            }
+        })
+    }
+
+    private fun checkPermissions(result: Result) {
+        Qonversion.checkPermissions(object: QonversionPermissionsCallback {
+            override fun onSuccess(permissions: Map<String, QPermission>) {
+                result.success(permissions.mapValues { it.value.toMap() })
+            }
+
+            override fun onError(error: QonversionError) {
+                result.qonversionError(error.description, error.additionalMessage)
+            }
+        })
+    }
+
+    private fun restore(result: Result) {
+        Qonversion.restore(object: QonversionPermissionsCallback {
+            override fun onSuccess(permissions: Map<String, QPermission>) {
+                result.success(permissions.mapValues { it.value.toMap() })
+            }
+
+            override fun onError(error: QonversionError) {
+                result.qonversionError(error.description, error.additionalMessage)
+            }
+        })
     }
 
     private fun products(result: Result) {

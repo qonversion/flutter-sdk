@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:qonversion_flutter/src/models/product_renew_state.dart';
+import 'package:qonversion_flutter/src/models/utils/mapper.dart';
 
 part 'permission.g.dart';
 
@@ -25,11 +26,17 @@ class QPermission {
   final QProductRenewState renewState;
 
   /// Purchase date
-  @JsonKey(name: 'started_timestamp')
+  @JsonKey(
+    name: 'started_timestamp',
+    fromJson: QMapper.dateTimeFromSecondsTimestamp,
+  )
   final DateTime startedDate;
 
   /// Expiration date for subscription
-  @JsonKey(name: 'expiration_timestamp')
+  @JsonKey(
+    name: 'expiration_timestamp',
+    fromJson: QMapper.dateTimeFromSecondsTimestamp,
+  )
   final DateTime expirationDate;
 
   /// Use for checking permission for current user.

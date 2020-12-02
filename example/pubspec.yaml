@@ -1,5 +1,8 @@
 name: qonversion_example
 description: Demonstrates how to use the qonversion plugin.
+
+version: 1.0.0+1
+
 publish_to: 'none'
 
 environment:

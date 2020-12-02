@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qonversion_example/home.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
 
 class ProductsView extends StatefulWidget {
@@ -8,7 +7,7 @@ class ProductsView extends StatefulWidget {
 }
 
 class _ProductsViewState extends State<ProductsView> {
-  Map<String, QProduct> _products;
+  var _products = <String, QProduct>{};
 
   @override
   void initState() {
@@ -26,7 +25,9 @@ class _ProductsViewState extends State<ProductsView> {
         child: _products == null
             ? CircularProgressIndicator()
             : ListView(
-                children: [...productsFromMap(_products)],
+                children: [
+                  for (final p in _products.values) _productWidget(p),
+                ],
               ),
       ),
     );
@@ -40,5 +41,29 @@ class _ProductsViewState extends State<ProductsView> {
       print(e);
       _products = {};
     }
+  }
+
+  Widget _productWidget(QProduct product) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ListTile(
+          title: Text('Store ID: ${product.storeId}'),
+          subtitle: Text('Q ID: ${product.qonversionId}'),
+        ),
+        Padding(
+          padding: EdgeInsets.all(8),
+          child: FlatButton(
+            child: Text('Buy'),
+            color: Colors.blue,
+            textColor: Colors.white,
+            onPressed: () async {
+              final res = await Qonversion.purchase(product.qonversionId);
+              print(res[product.qonversionId]?.isActive);
+            },
+          ),
+        ),
+      ],
+    );
   }
 }
