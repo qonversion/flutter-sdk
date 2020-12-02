@@ -14,8 +14,17 @@ QProduct _$QProductFromJson(Map<String, dynamic> json) {
         unknownValue: QProductType.unknown),
     _$enumDecodeNullable(_$QProductDurationEnumMap, json['duration'],
         unknownValue: QProductDuration.unknown),
+    QMapper.skProductFromJson(json['sk_product']),
   );
 }
+
+Map<String, dynamic> _$QProductToJson(QProduct instance) => <String, dynamic>{
+      'id': instance.qonversionId,
+      'store_id': instance.storeId,
+      'type': _$QProductTypeEnumMap[instance.type],
+      'duration': _$QProductDurationEnumMap[instance.duration],
+      'sk_product': instance.skProduct,
+    };
 
 T _$enumDecode<T>(
   Map<T, dynamic> enumValues,

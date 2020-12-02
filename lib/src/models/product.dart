@@ -2,10 +2,12 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'product_duration.dart';
 import 'product_type.dart';
+import 'sk_product_wrapper.dart';
+import 'utils/mapper.dart';
 
 part 'product.g.dart';
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable()
 class QProduct {
   /// Product ID created in Qonversion Dashboard.
   ///
@@ -37,11 +39,18 @@ class QProduct {
   )
   final QProductDuration duration;
 
+  /// Associated SKProduct.
+  ///
+  /// Available for iOS only.
+  @JsonKey(name: 'sk_product', fromJson: QMapper.skProductFromJson)
+  final SKProductWrapper skProduct;
+
   const QProduct(
     this.qonversionId,
     this.storeId,
     this.type,
     this.duration,
+    this.skProduct,
   );
 
   factory QProduct.fromJson(Map<String, dynamic> json) =>

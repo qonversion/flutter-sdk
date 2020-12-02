@@ -1,5 +1,8 @@
 import '../permission.dart';
 import '../product.dart';
+import '../sk_product/discount.dart';
+import '../sk_product/subscription_period.dart';
+import '../sk_product_wrapper.dart';
 
 class QMapper {
   static Map<String, QProduct> productsFromJson(dynamic json) {
@@ -22,6 +25,39 @@ class QMapper {
       final permissionMap = Map<String, dynamic>.from(value);
       return MapEntry(key, QPermission.fromJson(permissionMap));
     });
+  }
+
+  static SKProductWrapper skProductFromJson(dynamic json) {
+    if (json == null) return null;
+
+    final map = Map<String, dynamic>.from(json);
+
+    return SKProductWrapper.fromJson(map);
+  }
+
+  static SKPriceLocaleWrapper skPriceLocaleFromJson(dynamic json) {
+    if (json == null) return null;
+
+    final map = Map<String, dynamic>.from(json);
+
+    return SKPriceLocaleWrapper.fromJson(map);
+  }
+
+  static SKProductSubscriptionPeriodWrapper skProductSubscriptionPeriodFromJson(
+      dynamic json) {
+    if (json == null) return null;
+
+    final map = Map<String, dynamic>.from(json);
+
+    return SKProductSubscriptionPeriodWrapper.fromJson(map);
+  }
+
+  static SKProductDiscountWrapper skProductDiscountFromJson(dynamic json) {
+    if (json == null) return null;
+
+    final map = Map<String, dynamic>.from(json);
+
+    return SKProductDiscountWrapper.fromJson(map);
   }
 
   static DateTime dateTimeFromSecondsTimestamp(num timestamp) {
