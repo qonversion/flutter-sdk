@@ -14,6 +14,7 @@ class Constants {
   static const kPermissions = 'permissions';
   static const kProperty = 'property';
   static const kValue = 'value';
+  static const kProrationMode = 'proration_mode';
 
   // MethodChannel methods names
   static const mLaunch = 'launch';
