@@ -1,4 +1,4 @@
-package com.qonversion.flutter.sdk.qonversion_flutter_sdk_example
+package com.qonversion.sample
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

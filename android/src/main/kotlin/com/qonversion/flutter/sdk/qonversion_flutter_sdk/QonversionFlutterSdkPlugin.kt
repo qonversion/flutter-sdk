@@ -189,7 +189,6 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
     }
 
     private fun addAttributionData(args: Map<String, Any>, result: Result) {
-        @Suppress("UNCHECKED_CAST")
         val data = args["data"] as? Map<String, Any> ?: return result.noDataError()
 
         if (data.isEmpty()) {
