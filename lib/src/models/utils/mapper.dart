@@ -33,7 +33,12 @@ class QMapper {
 
     final map = Map<String, dynamic>.from(json);
 
-    return SKProductWrapper.fromJson(map);
+    try {
+      return SKProductWrapper.fromJson(map);
+    } catch (e) {
+      print('Could not parse SKProduct: $e');
+      return null;
+    }
   }
 
   static SKPriceLocaleWrapper skPriceLocaleFromJson(dynamic json) {
@@ -66,7 +71,12 @@ class QMapper {
 
     final map = Map<String, dynamic>.from(json);
 
-    return SkuDetailsWrapper.fromJson(map);
+    try {
+      return SkuDetailsWrapper.fromJson(map);
+    } catch (e) {
+      print('Could not parse SkuDetails: $e');
+      return null;
+    }
   }
 
   static DateTime dateTimeFromSecondsTimestamp(num timestamp) {
