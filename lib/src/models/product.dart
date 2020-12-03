@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'product_duration.dart';
 import 'product_type.dart';
 import 'sk_product_wrapper.dart';
+import 'sku_details/sku_details.dart';
 import 'utils/mapper.dart';
 
 part 'product.g.dart';
@@ -45,12 +46,19 @@ class QProduct {
   @JsonKey(name: 'sk_product', fromJson: QMapper.skProductFromJson)
   final SKProductWrapper skProduct;
 
+  /// Associated SkuDetails.
+  ///
+  /// Available for Android only.
+  @JsonKey(name: 'sku_details', fromJson: QMapper.skuDetailsFromJson)
+  final SkuDetailsWrapper skuDetails;
+
   const QProduct(
     this.qonversionId,
     this.storeId,
     this.type,
     this.duration,
     this.skProduct,
+    this.skuDetails,
   );
 
   factory QProduct.fromJson(Map<String, dynamic> json) =>

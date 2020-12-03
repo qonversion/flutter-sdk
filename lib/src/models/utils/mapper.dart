@@ -3,6 +3,7 @@ import '../product.dart';
 import '../sk_product/discount.dart';
 import '../sk_product/subscription_period.dart';
 import '../sk_product_wrapper.dart';
+import '../sku_details/sku_details.dart';
 
 class QMapper {
   static Map<String, QProduct> productsFromJson(dynamic json) {
@@ -58,6 +59,14 @@ class QMapper {
     final map = Map<String, dynamic>.from(json);
 
     return SKProductDiscountWrapper.fromJson(map);
+  }
+
+  static SkuDetailsWrapper skuDetailsFromJson(dynamic json) {
+    if (json == null) return null;
+
+    final map = Map<String, dynamic>.from(json);
+
+    return SkuDetailsWrapper.fromJson(map);
   }
 
   static DateTime dateTimeFromSecondsTimestamp(num timestamp) {
