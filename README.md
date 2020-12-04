@@ -1,89 +1,55 @@
 <p align="center">
- <a href="https://qonversion.io" target="_blank"><img width="460" height="150" src="https://qonversion.io/img/q_brand.svg"></a>
+ <a href="https://qonversion.io" target="_blank"><img width="360" height="150" src="https://qonversion.io/img/q_brand.svg"></a>
 </p>
 
 <p align="center">
-     <a href="https://qonversion.io"><img width="660" src="https://qonversion.io/img/illustrations/charts.svg"></a></p>
+     <a href="https://qonversion.io"><img width="660" src="https://qonversion.io/img/images/product-center.svg">
+     </a>
+</p>
 
-Get access to the powerful yet simple subscription analytics:
-* Conversion from install to paying user, MRR, LTV, churn and other metrics.
-* Feed the advertising and analytics tools you are already using with the data on high-value users to improve your ads targeting and marketing ROAS.
+
+<p>
+Qonversion provides full in-app purchases infrastructure, so you do not need to build your own server for receipt validation.
+</p>
+
+
+<p>
+Implement in-app subscriptions, validate user receipts, check subscription status, and provide access to your app features and content using our StoreKit wrapper and Google Play Billing wrapper.
+</p>
+
+Read more in [documentation](https://docs.qonversion.io).
 
 [![Pub](https://img.shields.io/pub/v/qonversion_flutter.svg)](https://pub.dev/packages/qonversion_flutter)
+[![MIT License](http://img.shields.io/cocoapods/l/Qonversion.svg?style=flat)](http://qonversion.io)
 
-## Installation
-To use Qonversion in your Flutter app, add `qonversion` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/): 
 
-```
-dependencies:
-  qonversion_flutter: ^1.1.2
-```
+## Product Center
 
-Run `flutter pub get` to install dependency.
+<p align="center">
+     <a href="https://qonversion.io"><img width="400" src="https://qonversion.io/img/images/product-center-scheme.svg">
+     </a>
+</p>
 
-## Usage 
+1. Application calls the purchase method to initialize Qonversion SDK.
+2. Qonversion SDK communicates with StoreKit or Google Billing Client to make a purchase.
+3. If a purchase is successful, the SDK sends a request to Qonversion API for server-to-server validation of purchase. Qonversion server unlocks permissions associated with the product.
+4. SDK returns control to the application with a processing state
 
-### Setup
+## Analytics
 
-You need to configure Qonversion once at a starting point of your app. 
+Monitor your in-app revenue metrics. Understand your customers and make better decisions with precise subscription revenue data.
 
-For example, launch Qonversion in `initState` of your top level widget: 
+<p align="center">
+     <a href="https://qonversion.io"><img width="90%" src="https://qonversion.io/img/screenshots/desktop/mobile_subscription_analytics.jpg">
+     </a>
+</p>
 
-```
-...
-import 'package:qonversion_flutter/qonversion.dart';
+## Integraitons
 
-...
+Share your iOS and Android in-app subscription data with your favorite platforms.
 
-String _qonversionUserId;
 
-@override
-void initState() {
-  super.initState();
-  
-  _launchQonversion();
-}
-
-Future<String> _launchQonversion() async {
-  _qonversionUserId = await Qonversion.launch('YOUR_API_KEY');
-}
-
-...
-```
-
-You can also specify your client side `userId` (instead of Qonversion user-id) that will be used for matching data in the third party data:
-
-```
-final userId = 'CLIENT_SIDE_USER_ID';
-Qonversion.launch(
-  'YOUR_API_KEY',
-  userId: userId,
-);
-```
-
-### Purchase tracking
-
-#### Android
-On Android you must call `Qonversion.manualTrackPurchase(skuDetails, purchase)` method on each purchase success in order to track purchases.
-If you're not using official [in_app_purchase plugin](https://pub.dev/packages/in_app_purchase), you can use fallback method `trackPurchase` and pass it correct SkuDetails and ProductDetails Maps.
-
-#### iOS
-On iOS Qonversion will track purchases automatically.
-
-### Attribution
-You need to have AppsFlyer SDK integrated in your app before starting with this integration. If you do not have Appsflyer integration yet, please use [this docs](https://pub.dev/packages/appsflyer_sdk#-readme-tab-). 
-
-On iOS you can also use Branch integration. 
-
-Use `addAttributionData(data, provider, userId)` method to pass attribution data dictionary: 
-```
-Qonversion.addAttributionData(
-  data, 
-  QAttributionProvider.appsFlyer,
-  'USER_ID',
-)
-```
-
-## License
-
-Qonversion SDK is available under the MIT license.
+<p align="center">
+     <a href="https://qonversion.io"><img width="500" src="https://qonversion.io/img/illustrations/pic-integration.svg">
+     </a>
+</p>
