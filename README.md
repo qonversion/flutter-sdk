@@ -44,7 +44,7 @@ Monitor your in-app revenue metrics. Understand your customers and make better d
      </a>
 </p>
 
-## Integraitons
+## Integrations
 
 Share your iOS and Android in-app subscription data with your favorite platforms.
 
