@@ -2,10 +2,13 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'product_duration.dart';
 import 'product_type.dart';
+import 'sk_product_wrapper.dart';
+import 'sku_details/sku_details.dart';
+import 'utils/mapper.dart';
 
 part 'product.g.dart';
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable()
 class QProduct {
   /// Product ID created in Qonversion Dashboard.
   ///
@@ -37,11 +40,30 @@ class QProduct {
   )
   final QProductDuration duration;
 
+  /// Localized price, e.g. 4.99 USD
+  @JsonKey(name: 'pretty_price')
+  final String prettyPrice;
+
+  /// Associated SKProduct.
+  ///
+  /// Available for iOS only.
+  @JsonKey(name: 'sk_product', fromJson: QMapper.skProductFromJson)
+  final SKProductWrapper skProduct;
+
+  /// Associated SkuDetails.
+  ///
+  /// Available for Android only.
+  @JsonKey(name: 'sku_details', fromJson: QMapper.skuDetailsFromJson)
+  final SkuDetailsWrapper skuDetails;
+
   const QProduct(
     this.qonversionId,
     this.storeId,
     this.type,
     this.duration,
+    this.prettyPrice,
+    this.skProduct,
+    this.skuDetails,
   );
 
   factory QProduct.fromJson(Map<String, dynamic> json) =>

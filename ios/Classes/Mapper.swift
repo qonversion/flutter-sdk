@@ -16,7 +16,7 @@ struct PurchaseResult {
   let error: Error?
   let isCancelled: Bool
   
-  func toMap() -> Dictionary<String, Any?> {
+  func toMap() -> [String: Any?] {
     return [
       "permissions": permissions.mapValues { $0.toMap() },
       "error": error?.localizedDescription,
@@ -26,7 +26,7 @@ struct PurchaseResult {
 }
 
 extension Qonversion.LaunchResult {
-  func toMap() -> Dictionary<String, Any> {
+  func toMap() -> [String: Any] {
     return [
       "uid": uid,
       "timestamp": NSNumber(value: timestamp).intValue * 1000,
@@ -38,18 +38,20 @@ extension Qonversion.LaunchResult {
 }
 
 extension Qonversion.Product {
-  func toMap() -> Dictionary<String, Any> {
+  func toMap() -> [String: Any?] {
     return [
       "id": qonversionID,
       "store_id": storeID,
       "type": type.rawValue,
       "duration": duration.rawValue,
+      "sk_product": skProduct?.toMap(),
+      "pretty_price": prettyPrice
     ]
   }
 }
 
 extension Qonversion.Permission {
-  func toMap() -> Dictionary<String, Any?> {
+  func toMap() -> [String: Any?] {
     return [
       "id": permissionID,
       "associated_product": productID,

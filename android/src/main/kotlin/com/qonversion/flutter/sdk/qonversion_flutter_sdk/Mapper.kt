@@ -1,5 +1,6 @@
 package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 
+import com.android.billingclient.api.SkuDetails
 import com.qonversion.android.sdk.QonversionError
 import com.qonversion.android.sdk.dto.QLaunchResult
 import com.qonversion.android.sdk.dto.QPermission
@@ -29,7 +30,9 @@ fun QProduct.toMap(): Map<String, Any?> {
             "id" to qonversionID,
             "store_id" to storeID,
             "type" to type.type,
-            "duration" to duration?.type
+            "duration" to duration?.type,
+            "sku_details" to skuDetail?.toMap(),
+            "pretty_price" to prettyPrice
     )
 }
 
@@ -41,5 +44,25 @@ fun QPermission.toMap(): Map<String, Any?> {
             "started_timestamp" to startedDate.time.toDouble(),
             "expiration_timestamp" to expirationDate?.time?.toDouble(),
             "active" to isActive()
+    )
+}
+
+fun SkuDetails.toMap(): Map<String, Any?> {
+    return mapOf(
+            "title" to title,
+            "description" to description,
+            "freeTrialPeriod" to freeTrialPeriod,
+            "introductoryPrice" to introductoryPrice,
+            "introductoryPriceAmountMicros" to introductoryPriceAmountMicros,
+            "introductoryPriceCycles" to introductoryPriceCycles,
+            "introductoryPricePeriod" to introductoryPricePeriod,
+            "price" to price,
+            "priceAmountMicros" to priceAmountMicros,
+            "priceCurrencyCode" to priceCurrencyCode,
+            "sku" to sku,
+            "type" to type,
+            "subscriptionPeriod" to subscriptionPeriod,
+            "originalPrice" to originalPrice,
+            "originalPriceAmountMicros" to originalPriceAmountMicros
     )
 }

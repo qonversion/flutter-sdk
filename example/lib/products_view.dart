@@ -50,6 +50,9 @@ class _ProductsViewState extends State<ProductsView> {
         ListTile(
           title: Text('Store ID: ${product.storeId}'),
           subtitle: Text('Q ID: ${product.qonversionId}'),
+          trailing: product.skProduct != null
+              ? Text(product.skProduct.localizedTitle)
+              : null,
         ),
         Padding(
           padding: EdgeInsets.all(8),
