@@ -31,7 +31,8 @@ fun QProduct.toMap(): Map<String, Any?> {
             "store_id" to storeID,
             "type" to type.type,
             "duration" to duration?.type,
-            "sku_details" to skuDetail?.toMap()
+            "sku_details" to skuDetail?.toMap(),
+            "pretty_price" to prettyPrice
     )
 }
 

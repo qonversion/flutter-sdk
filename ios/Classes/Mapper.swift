@@ -44,7 +44,8 @@ extension Qonversion.Product {
       "store_id": storeID,
       "type": type.rawValue,
       "duration": duration.rawValue,
-      "sk_product": skProduct?.toMap()
+      "sk_product": skProduct?.toMap(),
+      "pretty_price": prettyPrice
     ]
   }
 }

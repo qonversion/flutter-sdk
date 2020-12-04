@@ -11,7 +11,7 @@ SkuDetailsWrapper _$SkuDetailsWrapperFromJson(Map<String, dynamic> json) {
     description: json['description'] as String,
     freeTrialPeriod: json['freeTrialPeriod'] as String,
     introductoryPrice: json['introductoryPrice'] as String,
-    introductoryPriceAmountMicros: json['introductoryPriceMicros'] as int,
+    introductoryPriceAmountMicros: json['introductoryPriceAmountMicros'] as int,
     introductoryPriceCycles: json['introductoryPriceCycles'] as int,
     introductoryPricePeriod: json['introductoryPricePeriod'] as String,
     price: json['price'] as String,

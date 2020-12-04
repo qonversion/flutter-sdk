@@ -40,6 +40,10 @@ class QProduct {
   )
   final QProductDuration duration;
 
+  /// Localized price, e.g. 4.99 USD
+  @JsonKey(name: 'pretty_price')
+  final String prettyPrice;
+
   /// Associated SKProduct.
   ///
   /// Available for iOS only.
@@ -57,6 +61,7 @@ class QProduct {
     this.storeId,
     this.type,
     this.duration,
+    this.prettyPrice,
     this.skProduct,
     this.skuDetails,
   );
