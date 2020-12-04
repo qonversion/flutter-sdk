@@ -3,17 +3,16 @@ package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 import android.app.Activity
 import android.app.Application
 import androidx.annotation.NonNull
-import com.android.billingclient.api.Purchase
-import com.android.billingclient.api.SkuDetails
-import com.qonversion.android.sdk.AttributionSource
+import com.qonversion.android.sdk.*
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
-import com.qonversion.android.sdk.Qonversion
-import com.qonversion.android.sdk.QonversionCallback
+import com.qonversion.android.sdk.dto.QLaunchResult
+import com.qonversion.android.sdk.dto.QPermission
+import com.qonversion.android.sdk.dto.QProduct
 
 /** QonversionFlutterSdkPlugin */
 class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): MethodCallHandler {
@@ -29,15 +28,35 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-        val args = call.arguments() as? Map<String, Any> ?: return result.noArgsError()
 
-        if (args.isEmpty()) {
-            return result.noArgsError()
+        // Methods without args
+
+        when (call.method) {
+            "products" -> {
+                return products(result)
+            }
+            "syncPurchases" -> {
+                return syncPurchases(result)
+            }
+            "checkPermissions" -> {
+                return checkPermissions(result)
+            }
+            "restore" -> {
+                return restore(result)
+            }
         }
+
+        // Methods with args
+
+        val args = call.arguments() as? Map<String, Any> ?: return result.noArgsError()
 
         when (call.method) {
             "launch" -> launch(args, result)
-            "trackPurchase" -> trackPurchase(args, result)
+            "purchase" -> purchase(args["productId"] as? String, result)
+            "updatePurchase" -> updatePurchase(args, result)
+            "setUserId" -> setUserId(args["userId"] as? String, result)
+            "setProperty" -> setProperty(args, result)
+            "setUserProperty" -> setUserProperty(args, result)
             "addAttributionData" -> addAttributionData(args, result)
             else -> result.notImplemented()
         }
@@ -45,46 +64,128 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
 
     private fun launch(args: Map<String, Any>, result: Result) {
         val apiKey = args["key"] as? String ?: return result.noApiKeyError()
+        val isObserveMode = args["isObserveMode"] as? Boolean ?: return result.noArgsError()
 
-        val userId = args["userID"] as? String ?: ""
-
-        val callback = object: QonversionCallback {
-            override fun onSuccess(uid: String) {
-                result.success(uid)
-            }
-
-            override fun onError(t: Throwable) {
-                result.qonversionError(t.localizedMessage, t.cause.toString())
-            }
-        }
-
-        Qonversion.initialize(
+        Qonversion.launch(
                 application,
                 apiKey,
-                userId,
-                callback
+                isObserveMode,
+                callback = object: QonversionLaunchCallback {
+                    override fun onSuccess(launchResult: QLaunchResult) {
+                        result.success(launchResult.toMap())
+                    }
+
+                    override fun onError(error: QonversionError) {
+                        result.qonversionError(error.description, error.additionalMessage)
+                    }
+                }
         )
     }
 
-    private fun trackPurchase(args: Map<String, Any>, result: Result) {
-        val detailsJson = args["details"] as String
-        val purchaseJson = args["purchase"] as String
-        val signature = args["signature"] as String
-
-        val details = SkuDetails(detailsJson)
-        val purchase = Purchase(purchaseJson, signature)
-
-        val callback = object: QonversionCallback {
-            override fun onSuccess(uid: String) {
-                result.success(uid)
-            }
-
-            override fun onError(t: Throwable) {
-                result.qonversionError(t.localizedMessage, t.cause.toString())
-            }
+    private fun purchase(productId: String?, result: Result) {
+        if (productId == null) {
+            result.noProductIdError()
+            return
         }
 
-        Qonversion.instance?.purchase(details, purchase, callback)
+        Qonversion.purchase(activity, productId, callback = object: QonversionPermissionsCallback {
+            override fun onSuccess(permissions: Map<String, QPermission>) {
+                result.success(PurchaseResult(permissions).toMap())
+            }
+
+            override fun onError(error: QonversionError) {
+                result.success(PurchaseResult(error = error).toMap())
+            }
+        })
+    }
+
+    private fun updatePurchase(args: Map<String, Any>, result: Result) {
+        val newProductId = args["newProductId"] as? String ?: return result.noNewProductIdError()
+        val oldProductId = args["oldProductId"] as? String ?: return result.noOldProductIdError()
+        val prorationMode = args["proration_mode"] as? Int
+        
+        Qonversion.updatePurchase(activity, newProductId, oldProductId, prorationMode, callback = object: QonversionPermissionsCallback {
+            override fun onSuccess(permissions: Map<String, QPermission>) {
+                result.success(permissions.mapValues { it.value.toMap() })
+            }
+
+            override fun onError(error: QonversionError) {
+                result.qonversionError(error.description, error.additionalMessage)
+            }
+        })
+    }
+
+    private fun checkPermissions(result: Result) {
+        Qonversion.checkPermissions(object: QonversionPermissionsCallback {
+            override fun onSuccess(permissions: Map<String, QPermission>) {
+                result.success(permissions.mapValues { it.value.toMap() })
+            }
+
+            override fun onError(error: QonversionError) {
+                result.qonversionError(error.description, error.additionalMessage)
+            }
+        })
+    }
+
+    private fun restore(result: Result) {
+        Qonversion.restore(object: QonversionPermissionsCallback {
+            override fun onSuccess(permissions: Map<String, QPermission>) {
+                result.success(permissions.mapValues { it.value.toMap() })
+            }
+
+            override fun onError(error: QonversionError) {
+                result.qonversionError(error.description, error.additionalMessage)
+            }
+        })
+    }
+
+    private fun products(result: Result) {
+        Qonversion.products(callback = object: QonversionProductsCallback {
+            override fun onSuccess(products: Map<String, QProduct>) {
+                result.success(products.mapValues { it.value.toMap() })
+            }
+
+            override fun onError(error: QonversionError) {
+                result.qonversionError(error.description, error.additionalMessage)
+            }
+        })
+    }
+
+    private fun setUserId(userId: String?, result: Result) {
+        if (userId == null) {
+            result.noUserIdError()
+            return
+        }
+
+        Qonversion.setUserID(userId)
+        result.success(null)
+    }
+
+    private fun setProperty(args: Map<String, Any>, result: Result) {
+        val rawProperty = args["property"] as? String ?: return result.noProperty()
+
+        val value = args["value"] as? String ?: return result.noPropertyValue()
+
+        try {
+            Qonversion.setProperty(QUserProperties.valueOf(rawProperty), value)
+            result.success(null)
+        } catch (e: IllegalArgumentException) {
+            result.parsingError(e.localizedMessage)
+        }
+    }
+
+    private fun setUserProperty(args: Map<String, Any>, result: Result) {
+        val property = args["property"] as? String ?: return result.noProperty()
+
+        val value = args["value"] as? String ?: return result.noPropertyValue()
+
+        Qonversion.setUserProperty(property, value)
+        result.success(null)
+    }
+
+    private fun syncPurchases(result: Result) {
+        Qonversion.syncPurchases()
+        result.success(null)
     }
 
     private fun addAttributionData(args: Map<String, Any>, result: Result) {
@@ -104,7 +205,7 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         }
                 ?: return result.success(null)
 
-        Qonversion.instance?.attribution(data, castedProvider, uid)
+        Qonversion.attribution(data, castedProvider, uid)
 
         result.success(null)
     }
