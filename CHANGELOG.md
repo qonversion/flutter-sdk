@@ -1,3 +1,6 @@
+## 2.0.0
+* We have rethought our approach to working with subscriptions and prepared our largest update that includes [Product Center](https://documentation.qonversion.io/docs/product-center) – our major feature for working with any type in-app purchases.
+
 ## 1.1.2
 * Fix Android `manualTrackPurchase` args parsing
 * Update Example app
