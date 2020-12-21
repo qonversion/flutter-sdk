@@ -1,3 +1,6 @@
+## 2.0.1
+* Fix iOS timestamp mapping
+
 ## 2.0.0
 * We have rethought our approach to working with subscriptions and prepared our largest update that includes [Product Center](https://documentation.qonversion.io/docs/product-center) – our major feature for working with any type in-app purchases.
 
