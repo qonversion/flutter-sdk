@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
 
@@ -105,6 +106,10 @@ class _HomeViewState extends State<HomeView> {
       'PV77YHL7qnGvsdmpTs7gimsxUvY-Znl2',
       isObserveMode: false,
     );
+
+    if (kDebugMode) {
+      await Qonversion.setDebugMode();
+    }
 
     setState(() {});
   }
