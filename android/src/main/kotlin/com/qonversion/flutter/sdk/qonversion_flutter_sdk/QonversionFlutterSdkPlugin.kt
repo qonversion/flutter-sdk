@@ -44,6 +44,10 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
             "restore" -> {
                 return restore(result)
             }
+            "setDebugMode" -> {
+                Qonversion.setDebugMode()
+                return result.success(null)
+            }
         }
 
         // Methods with args
@@ -197,15 +201,13 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
 
         val provider = args["provider"] as? String ?: return result.noProviderError()
 
-        val uid = args["userId"] as? String ?: return result.noUserIdError()
-
         val castedProvider = when (provider) {
-            "appsFlyer" -> AttributionSource.APPSFLYER
+            "appsFlyer" -> AttributionSource.AppsFlyer
             else -> null
         }
                 ?: return result.success(null)
 
-        Qonversion.attribution(data, castedProvider, uid)
+        Qonversion.attribution(data, castedProvider)
 
         result.success(null)
     }
