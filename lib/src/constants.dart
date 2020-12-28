@@ -28,4 +28,5 @@ class Constants {
   static const mSetUserProperty = 'setUserProperty';
   static const mSyncPurchases = 'syncPurchases';
   static const mAddAttributionData = 'addAttributionData';
+  static const mSetDebugMode = 'setDebugMode';
 }

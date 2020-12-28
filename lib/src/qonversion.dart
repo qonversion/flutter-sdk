@@ -166,4 +166,7 @@ class Qonversion {
 
     return _channel.invokeMethod(Constants.mAddAttributionData, args);
   }
+
+  static Future<void> setDebugMode() =>
+      _channel.invokeMethod(Constants.mSetDebugMode);
 }

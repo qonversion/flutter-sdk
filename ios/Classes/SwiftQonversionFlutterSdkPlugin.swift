@@ -23,6 +23,10 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     case "restore":
       return restore(result)
       
+    case "setDebugMode":
+      Qonversion.setDebugMode()
+      return result(nil)
+      
     default:
       break
     }
