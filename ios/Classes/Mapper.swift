@@ -86,3 +86,22 @@ extension Qonversion.Property {
     }
   }
 }
+
+extension Qonversion.Offerings {
+  func toMap() -> [String: Any?] {
+    return [
+      "main": main?.toMap(),
+      "available_offerings": availableOfferings.map { $0.toMap() }
+    ]
+  }
+}
+
+extension Qonversion.Offering {
+  func toMap() -> [String: Any?] {
+    return [
+      "id": identifier,
+      "tag": tag.rawValue,
+      "products": products.map { $0.toMap() }
+    ]
+  }
+}

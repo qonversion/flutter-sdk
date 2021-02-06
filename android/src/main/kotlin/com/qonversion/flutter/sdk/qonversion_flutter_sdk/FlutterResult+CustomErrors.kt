@@ -55,3 +55,7 @@ fun MethodChannel.Result.noProperty() {
 fun MethodChannel.Result.noPropertyValue() {
     return this.error("14", "Could not find property value", passValidValue)
 }
+
+fun MethodChannel.Result.offeringsError(description: String?, message: String?) {
+    return this.error("OFFERINGS", "Could not get offerings", "$description $message")
+}

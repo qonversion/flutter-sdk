@@ -27,6 +27,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       Qonversion.setDebugMode()
       return result(nil)
       
+    case "offerings":
+      return offerings(result)
+      
     default:
       break
     }
@@ -120,6 +123,16 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       
       let permissionsDict = permissions.mapValues { $0.toMap() }
       result(permissionsDict)
+    }
+  }
+  
+  private func offerings(_ result: @escaping FlutterResult) {
+    Qonversion.offerings { offerings, error in
+      if let error = error {
+        result(FlutterError.offeringsError(error.localizedDescription))
+      }
+      
+      result(offerings?.toMap())
     }
   }
   

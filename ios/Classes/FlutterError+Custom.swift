@@ -63,4 +63,10 @@ extension FlutterError {
   static let noPropertyValue = FlutterError(code: "14",
                                        message: "Could not find property value",
                                        details: passValidValue)
+  
+  static func offeringsError(_ description: String) -> FlutterError {
+    return FlutterError(code: "OFFERINGS",
+                        message: "Could not get offerings",
+                        details: description)
+  }
 }

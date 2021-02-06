@@ -4,7 +4,9 @@ import com.android.billingclient.api.SkuDetails
 import com.qonversion.android.sdk.QonversionError
 import com.qonversion.android.sdk.dto.QLaunchResult
 import com.qonversion.android.sdk.dto.QPermission
-import com.qonversion.android.sdk.dto.QProduct
+import com.qonversion.android.sdk.dto.offerings.QOffering
+import com.qonversion.android.sdk.dto.offerings.QOfferings
+import com.qonversion.android.sdk.dto.products.QProduct
 
 data class PurchaseResult(val permissions: Map<String, QPermission>? = null, val error: QonversionError? = null) {
     fun toMap(): Map<String, Any?> {
@@ -44,6 +46,21 @@ fun QPermission.toMap(): Map<String, Any?> {
             "started_timestamp" to startedDate.time.toDouble(),
             "expiration_timestamp" to expirationDate?.time?.toDouble(),
             "active" to isActive()
+    )
+}
+
+fun QOfferings.toMap(): Map<String, Any?> {
+    return mapOf(
+            "main" to main?.toMap(),
+            "available_offerings" to availableOfferings.map { it.toMap() }
+    )
+}
+
+fun QOffering.toMap(): Map<String, Any?> {
+    return mapOf(
+            "id" to offeringID,
+            "tag" to tag.tag,
+            "products" to products.map { it.toMap() }
     )
 }
 

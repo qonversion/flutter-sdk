@@ -12,7 +12,8 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 
 import com.qonversion.android.sdk.dto.QLaunchResult
 import com.qonversion.android.sdk.dto.QPermission
-import com.qonversion.android.sdk.dto.QProduct
+import com.qonversion.android.sdk.dto.offerings.QOfferings
+import com.qonversion.android.sdk.dto.products.QProduct
 
 /** QonversionFlutterSdkPlugin */
 class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): MethodCallHandler {
@@ -47,6 +48,9 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
             "setDebugMode" -> {
                 Qonversion.setDebugMode()
                 return result.success(null)
+            }
+            "offerings" -> {
+                return offerings(result)
             }
         }
 
@@ -139,6 +143,18 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
 
             override fun onError(error: QonversionError) {
                 result.qonversionError(error.description, error.additionalMessage)
+            }
+        })
+    }
+
+    private fun offerings(result: Result) {
+        Qonversion.offerings(callback = object: QonversionOfferingsCallback {
+            override fun onSuccess(offerings: QOfferings) {
+                result.success(offerings.toMap())
+            }
+
+            override fun onError(error: QonversionError) {
+                result.offeringsError(error.description, error.additionalMessage)
             }
         })
     }
