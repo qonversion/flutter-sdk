@@ -132,7 +132,12 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
         result(FlutterError.offeringsError(error.localizedDescription))
       }
       
-      result(offerings?.toMap())
+      guard let offerings = offerings else {
+        return result(nil)
+      }
+      
+      
+      result(offerings.toMap().toJson())
     }
   }
   

@@ -105,3 +105,15 @@ extension Qonversion.Offering {
     ]
   }
 }
+
+// MARK: - JSON Encoding
+extension Dictionary {
+  func toJson() -> String? {
+    guard let jsonData = try? JSONSerialization.data(withJSONObject: self,
+                                                     options: []) else {
+      return nil
+    }
+    
+    return String(data: jsonData, encoding: .utf8)
+  }
+}

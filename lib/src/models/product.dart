@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'product_duration.dart';
 import 'product_type.dart';
-import 'sk_product_wrapper.dart';
+import 'sk_product/sk_product_wrapper.dart';
 import 'sku_details/sku_details.dart';
 import 'utils/mapper.dart';
 

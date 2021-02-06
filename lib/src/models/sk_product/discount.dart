@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:qonversion_flutter/src/models/utils/mapper.dart';
 
-import '../sk_product_wrapper.dart';
 import 'discount_payment_mode.dart';
+import 'sk_product_wrapper.dart';
 import 'subscription_period.dart';
 
 part 'discount.g.dart';

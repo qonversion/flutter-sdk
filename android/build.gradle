@@ -43,4 +43,5 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "com.qonversion.android.sdk:sdk:$qonversion_version"
+    implementation 'com.google.code.gson:gson:2.8.6'
 }
