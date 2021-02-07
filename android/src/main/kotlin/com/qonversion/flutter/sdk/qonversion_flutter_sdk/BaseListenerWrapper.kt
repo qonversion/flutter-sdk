@@ -17,7 +17,7 @@ abstract class BaseListenerWrapper(
                 BaseEventStreamHandler()
         eventChannel = EventChannel(
                 binaryMessenger,
-                "qonversion_flutter_/${eventChannelPostfix}"
+                "qonversion_flutter_${eventChannelPostfix}"
         ).apply { setStreamHandler(eventStreamHandler) }
     }
 
