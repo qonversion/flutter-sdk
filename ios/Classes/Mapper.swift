@@ -45,7 +45,8 @@ extension Qonversion.Product {
       "type": type.rawValue,
       "duration": duration.rawValue,
       "sk_product": skProduct?.toMap(),
-      "pretty_price": prettyPrice
+      "pretty_price": prettyPrice,
+      "trial_duration": trialDuration.rawValue
     ]
   }
 }
