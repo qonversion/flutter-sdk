@@ -18,15 +18,30 @@ import com.qonversion.android.sdk.dto.offerings.QOfferings
 import com.qonversion.android.sdk.dto.products.QProduct
 
 /** QonversionFlutterSdkPlugin */
-class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): MethodCallHandler {
+class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): MethodCallHandler, BaseListenerWrapper(registrar.messenger()) {
     private val activity: Activity = registrar.activity()
     private val application: Application = activity.application
+
+    override val eventChannelPostfix = "updated_purchases"
 
     companion object {
         @JvmStatic
         fun registerWith(registrar: Registrar) {
             val channel = MethodChannel(registrar.messenger(), "qonversion_flutter_sdk")
-            channel.setMethodCallHandler(QonversionFlutterSdkPlugin(registrar))
+            val instance = QonversionFlutterSdkPlugin(registrar)
+            channel.setMethodCallHandler(instance)
+
+            // Register Updated Purchases Event Channel
+            instance.register()
+
+            // Start listening to Qonversion purchases events
+            Qonversion.setUpdatedPurchasesListener(object: UpdatedPurchasesListener {
+                override fun onPermissionsUpdate(permissions: Map<String, QPermission>) {
+                    val payload = Gson().toJson(permissions.mapValues { it.value.toMap() })
+
+                    instance.eventStreamHandler?.eventSink?.success(payload)
+                }
+            })
         }
     }
 

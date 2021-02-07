@@ -17,6 +17,20 @@ import 'qa_provider.dart';
 
 class Qonversion {
   static const MethodChannel _channel = MethodChannel('qonversion_flutter_sdk');
+  static const _purchasesEventChannel =
+      EventChannel('qonversion_flutter_updated_purchases');
+
+  /// Yields an event each time a deferred transaction happens
+  static Stream<Map<String, QPermission>> get updatedPurchasesStream =>
+      _purchasesEventChannel
+          .receiveBroadcastStream()
+          .cast<String>()
+          .map((event) {
+        final Map<String, dynamic> decodedEvent = jsonDecode(event);
+
+        return decodedEvent
+            .map((key, value) => MapEntry(key, QPermission.fromJson(value)));
+      });
 
   /// Initializes Qonversion SDK with the given API key.
   /// You can get one in your account on qonversion.io.

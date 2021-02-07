@@ -3,10 +3,19 @@ import UIKit
 import Qonversion
 
 public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
+  var purchasesEventStreamHandler: BaseEventStreamHandler?
+  
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "qonversion_flutter_sdk", binaryMessenger: registrar.messenger())
     let instance = SwiftQonversionFlutterSdkPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
+    
+    // Register events listeners
+    let purchasesListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "updated_purchases")
+    purchasesListener.register() { instance.purchasesEventStreamHandler = $0 }
+    
+    // Setting delegate as soon as plugin is registered
+    Qonversion.setPurchasesDelegate(instance)
   }
   
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -226,5 +235,13 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     Qonversion.addAttributionData(data, from: castedProvider)
     
     result(nil)
+  }
+}
+
+extension SwiftQonversionFlutterSdkPlugin: Qonversion.PurchasesDelegate {
+  public func qonversionDidReceiveUpdatedPermissions(_ permissions: [String : Qonversion.Permission]) {
+    let payload = permissions.mapValues { $0.toMap() }.toJson()
+    
+    purchasesEventStreamHandler?.eventSink?(payload)
   }
 }
