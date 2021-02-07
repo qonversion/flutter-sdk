@@ -13,6 +13,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 
 import com.qonversion.android.sdk.dto.QLaunchResult
 import com.qonversion.android.sdk.dto.QPermission
+import com.qonversion.android.sdk.dto.eligibility.QEligibility
 import com.qonversion.android.sdk.dto.offerings.QOfferings
 import com.qonversion.android.sdk.dto.products.QProduct
 
@@ -67,6 +68,7 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
             "setProperty" -> setProperty(args, result)
             "setUserProperty" -> setUserProperty(args, result)
             "addAttributionData" -> addAttributionData(args, result)
+            "checkTrialIntroEligibility" -> checkTrialIntroEligibility(args, result)
             else -> result.notImplemented()
         }
     }
@@ -228,5 +230,20 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         Qonversion.attribution(data, castedProvider)
 
         result.success(null)
+    }
+
+    private fun checkTrialIntroEligibility(args: Map<String, Any>, result: Result) {
+        val ids = args["ids"] as? List<String> ?: return result.noDataError()
+
+        Qonversion.checkTrialIntroEligibilityForProductIds(ids, callback = object: QonversionEligibilityCallback {
+            override fun onSuccess(eligibilities: Map<String, QEligibility>) {
+                val jsonEligibilities = Gson().toJson(eligibilities.mapValues { it.value.toMap() })
+                result.success(jsonEligibilities)
+            }
+
+            override fun onError(error: QonversionError) {
+                result.qonversionError(error.additionalMessage, error.description)
+            }
+        })
     }
 }

@@ -30,4 +30,5 @@ class Constants {
   static const mAddAttributionData = 'addAttributionData';
   static const mSetDebugMode = 'setDebugMode';
   static const mOfferings = 'offerings';
+  static const mCheckTrialIntroEligibility = 'checkTrialIntroEligibility';
 }

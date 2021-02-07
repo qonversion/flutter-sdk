@@ -30,7 +30,27 @@ class _ProductsViewState extends State<ProductsView> {
                 children: [
                   if (_products != null)
                     for (final p in _products.values) _productWidget(p),
-                  if (_offerings != null) _offeringsWidget(_offerings)
+                  if (_offerings != null) _offeringsWidget(_offerings),
+                  if (_products != null)
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: 8,
+                        right: 8,
+                        bottom: 8,
+                      ),
+                      child: FlatButton(
+                        child: Text('Check Intro Eligibility'),
+                        color: Colors.yellow,
+                        textColor: Colors.black,
+                        onPressed: () async {
+                          final res =
+                              await Qonversion.checkTrialIntroEligibility(
+                                  _products.keys.toList());
+                          print(res.map(
+                              (key, value) => MapEntry(key, value.status)));
+                        },
+                      ),
+                    ),
                 ],
               ),
       ),

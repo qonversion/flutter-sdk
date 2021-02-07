@@ -1,3 +1,4 @@
+export 'src/models/eligibility.dart';
 export 'src/models/launch_result.dart';
 export 'src/models/offerings.dart';
 export 'src/models/permission.dart';
