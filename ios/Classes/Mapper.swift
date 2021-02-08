@@ -107,6 +107,12 @@ extension Qonversion.Offering {
   }
 }
 
+extension Qonversion.IntroEligibility {
+  func toMap() -> [String: Any?] {
+    return ["status": status.rawValue]
+  }
+}
+
 // MARK: - JSON Encoding
 extension Dictionary {
   func toJson() -> String? {

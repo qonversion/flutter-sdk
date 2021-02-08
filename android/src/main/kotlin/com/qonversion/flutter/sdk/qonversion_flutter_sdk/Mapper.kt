@@ -4,6 +4,8 @@ import com.android.billingclient.api.SkuDetails
 import com.qonversion.android.sdk.QonversionError
 import com.qonversion.android.sdk.dto.QLaunchResult
 import com.qonversion.android.sdk.dto.QPermission
+import com.qonversion.android.sdk.dto.eligibility.QEligibility
+import com.qonversion.android.sdk.dto.eligibility.QIntroEligibilityStatus
 import com.qonversion.android.sdk.dto.offerings.QOffering
 import com.qonversion.android.sdk.dto.offerings.QOfferings
 import com.qonversion.android.sdk.dto.products.QProduct
@@ -63,6 +65,19 @@ fun QOffering.toMap(): Map<String, Any?> {
             "tag" to tag.tag,
             "products" to products.map { it.toMap() }
     )
+}
+
+fun QEligibility.toMap(): Map<String, Any?> {
+    return mapOf("status" to status.toInt())
+}
+
+fun QIntroEligibilityStatus.toInt(): Int {
+    return when (this) {
+        QIntroEligibilityStatus.Unknown -> 0
+        QIntroEligibilityStatus.NonIntroProduct -> 1
+        QIntroEligibilityStatus.Ineligible -> 2
+        QIntroEligibilityStatus.Eligible -> 3
+    }
 }
 
 fun SkuDetails.toMap(): Map<String, Any?> {

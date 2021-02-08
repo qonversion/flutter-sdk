@@ -180,4 +180,16 @@ class Qonversion {
 
     return QOfferings.fromJson(decodedOfferings);
   }
+
+  static Future<Map<String, QEligibility>> checkTrialIntroEligibility(
+      List<String> ids) async {
+    final eligibilitiesString = await _channel.invokeMethod<String>(
+        Constants.mCheckTrialIntroEligibility, {"ids": ids});
+
+    final Map<String, dynamic> decodedEligibilities =
+        jsonDecode(eligibilitiesString);
+
+    return decodedEligibilities
+        .map((key, value) => MapEntry(key, QEligibility.fromJson(value)));
+  }
 }
