@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
+import 'package:qonversion_flutter/src/models/offerings.dart';
 import 'package:qonversion_flutter/src/models/user_property.dart';
 import 'package:qonversion_flutter/src/models/utils/mapper.dart';
 import 'package:qonversion_flutter/src/utils/string.dart';
@@ -169,4 +171,13 @@ class Qonversion {
 
   static Future<void> setDebugMode() =>
       _channel.invokeMethod(Constants.mSetDebugMode);
+
+  static Future<QOfferings> offerings() async {
+    final offeringsString =
+        await _channel.invokeMethod<String>(Constants.mOfferings);
+
+    final Map<String, dynamic> decodedOfferings = jsonDecode(offeringsString);
+
+    return QOfferings.fromJson(decodedOfferings);
+  }
 }

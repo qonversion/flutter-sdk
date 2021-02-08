@@ -6,10 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:qonversion_flutter/src/models/utils/mapper.dart';
 
-import 'sk_product/discount.dart';
-import 'sk_product/discount_payment_mode.dart';
-import 'sk_product/subscription_period.dart';
-import 'sk_product/subscription_period_unit.dart';
+import 'discount.dart';
+import 'subscription_period.dart';
 
 part 'sk_product_wrapper.g.dart';
 

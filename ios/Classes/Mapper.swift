@@ -86,3 +86,34 @@ extension Qonversion.Property {
     }
   }
 }
+
+extension Qonversion.Offerings {
+  func toMap() -> [String: Any?] {
+    return [
+      "main": main?.toMap(),
+      "available_offerings": availableOfferings.map { $0.toMap() }
+    ]
+  }
+}
+
+extension Qonversion.Offering {
+  func toMap() -> [String: Any?] {
+    return [
+      "id": identifier,
+      "tag": tag.rawValue,
+      "products": products.map { $0.toMap() }
+    ]
+  }
+}
+
+// MARK: - JSON Encoding
+extension Dictionary {
+  func toJson() -> String? {
+    guard let jsonData = try? JSONSerialization.data(withJSONObject: self,
+                                                     options: []) else {
+      return nil
+    }
+    
+    return String(data: jsonData, encoding: .utf8)
+  }
+}

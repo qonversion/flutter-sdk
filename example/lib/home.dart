@@ -120,17 +120,17 @@ class _HomeViewState extends State<HomeView> {
           (e) => ListTile(
             title: Text(e.key),
             subtitle: Text(
-              e.value.productId +
-                  '\n' +
-                  e.value.permissionId +
-                  '\n' +
-                  e.value.renewState.toString() +
-                  '\n' +
-                  (e.value.startedDate?.toString() ?? 'n/a') +
-                  '\n' +
-                  (e.value.expirationDate?.toString() ?? 'n/a') +
-                  '\n' +
-                  e.value.isActive.toString(),
+              e.value.productId ??
+                  '' + '\n' + e.value.permissionId ??
+                  '' +
+                      '\n' +
+                      e.value.renewState.toString() +
+                      '\n' +
+                      (e.value.startedDate?.toString() ?? 'n/a') +
+                      '\n' +
+                      (e.value.expirationDate?.toString() ?? 'n/a') +
+                      '\n' +
+                      e.value.isActive.toString(),
             ),
           ),
         )
@@ -144,14 +144,14 @@ List<Widget> productsFromMap(Map<String, QProduct> products) {
         (e) => ListTile(
           title: Text(e.key),
           subtitle: Text(
-            e.value.qonversionId +
-                '\n' +
-                e.value.storeId +
-                '\n' +
-                e.value.duration.toString() +
-                '\n' +
-                e.value.type.toString() +
-                '\n',
+            e.value.qonversionId ??
+                '' + '\n' + e.value.storeId ??
+                '' +
+                    '\n' +
+                    e.value.duration.toString() +
+                    '\n' +
+                    e.value.type.toString() +
+                    '\n',
           ),
         ),
       )
