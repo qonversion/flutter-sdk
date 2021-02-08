@@ -3,6 +3,13 @@ import 'package:qonversion_flutter/qonversion_flutter.dart';
 
 part 'offerings.g.dart';
 
+enum QOfferingTag {
+  @JsonValue(0)
+  none,
+  @JsonValue(1)
+  main,
+}
+
 @JsonSerializable(createToJson: false)
 class QOfferings {
   @JsonKey(name: 'main')
@@ -28,7 +35,7 @@ class QOffering {
   final String id;
 
   @JsonKey(name: 'tag')
-  final int tag;
+  final QOfferingTag tag;
 
   @JsonKey(name: 'products')
   final List<QProduct> products;
