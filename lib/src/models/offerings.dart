@@ -35,6 +35,11 @@ class QOffering {
 
   const QOffering(this.id, this.tag, this.products);
 
+  QProduct productForIdentifier(String id) => products.firstWhere(
+        (element) => element.qonversionId == id,
+        orElse: () => null,
+      );
+
   factory QOffering.fromJson(Map<String, dynamic> json) =>
       _$QOfferingFromJson(json);
 }
