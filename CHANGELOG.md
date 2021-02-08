@@ -1,3 +1,9 @@
+## 2.2.0
+* Add Offerings feature
+* Add `trialDuration` property to `product`
+* Add `checkTrialIntroEligibility` method
+* Bugfixes and improvements under the hood
+
 ## 2.1.0
 * Add `setDebugMode()` method
 
