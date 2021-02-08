@@ -190,7 +190,6 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
   }
   
   private func checkTrialIntroEligibility(_ args: [String: Any], _ result: @escaping FlutterResult) {
-    //
     guard let ids = args["ids"] as? [String] else {
       return result(FlutterError.noData)
     }
