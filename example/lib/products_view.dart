@@ -66,6 +66,7 @@ class _ProductsViewState extends State<ProductsView> {
           trailing: product.skProduct != null
               ? Text(product.skProduct.localizedTitle)
               : null,
+          onTap: () => print(product.toJson()),
         ),
         Padding(
           padding: EdgeInsets.all(8),

@@ -8,6 +8,29 @@ import 'utils/mapper.dart';
 
 part 'product.g.dart';
 
+enum QTrialDuration {
+  @JsonValue(-1)
+  notAvailable,
+  @JsonValue(1)
+  threeDays,
+  @JsonValue(2)
+  week,
+  @JsonValue(3)
+  twoWeeks,
+  @JsonValue(4)
+  month,
+  @JsonValue(5)
+  twoMonths,
+  @JsonValue(6)
+  threeMonths,
+  @JsonValue(7)
+  sixMonths,
+  @JsonValue(8)
+  year,
+  @JsonValue(9)
+  other,
+}
+
 @JsonSerializable()
 class QProduct {
   /// Product ID created in Qonversion Dashboard.
@@ -44,6 +67,10 @@ class QProduct {
   @JsonKey(name: 'pretty_price')
   final String prettyPrice;
 
+  /// Trial duration of the subscription
+  @JsonKey(name: 'trial_duration')
+  final QTrialDuration trialDuration;
+
   /// Associated SKProduct.
   ///
   /// Available for iOS only.
@@ -62,10 +89,13 @@ class QProduct {
     this.type,
     this.duration,
     this.prettyPrice,
+    this.trialDuration,
     this.skProduct,
     this.skuDetails,
   );
 
   factory QProduct.fromJson(Map<String, dynamic> json) =>
       _$QProductFromJson(json);
+
+  Map<String, dynamic> toJson() => _$QProductToJson(this);
 }
