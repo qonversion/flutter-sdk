@@ -3,6 +3,7 @@ package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 import android.app.Activity
 import android.app.Application
 import androidx.annotation.NonNull
+import com.google.gson.Gson
 import com.qonversion.android.sdk.*
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -12,7 +13,9 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 
 import com.qonversion.android.sdk.dto.QLaunchResult
 import com.qonversion.android.sdk.dto.QPermission
-import com.qonversion.android.sdk.dto.QProduct
+import com.qonversion.android.sdk.dto.eligibility.QEligibility
+import com.qonversion.android.sdk.dto.offerings.QOfferings
+import com.qonversion.android.sdk.dto.products.QProduct
 
 /** QonversionFlutterSdkPlugin */
 class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): MethodCallHandler {
@@ -48,6 +51,9 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
                 Qonversion.setDebugMode()
                 return result.success(null)
             }
+            "offerings" -> {
+                return offerings(result)
+            }
         }
 
         // Methods with args
@@ -62,6 +68,7 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
             "setProperty" -> setProperty(args, result)
             "setUserProperty" -> setUserProperty(args, result)
             "addAttributionData" -> addAttributionData(args, result)
+            "checkTrialIntroEligibility" -> checkTrialIntroEligibility(args, result)
             else -> result.notImplemented()
         }
     }
@@ -143,6 +150,19 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         })
     }
 
+    private fun offerings(result: Result) {
+        Qonversion.offerings(callback = object: QonversionOfferingsCallback {
+            override fun onSuccess(offerings: QOfferings) {
+                val jsonOfferings = Gson().toJson(offerings.toMap())
+                result.success(jsonOfferings)
+            }
+
+            override fun onError(error: QonversionError) {
+                result.offeringsError(error.description, error.additionalMessage)
+            }
+        })
+    }
+
     private fun products(result: Result) {
         Qonversion.products(callback = object: QonversionProductsCallback {
             override fun onSuccess(products: Map<String, QProduct>) {
@@ -210,5 +230,20 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         Qonversion.attribution(data, castedProvider)
 
         result.success(null)
+    }
+
+    private fun checkTrialIntroEligibility(args: Map<String, Any>, result: Result) {
+        val ids = args["ids"] as? List<String> ?: return result.noDataError()
+
+        Qonversion.checkTrialIntroEligibilityForProductIds(ids, callback = object: QonversionEligibilityCallback {
+            override fun onSuccess(eligibilities: Map<String, QEligibility>) {
+                val jsonEligibilities = Gson().toJson(eligibilities.mapValues { it.value.toMap() })
+                result.success(jsonEligibilities)
+            }
+
+            override fun onError(error: QonversionError) {
+                result.qonversionError(error.additionalMessage, error.description)
+            }
+        })
     }
 }

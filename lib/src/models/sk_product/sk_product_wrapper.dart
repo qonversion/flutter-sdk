@@ -6,18 +6,13 @@ import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:qonversion_flutter/src/models/utils/mapper.dart';
 
-import 'sk_product/discount.dart';
-import 'sk_product/discount_payment_mode.dart';
-import 'sk_product/subscription_period.dart';
-import 'sk_product/subscription_period_unit.dart';
+import 'discount.dart';
+import 'subscription_period.dart';
 
 part 'sk_product_wrapper.g.dart';
 
 /// Dart wrapper around StoreKit's [SKProduct](https://developer.apple.com/documentation/storekit/skproduct?language=objc).
-///
-/// A list of [SKProductWrapper] is returned in the [SKRequestMaker.startProductRequest] method, and
-/// should be stored for use when making a payment.
-@JsonSerializable(nullable: true)
+@JsonSerializable()
 class SKProductWrapper {
   /// The unique identifier of the product.
   final String productIdentifier;
@@ -62,7 +57,7 @@ class SKProductWrapper {
   final SKProductDiscountWrapper introductoryPrice;
 
   /// Creates an [SKProductWrapper] with the given product details.
-  SKProductWrapper({
+  const SKProductWrapper({
     @required this.productIdentifier,
     @required this.localizedTitle,
     @required this.localizedDescription,
@@ -73,14 +68,8 @@ class SKProductWrapper {
     @required this.introductoryPrice,
   });
 
-  /// Constructing an instance from a map from the Objective-C layer.
-  ///
-  /// This method should only be used with `map` values returned by [SkProductResponseWrapper.fromJson].
-  /// The `map` parameter must not be null.
-  factory SKProductWrapper.fromJson(Map<String, dynamic> map) {
-    assert(map != null, 'Map must not be null.');
-    return _$SKProductWrapperFromJson(map);
-  }
+  factory SKProductWrapper.fromJson(Map<String, dynamic> json) =>
+      _$SKProductWrapperFromJson(json);
 
   @override
   bool operator ==(Object other) {
@@ -116,9 +105,6 @@ class SKProductWrapper {
 /// Object that indicates the locale of the price
 ///
 /// It is a thin wrapper of [NSLocale](https://developer.apple.com/documentation/foundation/nslocale?language=objc).
-// TODO(cyanglaz): NSLocale is a complex object, want to see the actual need of getting this expanded.
-//                 Matching android to only get the currencySymbol for now.
-//                 https://github.com/flutter/flutter/issues/26610
 @JsonSerializable()
 class SKPriceLocaleWrapper {
   ///The currency symbol for the locale, e.g. $ for US locale.
@@ -128,19 +114,13 @@ class SKPriceLocaleWrapper {
   final String currencyCode;
 
   /// Creates a new price locale for `currencySymbol` and `currencyCode`.
-  SKPriceLocaleWrapper({
+  const SKPriceLocaleWrapper({
     @required this.currencySymbol,
     @required this.currencyCode,
   });
 
-  /// Constructing an instance from a map from the Objective-C layer.
-  ///
-  /// This method should only be used with `map` values returned by [SKProductWrapper.fromJson] and [SKProductDiscountWrapper.fromJson].
-  /// The `map` parameter must not be null.
-  factory SKPriceLocaleWrapper.fromJson(Map map) {
-    assert(map != null, 'Map must not be null.');
-    return _$SKPriceLocaleWrapperFromJson(map);
-  }
+  factory SKPriceLocaleWrapper.fromJson(Map<String, dynamic> json) =>
+      _$SKPriceLocaleWrapperFromJson(json);
 
   @override
   bool operator ==(Object other) {

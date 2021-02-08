@@ -45,7 +45,8 @@ extension Qonversion.Product {
       "type": type.rawValue,
       "duration": duration.rawValue,
       "sk_product": skProduct?.toMap(),
-      "pretty_price": prettyPrice
+      "pretty_price": prettyPrice,
+      "trial_duration": trialDuration.rawValue
     ]
   }
 }
@@ -84,5 +85,42 @@ extension Qonversion.Property {
     default:
       throw ParsingError.runtimeError("Could not parse Qonversion.Property")
     }
+  }
+}
+
+extension Qonversion.Offerings {
+  func toMap() -> [String: Any?] {
+    return [
+      "main": main?.toMap(),
+      "available_offerings": availableOfferings.map { $0.toMap() }
+    ]
+  }
+}
+
+extension Qonversion.Offering {
+  func toMap() -> [String: Any?] {
+    return [
+      "id": identifier,
+      "tag": tag.rawValue,
+      "products": products.map { $0.toMap() }
+    ]
+  }
+}
+
+extension Qonversion.IntroEligibility {
+  func toMap() -> [String: Any?] {
+    return ["status": status.rawValue]
+  }
+}
+
+// MARK: - JSON Encoding
+extension Dictionary {
+  func toJson() -> String? {
+    guard let jsonData = try? JSONSerialization.data(withJSONObject: self,
+                                                     options: []) else {
+      return nil
+    }
+    
+    return String(data: jsonData, encoding: .utf8)
   }
 }

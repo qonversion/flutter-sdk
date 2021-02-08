@@ -4,7 +4,11 @@ import com.android.billingclient.api.SkuDetails
 import com.qonversion.android.sdk.QonversionError
 import com.qonversion.android.sdk.dto.QLaunchResult
 import com.qonversion.android.sdk.dto.QPermission
-import com.qonversion.android.sdk.dto.QProduct
+import com.qonversion.android.sdk.dto.eligibility.QEligibility
+import com.qonversion.android.sdk.dto.eligibility.QIntroEligibilityStatus
+import com.qonversion.android.sdk.dto.offerings.QOffering
+import com.qonversion.android.sdk.dto.offerings.QOfferings
+import com.qonversion.android.sdk.dto.products.QProduct
 
 data class PurchaseResult(val permissions: Map<String, QPermission>? = null, val error: QonversionError? = null) {
     fun toMap(): Map<String, Any?> {
@@ -32,7 +36,8 @@ fun QProduct.toMap(): Map<String, Any?> {
             "type" to type.type,
             "duration" to duration?.type,
             "sku_details" to skuDetail?.toMap(),
-            "pretty_price" to prettyPrice
+            "pretty_price" to prettyPrice,
+            "trial_duration" to trialDuration?.type
     )
 }
 
@@ -45,6 +50,34 @@ fun QPermission.toMap(): Map<String, Any?> {
             "expiration_timestamp" to expirationDate?.time?.toDouble(),
             "active" to isActive()
     )
+}
+
+fun QOfferings.toMap(): Map<String, Any?> {
+    return mapOf(
+            "main" to main?.toMap(),
+            "available_offerings" to availableOfferings.map { it.toMap() }
+    )
+}
+
+fun QOffering.toMap(): Map<String, Any?> {
+    return mapOf(
+            "id" to offeringID,
+            "tag" to tag.tag,
+            "products" to products.map { it.toMap() }
+    )
+}
+
+fun QEligibility.toMap(): Map<String, Any?> {
+    return mapOf("status" to status.toInt())
+}
+
+fun QIntroEligibilityStatus.toInt(): Int {
+    return when (this) {
+        QIntroEligibilityStatus.Unknown -> 0
+        QIntroEligibilityStatus.NonIntroProduct -> 1
+        QIntroEligibilityStatus.Ineligible -> 2
+        QIntroEligibilityStatus.Eligible -> 3
+    }
 }
 
 fun SkuDetails.toMap(): Map<String, Any?> {

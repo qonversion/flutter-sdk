@@ -15,6 +15,7 @@ QProduct _$QProductFromJson(Map<String, dynamic> json) {
     _$enumDecodeNullable(_$QProductDurationEnumMap, json['duration'],
         unknownValue: QProductDuration.unknown),
     json['pretty_price'] as String,
+    _$enumDecodeNullable(_$QTrialDurationEnumMap, json['trial_duration']),
     QMapper.skProductFromJson(json['sk_product']),
     QMapper.skuDetailsFromJson(json['sku_details']),
   );
@@ -26,6 +27,7 @@ Map<String, dynamic> _$QProductToJson(QProduct instance) => <String, dynamic>{
       'type': _$QProductTypeEnumMap[instance.type],
       'duration': _$QProductDurationEnumMap[instance.duration],
       'pretty_price': instance.prettyPrice,
+      'trial_duration': _$QTrialDurationEnumMap[instance.trialDuration],
       'sk_product': instance.skProduct,
       'sku_details': instance.skuDetails,
     };
@@ -77,4 +79,17 @@ const _$QProductDurationEnumMap = {
   QProductDuration.annual: 4,
   QProductDuration.lifetime: 5,
   QProductDuration.unknown: 'unknown',
+};
+
+const _$QTrialDurationEnumMap = {
+  QTrialDuration.notAvailable: -1,
+  QTrialDuration.threeDays: 1,
+  QTrialDuration.week: 2,
+  QTrialDuration.twoWeeks: 3,
+  QTrialDuration.month: 4,
+  QTrialDuration.twoMonths: 5,
+  QTrialDuration.threeMonths: 6,
+  QTrialDuration.sixMonths: 7,
+  QTrialDuration.year: 8,
+  QTrialDuration.other: 9,
 };

@@ -27,6 +27,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       Qonversion.setDebugMode()
       return result(nil)
       
+    case "offerings":
+      return offerings(result)
+      
     default:
       break
     }
@@ -55,6 +58,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       
     case "setUserProperty":
       return setUserProperty(args, result)
+      
+    case "checkTrialIntroEligibility":
+      return checkTrialIntroEligibility(args, result)
       
     default:
       return result(FlutterMethodNotImplemented)
@@ -123,6 +129,21 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     }
   }
   
+  private func offerings(_ result: @escaping FlutterResult) {
+    Qonversion.offerings { offerings, error in
+      if let error = error {
+        result(FlutterError.offeringsError(error.localizedDescription))
+      }
+      
+      guard let offerings = offerings else {
+        return result(nil)
+      }
+      
+      
+      result(offerings.toMap().toJson())
+    }
+  }
+  
   private func setUserId(_ userId: String?, _ result: @escaping FlutterResult) {
     guard let userId = userId else {
       result(FlutterError.noUserId)
@@ -166,6 +187,20 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     Qonversion.setUserProperty(property, value: value)
     
     result(nil)
+  }
+  
+  private func checkTrialIntroEligibility(_ args: [String: Any], _ result: @escaping FlutterResult) {
+    guard let ids = args["ids"] as? [String] else {
+      return result(FlutterError.noData)
+    }
+    
+    Qonversion.checkTrialIntroEligibility(forProductIds: ids) { eligibilities, error in
+      if let error = error {
+        return result(FlutterError.qonversionError(error.localizedDescription))
+      }
+      
+      result(eligibilities.mapValues { $0.toMap() }.toJson())
+    }
   }
   
   private func addAttributionData(_ args: [String: Any], _ result: @escaping FlutterResult) {

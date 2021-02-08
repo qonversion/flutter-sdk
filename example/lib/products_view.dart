@@ -8,11 +8,13 @@ class ProductsView extends StatefulWidget {
 
 class _ProductsViewState extends State<ProductsView> {
   var _products = <String, QProduct>{};
+  QOfferings _offerings;
 
   @override
   void initState() {
     super.initState();
     _loadProducts();
+    _loadOfferings();
   }
 
   @override
@@ -22,11 +24,33 @@ class _ProductsViewState extends State<ProductsView> {
         title: Text('Products'),
       ),
       body: Center(
-        child: _products == null
+        child: _products == null && _offerings == null
             ? CircularProgressIndicator()
             : ListView(
                 children: [
-                  for (final p in _products.values) _productWidget(p),
+                  if (_products != null)
+                    for (final p in _products.values) _productWidget(p),
+                  if (_offerings != null) _offeringsWidget(_offerings),
+                  if (_products != null)
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: 8,
+                        right: 8,
+                        bottom: 8,
+                      ),
+                      child: FlatButton(
+                        child: Text('Check Intro Eligibility'),
+                        color: Colors.yellow,
+                        textColor: Colors.black,
+                        onPressed: () async {
+                          final res =
+                              await Qonversion.checkTrialIntroEligibility(
+                                  _products.keys.toList());
+                          print(res.map(
+                              (key, value) => MapEntry(key, value.status)));
+                        },
+                      ),
+                    ),
                 ],
               ),
       ),
@@ -43,6 +67,15 @@ class _ProductsViewState extends State<ProductsView> {
     }
   }
 
+  Future<void> _loadOfferings() async {
+    try {
+      _offerings = await Qonversion.offerings();
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Widget _productWidget(QProduct product) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,6 +86,7 @@ class _ProductsViewState extends State<ProductsView> {
           trailing: product.skProduct != null
               ? Text(product.skProduct.localizedTitle)
               : null,
+          onTap: () => print(product.toJson()),
         ),
         Padding(
           padding: EdgeInsets.all(8),
@@ -68,5 +102,46 @@ class _ProductsViewState extends State<ProductsView> {
         ),
       ],
     );
+  }
+
+  Widget _offeringsWidget(QOfferings offerings) {
+    final main = offerings.main;
+    final availableOfferings = offerings.availableOfferings;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ListTile(
+          title: Text('OFFERINGS:'),
+        ),
+        ..._offeringWidgets(main, true),
+        if (availableOfferings != null && availableOfferings.isNotEmpty)
+          for (final offering in availableOfferings)
+            ..._offeringWidgets(offering, false),
+      ],
+    );
+  }
+
+  List<Widget> _offeringWidgets(QOffering offering, bool isMain) {
+    if (offering == null) return <Widget>[];
+    return [
+      if (!isMain)
+        ListTile(
+          title: Text('ADDITIONAL AVAILABLE OFFERING:'),
+        ),
+      ListTile(
+        title: Text('ID: ${offering.id}'),
+        subtitle: Text('Tag: ${offering.tag}'),
+      ),
+      if (offering.products.isNotEmpty)
+        for (final product in offering.products)
+          ListTile(
+            title: Text('Store ID: ${product.storeId}'),
+            subtitle: Text('Q ID: ${product.qonversionId}'),
+            trailing: product.skProduct != null
+                ? Text(product.skProduct.localizedTitle)
+                : null,
+          )
+    ];
   }
 }

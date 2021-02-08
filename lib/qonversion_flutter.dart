@@ -1,4 +1,6 @@
+export 'src/models/eligibility.dart';
 export 'src/models/launch_result.dart';
+export 'src/models/offerings.dart';
 export 'src/models/permission.dart';
 export 'src/models/product.dart';
 export 'src/models/proration_mode.dart';

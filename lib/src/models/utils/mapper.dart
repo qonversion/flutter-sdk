@@ -1,8 +1,8 @@
 import '../permission.dart';
 import '../product.dart';
 import '../sk_product/discount.dart';
+import '../sk_product/sk_product_wrapper.dart';
 import '../sk_product/subscription_period.dart';
-import '../sk_product_wrapper.dart';
 import '../sku_details/sku_details.dart';
 
 class QMapper {
