@@ -1,3 +1,6 @@
+## 2.3.0
+* From now SDK will return all requested info (products/offerings/permissions) even in case of an internet connection error, the server problem, etc if cached data is not outdated.
+
 ## 2.2.0
 * Add Offerings feature
 * Add `trialDuration` property to `product`
