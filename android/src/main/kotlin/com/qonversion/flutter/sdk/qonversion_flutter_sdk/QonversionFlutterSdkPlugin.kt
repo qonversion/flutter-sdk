@@ -23,10 +23,14 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
     private val application: Application = activity.application
 
     companion object {
+        private const val PENDING_PURCHASES_UPDATED = "pendingPurchasesUpdated"
+        private var channel: MethodChannel? = null
+
         @JvmStatic
         fun registerWith(registrar: Registrar) {
-            val channel = MethodChannel(registrar.messenger(), "qonversion_flutter_sdk")
-            channel.setMethodCallHandler(QonversionFlutterSdkPlugin(registrar))
+            val instance = QonversionFlutterSdkPlugin(registrar)
+            channel = MethodChannel(registrar.messenger(), "qonversion_flutter_sdk")
+            channel?.setMethodCallHandler(instance)
         }
     }
 
@@ -91,6 +95,15 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
                     }
                 }
         )
+        startListeningPendingPurchasesEvents()
+    }
+
+    private fun startListeningPendingPurchasesEvents(){
+        Qonversion.setUpdatedPurchasesListener(object : UpdatedPurchasesListener {
+            override fun onPermissionsUpdate(permissions: Map<String, QPermission>) {
+                channel?.invokeMethod(PENDING_PURCHASES_UPDATED, permissions.mapValues { it.value.toMap() })
+            }
+        })
     }
 
     private fun purchase(productId: String?, result: Result) {
@@ -114,7 +127,7 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         val newProductId = args["newProductId"] as? String ?: return result.noNewProductIdError()
         val oldProductId = args["oldProductId"] as? String ?: return result.noOldProductIdError()
         val prorationMode = args["proration_mode"] as? Int
-        
+
         Qonversion.updatePurchase(activity, newProductId, oldProductId, prorationMode, callback = object: QonversionPermissionsCallback {
             override fun onSuccess(permissions: Map<String, QPermission>) {
                 result.success(permissions.mapValues { it.value.toMap() })

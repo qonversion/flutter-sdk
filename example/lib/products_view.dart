@@ -15,6 +15,11 @@ class _ProductsViewState extends State<ProductsView> {
     super.initState();
     _loadProducts();
     _loadOfferings();
+
+    Qonversion.setPendingPurchasesListener(
+            (permissions) =>  print(permissions.map(
+                    (key, value) => MapEntry(value.permissionId, value.productId)))
+    );
   }
 
   @override

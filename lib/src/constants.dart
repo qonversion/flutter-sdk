@@ -31,4 +31,5 @@ class Constants {
   static const mSetDebugMode = 'setDebugMode';
   static const mOfferings = 'offerings';
   static const mCheckTrialIntroEligibility = 'checkTrialIntroEligibility';
+  static const mPendingPurchasesUpdated = 'pendingPurchasesUpdated';
 }

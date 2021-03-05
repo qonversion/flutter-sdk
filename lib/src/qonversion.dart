@@ -15,8 +15,14 @@ import 'models/launch_result.dart';
 import 'models/purchase_exception.dart';
 import 'qa_provider.dart';
 
+typedef void PendingPurchasesListener(Map<String, QPermission> permissions);
+
 class Qonversion {
-  static const MethodChannel _channel = MethodChannel('qonversion_flutter_sdk');
+  static final MethodChannel _channel = MethodChannel('qonversion_flutter_sdk')
+    ..setMethodCallHandler(_handleMethod);
+
+  // event listeners
+  static PendingPurchasesListener _onUpdatedPermissions;
 
   /// Initializes Qonversion SDK with the given API key.
   /// You can get one in your account on qonversion.io.
@@ -169,9 +175,18 @@ class Qonversion {
     return _channel.invokeMethod(Constants.mAddAttributionData, args);
   }
 
+  /// You can set the flag to distinguish sandbox and production users.
+  /// To see the sandbox users turn on the Viewing test Data toggle on Qonversion Dashboard
   static Future<void> setDebugMode() =>
       _channel.invokeMethod(Constants.mSetDebugMode);
 
+  /// Return Qonversion Offerings Object
+  /// An offering is a group of products that you can offer to a user on a given paywall based on your business logic.
+  /// For example, you can offer one set of products on a paywall immediately after onboarding and another set of products with discounts later on if a user has not converted.
+  /// Offerings allow changing the products offered remotely without releasing app updates.
+  ///
+  /// See [Offerings](https://qonversion.io/docs/offerings) for more details.
+  /// See [Product Center](https://qonversion.io/docs/product-center) for more details.
   static Future<QOfferings> offerings() async {
     final offeringsString =
         await _channel.invokeMethod<String>(Constants.mOfferings);
@@ -181,6 +196,9 @@ class Qonversion {
     return QOfferings.fromJson(decodedOfferings);
   }
 
+  /// You can check if a user is eligible for an introductory offer, including a free trial.
+  /// You can show only a regular price for users who are not eligible for an introductory offer.
+  /// [ids] products identifiers that must be checked
   static Future<Map<String, QEligibility>> checkTrialIntroEligibility(
       List<String> ids) async {
     final eligibilitiesString = await _channel.invokeMethod<String>(
@@ -191,5 +209,26 @@ class Qonversion {
 
     return decodedEligibilities
         .map((key, value) => MapEntry(key, QEligibility.fromJson(value)));
+  }
+
+  /// Set the listener to handle pending purchases
+  /// The listener is called when the deferred transaction status updates
+  /// For example, to handle purchases using slow credit card or SCA flow purchases
+  static void setPendingPurchasesListener(
+      PendingPurchasesListener updatedPurchasesListener) async {
+    _onUpdatedPermissions = updatedPurchasesListener;
+  }
+
+  // Private function that gets called by Swift/Kotlin
+  static Future<Null> _handleMethod(MethodCall call) async {
+    switch (call.method) {
+      case Constants.mPendingPurchasesUpdated:
+        if (_onUpdatedPermissions != null) {
+          _onUpdatedPermissions(QMapper.permissionsFromJson(call.arguments));
+        }
+        break;
+    }
+
+    return null;
   }
 }

@@ -3,10 +3,16 @@ import UIKit
 import Qonversion
 
 public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
+  private var channel: FlutterMethodChannel?
+    
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "qonversion_flutter_sdk", binaryMessenger: registrar.messenger())
+    
     let instance = SwiftQonversionFlutterSdkPlugin()
+    instance.channel = channel
     registrar.addMethodCallDelegate(instance, channel: channel)
+
+    Qonversion.setPurchasesDelegate(instance)
   }
   
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -226,4 +232,15 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     
     result(nil)
   }
+        
+}
+
+// MARK: - Qonversion.PurchasesDelegate
+
+extension SwiftQonversionFlutterSdkPlugin: Qonversion.PurchasesDelegate {
+    static private let pendingPurchasesUpdated = "pendingPurchasesUpdated"
+
+    public func qonversionDidReceiveUpdatedPermissions(_ permissions: [String : Qonversion.Permission]) {
+        self.channel?.invokeMethod(SwiftQonversionFlutterSdkPlugin.pendingPurchasesUpdated, arguments: permissions.mapValues { $0.toMap() })
+    }
 }
