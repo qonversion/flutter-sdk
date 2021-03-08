@@ -183,9 +183,18 @@ class Qonversion {
     return _channel.invokeMethod(Constants.mAddAttributionData, args);
   }
 
+  /// You can set the flag to distinguish sandbox and production users.
+  /// To see the sandbox users turn on the Viewing test Data toggle on Qonversion Dashboard
   static Future<void> setDebugMode() =>
       _channel.invokeMethod(Constants.mSetDebugMode);
 
+  /// Return Qonversion Offerings Object
+  /// An offering is a group of products that you can offer to a user on a given paywall based on your business logic.
+  /// For example, you can offer one set of products on a paywall immediately after onboarding and another set of products with discounts later on if a user has not converted.
+  /// Offerings allow changing the products offered remotely without releasing app updates.
+  ///
+  /// See [Offerings](https://qonversion.io/docs/offerings) for more details.
+  /// See [Product Center](https://qonversion.io/docs/product-center) for more details.
   static Future<QOfferings> offerings() async {
     final offeringsString =
         await _channel.invokeMethod<String>(Constants.mOfferings);
@@ -195,6 +204,9 @@ class Qonversion {
     return QOfferings.fromJson(decodedOfferings);
   }
 
+  /// You can check if a user is eligible for an introductory offer, including a free trial.
+  /// You can show only a regular price for users who are not eligible for an introductory offer.
+  /// [ids] products identifiers that must be checked
   static Future<Map<String, QEligibility>> checkTrialIntroEligibility(
       List<String> ids) async {
     final eligibilitiesString = await _channel.invokeMethod<String>(
