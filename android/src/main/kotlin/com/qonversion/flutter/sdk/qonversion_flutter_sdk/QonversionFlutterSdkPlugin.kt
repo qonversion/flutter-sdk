@@ -33,15 +33,6 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
 
             // Register Updated Purchases Event Channel
             instance.register()
-
-            // Start listening to Qonversion purchases events
-            Qonversion.setUpdatedPurchasesListener(object: UpdatedPurchasesListener {
-                override fun onPermissionsUpdate(permissions: Map<String, QPermission>) {
-                    val payload = Gson().toJson(permissions.mapValues { it.value.toMap() })
-
-                    instance.eventStreamHandler?.eventSink?.success(payload)
-                }
-            })
         }
     }
 
@@ -106,6 +97,18 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
                     }
                 }
         )
+
+        startListeningPendingPurchasesEvents()
+    }
+
+    private fun startListeningPendingPurchasesEvents() {
+        Qonversion.setUpdatedPurchasesListener(object : UpdatedPurchasesListener {
+            override fun onPermissionsUpdate(permissions: Map<String, QPermission>) {
+                val payload = Gson().toJson(permissions.mapValues { it.value.toMap() })
+
+                eventStreamHandler?.eventSink?.success(payload)
+            }
+        })
     }
 
     private fun purchase(productId: String?, result: Result) {
