@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
 
@@ -9,12 +11,23 @@ class ProductsView extends StatefulWidget {
 class _ProductsViewState extends State<ProductsView> {
   var _products = <String, QProduct>{};
   QOfferings _offerings;
+  StreamSubscription<Map<String, QPermission>> _subscription;
 
   @override
   void initState() {
     super.initState();
     _loadProducts();
     _loadOfferings();
+
+    _subscription =
+        Qonversion.updatedPurchasesStream.listen((event) => print(event));
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+
+    super.dispose();
   }
 
   @override
