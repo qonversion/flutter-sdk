@@ -16,6 +16,8 @@ import 'models/purchase_exception.dart';
 import 'qa_provider.dart';
 
 class Qonversion {
+  static const String _sdkVersion = "2.4.0";
+
   static const MethodChannel _channel = MethodChannel('qonversion_flutter_sdk');
   static const _purchasesEventChannel =
       EventChannel('qonversion_flutter_updated_purchases');
@@ -38,6 +40,8 @@ class Qonversion {
     String apiKey, {
     @required bool isObserveMode,
   }) async {
+    _storeSdkInfo();
+
     final args = {
       Constants.kApiKey: apiKey,
       Constants.kObserveMode: isObserveMode,
@@ -218,4 +222,13 @@ class Qonversion {
     return decodedEligibilities
         .map((key, value) => MapEntry(key, QEligibility.fromJson(value)));
   }
+
+  // Private methods
+  static Future<void> _storeSdkInfo() =>
+      _channel.invokeMethod(Constants.mStoreSdkInfo, {
+        "version": _sdkVersion,
+        "versionKey": Constants.versionKey,
+        "source": "flutter",
+        "sourceKey": Constants.sourceKey
+      });
 }

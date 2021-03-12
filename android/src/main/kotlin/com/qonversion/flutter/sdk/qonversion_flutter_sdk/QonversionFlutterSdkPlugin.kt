@@ -2,6 +2,7 @@ package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 
 import android.app.Activity
 import android.app.Application
+import android.preference.PreferenceManager
 import androidx.annotation.NonNull
 import com.google.gson.Gson
 import com.qonversion.android.sdk.*
@@ -75,6 +76,7 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
             "setUserProperty" -> setUserProperty(args, result)
             "addAttributionData" -> addAttributionData(args, result)
             "checkTrialIntroEligibility" -> checkTrialIntroEligibility(args, result)
+            "storeSdkInfo" -> storeSdkInfo(args, result)
             else -> result.notImplemented()
         }
     }
@@ -132,7 +134,7 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         val newProductId = args["newProductId"] as? String ?: return result.noNewProductIdError()
         val oldProductId = args["oldProductId"] as? String ?: return result.noOldProductIdError()
         val prorationMode = args["proration_mode"] as? Int
-        
+
         Qonversion.updatePurchase(activity, newProductId, oldProductId, prorationMode, callback = object: QonversionPermissionsCallback {
             override fun onSuccess(permissions: Map<String, QPermission>) {
                 result.success(permissions.mapValues { it.value.toMap() })
@@ -263,5 +265,19 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
                 result.qonversionError(error.additionalMessage, error.description)
             }
         })
+    }
+
+    private fun storeSdkInfo(args: Map<String, Any>, result: Result) {
+        val version = args["version"] as? String ?: return result.noProperty()
+        val versionKey = args["versionKey"] as? String ?: return result.noProperty()
+        val source = args["source"] as? String ?: return result.noProperty()
+        val sourceKey = args["sourceKey"] as? String ?: return result.noProperty()
+
+        val editor = PreferenceManager.getDefaultSharedPreferences(application).edit()
+        editor.putString(sourceKey, source)
+        editor.putString(versionKey, version)
+        editor.apply()
+
+        result.success(null)
     }
 }
