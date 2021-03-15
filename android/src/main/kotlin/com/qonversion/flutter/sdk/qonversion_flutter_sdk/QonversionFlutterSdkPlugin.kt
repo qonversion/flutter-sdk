@@ -2,8 +2,8 @@ package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 
 import android.app.Activity
 import android.app.Application
-import android.preference.PreferenceManager
 import androidx.annotation.NonNull
+import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.qonversion.android.sdk.*
 import io.flutter.plugin.common.MethodCall
