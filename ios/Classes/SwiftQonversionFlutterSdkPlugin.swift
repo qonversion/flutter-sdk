@@ -168,11 +168,11 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
   
   private func setProperty(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let rawProperty = args["property"] as? String else {
-      return result(FlutterError.noData)
+      return result(FlutterError.noProperty)
     }
     
     guard let value = args["value"] as? String else {
-      return result(FlutterError.noProvider)
+      return result(FlutterError.noPropertyValue)
     }
     
     do {
@@ -189,11 +189,11 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
   
   private func setUserProperty(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let property = args["property"] as? String else {
-      return result(FlutterError.noData)
+      return result(FlutterError.noProperty)
     }
     
     guard let value = args["value"] as? String else {
-      return result(FlutterError.noProvider)
+      return result(FlutterError.noPropertyValue)
     }
     
     Qonversion.setUserProperty(property, value: value)
@@ -216,19 +216,14 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
   }
   
   private func storeSdkInfo(_ args: [String: Any], _ result: @escaping FlutterResult) {
-    guard let version = args["version"] as? String else {
-      return result(FlutterError.noData)
+    guard let version = args["version"] as? String,
+          let source = args["source"] as? String,
+          let sourceKey = args["sourceKey"] as? String,
+          let versionKey = args["versionKey"] as? String
+    else {
+      return result(FlutterError.noSdkInfo)
     }
-    guard let source = args["source"] as? String else {
-      return result(FlutterError.noData)
-    }
-    
-    guard let sourceKey = args["sourceKey"] as? String else {
-      return result(FlutterError.noData)
-    }
-    guard let versionKey = args["versionKey"] as? String else {
-      return result(FlutterError.noData)
-    }
+   
     let defaults = UserDefaults.standard
     defaults.set(version, forKey: versionKey)
     defaults.set(source, forKey: sourceKey)

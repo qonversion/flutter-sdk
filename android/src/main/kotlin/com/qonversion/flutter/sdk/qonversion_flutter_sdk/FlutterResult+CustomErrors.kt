@@ -59,3 +59,7 @@ fun MethodChannel.Result.noPropertyValue() {
 fun MethodChannel.Result.offeringsError(description: String?, message: String?) {
     return this.error("OFFERINGS", "Could not get offerings", "$description $message")
 }
+
+fun MethodChannel.Result.noSdkInfo() {
+    return this.error("15", "Could not find sdk info", passValidValue)
+}

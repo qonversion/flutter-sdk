@@ -268,10 +268,10 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
     }
 
     private fun storeSdkInfo(args: Map<String, Any>, result: Result) {
-        val version = args["version"] as? String ?: return result.noProperty()
-        val versionKey = args["versionKey"] as? String ?: return result.noProperty()
-        val source = args["source"] as? String ?: return result.noProperty()
-        val sourceKey = args["sourceKey"] as? String ?: return result.noProperty()
+        val version = args["version"] as? String ?: return result.noSdkInfo()
+        val versionKey = args["versionKey"] as? String ?: return result.noSdkInfo()
+        val source = args["source"] as? String ?: return result.noSdkInfo()
+        val sourceKey = args["sourceKey"] as? String ?: return result.noSdkInfo()
 
         val editor = PreferenceManager.getDefaultSharedPreferences(application).edit()
         editor.putString(sourceKey, source)
