@@ -25,7 +25,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     switch (call.method) {
     case "products":
       return products(result)
-    
+      
     case "checkPermissions":
       return checkPermissions(result)
       
@@ -52,7 +52,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     switch call.method {
     case "launch":
       return launch(with: args["key"] as? String, result)
-    
+      
     case "purchase":
       return purchase(args["productId"] as? String, result)
       
@@ -70,6 +70,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       
     case "checkTrialIntroEligibility":
       return checkTrialIntroEligibility(args, result)
+      
+    case "storeSdkInfo":
+      return storeSdkInfo(args, result)
       
     default:
       return result(FlutterMethodNotImplemented)
@@ -165,11 +168,11 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
   
   private func setProperty(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let rawProperty = args["property"] as? String else {
-      return result(FlutterError.noData)
+      return result(FlutterError.noProperty)
     }
     
     guard let value = args["value"] as? String else {
-      return result(FlutterError.noProvider)
+      return result(FlutterError.noPropertyValue)
     }
     
     do {
@@ -183,14 +186,14 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       result(FlutterError.qonversionError(error.localizedDescription))
     }
   }
-    
+  
   private func setUserProperty(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let property = args["property"] as? String else {
-      return result(FlutterError.noData)
+      return result(FlutterError.noProperty)
     }
     
     guard let value = args["value"] as? String else {
-      return result(FlutterError.noProvider)
+      return result(FlutterError.noPropertyValue)
     }
     
     Qonversion.setUserProperty(property, value: value)
@@ -210,6 +213,22 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       
       result(eligibilities.mapValues { $0.toMap() }.toJson())
     }
+  }
+  
+  private func storeSdkInfo(_ args: [String: Any], _ result: @escaping FlutterResult) {
+    guard let version = args["version"] as? String,
+        let source = args["source"] as? String,
+        let sourceKey = args["sourceKey"] as? String,
+        let versionKey = args["versionKey"] as? String
+    else {
+        return result(FlutterError.noSdkInfo)
+    }
+    
+    let defaults = UserDefaults.standard
+    defaults.set(version, forKey: versionKey)
+    defaults.set(source, forKey: sourceKey)
+    
+    result(nil)
   }
   
   private func addAttributionData(_ args: [String: Any], _ result: @escaping FlutterResult) {
