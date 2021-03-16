@@ -217,13 +217,13 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
   
   private func storeSdkInfo(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let version = args["version"] as? String,
-          let source = args["source"] as? String,
-          let sourceKey = args["sourceKey"] as? String,
-          let versionKey = args["versionKey"] as? String
+        let source = args["source"] as? String,
+        let sourceKey = args["sourceKey"] as? String,
+        let versionKey = args["versionKey"] as? String
     else {
-      return result(FlutterError.noSdkInfo)
+        return result(FlutterError.noSdkInfo)
     }
-   
+    
     let defaults = UserDefaults.standard
     defaults.set(version, forKey: versionKey)
     defaults.set(source, forKey: sourceKey)
