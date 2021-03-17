@@ -31,4 +31,10 @@ class Constants {
   static const mSetDebugMode = 'setDebugMode';
   static const mOfferings = 'offerings';
   static const mCheckTrialIntroEligibility = 'checkTrialIntroEligibility';
+  static const mStoreSdkInfo = 'storeSdkInfo';
+
+  // Keys for NSUserDefaults on iOS and SharedPreferences on Android
+  static const keyPrefix = 'com.qonversion.keys';
+  static const sourceKey = '$keyPrefix.source';
+  static const versionKey = '$keyPrefix.sourceVersion';
 }
