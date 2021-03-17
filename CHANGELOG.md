@@ -1,3 +1,6 @@
+## 2.4.1
+* Internal logic optimization and minor improvements
+
 ## 2.4.0
 * Add deferred purchases feature
 
