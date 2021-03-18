@@ -27,3 +27,5 @@ flutter:
         package: com.qonversion.flutter.sdk.qonversion_flutter_sdk
       ios:
         pluginClass: QonversionFlutterSdkPlugin
+      macos:
+        pluginClass: QonversionFlutterSdkPlugin
