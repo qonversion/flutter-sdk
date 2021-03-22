@@ -1,3 +1,6 @@
+## 2.5.0
+* MacOS support
+
 ## 2.4.1
 * Internal logic optimization and minor improvements
 
