@@ -1,3 +1,6 @@
+## 2.5.1
+* iOS 14.5 advertising ID support
+
 ## 2.5.0
 * MacOS support
 
