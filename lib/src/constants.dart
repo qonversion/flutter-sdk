@@ -29,6 +29,7 @@ class Constants {
   static const mSyncPurchases = 'syncPurchases';
   static const mAddAttributionData = 'addAttributionData';
   static const mSetDebugMode = 'setDebugMode';
+  static const mSetAdvertisingID = 'setAdvertisingID';
   static const mOfferings = 'offerings';
   static const mCheckTrialIntroEligibility = 'checkTrialIntroEligibility';
   static const mStoreSdkInfo = 'storeSdkInfo';

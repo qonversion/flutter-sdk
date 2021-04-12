@@ -16,7 +16,7 @@ import 'models/purchase_exception.dart';
 import 'qa_provider.dart';
 
 class Qonversion {
-  static const String _sdkVersion = "2.5.0";
+  static const String _sdkVersion = "2.5.1";
 
   static const MethodChannel _channel = MethodChannel('qonversion_flutter_sdk');
   static const _purchasesEventChannel =
@@ -191,6 +191,16 @@ class Qonversion {
   /// To see the sandbox users turn on the Viewing test Data toggle on Qonversion Dashboard
   static Future<void> setDebugMode() =>
       _channel.invokeMethod(Constants.mSetDebugMode);
+
+  /// iOS only. Returns `null` if called on Android.
+  /// On iOS 14.5+, after requesting the app tracking permission using ATT, you need to notify Qonversion if tracking is allowed and IDFA is available.
+  static Future<void> setAdvertisingID() {
+    if (Platform.isAndroid) {
+      return null;
+    }
+
+    return _channel.invokeMethod(Constants.mSetAdvertisingID);
+  }
 
   /// Return Qonversion Offerings Object
   /// An offering is a group of products that you can offer to a user on a given paywall based on your business logic.
