@@ -192,6 +192,16 @@ class Qonversion {
   static Future<void> setDebugMode() =>
       _channel.invokeMethod(Constants.mSetDebugMode);
 
+  /// iOS only. Returns `null` if called on Android.
+  /// On iOS 14.5+, after requesting the app tracking permission using ATT, you need to notify Qonversion if tracking is allowed and IDFA is available.
+  static Future<void> setAdvertisingID() {
+    if (Platform.isAndroid) {
+      return null;
+    }
+
+    return _channel.invokeMethod(Constants.mSetAdvertisingID);
+  }
+
   /// Return Qonversion Offerings Object
   /// An offering is a group of products that you can offer to a user on a given paywall based on your business logic.
   /// For example, you can offer one set of products on a paywall immediately after onboarding and another set of products with discounts later on if a user has not converted.

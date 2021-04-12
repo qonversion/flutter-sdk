@@ -45,6 +45,10 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     case "setDebugMode":
       Qonversion.setDebugMode()
       return result(nil)
+
+    case "setAdvertisingID":
+      Qonversion.setAdvertisingID()
+      return result(nil)
       
     case "offerings":
       return offerings(result)
