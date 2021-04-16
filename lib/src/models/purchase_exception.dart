@@ -10,7 +10,7 @@ class QPurchaseException implements Exception {
 
   const QPurchaseException(
     this.message, {
-    @required this.isUserCancelled,
+    required this.isUserCancelled,
   });
 
   @override

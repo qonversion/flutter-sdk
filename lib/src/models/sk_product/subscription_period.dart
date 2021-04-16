@@ -24,8 +24,8 @@ class SKProductSubscriptionPeriodWrapper {
   final SKSubscriptionPeriodUnit unit;
 
   SKProductSubscriptionPeriodWrapper({
-    @required this.numberOfUnits,
-    @required this.unit,
+    required this.numberOfUnits,
+    required this.unit,
   });
 
   /// Constructing an instance from a map from the Objective-C layer.
@@ -34,7 +34,7 @@ class SKProductSubscriptionPeriodWrapper {
   /// The `map` parameter must not be null.
   factory SKProductSubscriptionPeriodWrapper.fromJson(Map map) {
     assert(map != null, 'Map must not be null.');
-    return _$SKProductSubscriptionPeriodWrapperFromJson(map);
+    return _$SKProductSubscriptionPeriodWrapperFromJson(map as Map<String, dynamic>);
   }
 
   @override
@@ -45,7 +45,7 @@ class SKProductSubscriptionPeriodWrapper {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    final SKProductSubscriptionPeriodWrapper typedOther = other;
+    final SKProductSubscriptionPeriodWrapper typedOther = other as SKProductSubscriptionPeriodWrapper;
     return typedOther.numberOfUnits == numberOfUnits && typedOther.unit == unit;
   }
 

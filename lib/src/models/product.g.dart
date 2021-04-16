@@ -1,5 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+import 'package:collection/collection.dart' show IterableExtension;
 part of 'product.dart';
 
 // **************************************************************************
@@ -9,12 +10,12 @@ part of 'product.dart';
 QProduct _$QProductFromJson(Map<String, dynamic> json) {
   return QProduct(
     json['id'] as String,
-    json['store_id'] as String,
+    json['store_id'] as String?,
     _$enumDecodeNullable(_$QProductTypeEnumMap, json['type'],
-        unknownValue: QProductType.unknown),
+        unknownValue: QProductType.unknown)!,
     _$enumDecodeNullable(_$QProductDurationEnumMap, json['duration'],
         unknownValue: QProductDuration.unknown),
-    json['pretty_price'] as String,
+    json['pretty_price'] as String?,
     _$enumDecodeNullable(_$QTrialDurationEnumMap, json['trial_duration']),
     QMapper.skProductFromJson(json['sk_product']),
     QMapper.skuDetailsFromJson(json['sku_details']),
@@ -25,17 +26,17 @@ Map<String, dynamic> _$QProductToJson(QProduct instance) => <String, dynamic>{
       'id': instance.qonversionId,
       'store_id': instance.storeId,
       'type': _$QProductTypeEnumMap[instance.type],
-      'duration': _$QProductDurationEnumMap[instance.duration],
+      'duration': _$QProductDurationEnumMap[instance.duration!],
       'pretty_price': instance.prettyPrice,
-      'trial_duration': _$QTrialDurationEnumMap[instance.trialDuration],
+      'trial_duration': _$QTrialDurationEnumMap[instance.trialDuration!],
       'sk_product': instance.skProduct,
       'sku_details': instance.skuDetails,
     };
 
-T _$enumDecode<T>(
+T? _$enumDecode<T>(
   Map<T, dynamic> enumValues,
   dynamic source, {
-  T unknownValue,
+  T? unknownValue,
 }) {
   if (source == null) {
     throw ArgumentError('A value must be provided. Supported values: '
@@ -43,7 +44,7 @@ T _$enumDecode<T>(
   }
 
   final value = enumValues.entries
-      .singleWhere((e) => e.value == source, orElse: () => null)
+      .singleWhereOrNull((e) => e.value == source)
       ?.key;
 
   if (value == null && unknownValue == null) {
@@ -53,10 +54,10 @@ T _$enumDecode<T>(
   return value ?? unknownValue;
 }
 
-T _$enumDecodeNullable<T>(
+T? _$enumDecodeNullable<T>(
   Map<T, dynamic> enumValues,
   dynamic source, {
-  T unknownValue,
+  T? unknownValue,
 }) {
   if (source == null) {
     return null;

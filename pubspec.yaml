@@ -5,13 +5,14 @@ homepage: 'https://qonversion.io'
 repository: 'https://github.com/qonversion/flutter-sdk'
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
   flutter: ">=1.10.0 <2.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   json_annotation: ^4.0.1
+  collection: ^1.15.0-nullsafety.4
 
 dev_dependencies:
   flutter_test:

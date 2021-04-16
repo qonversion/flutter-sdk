@@ -20,7 +20,7 @@ class SKProductDiscountWrapper {
 
   /// Includes locale information about the price, e.g. `$` as the currency symbol for US locale.
   @JsonKey(fromJson: QMapper.skPriceLocaleFromJson)
-  final SKPriceLocaleWrapper priceLocale;
+  final SKPriceLocaleWrapper? priceLocale;
 
   /// The object represent the discount period length.
   ///
@@ -35,15 +35,15 @@ class SKProductDiscountWrapper {
   /// The [subscriptionPeriod] of the discount is independent of the product's [subscriptionPeriod],
   /// and their units and duration do not have to be matched.
   @JsonKey(fromJson: QMapper.skProductSubscriptionPeriodFromJson)
-  final SKProductSubscriptionPeriodWrapper subscriptionPeriod;
+  final SKProductSubscriptionPeriodWrapper? subscriptionPeriod;
 
   /// Creates an [SKProductDiscountWrapper] with the given discount details.
   SKProductDiscountWrapper({
-    @required this.price,
-    @required this.priceLocale,
-    @required this.numberOfPeriods,
-    @required this.paymentMode,
-    @required this.subscriptionPeriod,
+    required this.price,
+    required this.priceLocale,
+    required this.numberOfPeriods,
+    required this.paymentMode,
+    required this.subscriptionPeriod,
   });
 
   /// Constructing an instance from a map from the Objective-C layer.
@@ -52,7 +52,7 @@ class SKProductDiscountWrapper {
   /// The `map` parameter must not be null.
   factory SKProductDiscountWrapper.fromJson(Map map) {
     assert(map != null, 'Map must not be null.');
-    return _$SKProductDiscountWrapperFromJson(map);
+    return _$SKProductDiscountWrapperFromJson(map as Map<String, dynamic>);
   }
 
   @override
@@ -63,7 +63,7 @@ class SKProductDiscountWrapper {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    final SKProductDiscountWrapper typedOther = other;
+    final SKProductDiscountWrapper typedOther = other as SKProductDiscountWrapper;
     return typedOther.price == price &&
         typedOther.priceLocale == priceLocale &&
         typedOther.numberOfPeriods == numberOfPeriods &&

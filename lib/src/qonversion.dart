@@ -38,7 +38,7 @@ class Qonversion {
   /// You can get one in your account on qonversion.io.
   static Future<QLaunchResult> launch(
     String apiKey, {
-    @required bool isObserveMode,
+    required bool isObserveMode,
   }) async {
     _storeSdkInfo();
 
@@ -59,7 +59,7 @@ class Qonversion {
   /// It should only be called if you're using Qonversion SDK in observer mode.
   ///
   /// See [Observer mode for Android SDK](https://documentation.qonversion.io/docs/observer-mode#android-sdk-only)
-  static Future<void> syncPurchases() {
+  static Future<void>? syncPurchases() {
     if (Platform.isAndroid) {
       return _channel.invokeMethod(Constants.mSyncPurchases);
     }
@@ -101,10 +101,10 @@ class Qonversion {
   /// Upgrading, downgrading, or changing a subscription on Google Play Store requires calling updatePurchase() function.
   ///
   /// See [Google Play Documentation](https://developer.android.com/google/play/billing/subscriptions#upgrade-downgrade) for more details.
-  static Future<Map<String, QPermission>> updatePurchase({
-    @required String newProductId,
-    @required String oldProductId,
-    ProrationMode prorationMode,
+  static Future<Map<String, QPermission>?> updatePurchase({
+    required String newProductId,
+    required String oldProductId,
+    ProrationMode? prorationMode,
   }) async {
     if (!Platform.isAndroid) {
       return null;
@@ -113,7 +113,8 @@ class Qonversion {
     final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchase, {
       Constants.kNewProductId: newProductId,
       Constants.kOldProductId: oldProductId,
-      Constants.kProrationMode: prorationMode.index,
+      Constants.kProrationMode: prorationMode != null ? prorationMode.index : null,
+
     });
     return QMapper.permissionsFromJson(rawResult);
   }
@@ -175,8 +176,8 @@ class Qonversion {
   /// On Android [userId] is non-nullable.
   static Future<void> addAttributionData(
     Map<dynamic, dynamic> data, {
-    @required QAttributionProvider provider,
-    @required String userId,
+    required QAttributionProvider provider,
+    required String userId,
   }) {
     final args = {
       Constants.kData: data,
@@ -194,7 +195,7 @@ class Qonversion {
 
   /// iOS only. Returns `null` if called on Android.
   /// On iOS 14.5+, after requesting the app tracking permission using ATT, you need to notify Qonversion if tracking is allowed and IDFA is available.
-  static Future<void> setAdvertisingID() {
+  static Future<void>? setAdvertisingID() {
     if (Platform.isAndroid) {
       return null;
     }
@@ -211,7 +212,7 @@ class Qonversion {
   /// See [Product Center](https://qonversion.io/docs/product-center) for more details.
   static Future<QOfferings> offerings() async {
     final offeringsString =
-        await _channel.invokeMethod<String>(Constants.mOfferings);
+        await (_channel.invokeMethod<String>(Constants.mOfferings) as FutureOr<String>);
 
     final Map<String, dynamic> decodedOfferings = jsonDecode(offeringsString);
 
@@ -223,8 +224,8 @@ class Qonversion {
   /// [ids] products identifiers that must be checked
   static Future<Map<String, QEligibility>> checkTrialIntroEligibility(
       List<String> ids) async {
-    final eligibilitiesString = await _channel.invokeMethod<String>(
-        Constants.mCheckTrialIntroEligibility, {"ids": ids});
+    final eligibilitiesString = await (_channel.invokeMethod<String>(
+        Constants.mCheckTrialIntroEligibility, {"ids": ids}) as FutureOr<String>);
 
     final Map<String, dynamic> decodedEligibilities =
         jsonDecode(eligibilitiesString);

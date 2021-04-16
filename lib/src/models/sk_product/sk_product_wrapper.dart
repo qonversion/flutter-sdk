@@ -20,12 +20,12 @@ class SKProductWrapper {
   /// The localizedTitle of the product.
   ///
   /// It is localized based on the current locale.
-  final String localizedTitle;
+  final String? localizedTitle;
 
   /// The localized description of the product.
   ///
   /// It is localized based on the current locale.
-  final String localizedDescription;
+  final String? localizedDescription;
 
   /// Includes locale information about the price, e.g. `$` as the currency symbol for US locale.
   @JsonKey(fromJson: QMapper.skPriceLocaleFromJson)
@@ -35,7 +35,7 @@ class SKProductWrapper {
   ///
   /// A subscription group is a collection of subscription products.
   /// Check [SubscriptionGroup](https://developer.apple.com/app-store/subscriptions/) for more details about subscription group.
-  final String subscriptionGroupIdentifier;
+  final String? subscriptionGroupIdentifier;
 
   /// The price of the product, in the currency that is defined in [priceLocale].
   final String price;
@@ -44,7 +44,7 @@ class SKProductWrapper {
   ///
   /// Can be [null] is the product is not a subscription.
   @JsonKey(fromJson: QMapper.skProductSubscriptionPeriodFromJson)
-  final SKProductSubscriptionPeriodWrapper subscriptionPeriod;
+  final SKProductSubscriptionPeriodWrapper? subscriptionPeriod;
 
   /// The object represents the duration of single subscription period.
   ///
@@ -54,18 +54,18 @@ class SKProductWrapper {
   /// The [subscriptionPeriod] of the discount is independent of the product's [subscriptionPeriod],
   /// and their units and duration do not have to be matched.
   @JsonKey(fromJson: QMapper.skProductDiscountFromJson)
-  final SKProductDiscountWrapper introductoryPrice;
+  final SKProductDiscountWrapper? introductoryPrice;
 
   /// Creates an [SKProductWrapper] with the given product details.
   const SKProductWrapper({
-    @required this.productIdentifier,
-    @required this.localizedTitle,
-    @required this.localizedDescription,
-    @required this.priceLocale,
-    @required this.subscriptionGroupIdentifier,
-    @required this.price,
-    @required this.subscriptionPeriod,
-    @required this.introductoryPrice,
+    required this.productIdentifier,
+    required this.localizedTitle,
+    required this.localizedDescription,
+    required this.priceLocale,
+    required this.subscriptionGroupIdentifier,
+    required this.price,
+    required this.subscriptionPeriod,
+    required this.introductoryPrice,
   });
 
   factory SKProductWrapper.fromJson(Map<String, dynamic> json) =>
@@ -79,7 +79,7 @@ class SKProductWrapper {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    final SKProductWrapper typedOther = other;
+    final SKProductWrapper typedOther = other as SKProductWrapper;
     return typedOther.productIdentifier == productIdentifier &&
         typedOther.localizedTitle == localizedTitle &&
         typedOther.localizedDescription == localizedDescription &&
@@ -108,15 +108,15 @@ class SKProductWrapper {
 @JsonSerializable()
 class SKPriceLocaleWrapper {
   ///The currency symbol for the locale, e.g. $ for US locale.
-  final String currencySymbol;
+  final String? currencySymbol;
 
   ///The currency code for the locale, e.g. USD for US locale.
-  final String currencyCode;
+  final String? currencyCode;
 
   /// Creates a new price locale for `currencySymbol` and `currencyCode`.
   const SKPriceLocaleWrapper({
-    @required this.currencySymbol,
-    @required this.currencyCode,
+    required this.currencySymbol,
+    required this.currencyCode,
   });
 
   factory SKPriceLocaleWrapper.fromJson(Map<String, dynamic> json) =>
@@ -130,7 +130,7 @@ class SKPriceLocaleWrapper {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    final SKPriceLocaleWrapper typedOther = other;
+    final SKPriceLocaleWrapper typedOther = other as SKPriceLocaleWrapper;
     return typedOther.currencySymbol == currencySymbol &&
         typedOther.currencyCode == currencyCode;
   }
