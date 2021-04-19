@@ -98,8 +98,8 @@ class SkuDetailsWrapper {
   ///
   /// The map needs to have named string keys with values matching the names and
   /// types of all of the members on this class.
-  factory SkuDetailsWrapper.fromJson(Map map) =>
-      _$SkuDetailsWrapperFromJson(map as Map<String, dynamic>);
+  factory SkuDetailsWrapper.fromJson(Map<String, dynamic> map) =>
+      _$SkuDetailsWrapperFromJson(map);
 
   @override
   bool operator ==(dynamic other) {

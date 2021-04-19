@@ -31,9 +31,9 @@ class SKProductSubscriptionPeriodWrapper {
   ///
   /// This method should only be used with `map` values returned by [SKProductDiscountWrapper.fromJson] or [SKProductWrapper.fromJson].
   /// The `map` parameter must not be null.
-  factory SKProductSubscriptionPeriodWrapper.fromJson(Map map) {
-    assert(map != null, 'Map must not be null.');
-    return _$SKProductSubscriptionPeriodWrapperFromJson(map as Map<String, dynamic>);
+  factory SKProductSubscriptionPeriodWrapper.fromJson(
+      Map<String, dynamic> map) {
+    return _$SKProductSubscriptionPeriodWrapperFromJson(map);
   }
 
   @override
@@ -44,8 +44,9 @@ class SKProductSubscriptionPeriodWrapper {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    final SKProductSubscriptionPeriodWrapper typedOther = other as SKProductSubscriptionPeriodWrapper;
-    return typedOther.numberOfUnits == numberOfUnits && typedOther.unit == unit;
+    return other is SKProductSubscriptionPeriodWrapper &&
+        other.numberOfUnits == numberOfUnits &&
+        other.unit == unit;
   }
 
   @override
