@@ -1,6 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-import 'package:collection/collection.dart' show IterableExtension;
 part of 'product.dart';
 
 // **************************************************************************
@@ -11,8 +10,8 @@ QProduct _$QProductFromJson(Map<String, dynamic> json) {
   return QProduct(
     json['id'] as String,
     json['store_id'] as String?,
-    _$enumDecodeNullable(_$QProductTypeEnumMap, json['type'],
-        unknownValue: QProductType.unknown)!,
+    _$enumDecode(_$QProductTypeEnumMap, json['type'],
+        unknownValue: QProductType.unknown),
     _$enumDecodeNullable(_$QProductDurationEnumMap, json['duration'],
         unknownValue: QProductDuration.unknown),
     json['pretty_price'] as String?,
@@ -26,43 +25,37 @@ Map<String, dynamic> _$QProductToJson(QProduct instance) => <String, dynamic>{
       'id': instance.qonversionId,
       'store_id': instance.storeId,
       'type': _$QProductTypeEnumMap[instance.type],
-      'duration': _$QProductDurationEnumMap[instance.duration!],
+      'duration': _$QProductDurationEnumMap[instance.duration],
       'pretty_price': instance.prettyPrice,
-      'trial_duration': _$QTrialDurationEnumMap[instance.trialDuration!],
+      'trial_duration': _$QTrialDurationEnumMap[instance.trialDuration],
       'sk_product': instance.skProduct,
       'sku_details': instance.skuDetails,
     };
 
-T? _$enumDecode<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T? unknownValue,
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
 }) {
   if (source == null) {
-    throw ArgumentError('A value must be provided. Supported values: '
-        '${enumValues.values.join(', ')}');
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
   }
 
-  final value = enumValues.entries
-      .singleWhereOrNull((e) => e.value == source)
-      ?.key;
-
-  if (value == null && unknownValue == null) {
-    throw ArgumentError('`$source` is not one of the supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-  return value ?? unknownValue;
-}
-
-T? _$enumDecodeNullable<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T? unknownValue,
-}) {
-  if (source == null) {
-    return null;
-  }
-  return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
 }
 
 const _$QProductTypeEnumMap = {
@@ -71,6 +64,17 @@ const _$QProductTypeEnumMap = {
   QProductType.inApp: 2,
   QProductType.unknown: 'unknown',
 };
+
+K? _$enumDecodeNullable<K, V>(
+  Map<K, V> enumValues,
+  dynamic source, {
+  K? unknownValue,
+}) {
+  if (source == null) {
+    return null;
+  }
+  return _$enumDecode<K, V>(enumValues, source, unknownValue: unknownValue);
+}
 
 const _$QProductDurationEnumMap = {
   QProductDuration.weekly: 0,

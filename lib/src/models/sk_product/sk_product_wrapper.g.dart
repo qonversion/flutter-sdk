@@ -11,7 +11,7 @@ SKProductWrapper _$SKProductWrapperFromJson(Map<String, dynamic> json) {
     productIdentifier: json['productIdentifier'] as String,
     localizedTitle: json['localizedTitle'] as String?,
     localizedDescription: json['localizedDescription'] as String?,
-    priceLocale: QMapper.skPriceLocaleFromJson(json['priceLocale'])!,
+    priceLocale: QMapper.skPriceLocaleFromJson(json['priceLocale']),
     subscriptionGroupIdentifier: json['subscriptionGroupIdentifier'] as String?,
     price: json['price'] as String,
     subscriptionPeriod:

@@ -2,7 +2,6 @@
 
 import 'dart:ui' show hashValues;
 
-import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:qonversion_flutter/src/models/utils/mapper.dart';
 
@@ -29,7 +28,7 @@ class SKProductWrapper {
 
   /// Includes locale information about the price, e.g. `$` as the currency symbol for US locale.
   @JsonKey(fromJson: QMapper.skPriceLocaleFromJson)
-  final SKPriceLocaleWrapper priceLocale;
+  final SKPriceLocaleWrapper? priceLocale;
 
   /// The subscription group identifier.
   ///

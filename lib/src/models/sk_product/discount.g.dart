@@ -1,6 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-import 'package:collection/collection.dart' show IterableExtension;
 part of 'discount.dart';
 
 // **************************************************************************
@@ -13,8 +12,8 @@ SKProductDiscountWrapper _$SKProductDiscountWrapperFromJson(
     price: json['price'] as String,
     priceLocale: QMapper.skPriceLocaleFromJson(json['priceLocale']),
     numberOfPeriods: json['numberOfPeriods'] as int,
-    paymentMode: _$enumDecodeNullable(
-        _$SKProductDiscountPaymentModeEnumMap, json['paymentMode'])!,
+    paymentMode: _$enumDecode(
+        _$SKProductDiscountPaymentModeEnumMap, json['paymentMode']),
     subscriptionPeriod:
         QMapper.skProductSubscriptionPeriodFromJson(json['subscriptionPeriod']),
   );
@@ -31,36 +30,30 @@ Map<String, dynamic> _$SKProductDiscountWrapperToJson(
       'subscriptionPeriod': instance.subscriptionPeriod,
     };
 
-T? _$enumDecode<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T? unknownValue,
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
 }) {
   if (source == null) {
-    throw ArgumentError('A value must be provided. Supported values: '
-        '${enumValues.values.join(', ')}');
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
   }
 
-  final value = enumValues.entries
-      .singleWhereOrNull((e) => e.value == source)
-      ?.key;
-
-  if (value == null && unknownValue == null) {
-    throw ArgumentError('`$source` is not one of the supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-  return value ?? unknownValue;
-}
-
-T? _$enumDecodeNullable<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T? unknownValue,
-}) {
-  if (source == null) {
-    return null;
-  }
-  return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
 }
 
 const _$SKProductDiscountPaymentModeEnumMap = {
