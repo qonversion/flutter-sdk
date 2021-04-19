@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
 
@@ -13,16 +14,15 @@ enum QOfferingTag {
 @JsonSerializable(createToJson: false)
 class QOfferings {
   @JsonKey(name: 'main')
-  final QOffering main;
+  final QOffering? main;
 
   @JsonKey(name: 'available_offerings')
   final List<QOffering> availableOfferings;
 
   const QOfferings(this.main, this.availableOfferings);
 
-  QOffering offeringForIdentifier(String id) => availableOfferings.firstWhere(
+  QOffering? offeringForIdentifier(String id) => availableOfferings.firstWhereOrNull(
         (element) => element.id == id,
-        orElse: () => null,
       );
 
   factory QOfferings.fromJson(Map<String, dynamic> json) =>
@@ -42,9 +42,8 @@ class QOffering {
 
   const QOffering(this.id, this.tag, this.products);
 
-  QProduct productForIdentifier(String id) => products.firstWhere(
+  QProduct? productForIdentifier(String id) => products.firstWhereOrNull(
         (element) => element.qonversionId == id,
-        orElse: () => null,
       );
 
   factory QOffering.fromJson(Map<String, dynamic> json) =>

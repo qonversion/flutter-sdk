@@ -2,7 +2,6 @@
 
 import 'dart:ui' show hashValues;
 
-import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'sku_details.g.dart';
@@ -78,21 +77,21 @@ class SkuDetailsWrapper {
 
   /// Creates a [SkuDetailsWrapper] with the given purchase details.
   SkuDetailsWrapper({
-    @required this.description,
-    @required this.freeTrialPeriod,
-    @required this.introductoryPrice,
-    @required this.introductoryPriceAmountMicros,
-    @required this.introductoryPriceCycles,
-    @required this.introductoryPricePeriod,
-    @required this.price,
-    @required this.priceAmountMicros,
-    @required this.priceCurrencyCode,
-    @required this.sku,
-    @required this.subscriptionPeriod,
-    @required this.title,
-    @required this.type,
-    @required this.originalPrice,
-    @required this.originalPriceAmountMicros,
+    required this.description,
+    required this.freeTrialPeriod,
+    required this.introductoryPrice,
+    required this.introductoryPriceAmountMicros,
+    required this.introductoryPriceCycles,
+    required this.introductoryPricePeriod,
+    required this.price,
+    required this.priceAmountMicros,
+    required this.priceCurrencyCode,
+    required this.sku,
+    required this.subscriptionPeriod,
+    required this.title,
+    required this.type,
+    required this.originalPrice,
+    required this.originalPriceAmountMicros,
   });
 
   /// Constructs an instance of this from a key value map of data.
@@ -100,7 +99,7 @@ class SkuDetailsWrapper {
   /// The map needs to have named string keys with values matching the names and
   /// types of all of the members on this class.
   factory SkuDetailsWrapper.fromJson(Map map) =>
-      _$SkuDetailsWrapperFromJson(map);
+      _$SkuDetailsWrapperFromJson(map as Map<String, dynamic>);
 
   @override
   bool operator ==(dynamic other) {

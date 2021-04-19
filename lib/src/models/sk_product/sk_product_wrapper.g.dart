@@ -9,10 +9,10 @@ part of 'sk_product_wrapper.dart';
 SKProductWrapper _$SKProductWrapperFromJson(Map<String, dynamic> json) {
   return SKProductWrapper(
     productIdentifier: json['productIdentifier'] as String,
-    localizedTitle: json['localizedTitle'] as String,
-    localizedDescription: json['localizedDescription'] as String,
+    localizedTitle: json['localizedTitle'] as String?,
+    localizedDescription: json['localizedDescription'] as String?,
     priceLocale: QMapper.skPriceLocaleFromJson(json['priceLocale']),
-    subscriptionGroupIdentifier: json['subscriptionGroupIdentifier'] as String,
+    subscriptionGroupIdentifier: json['subscriptionGroupIdentifier'] as String?,
     price: json['price'] as String,
     subscriptionPeriod:
         QMapper.skProductSubscriptionPeriodFromJson(json['subscriptionPeriod']),
@@ -35,8 +35,8 @@ Map<String, dynamic> _$SKProductWrapperToJson(SKProductWrapper instance) =>
 
 SKPriceLocaleWrapper _$SKPriceLocaleWrapperFromJson(Map<String, dynamic> json) {
   return SKPriceLocaleWrapper(
-    currencySymbol: json['currencySymbol'] as String,
-    currencyCode: json['currencyCode'] as String,
+    currencySymbol: json['currencySymbol'] as String?,
+    currencyCode: json['currencyCode'] as String?,
   );
 }
 

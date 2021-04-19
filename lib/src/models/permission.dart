@@ -30,14 +30,14 @@ class QPermission {
     name: 'started_timestamp',
     fromJson: QMapper.dateTimeFromSecondsTimestamp,
   )
-  final DateTime startedDate;
+  final DateTime? startedDate;
 
   /// Expiration date for subscription
   @JsonKey(
     name: 'expiration_timestamp',
     fromJson: QMapper.dateTimeFromSecondsTimestamp,
   )
-  final DateTime expirationDate;
+  final DateTime? expirationDate;
 
   /// Use for checking permission for current user.
   /// Pay attention, isActive == true does not mean that subscription is renewable.
