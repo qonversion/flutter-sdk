@@ -28,7 +28,7 @@ class QMapper {
     });
   }
 
-  static SKProductWrapper skProductFromJson(dynamic json) {
+  static SKProductWrapper? skProductFromJson(dynamic json) {
     if (json == null) return null;
 
     final map = Map<String, dynamic>.from(json);
@@ -41,7 +41,7 @@ class QMapper {
     }
   }
 
-  static SKPriceLocaleWrapper skPriceLocaleFromJson(dynamic json) {
+  static SKPriceLocaleWrapper? skPriceLocaleFromJson(dynamic json) {
     if (json == null) return null;
 
     final map = Map<String, dynamic>.from(json);
@@ -49,7 +49,7 @@ class QMapper {
     return SKPriceLocaleWrapper.fromJson(map);
   }
 
-  static SKProductSubscriptionPeriodWrapper skProductSubscriptionPeriodFromJson(
+  static SKProductSubscriptionPeriodWrapper? skProductSubscriptionPeriodFromJson(
       dynamic json) {
     if (json == null) return null;
 
@@ -58,7 +58,7 @@ class QMapper {
     return SKProductSubscriptionPeriodWrapper.fromJson(map);
   }
 
-  static SKProductDiscountWrapper skProductDiscountFromJson(dynamic json) {
+  static SKProductDiscountWrapper? skProductDiscountFromJson(dynamic json) {
     if (json == null) return null;
 
     final map = Map<String, dynamic>.from(json);
@@ -66,7 +66,7 @@ class QMapper {
     return SKProductDiscountWrapper.fromJson(map);
   }
 
-  static SkuDetailsWrapper skuDetailsFromJson(dynamic json) {
+  static SkuDetailsWrapper? skuDetailsFromJson(dynamic json) {
     if (json == null) return null;
 
     final map = Map<String, dynamic>.from(json);
@@ -79,7 +79,7 @@ class QMapper {
     }
   }
 
-  static DateTime dateTimeFromSecondsTimestamp(num timestamp) {
+  static DateTime? dateTimeFromSecondsTimestamp(num? timestamp) {
     if (timestamp == null) return null;
 
     final intAbsTimestamp = timestamp.toInt().abs();

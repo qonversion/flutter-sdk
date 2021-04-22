@@ -16,5 +16,5 @@ enum SKProductDiscountPaymentMode {
 
   /// User pays nothing during the discounted period.
   @JsonValue(2)
-  freeTrail,
+  freeTrial,
 }

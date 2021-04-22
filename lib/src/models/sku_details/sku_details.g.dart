@@ -20,7 +20,7 @@ SkuDetailsWrapper _$SkuDetailsWrapperFromJson(Map<String, dynamic> json) {
     sku: json['sku'] as String,
     subscriptionPeriod: json['subscriptionPeriod'] as String,
     title: json['title'] as String,
-    type: _$enumDecodeNullable(_$SkuTypeEnumMap, json['type']),
+    type: _$enumDecode(_$SkuTypeEnumMap, json['type']),
     originalPrice: json['originalPrice'] as String,
     originalPriceAmountMicros: json['originalPriceAmountMicros'] as int,
   );
@@ -45,36 +45,30 @@ Map<String, dynamic> _$SkuDetailsWrapperToJson(SkuDetailsWrapper instance) =>
       'originalPriceAmountMicros': instance.originalPriceAmountMicros,
     };
 
-T _$enumDecode<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
 }) {
   if (source == null) {
-    throw ArgumentError('A value must be provided. Supported values: '
-        '${enumValues.values.join(', ')}');
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
   }
 
-  final value = enumValues.entries
-      .singleWhere((e) => e.value == source, orElse: () => null)
-      ?.key;
-
-  if (value == null && unknownValue == null) {
-    throw ArgumentError('`$source` is not one of the supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-  return value ?? unknownValue;
-}
-
-T _$enumDecodeNullable<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
-}) {
-  if (source == null) {
-    return null;
-  }
-  return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
 }
 
 const _$SkuTypeEnumMap = {
