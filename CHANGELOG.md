@@ -1,3 +1,7 @@
+## 3.0.0
+* Add null safety support 
+* Increase min Dart SDK version to 2.12.0
+
 ## 2.5.2
 * SKProduct issue fix
 * Unfinished transactions fix
