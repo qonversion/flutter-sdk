@@ -17,7 +17,7 @@ Qonversion provides full in-app purchases infrastructure, so you do not need to 
 Implement in-app subscriptions, validate user receipts, check subscription status, and provide access to your app features and content using our StoreKit wrapper and Google Play Billing wrapper.
 </p>
 
-Check the [documentation](https://docs.qonversion.io) to learn details on implementing and using Qonversion SDKs.
+Check the [documentation](https://documentation.qonversion.io/docs) to learn details on implementing and using Qonversion SDKs.
 
 [![Pub](https://img.shields.io/pub/v/qonversion_flutter.svg)](https://pub.dev/packages/qonversion_flutter)
 [![MIT License](http://img.shields.io/cocoapods/l/Qonversion.svg?style=flat)](http://qonversion.io)
