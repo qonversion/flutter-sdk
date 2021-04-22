@@ -59,5 +59,5 @@ K _$enumDecode<K, V>(
 const _$SKProductDiscountPaymentModeEnumMap = {
   SKProductDiscountPaymentMode.payAsYouGo: 0,
   SKProductDiscountPaymentMode.payUpFront: 1,
-  SKProductDiscountPaymentMode.freeTrail: 2,
+  SKProductDiscountPaymentMode.freeTrial: 2,
 };

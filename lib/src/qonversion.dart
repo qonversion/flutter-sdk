@@ -59,12 +59,10 @@ class Qonversion {
   /// It should only be called if you're using Qonversion SDK in observer mode.
   ///
   /// See [Observer mode for Android SDK](https://documentation.qonversion.io/docs/observer-mode#android-sdk-only)
-  static Future<void>? syncPurchases() {
+  static Future<void> syncPurchases() async {
     if (Platform.isAndroid) {
       return _channel.invokeMethod(Constants.mSyncPurchases);
     }
-
-    return null;
   }
 
   /// Returns Qonversion Products in assoсiation with Google Play Store Products.
@@ -195,12 +193,10 @@ class Qonversion {
 
   /// iOS only. Returns `null` if called on Android.
   /// On iOS 14.5+, after requesting the app tracking permission using ATT, you need to notify Qonversion if tracking is allowed and IDFA is available.
-  static Future<void>? setAdvertisingID() {
-    if (Platform.isAndroid) {
-      return null;
+  static Future<void> setAdvertisingID() async {
+    if (Platform.isIOS) {
+      return _channel.invokeMethod(Constants.mSetAdvertisingID);
     }
-
-    return _channel.invokeMethod(Constants.mSetAdvertisingID);
   }
 
   /// Return Qonversion Offerings Object
