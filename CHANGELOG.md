@@ -1,3 +1,8 @@
+## 2.5.2
+* SKProduct issue fix
+* Unfinished transactions fix
+* Minor improvements
+
 ## 2.5.1
 * iOS 14.5 advertising ID support
 
