@@ -17,7 +17,7 @@ class QLaunchResult {
     name: 'timestamp',
     fromJson: QMapper.dateTimeFromSecondsTimestamp,
   )
-  final DateTime date;
+  final DateTime? date;
 
   /// All products
   @JsonKey(

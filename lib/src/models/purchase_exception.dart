@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class QPurchaseException implements Exception {
   final String message;
 
@@ -10,7 +8,7 @@ class QPurchaseException implements Exception {
 
   const QPurchaseException(
     this.message, {
-    @required this.isUserCancelled,
+    required this.isUserCancelled,
   });
 
   @override
