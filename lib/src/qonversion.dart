@@ -206,13 +206,10 @@ class Qonversion {
   ///
   /// See [Offerings](https://qonversion.io/docs/offerings) for more details.
   /// See [Product Center](https://qonversion.io/docs/product-center) for more details.
-  static Future<QOfferings> offerings() async {
-    final offeringsString =
-        await (_channel.invokeMethod<String>(Constants.mOfferings) as FutureOr<String>);
+    static Future<QOfferings> offerings() async {
+    final offeringsString = await _channel.invokeMethod<String>(Constants.mOfferings);
 
-    final Map<String, dynamic> decodedOfferings = jsonDecode(offeringsString);
-
-    return QOfferings.fromJson(decodedOfferings);
+    return QMapper.offeringsFromJson(offeringsString);
   }
 
   /// You can check if a user is eligible for an introductory offer, including a free trial.
@@ -220,14 +217,10 @@ class Qonversion {
   /// [ids] products identifiers that must be checked
   static Future<Map<String, QEligibility>> checkTrialIntroEligibility(
       List<String> ids) async {
-    final eligibilitiesString = await (_channel.invokeMethod<String>(
-        Constants.mCheckTrialIntroEligibility, {"ids": ids}) as FutureOr<String>);
+    final eligibilitiesString = await _channel.invokeMethod<String>(
+        Constants.mCheckTrialIntroEligibility, {"ids": ids});
 
-    final Map<String, dynamic> decodedEligibilities =
-        jsonDecode(eligibilitiesString);
-
-    return decodedEligibilities
-        .map((key, value) => MapEntry(key, QEligibility.fromJson(value)));
+    return QMapper.eligibilityFromJson(eligibilitiesString);
   }
 
   // Private methods
