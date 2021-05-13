@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import '../eligibility.dart';
+import '../offerings.dart';
 import '../permission.dart';
 import '../product.dart';
 import '../sk_product/discount.dart';
@@ -26,6 +30,23 @@ class QMapper {
       final permissionMap = Map<String, dynamic>.from(value);
       return MapEntry(key, QPermission.fromJson(permissionMap));
     });
+  }
+
+  static QOfferings offeringsFromJson(String? jsonString) {
+    if (jsonString == null) return QOfferings(null, <QOffering>[]);
+
+    final offeringJson = Map<String, dynamic>.from(jsonDecode(jsonString));
+
+    return QOfferings.fromJson(offeringJson);
+  }
+
+  static Map<String, QEligibility> eligibilityFromJson(String? jsonString) {
+    if (jsonString == null) return <String, QEligibility>{};
+
+    final eligibilityJson = Map<String, dynamic>.from(jsonDecode(jsonString));
+
+    return eligibilityJson
+        .map((key, value) => MapEntry(key, QEligibility.fromJson(value)));
   }
 
   static SKProductWrapper? skProductFromJson(dynamic json) {
