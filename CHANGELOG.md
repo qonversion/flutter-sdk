@@ -1,3 +1,7 @@
+## 3.0.1
+* Fix QOfferings mapping error
+* Internal logic optimization for Android
+
 ## 3.0.0
 * Add null safety support 
 * Increase min Dart SDK version to 2.12.0
