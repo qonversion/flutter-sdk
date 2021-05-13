@@ -206,7 +206,7 @@ class Qonversion {
   ///
   /// See [Offerings](https://qonversion.io/docs/offerings) for more details.
   /// See [Product Center](https://qonversion.io/docs/product-center) for more details.
-    static Future<QOfferings> offerings() async {
+  static Future<QOfferings> offerings() async {
     final offeringsString = await _channel.invokeMethod<String>(Constants.mOfferings);
 
     return QMapper.offeringsFromJson(offeringsString);
