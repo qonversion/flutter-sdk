@@ -35,7 +35,7 @@ class QMapper {
   static QOfferings offeringsFromJson(String? jsonString) {
     if (jsonString == null) return QOfferings(null, <QOffering>[]);
 
-    final offeringJson = jsonDecode(jsonString);
+    final offeringJson = Map<String, dynamic>.from(jsonDecode(jsonString));
 
     return QOfferings.fromJson(offeringJson);
   }
@@ -43,7 +43,7 @@ class QMapper {
   static Map<String, QEligibility> eligibilityFromJson(String? jsonString) {
     if (jsonString == null) return <String, QEligibility>{};
 
-    final eligibilityJson = jsonDecode(jsonString);
+    final eligibilityJson = Map<String, dynamic>.from(jsonDecode(jsonString));
 
     return eligibilityJson
         .map((key, value) => MapEntry(key, QEligibility.fromJson(value)));
