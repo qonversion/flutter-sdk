@@ -20,6 +20,7 @@ class Constants {
   static const mLaunch = 'launch';
   static const mProducts = 'products';
   static const mPurchase = 'purchase';
+  static const mPromoPurchase = 'promoPurchase';
   static const mUpdatePurchase = 'updatePurchase';
   static const mCheckPermissions = 'checkPermissions';
   static const mRestore = 'restore';

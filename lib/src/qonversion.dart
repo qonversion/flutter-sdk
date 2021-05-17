@@ -19,8 +19,12 @@ class Qonversion {
   static const String _sdkVersion = "3.0.1";
 
   static const MethodChannel _channel = MethodChannel('qonversion_flutter_sdk');
+
   static const _purchasesEventChannel =
       EventChannel('qonversion_flutter_updated_purchases');
+
+  static final _promoPurchasesEventChannel = Platform.isIOS ?
+      EventChannel('qonversion_flutter_promo_purchases') : null;
 
   /// Yields an event each time a deferred transaction happens
   static Stream<Map<String, QPermission>> get updatedPurchasesStream =>
@@ -33,6 +37,12 @@ class Qonversion {
         return decodedEvent
             .map((key, value) => MapEntry(key, QPermission.fromJson(value)));
       });
+
+  /// Yields an event each time a promo transaction happens on iOS.
+  /// Returns App Store product ID
+  static Stream<String>? get promoPurchasesStream => _promoPurchasesEventChannel
+          ?.receiveBroadcastStream()
+          .cast<String>();
 
   /// Initializes Qonversion SDK with the given API key.
   /// You can get one in your account on qonversion.io.
@@ -81,17 +91,7 @@ class Qonversion {
     final rawResult = await _channel
         .invokeMethod(Constants.mPurchase, {Constants.kProductId: productId});
 
-    final resultMap = Map<String, dynamic>.from(rawResult);
-
-    final error = resultMap[Constants.kError];
-    if (error != null) {
-      throw QPurchaseException(
-        error,
-        isUserCancelled: resultMap[Constants.kIsCancelled] ?? false,
-      );
-    }
-
-    return QMapper.permissionsFromJson(resultMap[Constants.kPermissions]);
+    return _handlePurchaseResult(rawResult);
   }
 
   /// Android only. Returns `null` if called on iOS.
@@ -115,6 +115,22 @@ class Qonversion {
 
     });
     return QMapper.permissionsFromJson(rawResult);
+  }
+
+  /// iOS only. Returns `null` if called on Android.
+  /// Starts a promo purchase process with App Store [productId].
+  ///
+  /// Throws `QPurchaseException` in case of error in purchase flow.
+  static Future<Map<String, QPermission>?> promoPurchase(
+      String productId) async {
+    if (!Platform.isIOS) {
+      return null;
+    }
+
+    final rawResult = await _channel.invokeMethod(
+        Constants.mPromoPurchase, {Constants.kProductId: productId});
+
+    return _handlePurchaseResult(rawResult);
   }
 
   /// You need to call the checkPermissions method at the start of your app to check if a user has the required permission.
@@ -231,4 +247,19 @@ class Qonversion {
         "source": "flutter",
         "sourceKey": Constants.sourceKey
       });
+
+  static Map<String, QPermission> _handlePurchaseResult(
+      Map<dynamic, dynamic> rawResult) {
+    final resultMap = Map<String, dynamic>.from(rawResult);
+
+    final error = resultMap[Constants.kError];
+    if (error != null) {
+      throw QPurchaseException(
+        error,
+        isUserCancelled: resultMap[Constants.kIsCancelled] ?? false,
+      );
+    }
+
+    return QMapper.permissionsFromJson(resultMap[Constants.kPermissions]);
+  }
 }
