@@ -102,14 +102,14 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Future<void> initPlatformState() async {
+    if (kDebugMode) {
+      await Qonversion.setDebugMode();
+    }
+
     _qLaunchResult = await Qonversion.launch(
       'PV77YHL7qnGvsdmpTs7gimsxUvY-Znl2',
       isObserveMode: false,
     );
-
-    if (kDebugMode) {
-      await Qonversion.setDebugMode();
-    }
 
     setState(() {});
   }
