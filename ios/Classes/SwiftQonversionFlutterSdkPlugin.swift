@@ -7,9 +7,9 @@ import Flutter
 import Qonversion
 
 public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
-  var purchasesEventStreamHandler: BaseEventStreamHandler?
-  var promoPurchasesEventStreamHandler: BaseEventStreamHandler?
-  var promoExecutionBlocksByProductID = [String: Qonversion.PromoPurchaseCompletionHandler]()
+  var deferredPurchasesStreamHandler: BaseEventStreamHandler?
+  var promoPurchasesStreamHandler: BaseEventStreamHandler?
+  var promoPurchasesExecutionBlocks = [String: Qonversion.PromoPurchaseCompletionHandler]()
   
   public static func register(with registrar: FlutterPluginRegistrar) {
     let messenger: FlutterBinaryMessenger
@@ -24,12 +24,12 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     
     // Register deferred purchases events
     let purchasesListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "updated_purchases")
-    purchasesListener.register() { instance.purchasesEventStreamHandler = $0 }
+    purchasesListener.register() { instance.deferredPurchasesStreamHandler = $0 }
     Qonversion.setPurchasesDelegate(instance)
     
     // Register promo purchases events
     let promoPurchasesListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "promo_purchases")
-    promoPurchasesListener.register() { instance.promoPurchasesEventStreamHandler = $0 }
+    promoPurchasesListener.register() { instance.promoPurchasesStreamHandler = $0 }
     Qonversion.setPromoPurchasesDelegate(instance)
   }
   
@@ -146,10 +146,10 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       return result(FlutterError.noProductId)
     }
     
-    if let executionBlock = promoExecutionBlocksByProductID[productId] {
-      promoExecutionBlocksByProductID.removeValue(forKey: productId)
+    if let executionBlock = promoPurchasesExecutionBlocks[productId] {
+      promoPurchasesExecutionBlocks.removeValue(forKey: productId)
       
-      executionBlock{ (permissions, error, isCancelled) in
+      executionBlock { (permissions, error, isCancelled) in
         let purchaseResult = PurchaseResult(permissions: permissions,
                                             error: error,
                                             isCancelled: isCancelled)
@@ -301,14 +301,14 @@ extension SwiftQonversionFlutterSdkPlugin: Qonversion.PurchasesDelegate {
   public func qonversionDidReceiveUpdatedPermissions(_ permissions: [String : Qonversion.Permission]) {
     let payload = permissions.mapValues { $0.toMap() }.toJson()
     
-    purchasesEventStreamHandler?.eventSink?(payload)
+    deferredPurchasesStreamHandler?.eventSink?(payload)
   }
 }
 
 extension SwiftQonversionFlutterSdkPlugin: QNPromoPurchasesDelegate {
   public func shouldPurchasePromoProduct(withIdentifier productID: String, executionBlock: @escaping Qonversion.PromoPurchaseCompletionHandler) {
-    promoExecutionBlocksByProductID[productID] = executionBlock
+    promoPurchasesExecutionBlocks[productID] = executionBlock
     
-    promoPurchasesEventStreamHandler?.eventSink?(productID)
+    promoPurchasesStreamHandler?.eventSink?(productID)
   }
 }

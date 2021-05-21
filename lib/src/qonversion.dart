@@ -23,8 +23,8 @@ class Qonversion {
   static const _purchasesEventChannel =
       EventChannel('qonversion_flutter_updated_purchases');
 
-  static final _promoPurchasesEventChannel = Platform.isIOS ?
-      EventChannel('qonversion_flutter_promo_purchases') : null;
+  static const _promoPurchasesEventChannel =
+      EventChannel('qonversion_flutter_promo_purchases');
 
   /// Yields an event each time a deferred transaction happens
   static Stream<Map<String, QPermission>> get updatedPurchasesStream =>
@@ -40,8 +40,8 @@ class Qonversion {
 
   /// Yields an event each time a promo transaction happens on iOS.
   /// Returns App Store product ID
-  static Stream<String>? get promoPurchasesStream => _promoPurchasesEventChannel
-          ?.receiveBroadcastStream()
+  static Stream<String> get promoPurchasesStream => _promoPurchasesEventChannel
+          .receiveBroadcastStream()
           .cast<String>();
 
   /// Initializes Qonversion SDK with the given API key.

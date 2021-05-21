@@ -24,7 +24,7 @@ class _ProductsViewState extends State<ProductsView> {
         Qonversion.updatedPurchasesStream.listen((event) => print(event));
 
     _promoPurchasesStream =
-        Qonversion.promoPurchasesStream?.listen((promoPurchaseId) async {
+        Qonversion.promoPurchasesStream.listen((promoPurchaseId) async {
       try {
         final permissions = await Qonversion.promoPurchase(promoPurchaseId);
         // Get Qonversion product by App Store ID
