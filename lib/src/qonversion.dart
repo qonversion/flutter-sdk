@@ -51,6 +51,19 @@ class Qonversion {
     return QLaunchResult.fromJson(Map<String, dynamic>.from(rawResult));
   }
 
+  /// Call this function to link a user to his unique ID in your system and share purchase data.
+  /// [userId] unique user ID in your system
+  static Future<void> identify(String userId) =>
+      _channel.invokeMethod(Constants.mIdentify, {Constants.kUserId: userId});
+
+  /// Call this function to unlink a user from his unique ID in your system and his purchase data.
+  static Future<void> logout() => _channel.invokeMethod(Constants.mLogout);
+
+  /// Call this function to reset user ID and generate new anonymous user ID.
+  /// Call this function before Qonversion.launch()
+  static Future<void> resetUser() =>
+      _channel.invokeMethod(Constants.mResetUser);
+
   /// This method will send all purchases to the Qonversion backend. Call this every time when purchase is handled by you own implementation.
   ///
   /// **Warning!**
