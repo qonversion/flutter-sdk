@@ -1,3 +1,7 @@
+## 3.1.0
+* Add support for promo purchases on iOS
+* Add Identity support
+
 ## 3.0.1
 * Fix QOfferings mapping error
 * Internal logic optimization for Android
