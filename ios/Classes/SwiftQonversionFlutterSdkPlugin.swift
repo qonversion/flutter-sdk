@@ -57,7 +57,15 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       
     case "offerings":
       return offerings(result)
-      
+        
+    case "logout":
+      Qonversion.logout()
+      return result(nil)
+
+    case "resetUser":
+      Qonversion.resetUser()
+      return result(nil)
+        
     default:
       break
     }
@@ -95,6 +103,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       
     case "storeSdkInfo":
       return storeSdkInfo(args, result)
+        
+    case "identify":
+        return identify(args["userId"] as? String, result)
       
     default:
       return result(FlutterMethodNotImplemented)
@@ -115,7 +126,17 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       result(resultMap)
     }
   }
-  
+    
+  private func identify(_ userId: String?, _ result: @escaping FlutterResult) {
+    guard let userId = userId else {
+      result(FlutterError.noUserId)
+      return
+    }
+    
+    Qonversion.identify(userId)
+    result(nil)
+  }
+    
   private func products(_ result: @escaping FlutterResult) {
     Qonversion.products { (products, error) in
       if let error = error {

@@ -66,6 +66,14 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
             "offerings" -> {
                 return offerings(result)
             }
+            "logout" -> {
+                Qonversion.logout()
+                return result.success(null)
+            }
+            "resetUser" -> {
+                Qonversion.resetUser()
+                return result.success(null)
+            }
         }
 
         // Methods with args
@@ -82,6 +90,7 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
             "addAttributionData" -> addAttributionData(args, result)
             "checkTrialIntroEligibility" -> checkTrialIntroEligibility(args, result)
             "storeSdkInfo" -> storeSdkInfo(args, result)
+            "identify" -> identify(args["userId"] as? String, result)
             else -> result.notImplemented()
         }
     }
@@ -106,6 +115,16 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         )
 
         startListeningPendingPurchasesEvents()
+    }
+
+    private fun identify(userId: String?, result: Result) {
+        if (userId == null) {
+            result.noUserIdError()
+            return
+        }
+
+        Qonversion.identify(userId)
+        result.success(null)
     }
 
     private fun startListeningPendingPurchasesEvents() {
