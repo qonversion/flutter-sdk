@@ -19,11 +19,10 @@ import com.qonversion.android.sdk.dto.offerings.QOfferings
 import com.qonversion.android.sdk.dto.products.QProduct
 
 /** QonversionFlutterSdkPlugin */
-class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): MethodCallHandler, BaseListenerWrapper(registrar.messenger()) {
+class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): MethodCallHandler {
     private val activity: Activity = registrar.activity()
     private val application: Application = activity.application
-
-    override val eventChannelPostfix = "updated_purchases"
+    private var deferredPurchasesStreamHandler: BaseEventStreamHandler? = null
 
     companion object {
         @JvmStatic
@@ -32,8 +31,14 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
             val instance = QonversionFlutterSdkPlugin(registrar)
             channel.setMethodCallHandler(instance)
 
-            // Register Updated Purchases Event Channel
-            instance.register()
+            // Register deferred purchases events
+            val purchasesListener = BaseListenerWrapper(registrar.messenger(), "updated_purchases")
+            purchasesListener.register()
+            instance.deferredPurchasesStreamHandler = purchasesListener.eventStreamHandler
+
+            // Register promo purchases events. Android SDK does not generate any promo purchases yet
+            val promoPurchasesListener = BaseListenerWrapper(registrar.messenger(), "promo_purchases")
+            promoPurchasesListener.register()
         }
     }
 
@@ -61,6 +66,14 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
             "offerings" -> {
                 return offerings(result)
             }
+            "logout" -> {
+                Qonversion.logout()
+                return result.success(null)
+            }
+            "resetUser" -> {
+                Qonversion.resetUser()
+                return result.success(null)
+            }
         }
 
         // Methods with args
@@ -77,6 +90,7 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
             "addAttributionData" -> addAttributionData(args, result)
             "checkTrialIntroEligibility" -> checkTrialIntroEligibility(args, result)
             "storeSdkInfo" -> storeSdkInfo(args, result)
+            "identify" -> identify(args["userId"] as? String, result)
             else -> result.notImplemented()
         }
     }
@@ -103,12 +117,22 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         startListeningPendingPurchasesEvents()
     }
 
+    private fun identify(userId: String?, result: Result) {
+        if (userId == null) {
+            result.noUserIdError()
+            return
+        }
+
+        Qonversion.identify(userId)
+        result.success(null)
+    }
+
     private fun startListeningPendingPurchasesEvents() {
         Qonversion.setUpdatedPurchasesListener(object : UpdatedPurchasesListener {
             override fun onPermissionsUpdate(permissions: Map<String, QPermission>) {
                 val payload = Gson().toJson(permissions.mapValues { it.value.toMap() })
 
-                eventStreamHandler?.eventSink?.success(payload)
+                deferredPurchasesStreamHandler?.eventSink?.success(payload)
             }
         })
     }

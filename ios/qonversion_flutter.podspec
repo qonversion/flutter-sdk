@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'qonversion_flutter'
-  s.version          = '3.0.1'
+  s.version          = '3.1.0'
   s.summary          = 'Flutter Qonversion SDK'
   s.description      = <<-DESC
   Powerful yet simple subscription analytics
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
   s.platform = :ios, '9.0'
-  s.dependency 'Qonversion', '2.13.3'
+  s.dependency 'Qonversion', '2.13.4'
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }

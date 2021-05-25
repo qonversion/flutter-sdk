@@ -77,4 +77,10 @@ extension FlutterError {
   static let noSdkInfo = FlutterError(code: "15",
                                       message: "Could not find sdk info",
                                       details: passValidValue)
+  
+  static func promoPurchaseError(_ productId: String) -> FlutterError {
+    return FlutterError (code: "PromoPurchase",
+                         message: "Could not find completion block for Product ID: \(productId)",
+                         details: passValidValue)
+  }
 }

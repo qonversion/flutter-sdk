@@ -11,7 +11,8 @@ class ProductsView extends StatefulWidget {
 class _ProductsViewState extends State<ProductsView> {
   var _products = <String, QProduct>{};
   QOfferings _offerings;
-  StreamSubscription<Map<String, QPermission>> _subscription;
+  StreamSubscription<Map<String, QPermission>> _deferredPurchasesStream;
+  StreamSubscription<String> _promoPurchasesStream;
 
   @override
   void initState() {
@@ -19,13 +20,33 @@ class _ProductsViewState extends State<ProductsView> {
     _loadProducts();
     _loadOfferings();
 
-    _subscription =
+    _deferredPurchasesStream =
         Qonversion.updatedPurchasesStream.listen((event) => print(event));
+
+    _promoPurchasesStream =
+        Qonversion.promoPurchasesStream.listen((promoPurchaseId) async {
+      try {
+        final permissions = await Qonversion.promoPurchase(promoPurchaseId);
+        // Get Qonversion product by App Store ID
+        final qProduct = _products.values.firstWhere(
+            (element) => element.storeId == promoPurchaseId,
+            orElse: () => null);
+        // Get permission by Qonversion product
+        final permission = permissions.values.firstWhere(
+            (element) => element.productId == qProduct?.qonversionId,
+            orElse: () => null);
+
+        print(permission?.isActive);
+      } catch (e) {
+        print(e);
+      }
+    });
   }
 
   @override
   void dispose() {
-    _subscription.cancel();
+    _deferredPurchasesStream.cancel();
+    _promoPurchasesStream.cancel();
 
     super.dispose();
   }
@@ -108,8 +129,12 @@ class _ProductsViewState extends State<ProductsView> {
             color: Colors.blue,
             textColor: Colors.white,
             onPressed: () async {
-              final res = await Qonversion.purchase(product.qonversionId);
-              print(res[product.qonversionId]?.isActive);
+              final permissions = await Qonversion.purchase(product.qonversionId);
+              final permission =  permissions.values.firstWhere(
+                      (element) => element.productId == product.qonversionId,
+                  orElse: () => null);
+
+              print(permission?.isActive);
             },
           ),
         ),

@@ -20,6 +20,7 @@ class Constants {
   static const mLaunch = 'launch';
   static const mProducts = 'products';
   static const mPurchase = 'purchase';
+  static const mPromoPurchase = 'promoPurchase';
   static const mUpdatePurchase = 'updatePurchase';
   static const mCheckPermissions = 'checkPermissions';
   static const mRestore = 'restore';
@@ -33,6 +34,9 @@ class Constants {
   static const mOfferings = 'offerings';
   static const mCheckTrialIntroEligibility = 'checkTrialIntroEligibility';
   static const mStoreSdkInfo = 'storeSdkInfo';
+  static const mIdentify = 'identify';
+  static const mResetUser = 'resetUser';
+  static const mLogout = 'logout';
 
   // Keys for NSUserDefaults on iOS and SharedPreferences on Android
   static const keyPrefix = 'com.qonversion.keys';

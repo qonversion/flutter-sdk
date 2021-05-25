@@ -3,14 +3,13 @@ package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
 
-abstract class BaseListenerWrapper(
-        val binaryMessenger: BinaryMessenger
+class BaseListenerWrapper internal constructor(
+        private val binaryMessenger: BinaryMessenger,
+        private val eventChannelPostfix: String
 ) {
 
-    protected abstract val eventChannelPostfix: String
-
-    protected var eventChannel: EventChannel? = null
-    protected var eventStreamHandler: BaseEventStreamHandler? = null
+    private var eventChannel: EventChannel? = null
+    var eventStreamHandler: BaseEventStreamHandler? = null
 
     fun register() {
         eventStreamHandler =
