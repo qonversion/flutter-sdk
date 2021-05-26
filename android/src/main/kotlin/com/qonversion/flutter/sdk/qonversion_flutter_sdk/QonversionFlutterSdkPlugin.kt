@@ -6,40 +6,63 @@ import androidx.annotation.NonNull
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.qonversion.android.sdk.*
+import com.qonversion.android.sdk.dto.QLaunchResult
+import com.qonversion.android.sdk.dto.QPermission
+import com.qonversion.android.sdk.dto.eligibility.QEligibility
+import com.qonversion.android.sdk.dto.offerings.QOfferings
+import com.qonversion.android.sdk.dto.products.QProduct
+import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
-import com.qonversion.android.sdk.dto.QLaunchResult
-import com.qonversion.android.sdk.dto.QPermission
-import com.qonversion.android.sdk.dto.eligibility.QEligibility
-import com.qonversion.android.sdk.dto.offerings.QOfferings
-import com.qonversion.android.sdk.dto.products.QProduct
-
 /** QonversionFlutterSdkPlugin */
-class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): MethodCallHandler {
-    private val activity: Activity = registrar.activity()
-    private val application: Application = activity.application
+class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
+    private var activity: Activity? = null
+    private var application: Application? = null
+    private var channel: MethodChannel? = null
     private var deferredPurchasesStreamHandler: BaseEventStreamHandler? = null
 
     companion object {
+        const val METHOD_CHANNEL = "qonversion_flutter_sdk"
+        const val EVENT_CHANNEL_PROMO_PURCHASES = "promo_purchases"
+        const val EVENT_CHANNEL_DEFERRED_PURCHASES = "updated_purchases"
+
         @JvmStatic
         fun registerWith(registrar: Registrar) {
-            val channel = MethodChannel(registrar.messenger(), "qonversion_flutter_sdk")
-            val instance = QonversionFlutterSdkPlugin(registrar)
-            channel.setMethodCallHandler(instance)
-
-            // Register deferred purchases events
-            val purchasesListener = BaseListenerWrapper(registrar.messenger(), "updated_purchases")
-            purchasesListener.register()
-            instance.deferredPurchasesStreamHandler = purchasesListener.eventStreamHandler
-
-            // Register promo purchases events. Android SDK does not generate any promo purchases yet
-            val promoPurchasesListener = BaseListenerWrapper(registrar.messenger(), "promo_purchases")
-            promoPurchasesListener.register()
+            val instance = QonversionFlutterSdkPlugin()
+            instance.setup(registrar.messenger(), registrar.activity().application)
+            instance.activity = registrar.activity()
         }
+    }
+
+    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        setup(binding.binaryMessenger, binding.applicationContext as Application)
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        activity = binding.activity
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+        onDetachedFromActivity()
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        onAttachedToActivity(binding)
+    }
+
+    override fun onDetachedFromActivity() {
+        activity = null
+    }
+
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        tearDown()
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -96,25 +119,25 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
     }
 
     private fun launch(args: Map<String, Any>, result: Result) {
-        val apiKey = args["key"] as? String ?: return result.noApiKeyError()
-        val isObserveMode = args["isObserveMode"] as? Boolean ?: return result.noArgsError()
+        application?.let { application ->
+            val apiKey = args["key"] as? String ?: return result.noApiKeyError()
+            val isObserveMode = args["isObserveMode"] as? Boolean ?: return result.noArgsError()
+            Qonversion.launch(
+                    application,
+                    apiKey,
+                    isObserveMode,
+                    callback = object : QonversionLaunchCallback {
+                        override fun onSuccess(launchResult: QLaunchResult) {
+                            result.success(launchResult.toMap())
+                        }
 
-        Qonversion.launch(
-                application,
-                apiKey,
-                isObserveMode,
-                callback = object: QonversionLaunchCallback {
-                    override fun onSuccess(launchResult: QLaunchResult) {
-                        result.success(launchResult.toMap())
+                        override fun onError(error: QonversionError) {
+                            result.qonversionError(error.description, error.additionalMessage)
+                        }
                     }
-
-                    override fun onError(error: QonversionError) {
-                        result.qonversionError(error.description, error.additionalMessage)
-                    }
-                }
-        )
-
-        startListeningPendingPurchasesEvents()
+            )
+            startListeningPendingPurchasesEvents()
+        } ?: result.error(QonversionErrorCode.UnknownError.name, "Couldn't launch Qonversion. There is no Application context", null)
     }
 
     private fun identify(userId: String?, result: Result) {
@@ -143,15 +166,17 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
             return
         }
 
-        Qonversion.purchase(activity, productId, callback = object: QonversionPermissionsCallback {
-            override fun onSuccess(permissions: Map<String, QPermission>) {
-                result.success(PurchaseResult(permissions).toMap())
-            }
+        activity?.let { activity ->
+            Qonversion.purchase(activity, productId, callback = object : QonversionPermissionsCallback {
+                override fun onSuccess(permissions: Map<String, QPermission>) {
+                    result.success(PurchaseResult(permissions).toMap())
+                }
 
-            override fun onError(error: QonversionError) {
-                result.success(PurchaseResult(error = error).toMap())
-            }
-        })
+                override fun onError(error: QonversionError) {
+                    result.success(PurchaseResult(error = error).toMap())
+                }
+            })
+        } ?: result.error(QonversionErrorCode.PurchaseInvalid.name, "Couldn't make purchase. There is no Activity context", null)
     }
 
     private fun updatePurchase(args: Map<String, Any>, result: Result) {
@@ -159,15 +184,17 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         val oldProductId = args["oldProductId"] as? String ?: return result.noOldProductIdError()
         val prorationMode = args["proration_mode"] as? Int
 
-        Qonversion.updatePurchase(activity, newProductId, oldProductId, prorationMode, callback = object: QonversionPermissionsCallback {
-            override fun onSuccess(permissions: Map<String, QPermission>) {
-                result.success(permissions.mapValues { it.value.toMap() })
-            }
+        activity?.let { activity ->
+            Qonversion.updatePurchase(activity, newProductId, oldProductId, prorationMode, callback = object : QonversionPermissionsCallback {
+                override fun onSuccess(permissions: Map<String, QPermission>) {
+                    result.success(permissions.mapValues { it.value.toMap() })
+                }
 
-            override fun onError(error: QonversionError) {
-                result.qonversionError(error.description, error.additionalMessage)
-            }
-        })
+                override fun onError(error: QonversionError) {
+                    result.qonversionError(error.description, error.additionalMessage)
+                }
+            })
+        } ?: result.error(QonversionErrorCode.PurchaseInvalid.name, "Couldn't update purchase. There is no Activity context", null)
     }
 
     private fun checkPermissions(result: Result) {
@@ -303,5 +330,27 @@ class QonversionFlutterSdkPlugin internal constructor(registrar: Registrar): Met
         editor.apply()
 
         result.success(null)
+    }
+
+    private fun setup(messenger: BinaryMessenger, application: Application) {
+        this.application = application
+        channel = MethodChannel(messenger, METHOD_CHANNEL)
+        channel?.setMethodCallHandler(this)
+
+        // Register deferred purchases events
+        val purchasesListener = BaseListenerWrapper(messenger, EVENT_CHANNEL_DEFERRED_PURCHASES)
+        purchasesListener.register()
+        this.deferredPurchasesStreamHandler = purchasesListener.eventStreamHandler
+
+        // Register promo purchases events. Android SDK does not generate any promo purchases yet
+        val promoPurchasesListener = BaseListenerWrapper(messenger, EVENT_CHANNEL_PROMO_PURCHASES)
+        promoPurchasesListener.register()
+    }
+
+    private fun tearDown() {
+        channel?.setMethodCallHandler(null)
+        channel = null
+        this.deferredPurchasesStreamHandler = null
+        this.application = null
     }
 }
