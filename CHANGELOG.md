@@ -1,3 +1,6 @@
+## 3.2.0
+* Add support for Android v2 embedding
+
 ## 3.1.0
 * Add support for promo purchases on iOS
 * Add Identity support
