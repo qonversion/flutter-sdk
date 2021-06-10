@@ -21,7 +21,8 @@ class QOfferings {
 
   const QOfferings(this.main, this.availableOfferings);
 
-  QOffering? offeringForIdentifier(String id) => availableOfferings.firstWhereOrNull(
+  QOffering? offeringForIdentifier(String id) =>
+      availableOfferings.firstWhereOrNull(
         (element) => element.id == id,
       );
 

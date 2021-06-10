@@ -78,7 +78,8 @@ class SKProductWrapper {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is SKProductWrapper && other.productIdentifier == productIdentifier &&
+    return other is SKProductWrapper &&
+        other.productIdentifier == productIdentifier &&
         other.localizedTitle == localizedTitle &&
         other.localizedDescription == localizedDescription &&
         other.priceLocale == priceLocale &&
@@ -89,15 +90,16 @@ class SKProductWrapper {
   }
 
   @override
-  int get hashCode => hashValues(
-      this.productIdentifier,
-      this.localizedTitle,
-      this.localizedDescription,
-      this.priceLocale,
-      this.subscriptionGroupIdentifier,
-      this.price,
-      this.subscriptionPeriod,
-      this.introductoryPrice);
+  int get hashCode =>
+      hashValues(
+          this.productIdentifier,
+          this.localizedTitle,
+          this.localizedDescription,
+          this.priceLocale,
+          this.subscriptionGroupIdentifier,
+          this.price,
+          this.subscriptionPeriod,
+          this.introductoryPrice);
 }
 
 /// Object that indicates the locale of the price
@@ -128,7 +130,8 @@ class SKPriceLocaleWrapper {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is SKPriceLocaleWrapper && other.currencySymbol == currencySymbol &&
+    return other is SKPriceLocaleWrapper &&
+        other.currencySymbol == currencySymbol &&
         other.currencyCode == currencyCode;
   }
 

@@ -20,7 +20,7 @@ Implement in-app subscriptions, validate user receipts, check subscription statu
 Check the [documentation](https://documentation.qonversion.io/docs) to learn details on implementing and using Qonversion SDKs.
 
 [![Pub](https://img.shields.io/pub/v/qonversion_flutter.svg)](https://pub.dev/packages/qonversion_flutter)
-[![MIT License](http://img.shields.io/cocoapods/l/Qonversion.svg?style=flat)](http://qonversion.io)
+[![MIT License](https://img.shields.io/cocoapods/l/Qonversion.svg?style=flat)](https://qonversion.io)
 
 
 ## Product Center
