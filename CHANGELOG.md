@@ -1,3 +1,6 @@
+## 3.2.1
+* Fix enum dependencies
+
 ## 3.2.0
 * Add support for Android v2 embedding
 
