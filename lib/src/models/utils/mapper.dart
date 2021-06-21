@@ -70,8 +70,8 @@ class QMapper {
     return SKPriceLocaleWrapper.fromJson(map);
   }
 
-  static SKProductSubscriptionPeriodWrapper? skProductSubscriptionPeriodFromJson(
-      dynamic json) {
+  static SKProductSubscriptionPeriodWrapper?
+      skProductSubscriptionPeriodFromJson(dynamic json) {
     if (json == null) return null;
 
     final map = Map<String, dynamic>.from(json);

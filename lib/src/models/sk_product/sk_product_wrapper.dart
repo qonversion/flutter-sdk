@@ -90,16 +90,15 @@ class SKProductWrapper {
   }
 
   @override
-  int get hashCode =>
-      hashValues(
-          this.productIdentifier,
-          this.localizedTitle,
-          this.localizedDescription,
-          this.priceLocale,
-          this.subscriptionGroupIdentifier,
-          this.price,
-          this.subscriptionPeriod,
-          this.introductoryPrice);
+  int get hashCode => hashValues(
+      this.productIdentifier,
+      this.localizedTitle,
+      this.localizedDescription,
+      this.priceLocale,
+      this.subscriptionGroupIdentifier,
+      this.price,
+      this.subscriptionPeriod,
+      this.introductoryPrice);
 }
 
 /// Object that indicates the locale of the price
