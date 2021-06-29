@@ -83,16 +83,20 @@ class QProduct {
   @JsonKey(name: 'sku_details', fromJson: QMapper.skuDetailsFromJson)
   final SkuDetailsWrapper? skuDetails;
 
+  /// Associated Offering Id
+  @JsonKey(name: 'offering_id')
+  final String? offeringID;
+
   const QProduct(
-    this.qonversionId,
-    this.storeId,
-    this.type,
-    this.duration,
-    this.prettyPrice,
-    this.trialDuration,
-    this.skProduct,
-    this.skuDetails,
-  );
+      this.qonversionId,
+      this.storeId,
+      this.type,
+      this.duration,
+      this.prettyPrice,
+      this.trialDuration,
+      this.skProduct,
+      this.skuDetails,
+      this.offeringID);
 
   factory QProduct.fromJson(Map<String, dynamic> json) =>
       _$QProductFromJson(json);

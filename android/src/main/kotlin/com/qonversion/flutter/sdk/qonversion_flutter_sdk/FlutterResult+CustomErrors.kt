@@ -28,6 +28,10 @@ fun MethodChannel.Result.noProviderError() {
     return this.error("5", "Could not find provider", passValidValue)
 }
 
+fun MethodChannel.Result.noProductError() {
+    return this.error("6", "Could not find product", "Please provide valid product")
+}
+
 fun MethodChannel.Result.noProductIdError() {
     return this.error("8", "Could not find productId value", "Please provide valid productId")
 }
@@ -41,7 +45,7 @@ fun MethodChannel.Result.noNewProductIdError() {
 }
 
 fun MethodChannel.Result.noOldProductIdError() {
-    return this.error("11", "Could not find new product id", passValidValue)
+    return this.error("11", "Could not find old product id", passValidValue)
 }
 
 fun MethodChannel.Result.parsingError(message: String?) {

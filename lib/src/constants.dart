@@ -7,6 +7,7 @@ class Constants {
   static const kProvider = 'provider';
   static const kDetails = 'details';
   static const kProductId = 'productId';
+  static const kProduct = 'product';
   static const kNewProductId = 'newProductId';
   static const kOldProductId = 'oldProductId';
   static const kError = 'error';
@@ -20,8 +21,10 @@ class Constants {
   static const mLaunch = 'launch';
   static const mProducts = 'products';
   static const mPurchase = 'purchase';
+  static const mPurchaseProduct = 'purchaseProduct';
   static const mPromoPurchase = 'promoPurchase';
   static const mUpdatePurchase = 'updatePurchase';
+  static const mUpdatePurchaseByProduct = 'updatePurchaseByProduct';
   static const mCheckPermissions = 'checkPermissions';
   static const mRestore = 'restore';
   static const mSetUserId = 'setUserId';
