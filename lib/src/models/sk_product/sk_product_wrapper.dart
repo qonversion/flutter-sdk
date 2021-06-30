@@ -123,6 +123,8 @@ class SKPriceLocaleWrapper {
   factory SKPriceLocaleWrapper.fromJson(Map<String, dynamic> json) =>
       _$SKPriceLocaleWrapperFromJson(json);
 
+  Map<String, dynamic> toJson() => _$SKPriceLocaleWrapperToJson(this);
+
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) {

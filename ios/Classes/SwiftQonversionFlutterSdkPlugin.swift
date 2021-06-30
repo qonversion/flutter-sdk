@@ -57,7 +57,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       
     case "offerings":
       return offerings(result)
-        
+
     case "logout":
       Qonversion.logout()
       return result(nil)
@@ -65,7 +65,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     case "resetUser":
       Qonversion.resetUser()
       return result(nil)
-        
+
     default:
       break
     }
@@ -82,6 +82,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       
     case "purchase":
       return purchase(args["productId"] as? String, result)
+      
+    case "purchaseProduct":
+      return purchaseProduct(args["product"] as? String, result)
       
     case "promoPurchase":
       return promoPurchase(args["productId"] as? String, result)
@@ -103,7 +106,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       
     case "storeSdkInfo":
       return storeSdkInfo(args, result)
-        
+
     case "identify":
         return identify(args["userId"] as? String, result)
       
@@ -126,7 +129,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       result(resultMap)
     }
   }
-    
+
   private func identify(_ userId: String?, _ result: @escaping FlutterResult) {
     guard let userId = userId else {
       result(FlutterError.noUserId)
@@ -136,7 +139,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     Qonversion.identify(userId)
     result(nil)
   }
-    
+
   private func products(_ result: @escaping FlutterResult) {
     Qonversion.products { (products, error) in
       if let error = error {
@@ -159,6 +162,35 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
                                           error: error,
                                           isCancelled: isCancelled)
       result(purchaseResult.toMap())
+    }
+  }
+  
+  private func purchaseProduct(_ jsonProduct: String?, _ result: @escaping FlutterResult) {
+    guard let jsonProduct = jsonProduct else {
+      return result(FlutterError.noProduct)
+    }
+    
+    do {
+      let data = Data(jsonProduct.utf8)
+      if let jsonMap = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+       
+        guard let product = jsonMap.toProduct() else {
+          let errorMessage = "Failed to deserialize Qonversion Product. There is no qonversionId"
+          NSLog(errorMessage)
+          return result(FlutterError.noFieldIProductId(errorMessage))
+        }
+        
+        Qonversion.purchaseProduct(product) { (permissions, error, isCancelled) in
+          let purchaseResult = PurchaseResult(permissions: permissions,
+                                              error: error,
+                                              isCancelled: isCancelled)
+          result(purchaseResult.toMap())
+        }
+      }
+    } catch let error as NSError {
+      let errorMessage = "Failed to deserialize Qonversion Product: \(error.localizedDescription)"
+      NSLog(errorMessage)
+      result(FlutterError.jsonSerializationError(errorMessage))
     }
   }
   
