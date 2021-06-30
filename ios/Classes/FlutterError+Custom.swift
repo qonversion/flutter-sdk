@@ -38,10 +38,6 @@ extension FlutterError {
                                        message: "Could not find provider",
                                        details: passValidValue)
   
-  static let noProduct = FlutterError(code: "ProductNotProvided ",
-                                      message: "Could not find product",
-                                      details: "Please provide valid product")
-  
   static func failedToGetProducts(_ description: String) -> FlutterError {
     return FlutterError(code: "7",
                         message: "Failed to get products",
@@ -51,6 +47,10 @@ extension FlutterError {
   static let noProductId = FlutterError(code: "8",
                                         message: "Could not find productId value",
                                         details: "Please provide valid productId")
+  
+  static let noProduct = FlutterError(code: "ProductNotProvided",
+                                      message: "Could not find product",
+                                      details: "Please provide a valid product")
   
   static func qonversionError(_ description: String) -> FlutterError {
     return FlutterError(code: "9",
@@ -91,12 +91,12 @@ extension FlutterError {
   static func jsonSerializationError(_ description: String) -> FlutterError {
     return FlutterError(code: "JSONSerialization",
                         message: "JSON Serialization Error",
-                        details: passValidValue)
+                        details: description)
     
   }
   
-  static func noFieldIProductId(_ description: String) -> FlutterError {
-    return FlutterError(code: "noFieldIProductId",
+  static func noProductIdField(_ description: String) -> FlutterError {
+    return FlutterError(code: "NoProductIdField",
                         message: "Could not find qonversionId in Product",
                         details: description)
   }

@@ -2,6 +2,7 @@ package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 
 import android.app.Activity
 import android.app.Application
+import android.util.Log
 import androidx.annotation.NonNull
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
@@ -171,7 +172,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
 
         activity?.let {
             Qonversion.purchase(it, productId, getPurchasesListener(result))
-        } ?: handleMissingActivityOnPurchase(result)
+        } ?: handleMissingActivityOnPurchase(result, object {}.javaClass.enclosingMethod?.name)
     }
 
     private fun purchaseProduct(jsonProduct: String?, result: Result) {
@@ -179,15 +180,21 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             return result.noProductError()
         }
 
+        val funcName = object {}.javaClass.enclosingMethod?.name
         try {
             val product = mapQProduct(jsonProduct)
+                    ?: return handleMissingProductIdField(result, funcName)
+
             activity?.let {
                 Qonversion.purchase(it, product, getPurchasesListener(result))
-            } ?: handleMissingActivityOnPurchase(result)
+            } ?: handleMissingActivityOnPurchase(result, funcName)
+
         } catch (e: JsonSyntaxException) {
-            handleExceptionOnPurchase(result, e)
+            handleJsonExceptionOnPurchase(result, e, funcName)
         } catch (e: IllegalArgumentException) {
-            handleExceptionOnPurchase(result, e)
+            handleExceptionOnPurchase(result, e, funcName)
+        } catch (e: ClassCastException) {
+            handleExceptionOnPurchase(result, e, funcName)
         }
     }
 
@@ -198,7 +205,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
 
         activity?.let {
             Qonversion.updatePurchase(it, newProductId, oldProductId, prorationMode, getUpdatePurchasesListener(result))
-        } ?: handleMissingActivityOnPurchase(result)
+        } ?: handleMissingActivityOnPurchase(result, object {}.javaClass.enclosingMethod?.name)
     }
 
     private fun updatePurchaseByProduct(args: Map<String, Any>, result: Result) {
@@ -206,15 +213,20 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
         val oldProductId = args["oldProductId"] as? String ?: return result.noOldProductIdError()
         val prorationMode = args["proration_mode"] as? Int
 
+        val funcName = object {}.javaClass.enclosingMethod?.name
         try {
             val product = mapQProduct(jsonProduct)
+                    ?: return handleMissingProductIdField(result, funcName)
+
             activity?.let {
                 Qonversion.updatePurchase(it, product, oldProductId, prorationMode, getUpdatePurchasesListener(result))
-            } ?: handleMissingActivityOnPurchase(result)
+            } ?: handleMissingActivityOnPurchase(result, funcName)
         } catch (e: JsonSyntaxException) {
-            handleExceptionOnPurchase(result, e)
+            handleJsonExceptionOnPurchase(result, e, funcName)
         } catch (e: IllegalArgumentException) {
-            handleExceptionOnPurchase(result, e)
+            handleExceptionOnPurchase(result, e, funcName)
+        } catch (e: ClassCastException) {
+            handleExceptionOnPurchase(result, e, funcName)
         }
     }
 
@@ -355,11 +367,29 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
                 result.qonversionError(error.description, error.additionalMessage)
     }
 
-    private fun handleMissingActivityOnPurchase(result: Result) =
-            result.error(QonversionErrorCode.PurchaseInvalid.name, "Couldn't make purchase. There is no Activity context", null)
+    private fun handleMissingProductIdField(result: Result, functionName: String?) {
+        val errorMessage = "Failed to deserialize Qonversion Product. There is no qonversionId"
+        Log.d("Qonversion", "$functionName() -> $errorMessage")
+        result.noProductIdField(errorMessage)
+    }
 
-    private fun handleExceptionOnPurchase(result: Result, e: Exception) =
-            result.error(QonversionErrorCode.PurchaseInvalid.name, "Couldn't make purchase as an Exception occurred. ${e.localizedMessage}", null)
+    private fun handleMissingActivityOnPurchase(result: Result, functionName: String?) {
+        val errorMessage = "Couldn't make a purchase. There is no Activity context"
+        Log.d("Qonversion", "$functionName() -> $errorMessage")
+        result.error(QonversionErrorCode.PurchaseInvalid.name, errorMessage, null)
+    }
+
+    private fun handleExceptionOnPurchase(result: Result, e: Exception, functionName: String?) {
+        val errorMessage = "Couldn't make a purchase as an Exception occurred. ${e.localizedMessage}."
+        Log.d("Qonversion", "$functionName() -> $errorMessage")
+        result.error(QonversionErrorCode.PurchaseInvalid.name, errorMessage, null)
+    }
+
+    private fun handleJsonExceptionOnPurchase(result: Result, e: JsonSyntaxException, functionName: String?) {
+        val errorMessage = "Failed to deserialize Qonversion Product: ${e.localizedMessage}."
+        Log.d("Qonversion", "$functionName() -> $errorMessage")
+        result.jsonSerializationError(errorMessage)
+    }
 
     private fun storeSdkInfo(args: Map<String, Any>, result: Result) {
         val version = args["version"] as? String ?: return result.noSdkInfo()

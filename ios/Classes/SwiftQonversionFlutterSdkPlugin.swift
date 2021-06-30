@@ -177,7 +177,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
         guard let product = jsonMap.toProduct() else {
           let errorMessage = "Failed to deserialize Qonversion Product. There is no qonversionId"
           NSLog(errorMessage)
-          return result(FlutterError.noFieldIProductId(errorMessage))
+          return result(FlutterError.noProductIdField(errorMessage))
         }
         
         Qonversion.purchaseProduct(product) { (permissions, error, isCancelled) in

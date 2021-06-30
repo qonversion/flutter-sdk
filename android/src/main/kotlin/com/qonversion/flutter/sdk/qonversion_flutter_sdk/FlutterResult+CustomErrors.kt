@@ -29,7 +29,7 @@ fun MethodChannel.Result.noProviderError() {
 }
 
 fun MethodChannel.Result.noProductError() {
-    return this.error("6", "Could not find product", "Please provide valid product")
+    return this.error("ProductNotProvided", "Could not find product", "Please provide a valid product")
 }
 
 fun MethodChannel.Result.noProductIdError() {
@@ -66,4 +66,12 @@ fun MethodChannel.Result.offeringsError(description: String?, message: String?) 
 
 fun MethodChannel.Result.noSdkInfo() {
     return this.error("15", "Could not find sdk info", passValidValue)
+}
+
+fun MethodChannel.Result.noProductIdField(details: String?) {
+    return this.error("NoProductIdField", "Could not find qonversionId in Product", details)
+}
+
+fun MethodChannel.Result.jsonSerializationError(details: String?) {
+    return this.error("JSONSerialization", "JSON Serialization Error", details)
 }
