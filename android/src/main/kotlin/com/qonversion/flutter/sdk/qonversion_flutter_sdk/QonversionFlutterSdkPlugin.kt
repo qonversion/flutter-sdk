@@ -177,7 +177,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
 
     private fun purchaseProduct(jsonProduct: String?, result: Result) {
         if (jsonProduct == null) {
-            return result.noProductError()
+            return result.noProduct()
         }
 
         val funcName = object {}.javaClass.enclosingMethod?.name
@@ -209,7 +209,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
     }
 
     private fun updatePurchaseByProduct(args: Map<String, Any>, result: Result) {
-        val jsonProduct = args["product"] as? String ?: return result.noProductError()
+        val jsonProduct = args["product"] as? String ?: return result.noProduct()
         val oldProductId = args["oldProductId"] as? String ?: return result.noOldProductIdError()
         val prorationMode = args["proration_mode"] as? Int
 

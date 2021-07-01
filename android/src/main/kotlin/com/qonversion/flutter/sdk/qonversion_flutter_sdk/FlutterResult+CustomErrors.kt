@@ -28,7 +28,7 @@ fun MethodChannel.Result.noProviderError() {
     return this.error("5", "Could not find provider", passValidValue)
 }
 
-fun MethodChannel.Result.noProductError() {
+fun MethodChannel.Result.noProduct() {
     return this.error("ProductNotProvided", "Could not find product", "Please provide a valid product")
 }
 
