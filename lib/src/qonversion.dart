@@ -16,7 +16,7 @@ import 'models/purchase_exception.dart';
 import 'qa_provider.dart';
 
 class Qonversion {
-  static const String _sdkVersion = "3.2.1";
+  static const String _sdkVersion = "3.3.0";
 
   static const MethodChannel _channel = MethodChannel('qonversion_flutter_sdk');
 
@@ -70,8 +70,10 @@ class Qonversion {
 
   /// Call this function to reset user ID and generate new anonymous user ID.
   /// Call this function before Qonversion.launch()
-  static Future<void> resetUser() =>
-      _channel.invokeMethod(Constants.mResetUser);
+  @Deprecated("This function was used in debug mode only. You can reinstall the app if you need to reset the user ID.")
+  static Future<void> resetUser() async {
+    debugPrint("resetUser() function is deprecated now. It was used in debug mode only. You can reinstall the app if you need to reset the user ID.");
+  }
 
   /// This method will send all purchases to the Qonversion backend. Call this every time when purchase is handled by you own implementation.
   ///
@@ -106,6 +108,19 @@ class Qonversion {
     return _handlePurchaseResult(rawResult);
   }
 
+  /// Starts a process of purchasing product with Qonversion's [product] object.
+  ///
+  /// Throws `QPurchaseException` in case of error in purchase flow.
+  static Future<Map<String, QPermission>> purchaseProduct(
+      QProduct product) async {
+    final jsonProduct = jsonEncode(product);
+
+    final rawResult = await _channel.invokeMethod(
+        Constants.mPurchaseProduct, {Constants.kProduct: jsonProduct});
+
+    return _handlePurchaseResult(rawResult);
+  }
+
   /// Android only. Returns `null` if called on iOS.
   ///
   /// Upgrading, downgrading, or changing a subscription on Google Play Store requires calling updatePurchase() function.
@@ -122,6 +137,31 @@ class Qonversion {
 
     final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchase, {
       Constants.kNewProductId: newProductId,
+      Constants.kOldProductId: oldProductId,
+      Constants.kProrationMode:
+          prorationMode != null ? prorationMode.index : null,
+    });
+    return QMapper.permissionsFromJson(rawResult);
+  }
+
+  /// Android only. Returns `null` if called on iOS.
+  ///
+  /// Upgrading, downgrading, or changing a subscription on Google Play Store requires calling updatePurchaseWithProduct() function.
+  ///
+  /// See [Google Play Documentation](https://developer.android.com/google/play/billing/subscriptions#upgrade-downgrade) for more details.
+  static Future<Map<String, QPermission>?> updatePurchaseWithProduct({
+    required QProduct newProduct,
+    required String oldProductId,
+    ProrationMode? prorationMode,
+  }) async {
+    if (!Platform.isAndroid) {
+      return null;
+    }
+
+    final jsonProduct = jsonEncode(newProduct);
+    final rawResult =
+        await _channel.invokeMethod(Constants.mUpdatePurchaseWithProduct, {
+      Constants.kProduct: jsonProduct,
       Constants.kOldProductId: oldProductId,
       Constants.kProrationMode:
           prorationMode != null ? prorationMode.index : null,

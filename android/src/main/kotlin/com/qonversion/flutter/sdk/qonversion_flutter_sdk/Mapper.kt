@@ -1,6 +1,9 @@
 package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 
 import com.android.billingclient.api.SkuDetails
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
+import com.google.gson.reflect.TypeToken
 import com.qonversion.android.sdk.QonversionError
 import com.qonversion.android.sdk.dto.QLaunchResult
 import com.qonversion.android.sdk.dto.QPermission
@@ -9,6 +12,9 @@ import com.qonversion.android.sdk.dto.eligibility.QIntroEligibilityStatus
 import com.qonversion.android.sdk.dto.offerings.QOffering
 import com.qonversion.android.sdk.dto.offerings.QOfferings
 import com.qonversion.android.sdk.dto.products.QProduct
+import com.qonversion.android.sdk.dto.products.QProductDuration
+import com.qonversion.android.sdk.dto.products.QProductType
+import com.qonversion.android.sdk.dto.products.QTrialDuration
 
 data class PurchaseResult(val permissions: Map<String, QPermission>? = null, val error: QonversionError? = null) {
     fun toMap(): Map<String, Any?> {
@@ -31,13 +37,14 @@ fun QLaunchResult.toMap(): Map<String, Any> {
 
 fun QProduct.toMap(): Map<String, Any?> {
     return mapOf(
-            "id" to qonversionID,
-            "store_id" to storeID,
-            "type" to type.type,
-            "duration" to duration?.type,
-            "sku_details" to skuDetail?.toMap(),
-            "pretty_price" to prettyPrice,
-            "trial_duration" to trialDuration?.type
+            ProductFields.ID to qonversionID,
+            ProductFields.STORE_ID to storeID,
+            ProductFields.TYPE to type.type,
+            ProductFields.DURATION to duration?.type,
+            ProductFields.SKU_DETAILS to skuDetail?.toMap(),
+            ProductFields.PRETTY_PRICE to prettyPrice,
+            ProductFields.TRIAL_DURATION to trialDuration?.type,
+            ProductFields.OFFERING_ID to offeringID
     )
 }
 
@@ -96,6 +103,40 @@ fun SkuDetails.toMap(): Map<String, Any?> {
             "type" to type,
             "subscriptionPeriod" to subscriptionPeriod,
             "originalPrice" to originalPrice,
-            "originalPriceAmountMicros" to originalPriceAmountMicros
+            "originalPriceAmountMicros" to originalPriceAmountMicros,
+            SkuDetailsFields.ORIGINAL_JSON to originalJson
     )
+}
+
+@Throws(JsonSyntaxException::class, IllegalArgumentException::class, ClassCastException::class)
+fun mapQProduct(jsonProduct: String): QProduct? {
+    val mapType = object : TypeToken<Map<String, Any?>>() {}.type
+    val mappedProduct: Map<String, Any?> = Gson().fromJson(jsonProduct, mapType)
+
+    val qonversionId = mappedProduct[ProductFields.ID] as? String ?: return null
+
+    val storeId = mappedProduct[ProductFields.STORE_ID] as? String
+
+    val type = mappedProduct[ProductFields.TYPE] as Double
+    val productType = QProductType.fromType(type.toInt())
+
+    val duration = mappedProduct[ProductFields.DURATION] as? Double
+    val productDuration = duration?.toInt()?.let { QProductDuration.fromType(it) }
+
+    val prettyPrice = mappedProduct[ProductFields.PRETTY_PRICE] as? String
+
+    val trialDuration = mappedProduct[ProductFields.TRIAL_DURATION] as? Double
+    val productTrialDuration = trialDuration?.toInt()?.let { QTrialDuration.fromType(it) }
+
+    val offeringId = mappedProduct[ProductFields.OFFERING_ID] as String
+
+    val originalSkuDetails = mappedProduct[SkuDetailsFields.ORIGINAL_JSON] as? String
+    val skuDetails = originalSkuDetails?.let { SkuDetails(it) }
+
+    return QProduct(qonversionId, storeId, productType, productDuration).also {
+        it.skuDetail = skuDetails
+        it.offeringID = offeringId
+        it.prettyPrice = prettyPrice
+        it.trialDuration = productTrialDuration
+    }
 }

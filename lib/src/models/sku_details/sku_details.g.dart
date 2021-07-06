@@ -23,6 +23,7 @@ SkuDetailsWrapper _$SkuDetailsWrapperFromJson(Map<String, dynamic> json) {
     type: _$enumDecode(_$SkuTypeEnumMap, json['type']),
     originalPrice: json['originalPrice'] as String,
     originalPriceAmountMicros: json['originalPriceAmountMicros'] as int,
+    originalJson: json['originalJson'] as String,
   );
 }
 
@@ -43,6 +44,7 @@ Map<String, dynamic> _$SkuDetailsWrapperToJson(SkuDetailsWrapper instance) =>
       'type': _$SkuTypeEnumMap[instance.type],
       'originalPrice': instance.originalPrice,
       'originalPriceAmountMicros': instance.originalPriceAmountMicros,
+      'originalJson': instance.originalJson,
     };
 
 K _$enumDecode<K, V>(

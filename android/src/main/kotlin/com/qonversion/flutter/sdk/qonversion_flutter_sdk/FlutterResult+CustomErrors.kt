@@ -28,6 +28,10 @@ fun MethodChannel.Result.noProviderError() {
     return this.error("5", "Could not find provider", passValidValue)
 }
 
+fun MethodChannel.Result.noProduct() {
+    return this.error("ProductNotProvided", "Could not find product", "Please provide a valid product")
+}
+
 fun MethodChannel.Result.noProductIdError() {
     return this.error("8", "Could not find productId value", "Please provide valid productId")
 }
@@ -41,7 +45,7 @@ fun MethodChannel.Result.noNewProductIdError() {
 }
 
 fun MethodChannel.Result.noOldProductIdError() {
-    return this.error("11", "Could not find new product id", passValidValue)
+    return this.error("11", "Could not find old product id", passValidValue)
 }
 
 fun MethodChannel.Result.parsingError(message: String?) {
@@ -57,9 +61,17 @@ fun MethodChannel.Result.noPropertyValue() {
 }
 
 fun MethodChannel.Result.offeringsError(description: String?, message: String?) {
-    return this.error("OFFERINGS", "Could not get offerings", "$description $message")
+    return this.error("Offerings", "Could not get offerings", "$description $message")
 }
 
 fun MethodChannel.Result.noSdkInfo() {
     return this.error("15", "Could not find sdk info", passValidValue)
+}
+
+fun MethodChannel.Result.noProductIdField(details: String?) {
+    return this.error("NoProductIdField", "Could not find qonversionId in Product", details)
+}
+
+fun MethodChannel.Result.jsonSerializationError(details: String?) {
+    return this.error("JSONSerialization", "JSON Serialization Error", details)
 }
