@@ -73,7 +73,7 @@ extension FlutterError {
                                             details: passValidValue)
   
   static func offeringsError(_ description: String) -> FlutterError {
-    return FlutterError(code: "OFFERINGS",
+    return FlutterError(code: "Offerings",
                         message: "Could not get offerings",
                         details: description)
   }

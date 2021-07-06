@@ -24,7 +24,7 @@ class Constants {
   static const mPurchaseProduct = 'purchaseProduct';
   static const mPromoPurchase = 'promoPurchase';
   static const mUpdatePurchase = 'updatePurchase';
-  static const mUpdatePurchaseByProduct = 'updatePurchaseByProduct';
+  static const mUpdatePurchaseWithProduct = 'updatePurchaseWithProduct';
   static const mCheckPermissions = 'checkPermissions';
   static const mRestore = 'restore';
   static const mSetUserId = 'setUserId';

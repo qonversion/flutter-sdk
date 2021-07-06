@@ -111,7 +111,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             "purchase" -> purchase(args["productId"] as? String, result)
             "purchaseProduct" -> purchaseProduct(args["product"] as? String, result)
             "updatePurchase" -> updatePurchase(args, result)
-            "updatePurchaseByProduct" -> updatePurchaseByProduct(args, result)
+            "updatePurchaseWithProduct" -> updatePurchaseWithProduct(args, result)
             "setUserId" -> setUserId(args["userId"] as? String, result)
             "setProperty" -> setProperty(args, result)
             "setUserProperty" -> setUserProperty(args, result)
@@ -208,7 +208,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
         } ?: handleMissingActivityOnPurchase(result, object {}.javaClass.enclosingMethod?.name)
     }
 
-    private fun updatePurchaseByProduct(args: Map<String, Any>, result: Result) {
+    private fun updatePurchaseWithProduct(args: Map<String, Any>, result: Result) {
         val jsonProduct = args["product"] as? String ?: return result.noProduct()
         val oldProductId = args["oldProductId"] as? String ?: return result.noOldProductIdError()
         val prorationMode = args["proration_mode"] as? Int

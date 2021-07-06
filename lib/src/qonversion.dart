@@ -144,10 +144,10 @@ class Qonversion {
 
   /// Android only. Returns `null` if called on iOS.
   ///
-  /// Upgrading, downgrading, or changing a subscription on Google Play Store requires calling updatePurchaseByProduct() function.
+  /// Upgrading, downgrading, or changing a subscription on Google Play Store requires calling updatePurchaseWithProduct() function.
   ///
   /// See [Google Play Documentation](https://developer.android.com/google/play/billing/subscriptions#upgrade-downgrade) for more details.
-  static Future<Map<String, QPermission>?> updatePurchaseByProduct({
+  static Future<Map<String, QPermission>?> updatePurchaseWithProduct({
     required QProduct newProduct,
     required String oldProductId,
     ProrationMode? prorationMode,
@@ -158,7 +158,7 @@ class Qonversion {
 
     final jsonProduct = jsonEncode(newProduct);
     final rawResult =
-        await _channel.invokeMethod(Constants.mUpdatePurchaseByProduct, {
+        await _channel.invokeMethod(Constants.mUpdatePurchaseWithProduct, {
       Constants.kProduct: jsonProduct,
       Constants.kOldProductId: oldProductId,
       Constants.kProrationMode:
