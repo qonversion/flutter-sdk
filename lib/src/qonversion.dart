@@ -70,8 +70,10 @@ class Qonversion {
 
   /// Call this function to reset user ID and generate new anonymous user ID.
   /// Call this function before Qonversion.launch()
-  static Future<void> resetUser() =>
-      _channel.invokeMethod(Constants.mResetUser);
+  @Deprecated("This function was used in debug mode only. You can reinstall the app if you need to reset the user ID.")
+  static Future<void> resetUser() async {
+    debugPrint("resetUser() function is deprecated now. It was used in debug mode only. You can reinstall the app if you need to reset the user ID.");
+  }
 
   /// This method will send all purchases to the Qonversion backend. Call this every time when purchase is handled by you own implementation.
   ///

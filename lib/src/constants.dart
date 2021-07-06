@@ -38,7 +38,6 @@ class Constants {
   static const mCheckTrialIntroEligibility = 'checkTrialIntroEligibility';
   static const mStoreSdkInfo = 'storeSdkInfo';
   static const mIdentify = 'identify';
-  static const mResetUser = 'resetUser';
   static const mLogout = 'logout';
 
   // Keys for NSUserDefaults on iOS and SharedPreferences on Android
