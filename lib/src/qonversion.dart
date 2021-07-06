@@ -72,7 +72,7 @@ class Qonversion {
   /// Call this function before Qonversion.launch()
   @Deprecated("This function was used in debug mode only. You can reinstall the app if you need to reset the user ID.")
   static Future<void> resetUser() async {
-    debugPrint("resetUser() function was used in debug mode only. You can reinstall the app if you need to reset the user ID.");
+    debugPrint("resetUser() function is deprecated now. It was used in debug mode only. You can reinstall the app if you need to reset the user ID.");
   }
 
   /// This method will send all purchases to the Qonversion backend. Call this every time when purchase is handled by you own implementation.
