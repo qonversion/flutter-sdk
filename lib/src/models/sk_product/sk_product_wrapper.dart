@@ -70,6 +70,8 @@ class SKProductWrapper {
   factory SKProductWrapper.fromJson(Map<String, dynamic> json) =>
       _$SKProductWrapperFromJson(json);
 
+  Map<String, dynamic> toJson() => _$SKProductWrapperToJson(this);
+
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) {
@@ -120,6 +122,8 @@ class SKPriceLocaleWrapper {
 
   factory SKPriceLocaleWrapper.fromJson(Map<String, dynamic> json) =>
       _$SKPriceLocaleWrapperFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SKPriceLocaleWrapperToJson(this);
 
   @override
   bool operator ==(Object other) {

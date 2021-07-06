@@ -75,24 +75,27 @@ class SkuDetailsWrapper {
   /// [originalPrice] in micro-units (990000).
   final int originalPriceAmountMicros;
 
+  /// SKU details in JSON format.
+  final String originalJson;
+
   /// Creates a [SkuDetailsWrapper] with the given purchase details.
-  SkuDetailsWrapper({
-    required this.description,
-    required this.freeTrialPeriod,
-    required this.introductoryPrice,
-    required this.introductoryPriceAmountMicros,
-    required this.introductoryPriceCycles,
-    required this.introductoryPricePeriod,
-    required this.price,
-    required this.priceAmountMicros,
-    required this.priceCurrencyCode,
-    required this.sku,
-    required this.subscriptionPeriod,
-    required this.title,
-    required this.type,
-    required this.originalPrice,
-    required this.originalPriceAmountMicros,
-  });
+  SkuDetailsWrapper(
+      {required this.description,
+      required this.freeTrialPeriod,
+      required this.introductoryPrice,
+      required this.introductoryPriceAmountMicros,
+      required this.introductoryPriceCycles,
+      required this.introductoryPricePeriod,
+      required this.price,
+      required this.priceAmountMicros,
+      required this.priceCurrencyCode,
+      required this.sku,
+      required this.subscriptionPeriod,
+      required this.title,
+      required this.type,
+      required this.originalPrice,
+      required this.originalPriceAmountMicros,
+      required this.originalJson});
 
   /// Constructs an instance of this from a key value map of data.
   ///
@@ -100,6 +103,8 @@ class SkuDetailsWrapper {
   /// types of all of the members on this class.
   factory SkuDetailsWrapper.fromJson(Map<String, dynamic> map) =>
       _$SkuDetailsWrapperFromJson(map);
+
+  Map<String, dynamic> toJson() => _$SkuDetailsWrapperToJson(this);
 
   @override
   bool operator ==(dynamic other) {
@@ -123,7 +128,8 @@ class SkuDetailsWrapper {
         typedOther.title == title &&
         typedOther.type == type &&
         typedOther.originalPrice == originalPrice &&
-        typedOther.originalPriceAmountMicros == originalPriceAmountMicros;
+        typedOther.originalPriceAmountMicros == originalPriceAmountMicros &&
+        typedOther.originalJson == originalJson;
   }
 
   @override
@@ -142,6 +148,7 @@ class SkuDetailsWrapper {
         title.hashCode,
         type.hashCode,
         originalPrice,
-        originalPriceAmountMicros);
+        originalPriceAmountMicros,
+        originalJson.hashCode);
   }
 }

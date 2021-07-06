@@ -106,6 +106,19 @@ class Qonversion {
     return _handlePurchaseResult(rawResult);
   }
 
+  /// Starts a process of purchasing product with Qonversion's [product] object.
+  ///
+  /// Throws `QPurchaseException` in case of error in purchase flow.
+  static Future<Map<String, QPermission>> purchaseProduct(
+      QProduct product) async {
+    final jsonProduct = jsonEncode(product);
+
+    final rawResult = await _channel.invokeMethod(
+        Constants.mPurchaseProduct, {Constants.kProduct: jsonProduct});
+
+    return _handlePurchaseResult(rawResult);
+  }
+
   /// Android only. Returns `null` if called on iOS.
   ///
   /// Upgrading, downgrading, or changing a subscription on Google Play Store requires calling updatePurchase() function.
@@ -122,6 +135,31 @@ class Qonversion {
 
     final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchase, {
       Constants.kNewProductId: newProductId,
+      Constants.kOldProductId: oldProductId,
+      Constants.kProrationMode:
+          prorationMode != null ? prorationMode.index : null,
+    });
+    return QMapper.permissionsFromJson(rawResult);
+  }
+
+  /// Android only. Returns `null` if called on iOS.
+  ///
+  /// Upgrading, downgrading, or changing a subscription on Google Play Store requires calling updatePurchaseWithProduct() function.
+  ///
+  /// See [Google Play Documentation](https://developer.android.com/google/play/billing/subscriptions#upgrade-downgrade) for more details.
+  static Future<Map<String, QPermission>?> updatePurchaseWithProduct({
+    required QProduct newProduct,
+    required String oldProductId,
+    ProrationMode? prorationMode,
+  }) async {
+    if (!Platform.isAndroid) {
+      return null;
+    }
+
+    final jsonProduct = jsonEncode(newProduct);
+    final rawResult =
+        await _channel.invokeMethod(Constants.mUpdatePurchaseWithProduct, {
+      Constants.kProduct: jsonProduct,
       Constants.kOldProductId: oldProductId,
       Constants.kProrationMode:
           prorationMode != null ? prorationMode.index : null,

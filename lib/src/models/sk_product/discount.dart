@@ -53,6 +53,8 @@ class SKProductDiscountWrapper {
     return _$SKProductDiscountWrapperFromJson(map);
   }
 
+  Map<String, dynamic> toJson() => _$SKProductDiscountWrapperToJson(this);
+
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) {

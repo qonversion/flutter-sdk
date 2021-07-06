@@ -48,6 +48,10 @@ extension FlutterError {
                                         message: "Could not find productId value",
                                         details: "Please provide valid productId")
   
+  static let noProduct = FlutterError(code: "ProductNotProvided",
+                                      message: "Could not find product",
+                                      details: "Please provide a valid product")
+  
   static func qonversionError(_ description: String) -> FlutterError {
     return FlutterError(code: "9",
                         message: "Qonversion Error",
@@ -69,7 +73,7 @@ extension FlutterError {
                                             details: passValidValue)
   
   static func offeringsError(_ description: String) -> FlutterError {
-    return FlutterError(code: "OFFERINGS",
+    return FlutterError(code: "Offerings",
                         message: "Could not get offerings",
                         details: description)
   }
@@ -82,5 +86,18 @@ extension FlutterError {
     return FlutterError (code: "PromoPurchase",
                          message: "Could not find completion block for Product ID: \(productId)",
                          details: passValidValue)
+  }
+  
+  static func jsonSerializationError(_ description: String) -> FlutterError {
+    return FlutterError(code: "JSONSerialization",
+                        message: "JSON Serialization Error",
+                        details: description)
+    
+  }
+  
+  static func noProductIdField(_ description: String) -> FlutterError {
+    return FlutterError(code: "NoProductIdField",
+                        message: "Could not find qonversionId in Product",
+                        details: description)
   }
 }
