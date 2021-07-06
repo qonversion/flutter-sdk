@@ -62,10 +62,6 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       Qonversion.logout()
       return result(nil)
 
-    case "resetUser":
-      Qonversion.resetUser()
-      return result(nil)
-
     default:
       break
     }

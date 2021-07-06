@@ -96,10 +96,6 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
                 Qonversion.logout()
                 return result.success(null)
             }
-            "resetUser" -> {
-                Qonversion.resetUser()
-                return result.success(null)
-            }
         }
 
         // Methods with args
