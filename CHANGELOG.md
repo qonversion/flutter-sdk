@@ -1,3 +1,7 @@
+## 3.3.0
+* Add `purchaseProduct()`, `updatePurchaseWithProduct()`
+* Deprecate `resetUser()`
+
 ## 3.2.1
 * Fix enum dependencies
 
