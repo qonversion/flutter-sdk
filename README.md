@@ -18,7 +18,7 @@ Qonversion is the data platform to power in-app subscription revenue growth.
 </p>
 
 [![pub](https://img.shields.io/pub/v/qonversion_flutter)](https://pub.dev/packages/qonversion_flutter)
-[![MIT License](http://img.shields.io/cocoapods/l/Qonversion.svg?style=flat)](https://qonversion.io)
+[![MIT License](https://img.shields.io/cocoapods/l/Qonversion.svg?style=flat)](https://qonversion.io)
 
 
 ## How It Works: Product Center
@@ -44,10 +44,10 @@ Monitor your in-app revenue metrics. Understand your customers and make better d
 
 ## Integrations
 
-Send subscription data to your favorite platforms Share your mobile and web subscription data using our powerful integrations.
+Send subscription data to your favorite platforms. Share your mobile and web subscription data using our powerful integrations.
 
 <p align="center">
-     <a href="https://documentation.qonversion.io/docs/integrations-overview"><img width="90%", src="https://qcdn3.sfo3.digitaloceanspaces.com/github/integrations.png">
+     <a href="https://documentation.qonversion.io/docs/integrations-overview"><img width="90%" src="https://qcdn3.sfo3.digitaloceanspaces.com/github/integrations.png">
      </a>
 </p>
 
@@ -101,7 +101,7 @@ Whether you’re a core user or trying it out for the first time, you can make a
 
 * sending us feedback about something you thought was confusing or simply missing
 * sending us a pull request via GitHub
-* suggesting better wording or ways of explaining certain topics in the [Qonversion documentation](http://documentation.qonversion.io). Use `SUGGEST EDITS` button in the top right corner.
+* suggesting better wording or ways of explaining certain topics in the [Qonversion documentation](https://documentation.qonversion.io). Use `SUGGEST EDITS` button in the top right corner.
 
 ## Contributing
 
