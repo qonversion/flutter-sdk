@@ -1,3 +1,6 @@
+## 4.0.0
+* From now Qonversion supports Google Play Billing Library 4.0.0 version for Android.
+
 ## 3.3.0
 * Add `purchaseProduct()`, `updatePurchaseWithProduct()`
 * Deprecate `resetUser()`
