@@ -44,4 +44,7 @@ class Constants {
   static const keyPrefix = 'com.qonversion.keys';
   static const sourceKey = '$keyPrefix.source';
   static const versionKey = '$keyPrefix.sourceVersion';
+
+  // Numeric constants
+  static const skuDetailsPriceRatio = 1000000;
 }

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:json_annotation/json_annotation.dart';
-
+import '../constants.dart';
 import 'product_duration.dart';
 import 'product_type.dart';
 import 'sk_product/sk_product_wrapper.dart';
@@ -42,23 +42,35 @@ class QProduct {
   @JsonKey(name: 'id')
   final String qonversionId;
 
-  /// Store Product ID.
+  /// Store product ID.
   ///
   /// See [Create Products](https://qonversion.io/docs/create-products)
   @JsonKey(name: 'store_id')
   final String? storeId;
 
-  /// Store Product title
+  /// Store product title
   @JsonKey(ignore: true)
   String? storeTitle;
 
-  /// Store Product description
+  /// Store product description
   @JsonKey(ignore: true)
   String? storeDescription;
+
+  /// Formatted localized price of the product, including its currency sign, such as €2.99
+  @JsonKey(name: 'pretty_price')
+  final String? prettyPrice;
+
+  /// Localized price of the product
+  @JsonKey(ignore: true)
+  double? price;
 
   /// Formatted introductory price of a subscription, including its currency sign, such as €2.99
   @JsonKey(ignore: true)
   String? prettyIntroductoryPrice;
+
+  /// Store Product currency code, such as USD
+  @JsonKey(ignore: true)
+  String? currencyCode;
 
   /// Product type.
   ///
@@ -77,10 +89,6 @@ class QProduct {
     unknownEnumValue: QProductDuration.unknown,
   )
   final QProductDuration? duration;
-
-  /// Localized price, e.g. 4.99 USD
-  @JsonKey(name: 'pretty_price')
-  final String? prettyPrice;
 
   /// Trial duration of the subscription
   @JsonKey(name: 'trial_duration')
@@ -115,6 +123,13 @@ class QProduct {
     if (Platform.isAndroid) {
       storeTitle = skuDetails?.title;
       storeDescription = skuDetails?.description;
+      currencyCode = skuDetails?.priceCurrencyCode;
+
+      // Returns the original price in micro-units, where 1000000 micro-units equal one unit of the currency
+      final price = skuDetails?.priceAmountMicros;
+      if (price != null) {
+        this.price = price / Constants.skuDetailsPriceRatio;
+      }
 
       final String? introPrice = skuDetails?.introductoryPrice;
       if (introPrice != null && introPrice.isEmpty) {
@@ -125,9 +140,14 @@ class QProduct {
     } else {
       storeTitle = skProduct?.localizedTitle;
       storeDescription = skProduct?.localizedDescription;
+      currencyCode = skProduct?.priceLocale?.currencyCode;
+
+      final price = skProduct?.price;
+      if (price != null) {
+        this.price = double.tryParse(price) ?? null;
+      }
 
       final SKProductDiscountWrapper? introPrice = skProduct?.introductoryPrice;
-
       final String? currencySymbol = introPrice?.priceLocale?.currencySymbol;
       if (introPrice != null && currencySymbol != null) {
         prettyIntroductoryPrice = currencySymbol + introPrice.price;
