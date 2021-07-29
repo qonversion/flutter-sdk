@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:json_annotation/json_annotation.dart';
 
 import 'product_duration.dart';
 import 'product_type.dart';
 import 'sk_product/sk_product_wrapper.dart';
 import 'sku_details/sku_details.dart';
+import 'sk_product/discount.dart';
 import 'utils/mapper.dart';
 
 part 'product.g.dart';
@@ -39,11 +42,23 @@ class QProduct {
   @JsonKey(name: 'id')
   final String qonversionId;
 
-  /// Apple Store Product ID.
+  /// Store Product ID.
   ///
   /// See [Create Products](https://qonversion.io/docs/create-products)
   @JsonKey(name: 'store_id')
   final String? storeId;
+
+  /// Store Product title
+  @JsonKey(ignore: true)
+  String? storeTitle;
+
+  /// Store Product description
+  @JsonKey(ignore: true)
+  String? storeDescription;
+
+  /// Formatted introductory price of a subscription, including its currency sign, such as €2.99
+  @JsonKey(ignore: true)
+  String? prettyIntroductoryPrice;
 
   /// Product type.
   ///
@@ -87,7 +102,7 @@ class QProduct {
   @JsonKey(name: 'offering_id')
   final String? offeringID;
 
-  const QProduct(
+  QProduct(
       this.qonversionId,
       this.storeId,
       this.type,
@@ -96,7 +111,29 @@ class QProduct {
       this.trialDuration,
       this.skProduct,
       this.skuDetails,
-      this.offeringID);
+      this.offeringID) {
+    if (Platform.isAndroid) {
+      storeTitle = skuDetails?.title;
+      storeDescription = skuDetails?.description;
+
+      final String? introPrice = skuDetails?.introductoryPrice;
+      if (introPrice != null && introPrice.isEmpty) {
+        prettyIntroductoryPrice = null;
+      } else {
+        prettyIntroductoryPrice = introPrice;
+      }
+    } else {
+      storeTitle = skProduct?.localizedTitle;
+      storeDescription = skProduct?.localizedDescription;
+
+      final SKProductDiscountWrapper? introPrice = skProduct?.introductoryPrice;
+
+      final String? currencySymbol = introPrice?.priceLocale?.currencySymbol;
+      if (introPrice != null && currencySymbol != null) {
+        prettyIntroductoryPrice = currencySymbol + introPrice.price;
+      }
+    }
+  }
 
   factory QProduct.fromJson(Map<String, dynamic> json) =>
       _$QProductFromJson(json);
