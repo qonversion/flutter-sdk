@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:json_annotation/json_annotation.dart';
 import '../constants.dart';
 import 'product_duration.dart';
@@ -120,34 +118,34 @@ class QProduct {
       this.skProduct,
       this.skuDetails,
       this.offeringID) {
-    if (Platform.isAndroid) {
-      storeTitle = skuDetails?.title;
-      storeDescription = skuDetails?.description;
-      currencyCode = skuDetails?.priceCurrencyCode;
+    final skuDetails = this.skuDetails;
+    final skProduct = this.skProduct;
+
+    if(skuDetails != null) {
+      storeTitle = skuDetails.title;
+      storeDescription = skuDetails.description;
+      currencyCode = skuDetails.priceCurrencyCode;
 
       // Returns the original price in micro-units, where 1000000 micro-units equal one unit of the currency
-      final price = skuDetails?.priceAmountMicros;
-      if (price != null) {
-        this.price = price / Constants.skuDetailsPriceRatio;
-      }
+      final price = skuDetails.priceAmountMicros;
+      this.price = price / Constants.skuDetailsPriceRatio;
 
-      final String? introPrice = skuDetails?.introductoryPrice;
+      final String? introPrice = skuDetails.introductoryPrice;
       if (introPrice != null && introPrice.isEmpty) {
         prettyIntroductoryPrice = null;
       } else {
         prettyIntroductoryPrice = introPrice;
       }
-    } else {
-      storeTitle = skProduct?.localizedTitle;
-      storeDescription = skProduct?.localizedDescription;
-      currencyCode = skProduct?.priceLocale?.currencyCode;
+    }
+    else if(skProduct != null) {
+      storeTitle = skProduct.localizedTitle;
+      storeDescription = skProduct.localizedDescription;
+      currencyCode = skProduct.priceLocale?.currencyCode;
 
-      final price = skProduct?.price;
-      if (price != null) {
-        this.price = double.tryParse(price) ?? null;
-      }
+      final price = skProduct.price;
+      this.price = double.tryParse(price) ?? null;
 
-      final SKProductDiscountWrapper? introPrice = skProduct?.introductoryPrice;
+      final SKProductDiscountWrapper? introPrice = skProduct.introductoryPrice;
       final String? currencySymbol = introPrice?.priceLocale?.currencySymbol;
       if (introPrice != null && currencySymbol != null) {
         prettyIntroductoryPrice = currencySymbol + introPrice.price;
