@@ -146,7 +146,7 @@ class QProduct {
       this.price = double.tryParse(price) ?? null;
 
       final SKProductDiscountWrapper? introPrice = skProduct.introductoryPrice;
-      final String? currencySymbol = introPrice?.priceLocale?.currencySymbol;
+      final String? currencySymbol = skProduct.priceLocale?.currencySymbol;
       if (introPrice != null && currencySymbol != null) {
         prettyIntroductoryPrice = currencySymbol + introPrice.price;
       }
