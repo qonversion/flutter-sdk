@@ -1,3 +1,6 @@
+## 3.3.1
+* Improved Android requests logic during the background and foreground app states.
+
 ## 3.3.0
 * Add `purchaseProduct()`, `updatePurchaseWithProduct()`
 * Deprecate `resetUser()`
