@@ -57,6 +57,7 @@ extension SKProductDiscount {
       "numberOfPeriods": numberOfPeriods,
       "subscriptionPeriod": subscriptionPeriod.toMap(),
       "paymentMode": paymentMode.rawValue,
+      "priceLocale": priceLocale.toMap()
     ]
   }
 }
