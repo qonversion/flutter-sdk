@@ -125,10 +125,8 @@ class QProduct {
       storeTitle = skuDetails.title;
       storeDescription = skuDetails.description;
       currencyCode = skuDetails.priceCurrencyCode;
-
       // Returns the original price in micro-units, where 1000000 micro-units equal one unit of the currency
-      final price = skuDetails.priceAmountMicros;
-      this.price = price / Constants.skuDetailsPriceRatio;
+      price = skuDetails.priceAmountMicros / Constants.skuDetailsPriceRatio;
 
       final String? introPrice = skuDetails.introductoryPrice;
       if (introPrice != null && introPrice.isEmpty) {
@@ -141,9 +139,7 @@ class QProduct {
       storeTitle = skProduct.localizedTitle;
       storeDescription = skProduct.localizedDescription;
       currencyCode = skProduct.priceLocale?.currencyCode;
-
-      final price = skProduct.price;
-      this.price = double.tryParse(price) ?? null;
+      price = double.tryParse(skProduct.price) ?? null;
 
       final SKProductDiscountWrapper? introPrice = skProduct.introductoryPrice;
       final String? currencySymbol = introPrice?.priceLocale?.currencySymbol;
