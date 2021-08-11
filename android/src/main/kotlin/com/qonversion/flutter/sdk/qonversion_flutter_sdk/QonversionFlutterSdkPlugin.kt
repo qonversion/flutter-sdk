@@ -133,7 +133,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
                         }
 
                         override fun onError(error: QonversionError) {
-                            result.qonversionError(error.description, error.additionalMessage)
+                            result.qonversionError(error)
                         }
                     }
             )
@@ -233,7 +233,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             }
 
             override fun onError(error: QonversionError) {
-                result.qonversionError(error.description, error.additionalMessage)
+                result.qonversionError(error)
             }
         })
     }
@@ -245,7 +245,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             }
 
             override fun onError(error: QonversionError) {
-                result.qonversionError(error.description, error.additionalMessage)
+                result.qonversionError(error)
             }
         })
     }
@@ -270,7 +270,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             }
 
             override fun onError(error: QonversionError) {
-                result.qonversionError(error.description, error.additionalMessage)
+                result.qonversionError(error)
             }
         })
     }
@@ -342,7 +342,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             }
 
             override fun onError(error: QonversionError) {
-                result.qonversionError(error.additionalMessage, error.description)
+                result.qonversionError(error)
             }
         })
     }
@@ -360,7 +360,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
                 result.success(permissions.mapValues { it.value.toMap() })
 
         override fun onError(error: QonversionError) =
-                result.qonversionError(error.description, error.additionalMessage)
+                result.qonversionError(error)
     }
 
     private fun handleMissingProductIdField(result: Result, functionName: String?) {
