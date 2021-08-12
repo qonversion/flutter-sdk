@@ -139,7 +139,7 @@ fun mapQProduct(jsonProduct: String): QProduct? {
     val trialDuration = mappedProduct[ProductFields.TRIAL_DURATION] as? Double
     val productTrialDuration = trialDuration?.toInt()?.let { QTrialDuration.fromType(it) }
 
-    val offeringId = mappedProduct[ProductFields.OFFERING_ID] as String
+    val offeringId = mappedProduct[ProductFields.OFFERING_ID] as? String
 
     val originalSkuDetails = mappedProduct[SkuDetailsFields.ORIGINAL_JSON] as? String
     val skuDetails = originalSkuDetails?.let { SkuDetails(it) }
