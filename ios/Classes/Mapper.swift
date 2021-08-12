@@ -13,15 +13,27 @@ enum ParsingError: Error {
 
 struct PurchaseResult {
   let permissions: [String : Qonversion.Permission]
-  let error: Error?
+  let error: NSError?
   let isCancelled: Bool
   
   func toMap() -> [String: Any?] {
     return [
       "permissions": permissions.mapValues { $0.toMap() },
-      "error": error?.localizedDescription,
+      "error": error?.toMap(),
       "is_cancelled": isCancelled,
     ]
+  }
+  
+}
+
+extension NSError {
+  func toMap() -> [String: Any?] {
+    let errorMap = [
+      "code": code,
+      "description": localizedDescription,
+      "additionalMessage": userInfo[NSDebugDescriptionErrorKey]]
+    
+    return errorMap
   }
 }
 
@@ -133,7 +145,7 @@ extension Dictionary {
     let product = Qonversion.Product()
     
     product.qonversionID = id
-   
+
     product.storeID = data[ProductFields.storeId] as? String ?? ""
     
     if let type = data[ProductFields.type] as? Int {

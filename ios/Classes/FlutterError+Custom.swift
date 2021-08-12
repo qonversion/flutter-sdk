@@ -38,10 +38,12 @@ extension FlutterError {
                                        message: "Could not find provider",
                                        details: passValidValue)
   
-  static func failedToGetProducts(_ description: String) -> FlutterError {
+  static func failedToGetProducts(_ error: NSError) -> FlutterError {
+    let additionalMessage = error.userInfo[NSDebugDescriptionErrorKey] ?? ""
+
     return FlutterError(code: "7",
-                        message: "Failed to get products",
-                        details: description)
+                        message: "Failed to get products. \(error.localizedDescription)",
+                        details: "Qonversion Error Code: \(error.code). Additional Message:\(additionalMessage)")
   }
   
   static let noProductId = FlutterError(code: "8",
@@ -52,10 +54,12 @@ extension FlutterError {
                                       message: "Could not find product",
                                       details: "Please provide a valid product")
   
-  static func qonversionError(_ description: String) -> FlutterError {
+  static func qonversionError(_ error: NSError) -> FlutterError {
+    let additionalMessage = error.userInfo[NSDebugDescriptionErrorKey] ?? ""
+    
     return FlutterError(code: "9",
-                        message: "Qonversion Error",
-                        details: description)
+                        message: error.localizedDescription,
+                        details: "Qonversion Error Code: \(error.code). Additional Message:\(additionalMessage)")
   }
   
   static func parsingError(_ description: String) -> FlutterError {
@@ -72,10 +76,12 @@ extension FlutterError {
                                             message: "Could not find property value",
                                             details: passValidValue)
   
-  static func offeringsError(_ description: String) -> FlutterError {
+  static func offeringsError(_ error: NSError) -> FlutterError {
+    let additionalMessage = error.userInfo[NSDebugDescriptionErrorKey] ?? ""
+
     return FlutterError(code: "Offerings",
-                        message: "Could not get offerings",
-                        details: description)
+                        message: "Could not get offerings. \(error.localizedDescription)",
+                        details: "Qonversion Error Code: \(error.code). Additional Message:\(additionalMessage)")
   }
   
   static let noSdkInfo = FlutterError(code: "15",

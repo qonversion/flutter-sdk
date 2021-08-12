@@ -1,5 +1,6 @@
 package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 
+import com.qonversion.android.sdk.QonversionError
 import io.flutter.plugin.common.MethodChannel
 
 private const val passValidValue = "Please make sure you pass a valid value"
@@ -36,8 +37,8 @@ fun MethodChannel.Result.noProductIdError() {
     return this.error("8", "Could not find productId value", "Please provide valid productId")
 }
 
-fun MethodChannel.Result.qonversionError(message: String, cause: String) {
-    return this.error("9", message, cause)
+fun MethodChannel.Result.qonversionError(error: QonversionError) {
+    return this.error("9", error.description, "Qonversion Error Code: ${error.code}. Additional Message: ${error.additionalMessage}")
 }
 
 fun MethodChannel.Result.noNewProductIdError() {
@@ -60,8 +61,8 @@ fun MethodChannel.Result.noPropertyValue() {
     return this.error("14", "Could not find property value", passValidValue)
 }
 
-fun MethodChannel.Result.offeringsError(description: String?, message: String?) {
-    return this.error("Offerings", "Could not get offerings", "$description $message")
+fun MethodChannel.Result.offeringsError(error: QonversionError) {
+    return this.error("Offerings", "Could not get offerings. ${error.description}.", "Qonversion Error Code: ${error.code}. Additional Message: ${error.additionalMessage}")
 }
 
 fun MethodChannel.Result.noSdkInfo() {

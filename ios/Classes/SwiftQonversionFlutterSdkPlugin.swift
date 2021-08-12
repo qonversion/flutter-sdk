@@ -117,8 +117,8 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     }
     
     Qonversion.launch(withKey: apiKey) { launchResult, error in
-      if let error = error {
-        return result(FlutterError.qonversionError(error.localizedDescription))
+      if let nsError = error as NSError? {
+        return result(FlutterError.qonversionError(nsError))
       }
       
       let resultMap = launchResult.toMap()
@@ -138,8 +138,8 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
 
   private func products(_ result: @escaping FlutterResult) {
     Qonversion.products { (products, error) in
-      if let error = error {
-        return result(FlutterError.failedToGetProducts(error.localizedDescription))
+      if let nsError = error as NSError? {
+        return result(FlutterError.failedToGetProducts(nsError))
       }
       
       let productsMap = products.mapValues { $0.toMap() }
@@ -154,8 +154,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     }
     
     Qonversion.purchase(productId) { (permissions, error, isCancelled) in
+      let nsError = error as NSError?
       let purchaseResult = PurchaseResult(permissions: permissions,
-                                          error: error,
+                                          error: nsError,
                                           isCancelled: isCancelled)
       result(purchaseResult.toMap())
     }
@@ -169,7 +170,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     do {
       let data = Data(jsonProduct.utf8)
       if let jsonMap = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-       
+
         guard let product = jsonMap.toProduct() else {
           let errorMessage = "Failed to deserialize Qonversion Product. There is no qonversionId"
           NSLog(errorMessage)
@@ -177,8 +178,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
         }
         
         Qonversion.purchaseProduct(product) { (permissions, error, isCancelled) in
+          let nsError = error as NSError?
           let purchaseResult = PurchaseResult(permissions: permissions,
-                                              error: error,
+                                              error: nsError,
                                               isCancelled: isCancelled)
           result(purchaseResult.toMap())
         }
@@ -199,8 +201,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       promoPurchasesExecutionBlocks.removeValue(forKey: productId)
       
       executionBlock { (permissions, error, isCancelled) in
+        let nsError = error as NSError?
         let purchaseResult = PurchaseResult(permissions: permissions,
-                                            error: error,
+                                            error: nsError,
                                             isCancelled: isCancelled)
         result(purchaseResult.toMap())
       }
@@ -211,8 +214,8 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
   
   private func checkPermissions(_ result: @escaping FlutterResult) {
     Qonversion.checkPermissions { (permissions, error) in
-      if let error = error {
-        return result(FlutterError.qonversionError(error.localizedDescription))
+      if let nsError = error as NSError? {
+        return result(FlutterError.qonversionError(nsError))
       }
       
       let permissionsDict = permissions.mapValues { $0.toMap() }
@@ -222,8 +225,8 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
   
   private func restore(_ result: @escaping FlutterResult) {
     Qonversion.restore { (permissions, error) in
-      if let error = error {
-        return result(FlutterError.qonversionError(error.localizedDescription))
+      if let nsError = error as NSError? {
+        return result(FlutterError.qonversionError(nsError))
       }
       
       let permissionsDict = permissions.mapValues { $0.toMap() }
@@ -233,8 +236,8 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
   
   private func offerings(_ result: @escaping FlutterResult) {
     Qonversion.offerings { offerings, error in
-      if let error = error {
-        result(FlutterError.offeringsError(error.localizedDescription))
+      if let nsError = error as NSError? {
+        result(FlutterError.offeringsError(nsError))
       }
       
       guard let offerings = offerings else {
@@ -273,7 +276,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     } catch ParsingError.runtimeError(let message) {
       result(FlutterError.parsingError(message))
     } catch {
-      result(FlutterError.qonversionError(error.localizedDescription))
+      if let nsError = error as NSError? {
+        result(FlutterError.qonversionError(nsError))
+      }
     }
   }
   
@@ -297,8 +302,8 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     }
     
     Qonversion.checkTrialIntroEligibility(forProductIds: ids) { eligibilities, error in
-      if let error = error {
-        return result(FlutterError.qonversionError(error.localizedDescription))
+      if let nsError = error as NSError? {
+        return result(FlutterError.qonversionError(nsError))
       }
       
       result(eligibilities.mapValues { $0.toMap() }.toJson())
