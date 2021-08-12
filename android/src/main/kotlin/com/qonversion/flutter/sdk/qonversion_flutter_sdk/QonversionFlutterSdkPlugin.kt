@@ -258,7 +258,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             }
 
             override fun onError(error: QonversionError) {
-                result.offeringsError(error.description, error.additionalMessage)
+                result.offeringsError(error)
             }
         })
     }
