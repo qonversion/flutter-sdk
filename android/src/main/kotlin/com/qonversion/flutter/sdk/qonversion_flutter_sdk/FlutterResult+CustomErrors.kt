@@ -61,8 +61,8 @@ fun MethodChannel.Result.noPropertyValue() {
     return this.error("14", "Could not find property value", passValidValue)
 }
 
-fun MethodChannel.Result.offeringsError(description: String?, message: String?) {
-    return this.error("Offerings", "Could not get offerings", "$description $message")
+fun MethodChannel.Result.offeringsError(error: QonversionError) {
+    return this.error("Offerings", "Could not get offerings. ${error.description}.", "Qonversion Error Code: ${error.code}. Additional Message: ${error.additionalMessage}")
 }
 
 fun MethodChannel.Result.noSdkInfo() {
