@@ -38,7 +38,8 @@ fun MethodChannel.Result.noProductIdError() {
 }
 
 fun MethodChannel.Result.qonversionError(error: QonversionError) {
-    return this.error("9", error.description, "Qonversion Error Code: ${error.code}. Additional Message: ${error.additionalMessage}")
+    val errorDetails = getErrorDetails(error)
+    return this.error("9", error.description, errorDetails)
 }
 
 fun MethodChannel.Result.noNewProductIdError() {
@@ -62,7 +63,8 @@ fun MethodChannel.Result.noPropertyValue() {
 }
 
 fun MethodChannel.Result.offeringsError(error: QonversionError) {
-    return this.error("Offerings", "Could not get offerings. ${error.description}.", "Qonversion Error Code: ${error.code}. Additional Message: ${error.additionalMessage}")
+    val errorDetails = getErrorDetails(error)
+    return this.error("Offerings", "Could not get offerings. ${error.description}.", errorDetails)
 }
 
 fun MethodChannel.Result.noSdkInfo() {
@@ -75,4 +77,13 @@ fun MethodChannel.Result.noProductIdField(details: String?) {
 
 fun MethodChannel.Result.jsonSerializationError(details: String?) {
     return this.error("JSONSerialization", "JSON Serialization Error", details)
+}
+
+private fun getErrorDetails(error: QonversionError): String {
+    var result = "Qonversion Error Code: ${error.code}"
+    if (error.additionalMessage.isNotEmpty()) {
+        result += ". Additional Message: ${error.additionalMessage}"
+    }
+
+    return result
 }
