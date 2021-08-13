@@ -1,3 +1,7 @@
+## 3.4.0
+* New Product fields: storeTitle, storeDescription, price, currencyCode, prettyIntroductoryPrice.
+* Improved errors details.
+
 ## 3.3.1
 * Improved Android requests logic during the background and foreground app states.
 

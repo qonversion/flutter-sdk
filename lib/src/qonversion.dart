@@ -16,7 +16,7 @@ import 'models/purchase_exception.dart';
 import 'qa_provider.dart';
 
 class Qonversion {
-  static const String _sdkVersion = "3.3.1";
+  static const String _sdkVersion = "3.4.0";
 
   static const MethodChannel _channel = MethodChannel('qonversion_flutter_sdk');
 
