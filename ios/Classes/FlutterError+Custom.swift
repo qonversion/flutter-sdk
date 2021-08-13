@@ -39,11 +39,7 @@ extension FlutterError {
                                        details: passValidValue)
   
   static func failedToGetProducts(_ error: NSError) -> FlutterError {
-    let additionalMessage = error.userInfo[NSDebugDescriptionErrorKey] ?? ""
-
-    return FlutterError(code: "7",
-                        message: "Failed to get products. \(error.localizedDescription)",
-                        details: "Qonversion Error Code: \(error.code). Additional Message:\(additionalMessage)")
+    return mapQonversionError(error, errorCode: "7", errorMessage: "Failed to get products")
   }
   
   static let noProductId = FlutterError(code: "8",
@@ -55,11 +51,7 @@ extension FlutterError {
                                       details: "Please provide a valid product")
   
   static func qonversionError(_ error: NSError) -> FlutterError {
-    let additionalMessage = error.userInfo[NSDebugDescriptionErrorKey] ?? ""
-    
-    return FlutterError(code: "9",
-                        message: error.localizedDescription,
-                        details: "Qonversion Error Code: \(error.code). Additional Message:\(additionalMessage)")
+    return mapQonversionError(error, errorCode: "9")
   }
   
   static func parsingError(_ description: String) -> FlutterError {
@@ -77,11 +69,7 @@ extension FlutterError {
                                             details: passValidValue)
   
   static func offeringsError(_ error: NSError) -> FlutterError {
-    let additionalMessage = error.userInfo[NSDebugDescriptionErrorKey] ?? ""
-
-    return FlutterError(code: "Offerings",
-                        message: "Could not get offerings. \(error.localizedDescription)",
-                        details: "Qonversion Error Code: \(error.code). Additional Message:\(additionalMessage)")
+    return mapQonversionError(error, errorCode: "Offerings", errorMessage: "Could not get offerings")
   }
   
   static let noSdkInfo = FlutterError(code: "15",
@@ -105,5 +93,24 @@ extension FlutterError {
     return FlutterError(code: "NoProductIdField",
                         message: "Could not find qonversionId in Product",
                         details: description)
+  }
+  
+  private static func mapQonversionError(_ error: NSError, errorCode: String, errorMessage: String? = nil) -> FlutterError {
+    var message = ""
+    
+    if let errorMessage = errorMessage {
+      message = errorMessage + ". "
+    }
+    message += error.localizedDescription
+    
+    var details = "Qonversion Error Code: \(error.code)"
+    
+    if let additionalMessage = error.userInfo[NSDebugDescriptionErrorKey] {
+      details = "\(details). Additional Message: \(additionalMessage)"
+    }
+    
+    return FlutterError(code: errorCode,
+                        message: message,
+                        details: details)
   }
 }
