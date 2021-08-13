@@ -49,4 +49,7 @@ class Constants {
   static const errorCode = 'code';
   static const errorDescription = 'description';
   static const errorAdditionalMessage = 'additionalMessage';
+
+  // Numeric constants
+  static const skuDetailsPriceRatio = 1000000;
 }
