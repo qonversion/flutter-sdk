@@ -1,3 +1,7 @@
+## 4.1.0
+* New Product fields: storeTitle, storeDescription, price, currencyCode, prettyIntroductoryPrice.
+* Improved errors details.
+
 ## 4.0.0
 * From now Qonversion supports Google Play Billing Library 4.0.0 version for Android.
 

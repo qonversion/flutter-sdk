@@ -16,7 +16,7 @@ import 'models/purchase_exception.dart';
 import 'qa_provider.dart';
 
 class Qonversion {
-  static const String _sdkVersion = "4.0.0";
+  static const String _sdkVersion = "4.1.0";
 
   static const MethodChannel _channel = MethodChannel('qonversion_flutter_sdk');
 
@@ -310,7 +310,9 @@ class Qonversion {
     final error = resultMap[Constants.kError];
     if (error != null) {
       throw QPurchaseException(
-        error,
+        error[Constants.errorCode]?.toString() ?? "",
+        error[Constants.errorDescription] ?? "",
+        error[Constants.errorAdditionalMessage],
         isUserCancelled: resultMap[Constants.kIsCancelled] ?? false,
       );
     }
