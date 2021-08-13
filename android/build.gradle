@@ -1,5 +1,5 @@
 group 'com.qonversion.flutter.sdk.qonversion_flutter_sdk'
-version '4.0.0'
+version '4.1.0'
 
 buildscript {
     ext.kotlin_version = '1.3.50'
