@@ -44,4 +44,9 @@ class Constants {
   static const keyPrefix = 'com.qonversion.keys';
   static const sourceKey = '$keyPrefix.source';
   static const versionKey = '$keyPrefix.sourceVersion';
+
+  // Error fields
+  static const errorCode = 'code';
+  static const errorDescription = 'description';
+  static const errorAdditionalMessage = 'additionalMessage';
 }

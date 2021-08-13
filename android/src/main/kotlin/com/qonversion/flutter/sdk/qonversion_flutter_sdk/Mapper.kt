@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import com.qonversion.android.sdk.QonversionError
+import com.qonversion.android.sdk.QonversionErrorCode
 import com.qonversion.android.sdk.dto.QLaunchResult
 import com.qonversion.android.sdk.dto.QPermission
 import com.qonversion.android.sdk.dto.eligibility.QEligibility
@@ -18,11 +19,21 @@ import com.qonversion.android.sdk.dto.products.QTrialDuration
 
 data class PurchaseResult(val permissions: Map<String, QPermission>? = null, val error: QonversionError? = null) {
     fun toMap(): Map<String, Any?> {
+        val isUserCancelled = error?.code == QonversionErrorCode.CanceledPurchase
         return mapOf(
                 "permissions" to permissions?.mapValues { it.value.toMap() },
-                "error" to (error?.description ?: error?.additionalMessage)
+                "error" to error.toMap(),
+                "is_cancelled" to isUserCancelled
         )
     }
+}
+
+fun QonversionError?.toMap(): Map<String, String>? {
+    if (this == null) return null
+
+    return mapOf("code" to code.toString(),
+            "description" to description,
+            "additionalMessage" to additionalMessage)
 }
 
 fun QLaunchResult.toMap(): Map<String, Any> {
@@ -128,7 +139,7 @@ fun mapQProduct(jsonProduct: String): QProduct? {
     val trialDuration = mappedProduct[ProductFields.TRIAL_DURATION] as? Double
     val productTrialDuration = trialDuration?.toInt()?.let { QTrialDuration.fromType(it) }
 
-    val offeringId = mappedProduct[ProductFields.OFFERING_ID] as String
+    val offeringId = mappedProduct[ProductFields.OFFERING_ID] as? String
 
     val originalSkuDetails = mappedProduct[SkuDetailsFields.ORIGINAL_JSON] as? String
     val skuDetails = originalSkuDetails?.let { SkuDetails(it) }
