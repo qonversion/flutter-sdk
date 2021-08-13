@@ -310,7 +310,9 @@ class Qonversion {
     final error = resultMap[Constants.kError];
     if (error != null) {
       throw QPurchaseException(
-        error,
+        error[Constants.errorCode]?.toString() ?? "",
+        error[Constants.errorDescription] ?? "",
+        error[Constants.errorAdditionalMessage],
         isUserCancelled: resultMap[Constants.kIsCancelled] ?? false,
       );
     }
