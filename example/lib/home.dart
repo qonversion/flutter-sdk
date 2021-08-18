@@ -94,7 +94,7 @@ class _HomeViewState extends State<HomeView> {
 
   Future<void> _initPlatformState() async {
     if (kDebugMode) {
-      await Qonversion.setDebugMode();
+      Qonversion.setDebugMode();
     }
 
     Qonversion.launch(
