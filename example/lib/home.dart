@@ -102,10 +102,10 @@ class _HomeViewState extends State<HomeView> {
       isObserveMode: false,
     );
 
-    _loadUI();
+    _loadQonversionObjects();
   }
 
-  Future<void> _loadUI() async {
+  Future<void> _loadQonversionObjects() async {
     try {
       _products = await Qonversion.products();
       _permissions = await Qonversion.checkPermissions();
