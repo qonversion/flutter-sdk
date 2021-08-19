@@ -21,8 +21,8 @@ class ParamsView extends StatelessWidget {
               child: Text('Set User ID'),
               color: Colors.green,
               textColor: Colors.white,
-              onPressed: () async {
-                await Qonversion.setUserId('customId');
+              onPressed: () {
+                Qonversion.setUserId('customId');
                 print('did set user id');
               },
             ),
@@ -30,9 +30,8 @@ class ParamsView extends StatelessWidget {
               child: Text('Set User Property'),
               color: Colors.blue,
               textColor: Colors.white,
-              onPressed: () async {
-                await Qonversion.setUserProperty(
-                    'customProperty', 'customValue');
+              onPressed: () {
+                Qonversion.setUserProperty('customProperty', 'customValue');
                 print('did set user property');
               },
             ),
@@ -41,8 +40,8 @@ class ParamsView extends StatelessWidget {
                 child: Text('Set ${describeEnum(v)}'),
                 color: Colors.purple,
                 textColor: Colors.white,
-                onPressed: () async {
-                  await Qonversion.setProperty(v, 'email@email.com');
+                onPressed: () {
+                  Qonversion.setProperty(v, 'email@email.com');
                   print('did set property');
                 },
               ),

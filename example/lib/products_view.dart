@@ -37,7 +37,9 @@ class _ProductsViewState extends State<ProductsView> {
             orElse: () => null);
 
         print(permission?.isActive);
-      } catch (e) {
+      } on QPurchaseException catch (e) {
+        // check if a user canceled the purchase
+        // e.isUserCancelled
         print(e);
       }
     });
@@ -77,11 +79,15 @@ class _ProductsViewState extends State<ProductsView> {
                         color: Colors.yellow,
                         textColor: Colors.black,
                         onPressed: () async {
-                          final res =
-                              await Qonversion.checkTrialIntroEligibility(
-                                  _products.keys.toList());
-                          print(res.map(
-                              (key, value) => MapEntry(key, value.status)));
+                          try {
+                            final res =
+                                await Qonversion.checkTrialIntroEligibility(
+                                    _products.keys.toList());
+                            print(res.map(
+                                (key, value) => MapEntry(key, value.status)));
+                          } catch (e) {
+                            print(e);
+                          }
                         },
                       ),
                     ),
@@ -116,10 +122,7 @@ class _ProductsViewState extends State<ProductsView> {
       children: [
         ListTile(
           title: Text('Store ID: ${product.storeId}'),
-          subtitle: Text('Q ID: ${product.qonversionId}'),
-          trailing: product.skProduct != null
-              ? Text(product.skProduct.localizedTitle)
-              : null,
+          subtitle: Text('Q ID: ${product.qonversionId}.\nStore Title: ${product.storeTitle}'),
           onTap: () => print(product.toJson()),
         ),
         Padding(
@@ -129,12 +132,19 @@ class _ProductsViewState extends State<ProductsView> {
             color: Colors.blue,
             textColor: Colors.white,
             onPressed: () async {
-              final permissions = await Qonversion.purchase(product.qonversionId);
-              final permission =  permissions.values.firstWhere(
-                      (element) => element.productId == product.qonversionId,
-                  orElse: () => null);
+              try {
+                final permissions =
+                    await Qonversion.purchaseProduct(product);
+                final permission = permissions.values.firstWhere(
+                    (element) => element.productId == product.qonversionId,
+                    orElse: () => null);
 
-              print(permission?.isActive);
+                print(permission?.isActive);
+              } on QPurchaseException catch (e) {
+                // check if a user canceled the purchase
+                // e.isUserCancelled
+                print(e);
+              }
             },
           ),
         ),
@@ -176,9 +186,6 @@ class _ProductsViewState extends State<ProductsView> {
           ListTile(
             title: Text('Store ID: ${product.storeId}'),
             subtitle: Text('Q ID: ${product.qonversionId}'),
-            trailing: product.skProduct != null
-                ? Text(product.skProduct.localizedTitle)
-                : null,
           )
     ];
   }
