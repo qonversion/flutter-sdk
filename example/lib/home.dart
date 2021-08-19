@@ -10,12 +10,13 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  QLaunchResult _qLaunchResult;
+  Map<String, QPermission> _permissions;
+  Map<String, QProduct> _products;
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    _initPlatformState();
   }
 
   @override
@@ -25,25 +26,15 @@ class _HomeViewState extends State<HomeView> {
         title: const Text('Qonversion example app'),
       ),
       body: Center(
-        child: _qLaunchResult == null
+        child: _products == null && _permissions == null
             ? CircularProgressIndicator()
             : ListView(
                 children: [
                   Padding(padding: EdgeInsets.only(top: 20)),
-                  ListTile(
-                    title: Text('UID'),
-                    subtitle: Text(_qLaunchResult.uid),
-                  ),
-                  ListTile(
-                    title: Text('DateTime'),
-                    subtitle: Text(_qLaunchResult.date?.toString() ?? 'n/a'),
-                  ),
                   ListTile(title: Text('PRODUCTS:')),
-                  ...productsFromMap(_qLaunchResult.products),
+                  ..._productsFromMap(_products ?? {}),
                   ListTile(title: Text('PERMISSIONS:')),
-                  ..._permissionsFromMap(_qLaunchResult.permissions),
-                  ListTile(title: Text('USER PRODUCTS:')),
-                  ...productsFromMap(_qLaunchResult.userProducts),
+                  ..._permissionsFromMap(_permissions ?? {}),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: FlatButton(
@@ -101,15 +92,28 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Future<void> initPlatformState() async {
+  Future<void> _initPlatformState() async {
     if (kDebugMode) {
-      await Qonversion.setDebugMode();
+      Qonversion.setDebugMode();
     }
 
-    _qLaunchResult = await Qonversion.launch(
+    Qonversion.launch(
       'PV77YHL7qnGvsdmpTs7gimsxUvY-Znl2',
       isObserveMode: false,
     );
+
+    _loadQonversionObjects();
+  }
+
+  Future<void> _loadQonversionObjects() async {
+    try {
+      _products = await Qonversion.products();
+      _permissions = await Qonversion.checkPermissions();
+    } catch (e) {
+      print(e);
+      _products = {};
+      _permissions = {};
+    }
 
     setState(() {});
   }
@@ -136,24 +140,24 @@ class _HomeViewState extends State<HomeView> {
         )
         .toList();
   }
-}
 
-List<Widget> productsFromMap(Map<String, QProduct> products) {
-  return products.entries
-      .map<Widget>(
-        (e) => ListTile(
-          title: Text(e.key),
-          subtitle: Text(
-            e.value.qonversionId ??
-                '' + '\n' + e.value.storeId ??
-                '' +
-                    '\n' +
-                    e.value.duration.toString() +
-                    '\n' +
-                    e.value.type.toString() +
-                    '\n',
+  List<Widget> _productsFromMap(Map<String, QProduct> products) {
+    return products.entries
+        .map<Widget>(
+          (e) => ListTile(
+            title: Text(e.key),
+            subtitle: Text(
+              e.value.qonversionId ??
+                  '' + '\n' + e.value.storeId ??
+                  '' +
+                      '\n' +
+                      e.value.duration.toString() +
+                      '\n' +
+                      e.value.type.toString() +
+                      '\n',
+            ),
           ),
-        ),
-      )
-      .toList();
+        )
+        .toList();
+  }
 }
