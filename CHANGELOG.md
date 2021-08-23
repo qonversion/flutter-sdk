@@ -1,3 +1,6 @@
+## 4.1.1
+* Fix StrictMode policy violation errors in the Google Play Console pre-launch report.
+
 ## 4.1.0
 * New Product fields: storeTitle, storeDescription, price, currencyCode, prettyIntroductoryPrice.
 * Improved errors details.
