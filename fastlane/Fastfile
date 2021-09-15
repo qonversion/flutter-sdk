@@ -1,5 +1,5 @@
 def update_dart(new_version)
-  path = Dir['../**/qonversion.dart'].first
+  path = Dir['../lib/**/qonversion.dart'].first
   regex = /static const String _sdkVersion = ".*";/
   result_value = "static const String _sdkVersion = \"#{new_version}\";"
 
