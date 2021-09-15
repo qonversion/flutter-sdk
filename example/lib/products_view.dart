@@ -9,7 +9,7 @@ class ProductsView extends StatefulWidget {
 }
 
 class _ProductsViewState extends State<ProductsView> {
-  var _products = <String, QProduct>{};
+  var _products = <QProduct>[];
   QOfferings _offerings;
   StreamSubscription<Map<String, QPermission>> _deferredPurchasesStream;
   StreamSubscription<String> _promoPurchasesStream;
@@ -17,7 +17,6 @@ class _ProductsViewState extends State<ProductsView> {
   @override
   void initState() {
     super.initState();
-    _loadProducts();
     _loadOfferings();
 
     _deferredPurchasesStream =
@@ -28,7 +27,7 @@ class _ProductsViewState extends State<ProductsView> {
       try {
         final permissions = await Qonversion.promoPurchase(promoPurchaseId);
         // Get Qonversion product by App Store ID
-        final qProduct = _products.values.firstWhere(
+        final qProduct = _products.firstWhere(
             (element) => element.storeId == promoPurchaseId,
             orElse: () => null);
         // Get permission by Qonversion product
@@ -65,7 +64,7 @@ class _ProductsViewState extends State<ProductsView> {
             : ListView(
                 children: [
                   if (_products != null)
-                    for (final p in _products.values) _productWidget(p),
+                    for (final p in _products) _productWidget(p),
                   if (_offerings != null) _offeringsWidget(_offerings),
                   if (_products != null)
                     Padding(
@@ -80,9 +79,10 @@ class _ProductsViewState extends State<ProductsView> {
                         textColor: Colors.black,
                         onPressed: () async {
                           try {
+                            final ids = _products.map((product) => product.storeId).toList();
                             final res =
-                                await Qonversion.checkTrialIntroEligibility(
-                                    _products.keys.toList());
+                                await Qonversion.checkTrialIntroEligibility(ids);
+
                             print(res.map(
                                 (key, value) => MapEntry(key, value.status)));
                           } catch (e) {
@@ -97,19 +97,20 @@ class _ProductsViewState extends State<ProductsView> {
     );
   }
 
-  Future<void> _loadProducts() async {
-    try {
-      _products = await Qonversion.products();
-      setState(() {});
-    } catch (e) {
-      print(e);
-      _products = {};
-    }
-  }
-
   Future<void> _loadOfferings() async {
     try {
       _offerings = await Qonversion.offerings();
+      _loadProducts();
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> _loadProducts() async {
+    try {
+      var mainOffering = _offerings.offeringForIdentifier("main");
+      _products = mainOffering.products;
       setState(() {});
     } catch (e) {
       print(e);
