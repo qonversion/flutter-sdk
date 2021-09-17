@@ -294,6 +294,11 @@ class Qonversion {
     return QMapper.eligibilityFromJson(eligibilitiesString);
   }
 
+  /// Enable attribution collection from Apple Search Ads. NO by default.
+  static Future<void> setAppleSearchAdsAttributionEnabled(bool enable) =>
+      _channel.invokeMethod(Constants.mSetAppleSearchAdsAttributionEnabled,
+          {Constants.kEnableAppleSearchAdsAttribution: enable});
+
   // Private methods
   static Future<void> _storeSdkInfo() =>
       _channel.invokeMethod(Constants.mStoreSdkInfo, {
