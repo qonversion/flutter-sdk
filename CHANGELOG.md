@@ -1,5 +1,5 @@
 ## 4.2.0
-* // Update changelog here
+* Add `setAppleSearchAdsAttributionEnabled()` method
 
 ## 4.1.1
 * Fix StrictMode policy violation errors in the Google Play Console pre-launch report.
