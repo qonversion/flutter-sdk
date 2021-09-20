@@ -40,7 +40,8 @@ class Constants {
   static const mStoreSdkInfo = 'storeSdkInfo';
   static const mIdentify = 'identify';
   static const mLogout = 'logout';
-  static const mSetAppleSearchAdsAttributionEnabled = 'setAppleSearchAdsAttributionEnabled';
+  static const mSetAppleSearchAdsAttributionEnabled =
+      'setAppleSearchAdsAttributionEnabled';
 
   // Keys for NSUserDefaults on iOS and SharedPreferences on Android
   static const keyPrefix = 'com.qonversion.keys';

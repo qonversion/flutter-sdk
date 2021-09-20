@@ -121,7 +121,7 @@ class QProduct {
     final skuDetails = this.skuDetails;
     final skProduct = this.skProduct;
 
-    if(skuDetails != null) {
+    if (skuDetails != null) {
       storeTitle = skuDetails.title;
       storeDescription = skuDetails.description;
       currencyCode = skuDetails.priceCurrencyCode;
@@ -134,8 +134,7 @@ class QProduct {
       } else {
         prettyIntroductoryPrice = introPrice;
       }
-    }
-    else if(skProduct != null) {
+    } else if (skProduct != null) {
       storeTitle = skProduct.localizedTitle;
       storeDescription = skProduct.localizedDescription;
       currencyCode = skProduct.priceLocale?.currencyCode;
