@@ -1,0 +1,38 @@
+def update_dart(new_version)
+  path = Dir['../lib/**/qonversion.dart'].first
+  regex = /static const String _sdkVersion = ".*";/
+  result_value = "static const String _sdkVersion = \"#{new_version}\";"
+
+  update_file(path, regex, result_value)
+end
+
+def update_yaml(new_version)
+  path = "../pubspec.yaml"
+  regex = /version: .*/
+  result_value = "version: #{new_version}"
+
+  update_file(path, regex, result_value)
+end
+
+def update_file(path, regex, result_value)
+  file = File.read(path)
+  new_content = file.gsub(regex, result_value)
+  File.open(path, 'w') { |line| line.puts new_content }
+end
+
+def update_changelog(new_version)
+  changelog_update = "\#\# #{new_version}\n* // Update changelog here\n\n"
+  path = "../CHANGELOG.md"
+  file = File.read(path)
+  File.open(path, 'w') { |line| 
+    line.puts changelog_update + file 
+  }
+end
+
+lane :bump do |options|
+  new_version = options[:version]
+
+  update_dart(new_version)
+  update_yaml(new_version)
+  update_changelog(new_version)
+end

@@ -106,6 +106,10 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     case "identify":
         return identify(args["userId"] as? String, result)
       
+    case "setAppleSearchAdsAttributionEnabled":
+      let enable = args["enable"] as? Bool ?? false
+      return setAppleSearchAdsAttributionEnabled(enable, result)
+        
     default:
       return result(FlutterMethodNotImplemented)
     }
@@ -347,6 +351,13 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     
     Qonversion.addAttributionData(data, from: castedProvider)
     
+    result(nil)
+  }
+  
+  private func setAppleSearchAdsAttributionEnabled(_ enable: Bool, _ result: @escaping FlutterResult) {
+    if enable {
+      Qonversion.setAppleSearchAdsAttributionEnabled(enable)
+    }
     result(nil)
   }
 }

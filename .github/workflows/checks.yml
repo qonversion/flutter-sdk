@@ -1,0 +1,25 @@
+name: Checks
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  lint:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+      
+      - uses: actions/setup-java@v1
+        name: Setup Java
+        with:
+          java-version: '12.x'
+          
+      - uses: subosito/flutter-action@v1
+        name: Setup Flutter
+        with:
+          channel: 'stable'
+      - run: flutter pub get
+      - name: Validation
+        run: flutter pub publish --dry-run

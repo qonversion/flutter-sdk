@@ -16,7 +16,7 @@ import 'models/purchase_exception.dart';
 import 'qa_provider.dart';
 
 class Qonversion {
-  static const String _sdkVersion = "4.1.1";
+  static const String _sdkVersion = "4.2.0";
 
   static const MethodChannel _channel = MethodChannel('qonversion_flutter_sdk');
 
@@ -293,6 +293,11 @@ class Qonversion {
 
     return QMapper.eligibilityFromJson(eligibilitiesString);
   }
+
+  /// Enable attribution collection from Apple Search Ads. NO by default.
+  static Future<void> setAppleSearchAdsAttributionEnabled(bool enable) =>
+      _channel.invokeMethod(Constants.mSetAppleSearchAdsAttributionEnabled,
+          {Constants.kEnableAppleSearchAdsAttribution: enable});
 
   // Private methods
   static Future<void> _storeSdkInfo() =>
