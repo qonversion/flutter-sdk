@@ -12,6 +12,7 @@ class AutomationsPlugin {
     private var failedActionsStreamHandler: BaseEventStreamHandler? = null
     private var finishedActionsStreamHandler: BaseEventStreamHandler? = null
     private var finishedAutomationsStreamHandler: BaseEventStreamHandler? = null
+    private val automationsDelegate = getAutomationsDelegate()
 
     companion object {
         const val EVENT_CHANNEL_SHOWN_SCREENS = "shown_screens"
@@ -44,29 +45,31 @@ class AutomationsPlugin {
     }
 
     fun setAutomationsDelegate() {
-        Automations.setDelegate(object : AutomationsDelegate {
-            override fun automationsDidShowScreen(screenId: String) {
-                shownScreensStreamHandler?.eventSink?.success(screenId)
-            }
+        Automations.setDelegate(automationsDelegate)
+    }
 
-            override fun automationsDidStartExecuting(actionResult: QActionResult) {
-                val payload = Gson().toJson(actionResult.toMap())
-                startedActionsStreamHandler?.eventSink?.success(payload)
-            }
+    private fun getAutomationsDelegate() = object : AutomationsDelegate {
+        override fun automationsDidShowScreen(screenId: String) {
+            shownScreensStreamHandler?.eventSink?.success(screenId)
+        }
 
-            override fun automationsDidFailExecuting(actionResult: QActionResult) {
-                val payload = Gson().toJson(actionResult.toMap())
-                failedActionsStreamHandler?.eventSink?.success(payload)
-            }
+        override fun automationsDidStartExecuting(actionResult: QActionResult) {
+            val payload = Gson().toJson(actionResult.toMap())
+            startedActionsStreamHandler?.eventSink?.success(payload)
+        }
 
-            override fun automationsDidFinishExecuting(actionResult: QActionResult) {
-                val payload = Gson().toJson(actionResult.toMap())
-                finishedActionsStreamHandler?.eventSink?.success(payload)
-            }
+        override fun automationsDidFailExecuting(actionResult: QActionResult) {
+            val payload = Gson().toJson(actionResult.toMap())
+            failedActionsStreamHandler?.eventSink?.success(payload)
+        }
 
-            override fun automationsFinished() {
-                finishedAutomationsStreamHandler?.eventSink?.success(null)
-            }
-        })
+        override fun automationsDidFinishExecuting(actionResult: QActionResult) {
+            val payload = Gson().toJson(actionResult.toMap())
+            finishedActionsStreamHandler?.eventSink?.success(payload)
+        }
+
+        override fun automationsFinished() {
+            finishedAutomationsStreamHandler?.eventSink?.success(null)
+        }
     }
 }
