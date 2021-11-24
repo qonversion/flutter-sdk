@@ -15,7 +15,7 @@ class QLaunchResult {
   /// Original Server response time
   @JsonKey(
     name: 'timestamp',
-    fromJson: QMapper.dateTimeFromSecondsTimestamp,
+    fromJson: QMapper.dateTimeFromNullableSecondsTimestamp,
   )
   final DateTime? date;
 

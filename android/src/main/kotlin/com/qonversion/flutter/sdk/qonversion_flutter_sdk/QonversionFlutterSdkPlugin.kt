@@ -2,9 +2,9 @@ package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 
 import android.app.Activity
 import android.app.Application
+import android.preference.PreferenceManager
 import android.util.Log
 import androidx.annotation.NonNull
-import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.qonversion.android.sdk.*
@@ -30,6 +30,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
     private var application: Application? = null
     private var channel: MethodChannel? = null
     private var deferredPurchasesStreamHandler: BaseEventStreamHandler? = null
+    private var automationsPlugin: AutomationsPlugin? = null
 
     companion object {
         const val METHOD_CHANNEL = "qonversion_flutter_sdk"
@@ -115,6 +116,8 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             "checkTrialIntroEligibility" -> checkTrialIntroEligibility(args, result)
             "storeSdkInfo" -> storeSdkInfo(args, result)
             "identify" -> identify(args["userId"] as? String, result)
+            "setNotificationsToken" -> setNotificationsToken(args["notificationsToken"] as? String, result)
+            "handleNotification" -> handleNotification(args, result)
             else -> result.notImplemented()
         }
     }
@@ -138,7 +141,9 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
                     }
             )
             startListeningPendingPurchasesEvents()
-        } ?: result.error(QonversionErrorCode.UnknownError.name, "Couldn't launch Qonversion. There is no Application context", null)
+            automationsPlugin?.setAutomationsDelegate()
+        }
+                ?: result.error(QonversionErrorCode.UnknownError.name, "Couldn't launch Qonversion. There is no Application context", null)
     }
 
     private fun identify(userId: String?, result: Result) {
@@ -347,6 +352,25 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
         })
     }
 
+    private fun setNotificationsToken(token: String?, result: Result) {
+        token?.let {
+            Qonversion.setNotificationsToken(it)
+            result.success(null)
+        } ?: result.noArgsError()
+    }
+
+    private fun handleNotification(args: Map<String, Any>, result: Result) {
+        val data = args["notificationData"] as? Map<String, Any> ?: return result.noDataError()
+
+        if (data.isEmpty()) {
+            return result.noDataError()
+        }
+       
+        val stringsMap: Map<String, String> = data.mapValues { it.value.toString() }
+        val isQonversionNotification = Qonversion.handleNotification(stringsMap)
+        result.success(isQonversionNotification)
+    }
+
     private fun getPurchasesListener(result: Result) = object : QonversionPermissionsCallback {
         override fun onSuccess(permissions: Map<String, QPermission>) =
                 result.success(PurchaseResult(permissions).toMap())
@@ -414,6 +438,9 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
         // Register promo purchases events. Android SDK does not generate any promo purchases yet
         val promoPurchasesListener = BaseListenerWrapper(messenger, EVENT_CHANNEL_PROMO_PURCHASES)
         promoPurchasesListener.register()
+        automationsPlugin = AutomationsPlugin().apply {
+            register(messenger)
+        }
     }
 
     private fun tearDown() {

@@ -10,6 +10,8 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
   var deferredPurchasesStreamHandler: BaseEventStreamHandler?
   var promoPurchasesStreamHandler: BaseEventStreamHandler?
   var promoPurchasesExecutionBlocks = [String: Qonversion.PromoPurchaseCompletionHandler]()
+  private var automationsPlugin: AutomationsPlugin?
+  private var shownScreensStreamHandler: BaseEventStreamHandler?
   
   public static func register(with registrar: FlutterPluginRegistrar) {
     let messenger: FlutterBinaryMessenger
@@ -31,6 +33,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     let promoPurchasesListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "promo_purchases")
     promoPurchasesListener.register() { instance.promoPurchasesStreamHandler = $0 }
     Qonversion.setPromoPurchasesDelegate(instance)
+    
+    instance.automationsPlugin = AutomationsPlugin()
+    instance.automationsPlugin?.register(registrar)
   }
   
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -109,7 +114,13 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     case "setAppleSearchAdsAttributionEnabled":
       let enable = args["enable"] as? Bool ?? false
       return setAppleSearchAdsAttributionEnabled(enable, result)
-        
+      
+    case "setNotificationsToken":
+      return setNotificationsToken(args["notificationsToken"] as? String, result)
+      
+    case "handleNotification":
+      return handleNotification(args, result)
+      
     default:
       return result(FlutterMethodNotImplemented)
     }
@@ -359,6 +370,25 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       Qonversion.setAppleSearchAdsAttributionEnabled(enable)
     }
     result(nil)
+  }
+  
+  private func setNotificationsToken(_ token: String?, _ result: @escaping FlutterResult) {
+    guard let token = token else {
+      result(FlutterError.noArgs)
+      return
+    }
+    let tokenData = token.toData()
+    Qonversion.setNotificationsToken(tokenData)
+    result(nil)
+  }
+  
+  private func handleNotification(_ args: [AnyHashable: Any], _ result: @escaping FlutterResult) {
+    guard let notificationData = args["notificationData"] as? [AnyHashable: Any] else {
+      return result(FlutterError.noData)
+    }
+    
+    let isPushHandled: Bool = Qonversion.handleNotification(notificationData)
+    result(isPushHandled)
   }
 }
 

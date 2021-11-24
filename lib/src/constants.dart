@@ -17,6 +17,8 @@ class Constants {
   static const kValue = 'value';
   static const kProrationMode = 'proration_mode';
   static const kEnableAppleSearchAdsAttribution = 'enable';
+  static const kNotificationsToken = 'notificationsToken';
+  static const kNotificationData = 'notificationData';
 
   // MethodChannel methods names
   static const mLaunch = 'launch';
@@ -42,6 +44,8 @@ class Constants {
   static const mLogout = 'logout';
   static const mSetAppleSearchAdsAttributionEnabled =
       'setAppleSearchAdsAttributionEnabled';
+  static const mSetNotificationsToken = 'setNotificationsToken';
+  static const mHandleNotification = 'handleNotification';
 
   // Keys for NSUserDefaults on iOS and SharedPreferences on Android
   static const keyPrefix = 'com.qonversion.keys';

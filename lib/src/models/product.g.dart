@@ -25,9 +25,9 @@ QProduct _$QProductFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$QProductToJson(QProduct instance) => <String, dynamic>{
       'id': instance.qonversionId,
       'store_id': instance.storeId,
+      'pretty_price': instance.prettyPrice,
       'type': _$QProductTypeEnumMap[instance.type],
       'duration': _$QProductDurationEnumMap[instance.duration],
-      'pretty_price': instance.prettyPrice,
       'trial_duration': _$QTrialDurationEnumMap[instance.trialDuration],
       'sk_product': instance.skProduct,
       'sku_details': instance.skuDetails,

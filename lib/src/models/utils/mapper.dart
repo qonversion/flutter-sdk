@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import '../qonversion_error.dart';
 import '../eligibility.dart';
 import '../offerings.dart';
 import '../permission.dart';
@@ -100,10 +101,27 @@ class QMapper {
     }
   }
 
-  static DateTime? dateTimeFromSecondsTimestamp(num? timestamp) {
+  static DateTime? dateTimeFromNullableSecondsTimestamp(num? timestamp) {
     if (timestamp == null) return null;
 
+    return dateTimeFromSecondsTimestamp(timestamp);
+  }
+
+  static DateTime dateTimeFromSecondsTimestamp(num timestamp) {
     final intAbsTimestamp = timestamp.toInt().abs();
     return DateTime.fromMillisecondsSinceEpoch(intAbsTimestamp);
+  }
+
+  static QError? qonversionErrorFromJson(dynamic json) {
+    if (json == null) return null;
+
+    final map = Map<String, dynamic>.from(json);
+
+    try {
+      return QError.fromJson(map);
+    } catch (e) {
+      print('Could not parse QError: $e');
+      return null;
+    }
   }
 }
