@@ -1,3 +1,6 @@
+## 4.3.0
+* // Update changelog here
+
 ## 4.2.0
 * Add `setAppleSearchAdsAttributionEnabled()` method
 
