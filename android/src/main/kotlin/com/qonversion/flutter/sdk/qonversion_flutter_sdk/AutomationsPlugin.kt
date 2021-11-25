@@ -15,11 +15,11 @@ class AutomationsPlugin {
     private val automationsDelegate = getAutomationsDelegate()
 
     companion object {
-        const val EVENT_CHANNEL_SHOWN_SCREENS = "shown_screens"
-        const val EVENT_CHANNEL_STARTED_ACTIONS = "started_actions"
-        const val EVENT_CHANNEL_FAILED_ACTIONS = "failed_actions"
-        const val EVENT_CHANNEL_FINISHED_ACTIONS = "finished_actions"
-        const val EVENT_CHANNEL_FINISHED_AUTOMATIONS = "finished_automations"
+        private const val EVENT_CHANNEL_SHOWN_SCREENS = "shown_screens"
+        private const val EVENT_CHANNEL_STARTED_ACTIONS = "started_actions"
+        private const val EVENT_CHANNEL_FAILED_ACTIONS = "failed_actions"
+        private const val EVENT_CHANNEL_FINISHED_ACTIONS = "finished_actions"
+        private const val EVENT_CHANNEL_FINISHED_AUTOMATIONS = "finished_automations"
     }
 
     fun register(messenger: BinaryMessenger) {
