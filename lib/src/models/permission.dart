@@ -28,14 +28,14 @@ class QPermission {
   /// Purchase date
   @JsonKey(
     name: 'started_timestamp',
-    fromJson: QMapper.dateTimeFromSecondsTimestamp,
+    fromJson: QMapper.dateTimeFromNullableSecondsTimestamp,
   )
   final DateTime? startedDate;
 
   /// Expiration date for subscription
   @JsonKey(
     name: 'expiration_timestamp',
-    fromJson: QMapper.dateTimeFromSecondsTimestamp,
+    fromJson: QMapper.dateTimeFromNullableSecondsTimestamp,
   )
   final DateTime? expirationDate;
 
