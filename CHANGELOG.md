@@ -1,5 +1,7 @@
 ## 4.3.0
-* // Update changelog here
+* Qonversion Automation allows sending automated, personalized push notifications and in-app messages initiated by in-app purchase events.
+This feature is designed to increase your app's revenue and retention, provide cancellation insights, reduce subscriber churn, and improve your subscribers' user experience.
+See more in the [documentation](https://documentation.qonversion.io/docs/automations).
 
 ## 4.2.0
 * Add `setAppleSearchAdsAttributionEnabled()` method
