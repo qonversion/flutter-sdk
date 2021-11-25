@@ -6,6 +6,10 @@ import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import com.qonversion.android.sdk.QonversionError
 import com.qonversion.android.sdk.QonversionErrorCode
+import com.qonversion.android.sdk.automations.AutomationsEvent
+import com.qonversion.android.sdk.automations.AutomationsEventType
+import com.qonversion.android.sdk.automations.QActionResult
+import com.qonversion.android.sdk.automations.QActionResultType
 import com.qonversion.android.sdk.dto.QLaunchResult
 import com.qonversion.android.sdk.dto.QPermission
 import com.qonversion.android.sdk.dto.eligibility.QEligibility
@@ -149,5 +153,50 @@ fun mapQProduct(jsonProduct: String): QProduct? {
         it.offeringID = offeringId
         it.prettyPrice = prettyPrice
         it.trialDuration = productTrialDuration
+    }
+}
+
+fun QActionResult.toMap(): Map<String, Any?> {
+    return mapOf("action_type" to type.toInt(),
+            "parameters" to value,
+            "error" to error.toMap())
+}
+
+fun QActionResultType.toInt(): Int {
+    return when (this) {
+        QActionResultType.Unknown -> 0
+        QActionResultType.Url -> 1
+        QActionResultType.DeepLink -> 2
+        QActionResultType.Navigation -> 3
+        QActionResultType.Purchase -> 4
+        QActionResultType.Restore -> 5
+        QActionResultType.Close -> 6
+    }
+}
+
+fun AutomationsEvent.toMap(): Map<String, Any?> {
+    return mapOf("event_type" to type.toInt(), 
+            "date" to date.time.toDouble())
+}
+
+fun AutomationsEventType.toInt(): Int {
+    return when (this) {
+        AutomationsEventType.Unknown -> 0
+        AutomationsEventType.TrialStarted -> 1
+        AutomationsEventType.TrialConverted -> 2
+        AutomationsEventType.TrialCanceled -> 3
+        AutomationsEventType.TrialBillingRetry -> 4
+        AutomationsEventType.SubscriptionStarted -> 5
+        AutomationsEventType.SubscriptionRenewed -> 6
+        AutomationsEventType.SubscriptionRefunded -> 7
+        AutomationsEventType.SubscriptionCanceled -> 8
+        AutomationsEventType.SubscriptionBillingRetry -> 9
+        AutomationsEventType.InAppPurchase -> 10
+        AutomationsEventType.SubscriptionUpgraded -> 11
+        AutomationsEventType.TrialStillActive -> 12
+        AutomationsEventType.TrialExpired -> 13
+        AutomationsEventType.SubscriptionExpired -> 14
+        AutomationsEventType.SubscriptionDowngraded -> 15
+        AutomationsEventType.SubscriptionProductChanged -> 16
     }
 }

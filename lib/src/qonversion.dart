@@ -16,7 +16,7 @@ import 'models/purchase_exception.dart';
 import 'qa_provider.dart';
 
 class Qonversion {
-  static const String _sdkVersion = "4.2.0";
+  static const String _sdkVersion = "4.3.0";
 
   static const MethodChannel _channel = MethodChannel('qonversion_flutter_sdk');
 
@@ -295,9 +295,36 @@ class Qonversion {
   }
 
   /// Enable attribution collection from Apple Search Ads. NO by default.
-  static Future<void> setAppleSearchAdsAttributionEnabled(bool enable) =>
-      _channel.invokeMethod(Constants.mSetAppleSearchAdsAttributionEnabled,
+  static Future<void> setAppleSearchAdsAttributionEnabled(bool enable) async {
+    if (Platform.isIOS) {
+      return _channel.invokeMethod(
+          Constants.mSetAppleSearchAdsAttributionEnabled,
           {Constants.kEnableAppleSearchAdsAttribution: enable});
+    }
+  }
+
+  /// Set push token to Qonversion to enable Qonversion push notifications
+  /// [token] Firebase device token on Android. APNs device token on iOS
+  static Future<void> setNotificationsToken(String token) {
+    return _channel.invokeMethod(Constants.mSetNotificationsToken,
+        {Constants.kNotificationsToken: token});
+  }
+
+  /// [notificationData] notification payload data
+  /// See [Firebase RemoteMessage data](https://pub.dev/documentation/firebase_messaging_platform_interface/latest/firebase_messaging_platform_interface/RemoteMessage/data.html)
+  /// See [APNs notification data](https://developer.apple.com/documentation/usernotifications/unnotificationcontent/1649869-userinfo)
+  /// Returns true when a push notification was received from Qonversion. Otherwise returns false, so you need to handle a notification yourself
+  static Future<bool> handleNotification(
+      Map<String, dynamic> notificationData) async {
+    try {
+      final bool rawResult = await _channel.invokeMethod(
+          Constants.mHandleNotification,
+          {Constants.kNotificationData: notificationData}) as bool;
+      return rawResult;
+    } catch (e) {
+      return false;
+    }
+  }
 
   // Private methods
   static Future<void> _storeSdkInfo() =>

@@ -23,7 +23,6 @@ struct PurchaseResult {
       "is_cancelled": isCancelled,
     ]
   }
-  
 }
 
 extension NSError {
@@ -34,6 +33,30 @@ extension NSError {
       "additionalMessage": userInfo[NSDebugDescriptionErrorKey]]
     
     return errorMap
+  }
+}
+
+extension Date {
+    func toMilliseconds() -> Double {
+      return timeIntervalSince1970 * 1000
+    }
+}
+
+extension String {
+  func toData() -> Data {
+    let len = count / 2
+    var data = Data(capacity: len)
+    var i = startIndex
+    for _ in 0..<len {
+      let j = index(i, offsetBy: 2)
+      let bytes = self[i..<j]
+      if var num = UInt8(bytes, radix: 16) {
+        data.append(&num, count: 1)
+      }
+      i = j
+    }
+    
+    return data
   }
 }
 
@@ -168,3 +191,19 @@ extension Dictionary {
   }
 }
 
+extension Qonversion.ActionResult {
+  func toMap() -> [String: Any?] {
+    let nsError = error as NSError?
+    
+    return ["action_type": type.rawValue,
+            "parameters": parameters,
+            "error": nsError?.toMap()]
+  }
+}
+
+extension QONAutomationsEvent {
+  func toMap() -> [String: Any?] {
+    return ["event_type": type.rawValue,
+            "date": date.toMilliseconds()]
+  }
+}
