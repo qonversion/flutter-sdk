@@ -4,4 +4,5 @@ enum QUserProperty {
   appsFlyerUserId,
   adjustAdId,
   kochavaDeviceId,
+  customUserId,
 }
