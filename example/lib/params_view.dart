@@ -21,7 +21,7 @@ class ParamsView extends StatelessWidget {
               child: Text('Set User ID'),
               color: Colors.green,
               textColor: Colors.white,
-              onPressed: () async {
+              onPressed: () {
                 Qonversion.setProperty(QUserProperty.customUserId, 'customId');
                 print('did set user id');
               },
