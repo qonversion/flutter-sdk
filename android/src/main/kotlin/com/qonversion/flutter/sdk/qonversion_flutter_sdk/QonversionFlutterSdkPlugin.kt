@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.util.Log
 import androidx.annotation.NonNull
-import androidx.preference.PreferenceManager
+import android.preference.PreferenceManager
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.qonversion.android.sdk.*
@@ -108,7 +108,6 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             "purchaseProduct" -> purchaseProduct(args["product"] as? String, result)
             "updatePurchase" -> updatePurchase(args, result)
             "updatePurchaseWithProduct" -> updatePurchaseWithProduct(args, result)
-            "setUserId" -> setUserId(args["userId"] as? String, result)
             "setProperty" -> setProperty(args, result)
             "setUserProperty" -> setUserProperty(args, result)
             "addAttributionData" -> addAttributionData(args, result)
@@ -273,16 +272,6 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
                 result.qonversionError(error)
             }
         })
-    }
-
-    private fun setUserId(userId: String?, result: Result) {
-        if (userId == null) {
-            result.noUserIdError()
-            return
-        }
-
-        Qonversion.setUserID(userId)
-        result.success(null)
     }
 
     private fun setProperty(args: Map<String, Any>, result: Result) {
