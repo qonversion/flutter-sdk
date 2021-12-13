@@ -12,7 +12,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+    
+  firebase_messaging: ^11.0.0
+  flutter_local_notifications: ^9.1.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
