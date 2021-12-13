@@ -61,7 +61,7 @@ class _HomeViewState extends State<HomeView> {
     });
     _finishedAutomationsStream =
         Automations.finishedAutomationsStream.listen((event) {
-          // do any logic you need or track event
+      // do any logic you need or track event
     });
   }
 
@@ -196,8 +196,10 @@ class _HomeViewState extends State<HomeView> {
         break;
     }
 
-    Qonversion.setNotificationsToken(deviceToken);
-    print('Device token: $deviceToken');
+    if (deviceToken != null) {
+      Qonversion.setNotificationsToken(deviceToken);
+      print('Device token: $deviceToken');
+    }
   }
 
   List<Widget> _permissionsFromMap(Map<String, QPermission> permissions) {
