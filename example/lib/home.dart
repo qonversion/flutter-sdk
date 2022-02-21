@@ -111,6 +111,8 @@ class _HomeViewState extends State<HomeView> {
       isObserveMode: false,
     );
 
+    Qonversion.setAppleSearchAdsAttributionEnabled(true);
+
     setState(() {});
   }
 
