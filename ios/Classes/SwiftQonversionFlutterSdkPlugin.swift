@@ -90,9 +90,6 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     case "promoPurchase":
       return promoPurchase(args["productId"] as? String, result)
       
-    case "setUserId":
-      return setUserId(args["userId"] as? String, result)
-      
     case "addAttributionData":
       return addAttributionData(args, result)
       
@@ -262,16 +259,6 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       
       result(offerings.toMap().toJson())
     }
-  }
-  
-  private func setUserId(_ userId: String?, _ result: @escaping FlutterResult) {
-    guard let userId = userId else {
-      result(FlutterError.noUserId)
-      return
-    }
-    
-    Qonversion.setUserID(userId)
-    result(nil)
   }
   
   private func setProperty(_ args: [String: Any], _ result: @escaping FlutterResult) {

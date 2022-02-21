@@ -118,6 +118,9 @@ extension Qonversion.Property {
     case "KochavaDeviceId":
       return .kochavaDeviceID
       
+    case "CustomUserId":
+      return .userID
+      
     default:
       throw ParsingError.runtimeError("Could not parse Qonversion.Property")
     }
