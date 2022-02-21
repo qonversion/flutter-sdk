@@ -22,7 +22,7 @@ class ParamsView extends StatelessWidget {
               color: Colors.green,
               textColor: Colors.white,
               onPressed: () {
-                Qonversion.setUserId('customId');
+                Qonversion.setProperty(QUserProperty.customUserId, 'customId');
                 print('did set user id');
               },
             ),
