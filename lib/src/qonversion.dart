@@ -209,8 +209,10 @@ class Qonversion {
   /// Qonversion SDK provides an asynchronous method to set your side User ID that can be used to match users in third-party integrations.
   ///
   /// See more in [documentation](https://documentation.qonversion.io/docs/user-identifiers)
+  @Deprecated(
+      "Will be removed in a future major release. Use setProperty(QUserProperty.customUserId, 'value') instead.")
   static Future<void> setUserId(String userId) =>
-      _channel.invokeMethod(Constants.mSetUserId, {Constants.kUserId: userId});
+      setProperty(QUserProperty.customUserId, userId);
 
   /// Sets user property for pre-defined case property.
   ///
