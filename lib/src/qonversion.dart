@@ -296,11 +296,12 @@ class Qonversion {
 
   /// Enable attribution collection from Apple Search Ads. NO by default.
   static Future<void> setAppleSearchAdsAttributionEnabled(bool enable) async {
-    if (Platform.isIOS) {
-      return _channel.invokeMethod(
-          Constants.mSetAppleSearchAdsAttributionEnabled,
-          {Constants.kEnableAppleSearchAdsAttribution: enable});
+    if (!Platform.isIOS) {
+      return null;
     }
+
+    return _channel.invokeMethod(Constants.mSetAppleSearchAdsAttributionEnabled,
+        {Constants.kEnableAppleSearchAdsAttribution: enable});
   }
 
   /// Set push token to Qonversion to enable Qonversion push notifications
