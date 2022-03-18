@@ -47,11 +47,11 @@ class _HomeViewState extends State<HomeView> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: FlatButton(
-                      child: Text('Set custom userId'),
-                      color: Colors.blue,
-                      textColor: Colors.white,
-                      onPressed: () => Qonversion.setUserId('userId'),
-                    ),
+                        child: Text('Set custom userId'),
+                        color: Colors.blue,
+                        textColor: Colors.white,
+                        onPressed: () => Qonversion.setProperty(
+                            QUserProperty.customUserId, 'userId')),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
@@ -110,6 +110,8 @@ class _HomeViewState extends State<HomeView> {
       'PV77YHL7qnGvsdmpTs7gimsxUvY-Znl2',
       isObserveMode: false,
     );
+
+    Qonversion.setAppleSearchAdsAttributionEnabled(true);
 
     setState(() {});
   }

@@ -16,6 +16,7 @@ class Constants {
   static const kProperty = 'property';
   static const kValue = 'value';
   static const kProrationMode = 'proration_mode';
+  static const kEnableAppleSearchAdsAttribution = 'enable';
 
   // MethodChannel methods names
   static const mLaunch = 'launch';
@@ -27,7 +28,6 @@ class Constants {
   static const mUpdatePurchaseWithProduct = 'updatePurchaseWithProduct';
   static const mCheckPermissions = 'checkPermissions';
   static const mRestore = 'restore';
-  static const mSetUserId = 'setUserId';
   static const mSetProperty = 'setProperty';
   static const mSetUserProperty = 'setUserProperty';
   static const mSyncPurchases = 'syncPurchases';
@@ -39,6 +39,8 @@ class Constants {
   static const mStoreSdkInfo = 'storeSdkInfo';
   static const mIdentify = 'identify';
   static const mLogout = 'logout';
+  static const mSetAppleSearchAdsAttributionEnabled =
+      'setAppleSearchAdsAttributionEnabled';
 
   // Keys for NSUserDefaults on iOS and SharedPreferences on Android
   static const keyPrefix = 'com.qonversion.keys';
