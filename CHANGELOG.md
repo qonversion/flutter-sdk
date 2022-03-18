@@ -1,5 +1,6 @@
 ## 4.3.1
-* // Update changelog here
+* Added Apple Search Ads support.
+* Method `setUserId` marked as deprecated.
 
 ## 4.3.0
 * Qonversion Automation allows sending automated, personalized push notifications and in-app messages initiated by in-app purchase events.
