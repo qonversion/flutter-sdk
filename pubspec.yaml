@@ -30,3 +30,7 @@ flutter:
         pluginClass: QonversionFlutterSdkPlugin
       macos:
         pluginClass: QonversionFlutterSdkPlugin
+
+false_secrets:
+  - /example/android/app/google-services.json
+  - /example/ios/GoogleService-Info.plist
