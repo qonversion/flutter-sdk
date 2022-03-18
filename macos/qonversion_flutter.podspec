@@ -1,10 +1,10 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint qonversion.podspec' to validate before publishing.
+# Run 'pod lib lint qonversion.podspec' to validate before publishing.
 #
 Pod::Spec.new do |s|
   s.name             = 'qonversion_flutter'
-  s.version          = '2.3.0'
+  s.version          = '3.5.0'
   s.summary          = 'Flutter Qonversion SDK'
   s.description      = <<-DESC
   Powerful yet simple subscription analytics

@@ -1,3 +1,7 @@
+## 3.5.0
+* Added Apple Search Ads support.
+* Method `setUserId` marked as deprecated.
+
 ## 3.4.1
 * Fix StrictMode policy violation errors in the Google Play Console pre-launch report.
 
