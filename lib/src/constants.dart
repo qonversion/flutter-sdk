@@ -30,7 +30,6 @@ class Constants {
   static const mUpdatePurchaseWithProduct = 'updatePurchaseWithProduct';
   static const mCheckPermissions = 'checkPermissions';
   static const mRestore = 'restore';
-  static const mSetUserId = 'setUserId';
   static const mSetProperty = 'setProperty';
   static const mSetUserProperty = 'setUserProperty';
   static const mSyncPurchases = 'syncPurchases';

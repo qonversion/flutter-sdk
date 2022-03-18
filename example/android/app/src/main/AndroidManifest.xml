@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
     <application
-        android:name="io.flutter.app.FlutterApplication"
         android:label="com.qonversion.sample"
         android:icon="@mipmap/ic_launcher">
         <activity

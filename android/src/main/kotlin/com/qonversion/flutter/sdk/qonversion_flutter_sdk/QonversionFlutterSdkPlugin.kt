@@ -109,7 +109,6 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             "purchaseProduct" -> purchaseProduct(args["product"] as? String, result)
             "updatePurchase" -> updatePurchase(args, result)
             "updatePurchaseWithProduct" -> updatePurchaseWithProduct(args, result)
-            "setUserId" -> setUserId(args["userId"] as? String, result)
             "setProperty" -> setProperty(args, result)
             "setUserProperty" -> setUserProperty(args, result)
             "addAttributionData" -> addAttributionData(args, result)
@@ -280,16 +279,6 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
         })
     }
 
-    private fun setUserId(userId: String?, result: Result) {
-        if (userId == null) {
-            result.noUserIdError()
-            return
-        }
-
-        Qonversion.setUserID(userId)
-        result.success(null)
-    }
-
     private fun setProperty(args: Map<String, Any>, result: Result) {
         val rawProperty = args["property"] as? String ?: return result.noProperty()
 
@@ -365,7 +354,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
         if (data.isEmpty()) {
             return result.noDataError()
         }
-       
+
         val stringsMap: Map<String, String> = data.mapValues { it.value.toString() }
         val isQonversionNotification = Qonversion.handleNotification(stringsMap)
         result.success(isQonversionNotification)
