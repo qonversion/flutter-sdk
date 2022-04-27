@@ -15,26 +15,26 @@ class QPermission {
   /// Product ID created in Qonversion Dashboard.
   ///
   /// See [Create Products](https://qonversion.io/docs/create-products)
-  @JsonKey(name: 'associated_product')
+  @JsonKey(name: 'associatedProduct')
   final String productId;
 
   /// A renew state for an associate product that unlocked permission
   @JsonKey(
-    name: 'renew_state',
+    name: 'renewState',
     unknownEnumValue: QProductRenewState.unknown,
   )
   final QProductRenewState renewState;
 
   /// Purchase date
   @JsonKey(
-    name: 'started_timestamp',
+    name: 'startedTimestamp',
     fromJson: QMapper.dateTimeFromNullableSecondsTimestamp,
   )
   final DateTime? startedDate;
 
   /// Expiration date for subscription
   @JsonKey(
-    name: 'expiration_timestamp',
+    name: 'expirationTimestamp',
     fromJson: QMapper.dateTimeFromNullableSecondsTimestamp,
   )
   final DateTime? expirationDate;

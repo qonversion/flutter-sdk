@@ -3,7 +3,6 @@ version '4.3.1'
 
 buildscript {
     ext.kotlin_version = '1.3.50'
-    ext.qonversion_version = '3.2.4'
     repositories {
         google()
         jcenter()
@@ -42,6 +41,6 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "io.qonversion.android.sdk:sdk:$qonversion_version"
+    implementation 'io.qonversion.sandwich:sandwich:0.0.6'
     implementation 'com.google.code.gson:gson:2.8.6'
 }

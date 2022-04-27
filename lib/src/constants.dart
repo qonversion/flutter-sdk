@@ -7,7 +7,7 @@ class Constants {
   static const kProvider = 'provider';
   static const kDetails = 'details';
   static const kProductId = 'productId';
-  static const kProduct = 'product';
+  static const kOfferingId = 'offeringId';
   static const kNewProductId = 'newProductId';
   static const kOldProductId = 'oldProductId';
   static const kError = 'error';
@@ -45,11 +45,6 @@ class Constants {
       'setAppleSearchAdsAttributionEnabled';
   static const mSetNotificationsToken = 'setNotificationsToken';
   static const mHandleNotification = 'handleNotification';
-
-  // Keys for NSUserDefaults on iOS and SharedPreferences on Android
-  static const keyPrefix = 'com.qonversion.keys';
-  static const sourceKey = '$keyPrefix.source';
-  static const versionKey = '$keyPrefix.sourceVersion';
 
   // Numeric constants
   static const skuDetailsPriceRatio = 1000000;

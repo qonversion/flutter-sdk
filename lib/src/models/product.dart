@@ -43,7 +43,7 @@ class QProduct {
   /// Store product ID.
   ///
   /// See [Create Products](https://qonversion.io/docs/create-products)
-  @JsonKey(name: 'store_id')
+  @JsonKey(name: 'storeId')
   final String? storeId;
 
   /// Store product title
@@ -55,7 +55,7 @@ class QProduct {
   String? storeDescription;
 
   /// Formatted localized price of the product, including its currency sign, such as €2.99
-  @JsonKey(name: 'pretty_price')
+  @JsonKey(name: 'prettyPrice')
   final String? prettyPrice;
 
   /// Localized price of the product
@@ -89,23 +89,23 @@ class QProduct {
   final QProductDuration? duration;
 
   /// Trial duration of the subscription
-  @JsonKey(name: 'trial_duration')
+  @JsonKey(name: 'trialDuration')
   final QTrialDuration? trialDuration;
 
   /// Associated SKProduct.
   ///
   /// Available for iOS only.
-  @JsonKey(name: 'sk_product', fromJson: QMapper.skProductFromJson)
+  @JsonKey(name: 'skProduct', fromJson: QMapper.skProductFromJson)
   final SKProductWrapper? skProduct;
 
   /// Associated SkuDetails.
   ///
   /// Available for Android only.
-  @JsonKey(name: 'sku_details', fromJson: QMapper.skuDetailsFromJson)
+  @JsonKey(name: 'skuDetails', fromJson: QMapper.skuDetailsFromJson)
   final SkuDetailsWrapper? skuDetails;
 
   /// Associated Offering Id
-  @JsonKey(name: 'offering_id')
+  @JsonKey(name: 'offeringId')
   final String? offeringID;
 
   QProduct(

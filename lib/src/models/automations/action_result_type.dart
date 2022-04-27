@@ -1,18 +1,18 @@
 import 'package:json_annotation/json_annotation.dart';
 
 enum ActionResultType {
-  @JsonValue(0)
+  @JsonValue('unknown')
   unknown,
-  @JsonValue(1)
+  @JsonValue('url')
   url,
-  @JsonValue(2)
+  @JsonValue('deeplink')
   deepLink,
-  @JsonValue(3)
+  @JsonValue('navigate')
   navigation,
-  @JsonValue(4)
+  @JsonValue('purchase')
   purchase,
-  @JsonValue(5)
+  @JsonValue('restore')
   restore,
-  @JsonValue(6)
+  @JsonValue('close')
   close,
 }

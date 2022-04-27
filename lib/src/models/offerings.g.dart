@@ -11,7 +11,7 @@ QOfferings _$QOfferingsFromJson(Map<String, dynamic> json) {
     json['main'] == null
         ? null
         : QOffering.fromJson(json['main'] as Map<String, dynamic>),
-    (json['available_offerings'] as List<dynamic>)
+    (json['availableOfferings'] as List<dynamic>)
         .map((e) => QOffering.fromJson(e as Map<String, dynamic>))
         .toList(),
   );
