@@ -1,5 +1,5 @@
 ## 4.3.2
-* // Update changelog here
+* Fixed Android null-safety compilation issue in Flutter 3+.
 
 ## 4.3.1
 * Added Apple Search Ads support.
