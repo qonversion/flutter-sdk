@@ -40,7 +40,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
         @JvmStatic
         fun registerWith(registrar: Registrar) {
             val instance = QonversionFlutterSdkPlugin()
-            instance.setup(registrar.messenger(), registrar.activity().application)
+            instance.setup(registrar.messenger(), registrar.context().applicationContext as Application)
             instance.activity = registrar.activity()
         }
     }
