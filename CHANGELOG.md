@@ -1,3 +1,6 @@
+## 4.3.2
+* // Update changelog here
+
 ## 4.3.1
 * Added Apple Search Ads support.
 * Method `setUserId` marked as deprecated.
