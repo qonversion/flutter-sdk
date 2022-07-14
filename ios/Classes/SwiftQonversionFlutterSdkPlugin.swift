@@ -185,7 +185,6 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
 
         guard let product = jsonMap.toProduct() else {
           let errorMessage = "Failed to deserialize Qonversion Product. There is no qonversionId"
-          NSLog(errorMessage)
           return result(FlutterError.noProductIdField(errorMessage))
         }
         
@@ -199,7 +198,6 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       }
     } catch let error as NSError {
       let errorMessage = "Failed to deserialize Qonversion Product: \(error.localizedDescription)"
-      NSLog(errorMessage)
       result(FlutterError.jsonSerializationError(errorMessage))
     }
   }
