@@ -1,5 +1,5 @@
 ## 4.3.3
-* // Update changelog here
+* Added `purchaseProduct` function for Mac OS.
 
 ## 4.3.2
 * Fixed Android null-safety compilation issue in Flutter 3+.
