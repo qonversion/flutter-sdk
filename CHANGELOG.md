@@ -1,3 +1,6 @@
+## 4.3.4
+* // Update changelog here
+
 ## 4.3.3
 * Added `purchaseProduct` function for Mac OS.
 
