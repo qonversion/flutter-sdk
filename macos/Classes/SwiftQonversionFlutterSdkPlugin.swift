@@ -97,7 +97,10 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
         
     case "identify":
         return identify(args["userId"] as? String, result)
-      
+
+    case "setPermissionsCacheLifetime":
+      return setPermissionsCacheLifetime(args, result)
+
     default:
       return result(FlutterMethodNotImplemented)
     }
@@ -315,6 +318,25 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     Qonversion.addAttributionData(data, from: castedProvider)
     
     result(nil)
+  }
+
+  private func setPermissionsCacheLifetime(_ args: [String: Any], _ result: @escaping FlutterResult) {
+    guard let rawLifetime = args["lifetime"] as? String else {
+      return result(FlutterError.noLifetime)
+    }
+
+    do {
+      let lifetime = try Qonversion.PermissionsCacheLifetime.fromString(rawLifetime)
+
+      Qonversion.setPermissionsCacheLifetime(lifetime)
+      result(nil)
+    } catch ParsingError.runtimeError(let message) {
+      result(FlutterError.parsingError(message))
+    } catch {
+      if let nsError = error as NSError? {
+        result(FlutterError.qonversionError(nsError))
+      }
+    }
   }
 }
 

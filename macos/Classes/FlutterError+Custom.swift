@@ -77,4 +77,9 @@ extension FlutterError {
   static let noSdkInfo = FlutterError(code: "15",
                                       message: "Could not find sdk info",
                                       details: passValidValue)
+
+  static let noLifetime = FlutterError(code: "16",
+                                       message: "Could not find lifetime",
+                                       details: passValidValue)
+
 }
