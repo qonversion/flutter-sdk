@@ -144,7 +144,7 @@ extension Qonversion.PermissionsCacheLifetime {
       return .unlimited;
 
     default:
-      throw ParsingError.runtimeError("Could not parse Qonversion.Property");
+      throw ParsingError.runtimeError("Could not parse Qonversion.PermissionsCacheLifetime");
     }
   }
 }
