@@ -1,3 +1,6 @@
+## 4.4.0
+* // Update changelog here
+
 ## 4.3.4
 * Updated native SDK versions. Android 3.2.4 -> 3.2.9. iOS 2.18.3 -> 2.19.1.
 
