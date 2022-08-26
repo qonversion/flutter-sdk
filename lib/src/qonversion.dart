@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
 import 'package:qonversion_flutter/src/models/offerings.dart';
 import 'package:qonversion_flutter/src/models/user_property.dart';
+import 'package:qonversion_flutter/src/models/permissions_cache_lifetime.dart';
 import 'package:qonversion_flutter/src/models/utils/mapper.dart';
 import 'package:qonversion_flutter/src/utils/string.dart';
 
@@ -305,6 +306,17 @@ class Qonversion {
     return _channel.invokeMethod(Constants.mSetAppleSearchAdsAttributionEnabled,
         {Constants.kEnableAppleSearchAdsAttribution: enable});
   }
+
+  /// Permissions cache is used when there are problems with the Qonversion API
+  /// or internet connection. If so, Qonversion will return the last successfully loaded
+  /// permissions. The current method allows you to configure how long that cache may be used.
+  /// The default value is [QPermissionsCacheLifetime.month].
+  ///
+  /// [lifetime] Desired permissions cache lifetime duration.
+  static Future<void> setPermissionsCacheLifetime(QPermissionsCacheLifetime lifetime) =>
+      _channel.invokeMethod(Constants.mSetPermissionsCacheLifetime, {
+        Constants.kLifetime: StringUtils.capitalize(describeEnum(lifetime)),
+      });
 
   /// Set push token to Qonversion to enable Qonversion push notifications
   /// [token] Firebase device token on Android. APNs device token on iOS

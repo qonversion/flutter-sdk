@@ -19,6 +19,7 @@ class Constants {
   static const kEnableAppleSearchAdsAttribution = 'enable';
   static const kNotificationsToken = 'notificationsToken';
   static const kNotificationData = 'notificationData';
+  static const kLifetime = 'lifetime';
 
   // MethodChannel methods names
   static const mLaunch = 'launch';
@@ -32,6 +33,7 @@ class Constants {
   static const mRestore = 'restore';
   static const mSetProperty = 'setProperty';
   static const mSetUserProperty = 'setUserProperty';
+  static const mSetPermissionsCacheLifetime = 'setPermissionsCacheLifetime';
   static const mSyncPurchases = 'syncPurchases';
   static const mAddAttributionData = 'addAttributionData';
   static const mSetDebugMode = 'setDebugMode';

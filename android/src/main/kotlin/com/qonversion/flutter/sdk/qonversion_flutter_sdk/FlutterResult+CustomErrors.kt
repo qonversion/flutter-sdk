@@ -71,6 +71,10 @@ fun MethodChannel.Result.noSdkInfo() {
     return this.error("15", "Could not find sdk info", passValidValue)
 }
 
+fun MethodChannel.Result.noLifetime() {
+    return this.error("16", "Could not find lifetime", passValidValue)
+}
+
 fun MethodChannel.Result.noProductIdField(details: String?) {
     return this.error("NoProductIdField", "Could not find qonversionId in Product", details)
 }

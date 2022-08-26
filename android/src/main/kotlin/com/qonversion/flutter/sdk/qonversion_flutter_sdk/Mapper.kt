@@ -12,6 +12,7 @@ import com.qonversion.android.sdk.automations.QActionResult
 import com.qonversion.android.sdk.automations.QActionResultType
 import com.qonversion.android.sdk.dto.QLaunchResult
 import com.qonversion.android.sdk.dto.QPermission
+import com.qonversion.android.sdk.dto.QPermissionsCacheLifetime
 import com.qonversion.android.sdk.dto.eligibility.QEligibility
 import com.qonversion.android.sdk.dto.eligibility.QIntroEligibilityStatus
 import com.qonversion.android.sdk.dto.offerings.QOffering
@@ -199,4 +200,19 @@ fun AutomationsEventType.toInt(): Int {
         AutomationsEventType.SubscriptionDowngraded -> 15
         AutomationsEventType.SubscriptionProductChanged -> 16
     }
+}
+
+fun parsePermissionsCacheLifetime(lifetime: String): QPermissionsCacheLifetime? {
+    val lifetimes = mapOf(
+        "Week" to QPermissionsCacheLifetime.WEEK,
+        "TwoWeeks" to QPermissionsCacheLifetime.TWO_WEEKS,
+        "Month" to QPermissionsCacheLifetime.MONTH,
+        "TwoMonths" to QPermissionsCacheLifetime.TWO_MONTHS,
+        "ThreeMonths" to QPermissionsCacheLifetime.THREE_MONTHS,
+        "SixMonths" to QPermissionsCacheLifetime.SIX_MONTHS,
+        "Year" to QPermissionsCacheLifetime.YEAR,
+        "Unlimited" to QPermissionsCacheLifetime.UNLIMITED
+    )
+
+    return lifetimes[lifetime]
 }

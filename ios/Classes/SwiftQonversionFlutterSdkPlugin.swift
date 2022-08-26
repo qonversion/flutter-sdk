@@ -111,6 +111,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     case "setAppleSearchAdsAttributionEnabled":
       let enable = args["enable"] as? Bool ?? false
       return setAppleSearchAdsAttributionEnabled(enable, result)
+
+    case "setPermissionsCacheLifetime":
+      return setPermissionsCacheLifetime(args, result)
       
     case "setNotificationsToken":
       return setNotificationsToken(args["notificationsToken"] as? String, result)
@@ -356,7 +359,26 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     }
     result(nil)
   }
-  
+
+  private func setPermissionsCacheLifetime(_ args: [String: Any], _ result: @escaping FlutterResult) {
+    guard let rawLifetime = args["lifetime"] as? String else {
+      return result(FlutterError.noLifetime)
+    }
+    
+    do {
+      let lifetime = try Qonversion.PermissionsCacheLifetime.fromString(rawLifetime)
+      
+      Qonversion.setPermissionsCacheLifetime(lifetime)
+      result(nil)
+    } catch ParsingError.runtimeError(let message) {
+      result(FlutterError.parsingError(message))
+    } catch {
+      if let nsError = error as NSError? {
+        result(FlutterError.qonversionError(nsError))
+      }
+    }
+  }
+
   private func setNotificationsToken(_ token: String?, _ result: @escaping FlutterResult) {
     guard let token = token else {
       result(FlutterError.noArgs)
