@@ -120,6 +120,9 @@ extension Qonversion.Property {
       
     case "CustomUserId":
       return .userID
+
+    case "FirebaseAppInstanceId":
+      return .firebaseAppInstanceId
       
     default:
       throw ParsingError.runtimeError("Could not parse Qonversion.Property")
@@ -208,5 +211,38 @@ extension QONAutomationsEvent {
   func toMap() -> [String: Any?] {
     return ["event_type": type.rawValue,
             "date": date.toMilliseconds()]
+  }
+}
+
+extension Qonversion.PermissionsCacheLifetime {
+  static func fromString(_ string: String) throws -> Self {
+    switch string {
+    case "Week":
+      return .week;
+    
+    case "TwoWeeks":
+      return .twoWeeks;
+    
+    case "Month":
+      return .month;
+    
+    case "TwoMonths":
+      return .twoMonth;
+    
+    case "ThreeMonths":
+      return .threeMonth;
+    
+    case "SixMonths":
+      return .sixMonth;
+    
+    case "Year":
+      return .year;
+      
+    case "Unlimited":
+      return .unlimited;
+      
+    default:
+      throw ParsingError.runtimeError("Could not parse Qonversion.PermissionsCacheLifetime");
+    }
   }
 }

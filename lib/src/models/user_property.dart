@@ -5,4 +5,5 @@ enum QUserProperty {
   adjustAdId,
   kochavaDeviceId,
   customUserId,
+  firebaseAppInstanceId,
 }
