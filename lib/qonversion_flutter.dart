@@ -18,5 +18,6 @@ export 'src/models/qonversion_error.dart';
 export 'src/models/sk_product/discount_payment_mode.dart';
 export 'src/models/sk_product/subscription_period_unit.dart';
 export 'src/models/user_property.dart';
+export 'src/models/permissions_cache_lifetime.dart';
 export 'src/qa_provider.dart';
 export 'src/qonversion.dart';

@@ -1,3 +1,18 @@
+## 4.4.0
+* Added support of network connection lack or unexpected backend errors. Now Qonversion SDK will handle user permissions correctly even if it can't reach out to the API and will actualize them with the next successful request. Also, products and offerings become permanently available after the first successful launch - nothing will interfere user from the purchase.
+* Added method `setPermissionsCacheLifetime` to configure the lifetime of permissions cache. It is used if we faced any error trying to get permissions from our API. Defaults to one month.
+* Added a new defined property `FirebaseAppInstanceId` for Firebase integration.
+* _(Android only)_ Fixed a bug with introductory price tracking causing wrong data in the analytics dashboard for some purchases.
+
+## 4.3.4
+* Updated native SDK versions. Android 3.2.4 -> 3.2.9. iOS 2.18.3 -> 2.19.1.
+
+## 4.3.3
+* Added `purchaseProduct` function for Mac OS.
+
+## 4.3.2
+* Fixed Android null-safety compilation issue in Flutter 3+.
+
 ## 4.3.1
 * Added Apple Search Ads support.
 * Method `setUserId` marked as deprecated.

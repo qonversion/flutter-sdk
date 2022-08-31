@@ -4,6 +4,14 @@ import android.app.Activity
 import android.app.Application
 import androidx.annotation.NonNull
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
+import com.qonversion.android.sdk.*
+import com.qonversion.android.sdk.dto.QLaunchResult
+import com.qonversion.android.sdk.dto.QPermission
+import com.qonversion.android.sdk.dto.QPermissionsCacheLifetime
+import com.qonversion.android.sdk.dto.eligibility.QEligibility
+import com.qonversion.android.sdk.dto.offerings.QOfferings
+import com.qonversion.android.sdk.dto.products.QProduct
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -51,7 +59,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
         @JvmStatic
         fun registerWith(registrar: Registrar) {
             val instance = QonversionFlutterSdkPlugin()
-            instance.setup(registrar.messenger(), registrar.activity().application)
+            instance.setup(registrar.messenger(), registrar.context().applicationContext as Application)
             instance.activity = registrar.activity()
         }
     }
@@ -126,6 +134,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             "checkTrialIntroEligibility" -> checkTrialIntroEligibility(args, result)
             "storeSdkInfo" -> storeSdkInfo(args, result)
             "identify" -> identify(args["userId"] as? String, result)
+            "setPermissionsCacheLifetime" -> setPermissionsCacheLifetime(args, result)
             "setNotificationsToken" -> setNotificationsToken(args["notificationsToken"] as? String, result)
             "handleNotification" -> handleNotification(args, result)
             else -> result.notImplemented()
@@ -258,6 +267,18 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
                 result.success(Gson().toJson(data))
             }
         })
+    }
+
+    private fun setPermissionsCacheLifetime(args: Map<String, Any>, result: Result) {
+        val rawLifetime = args["lifetime"] as? String ?: return result.noLifetime()
+
+        val lifetime = parsePermissionsCacheLifetime(rawLifetime) ?: run {
+            result.parsingError("No permissions cache lifetime associated with the provided value: $rawLifetime")
+            return
+        }
+
+        Qonversion.setPermissionsCacheLifetime(lifetime)
+        result.success(null)
     }
 
     private fun setNotificationsToken(token: String?, result: Result) {
