@@ -53,7 +53,7 @@ class AutomationsPlugin(messenger: BinaryMessenger) : AutomationsEventListener {
 
     override fun onAutomationEvent(event: AutomationsEventListener.Event, payload: BridgeData?) {
         val (data, stream) = when (event) {
-            AutomationsEventListener.Event.ScreenShown -> Pair(payload, shownScreensStreamHandler)
+            AutomationsEventListener.Event.ScreenShown -> Pair(Gson().toJson(payload), shownScreensStreamHandler)
             AutomationsEventListener.Event.ActionStarted -> Pair(Gson().toJson(payload), startedActionsStreamHandler)
             AutomationsEventListener.Event.ActionFinished -> Pair(Gson().toJson(payload), finishedActionsStreamHandler)
             AutomationsEventListener.Event.ActionFailed -> Pair(Gson().toJson(payload), failedActionsStreamHandler)

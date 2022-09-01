@@ -162,14 +162,14 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             return result.noProductIdError()
         }
 
-        qonversionSandwich.purchase(productId, result.toResultListener())
+        qonversionSandwich.purchase(productId, result.toPurchaseResultListener())
     }
 
     private fun purchaseProduct(args: Map<String, Any>, result: Result) {
         val productId = args["productId"] as? String ?: return result.noProductIdError()
         val offeringId = args["offeringId"] as? String
 
-        qonversionSandwich.purchaseProduct(productId, offeringId, result.toResultListener())
+        qonversionSandwich.purchaseProduct(productId, offeringId, result.toPurchaseResultListener())
     }
 
     private fun updatePurchase(args: Map<String, Any>, result: Result) {
@@ -177,7 +177,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
         val oldProductId = args["oldProductId"] as? String ?: return result.noOldProductIdError()
         val prorationMode = args["proration_mode"] as? Int
 
-        qonversionSandwich.updatePurchase(newProductId, oldProductId, prorationMode, result.toResultListener())
+        qonversionSandwich.updatePurchase(newProductId, oldProductId, prorationMode, result.toPurchaseResultListener())
     }
 
     private fun updatePurchaseWithProduct(args: Map<String, Any>, result: Result) {
@@ -191,7 +191,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             offeringId,
             oldProductId,
             prorationMode,
-            result.toResultListener()
+            result.toPurchaseResultListener()
         )
     }
 
@@ -260,7 +260,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
 
         qonversionSandwich.checkTrialIntroEligibility(ids, object : ResultListener {
             override fun onError(error: SandwichError) {
-                result.qonversionError(error)
+                result.sandwichError(error)
             }
 
             override fun onSuccess(data: Map<String, Any?>) {
@@ -272,12 +272,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
     private fun setPermissionsCacheLifetime(args: Map<String, Any>, result: Result) {
         val rawLifetime = args["lifetime"] as? String ?: return result.noLifetime()
 
-        val lifetime = parsePermissionsCacheLifetime(rawLifetime) ?: run {
-            result.parsingError("No permissions cache lifetime associated with the provided value: $rawLifetime")
-            return
-        }
-
-        Qonversion.setPermissionsCacheLifetime(lifetime)
+        qonversionSandwich.setPermissionsCacheLifetime(rawLifetime)
         result.success(null)
     }
 
@@ -334,7 +329,19 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
     private fun Result.toResultListener(): ResultListener {
         return object : ResultListener {
             override fun onError(error: SandwichError) {
-                qonversionError(error)
+                sandwichError(error)
+            }
+
+            override fun onSuccess(data: Map<String, Any?>) {
+                success(data)
+            }
+        }
+    }
+
+    private fun Result.toPurchaseResultListener(): PurchaseResultListener {
+        return object : PurchaseResultListener {
+            override fun onError(error: SandwichError, isCancelled: Boolean) {
+                purchaseError(error, isCancelled)
             }
 
             override fun onSuccess(data: Map<String, Any?>) {

@@ -153,13 +153,17 @@ class Qonversion {
       return null;
     }
 
-    final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchase, {
-      Constants.kNewProductId: newProductId,
-      Constants.kOldProductId: oldProductId,
-      Constants.kProrationMode: prorationMode != null ? prorationMode.index : null,
-    });
-    final result = QMapper.permissionsFromJson(rawResult);
-    return result;
+    try {
+      final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchase, {
+        Constants.kNewProductId: newProductId,
+        Constants.kOldProductId: oldProductId,
+        Constants.kProrationMode: prorationMode != null ? prorationMode.index : null,
+      });
+      final result = QMapper.permissionsFromJson(rawResult);
+      return result;
+    } on PlatformException catch (e) {
+      throw _convertPurchaseException(e);
+    }
   }
 
   /// Android only. Returns `null` if called on iOS.
@@ -176,14 +180,18 @@ class Qonversion {
       return null;
     }
 
-    final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchaseWithProduct, {
-      Constants.kNewProductId: newProduct.qonversionId,
-      Constants.kOfferingId: newProduct.offeringID,
-      Constants.kOldProductId: oldProductId,
-      Constants.kProrationMode: prorationMode != null ? prorationMode.index : null,
-    });
-    final result = QMapper.permissionsFromJson(rawResult);
-    return result;
+    try {
+      final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchaseWithProduct, {
+        Constants.kNewProductId: newProduct.qonversionId,
+        Constants.kOfferingId: newProduct.offeringID,
+        Constants.kOldProductId: oldProductId,
+        Constants.kProrationMode: prorationMode != null ? prorationMode.index : null,
+      });
+      final result = QMapper.permissionsFromJson(rawResult);
+      return result;
+    } on PlatformException catch (e) {
+      throw _convertPurchaseException(e);
+    }
   }
 
   /// iOS only. Returns `null` if called on Android.
@@ -261,19 +269,15 @@ class Qonversion {
 
   /// Sends your attribution [data] to the [provider].
   ///
-  /// [userId], if specified, will also be sent to the provider.
-  /// Note that you can pass `null` as [userId] on iOS.
-  ///
-  /// On Android [userId] is non-nullable.
+  /// [userId] parameter is deprecated and not used.
   static Future<void> addAttributionData(
     Map<dynamic, dynamic> data, {
     required QAttributionProvider provider,
-    required String userId,
+    @deprecated String? userId,
   }) {
     final args = {
       Constants.kData: data,
       Constants.kProvider: StringUtils.capitalize(describeEnum(provider)),
-      Constants.kUserId: userId,
     };
 
     return _channel.invokeMethod(Constants.mAddAttributionData, args);
@@ -374,7 +378,7 @@ class Qonversion {
       error.code,
       error.message ?? "",
       error.details,
-      isUserCancelled: false, // todo support ios
+      isUserCancelled: error.code == "PurchaseCancelledByUser"
     );
   }
 }

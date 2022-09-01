@@ -37,9 +37,14 @@ fun MethodChannel.Result.noProductIdError() {
     return this.error("8", "Could not find productId value", "Please provide valid productId")
 }
 
-fun MethodChannel.Result.qonversionError(error: SandwichError) {
+fun MethodChannel.Result.sandwichError(error: SandwichError) {
     val errorDetails = getErrorDetails(error)
-    return this.error("9", error.description, errorDetails)
+    return this.error("9", error.code, errorDetails)
+}
+
+fun MethodChannel.Result.purchaseError(error: SandwichError, isCancelled: Boolean) {
+    val errorDetails = getErrorDetails(error)
+    return this.error(if (isCancelled) "PurchaseCancelledByUser" else "9", error.code, errorDetails)
 }
 
 fun MethodChannel.Result.noNewProductIdError() {
@@ -79,8 +84,8 @@ fun MethodChannel.Result.jsonSerializationError(details: String?) {
     return this.error("JSONSerialization", "JSON Serialization Error", details)
 }
 
-private fun getErrorDetails(error: QonversionError): String {
-    var result = "Qonversion Error Code: ${error.code}"
+private fun getErrorDetails(error: SandwichError): String {
+    var result = error.description
     if (error.additionalMessage.isNotEmpty()) {
         result += ". Additional Message: ${error.additionalMessage}"
     }
