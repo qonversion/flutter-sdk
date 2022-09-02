@@ -250,7 +250,7 @@ class Qonversion {
   ///
   /// See more in [documentation](https://documentation.qonversion.io/docs/user-properties)
   static Future<void> setProperty(QUserProperty property, String value) =>
-      _channel.invokeMethod(Constants.mSetProperty, {
+      _channel.invokeMethod(Constants.mSetDefinedUserProperty, {
         Constants.kProperty: StringUtils.capitalize(describeEnum(property)),
         Constants.kValue: value,
       });
@@ -262,7 +262,7 @@ class Qonversion {
   ///
   /// See more in [documentation](https://documentation.qonversion.io/docs/user-properties)
   static Future<void> setUserProperty(String property, String value) =>
-      _channel.invokeMethod(Constants.mSetUserProperty, {
+      _channel.invokeMethod(Constants.mSetCustomUserProperty, {
         Constants.kProperty: property,
         Constants.kValue: value,
       });

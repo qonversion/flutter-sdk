@@ -5,7 +5,7 @@
 //  Created by Maria on 18.11.2021.
 //
 
-import Qonversion
+import QonversionSandwich
 
 public class AutomationsPlugin: NSObject {
   private let eventChannelShownScreens = "shown_screens"
@@ -20,6 +20,8 @@ public class AutomationsPlugin: NSObject {
   private var finishedActionsStreamHandler: BaseEventStreamHandler?
   private var finishedAutomationsStreamHandler: BaseEventStreamHandler?
   
+  private lazy var automationSandwich: AutomationsSandwich = AutomationsSandwich()
+
   public func register(_ registrar: FlutterPluginRegistrar) {
     let shownScreensListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: eventChannelShownScreens)
     shownScreensListener.register() { self.shownScreensStreamHandler = $0 }
@@ -36,31 +38,35 @@ public class AutomationsPlugin: NSObject {
     let finishedAutomationsListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: eventChannelFinishedAutomations)
     finishedAutomationsListener.register() { self.finishedAutomationsStreamHandler = $0 }
     
-    Qonversion.Automations.setDelegate(self)
+    automationSandwich.subscribe(self)
   }
 }
 
-extension AutomationsPlugin: Qonversion.AutomationsDelegate {
-  public func automationsDidShowScreen(_ screenID: String) {
-    shownScreensStreamHandler?.eventSink?(screenID)
-  }
+extension AutomationsPlugin: AutomationsEventListener {
   
-  public func automationsDidStartExecuting(actionResult: Qonversion.ActionResult) {
-    let payload = actionResult.toMap().toJson()
-    startedActionsStreamHandler?.eventSink?(payload)
-  }
-  
-  public func automationsDidFailExecuting(actionResult: Qonversion.ActionResult) {
-    let payload = actionResult.toMap().toJson()
-    failedActionsStreamHandler?.eventSink?(payload)
-  }
-  
-  public func automationsDidFinishExecuting(actionResult: Qonversion.ActionResult) {
-    let payload = actionResult.toMap().toJson()
-    finishedActionsStreamHandler?.eventSink?(payload)
-  }
-  
-  public func automationsFinished() {
-    finishedAutomationsStreamHandler?.eventSink?(nil)
+  public func automationDidTrigger(event: String, payload: [String: Any]?) {
+    let handler: BaseEventStreamHandler?
+    switch (event) {
+   
+    case AutomationsEvent.screenShown.rawValue:
+      handler = self.shownScreensStreamHandler
+      
+    case AutomationsEvent.actionStarted.rawValue:
+      handler = startedActionsStreamHandler
+    
+    case AutomationsEvent.actionFailed.rawValue:
+      handler = failedActionsStreamHandler
+    
+    case AutomationsEvent.actionFinished.rawValue:
+      handler = finishedActionsStreamHandler
+    
+    case AutomationsEvent.automationsFinished.rawValue:
+      handler = finishedAutomationsStreamHandler
+
+    default:
+      handler = nil
+    }
+    
+    handler?.eventSink?(payload)
   }
 }
