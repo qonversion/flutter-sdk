@@ -67,6 +67,6 @@ extension AutomationsPlugin: AutomationsEventListener {
       handler = nil
     }
     
-    handler?.eventSink?(payload)
+    handler?.eventSink?(payload?.toJson())
   }
 }

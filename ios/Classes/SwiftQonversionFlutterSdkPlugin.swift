@@ -306,12 +306,11 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
         return result(nil)
       }
 
-      guard let jsonData = try? JSONSerialization.data(withJSONObject: data) else {
+      guard let jsonData = data.toJson() else {
         return result(FlutterError.serializationError)
       }
-      
-      let stringData = String(data: jsonData, encoding: .utf8)
-      result(stringData)
+
+      result(jsonData)
     }
   }
   
