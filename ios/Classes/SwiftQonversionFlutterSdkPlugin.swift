@@ -192,7 +192,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
   }
   
   private func offerings(_ result: @escaping FlutterResult) {
-    qonversionSandwich?.offerings(getDefaultCompletion(result))
+    qonversionSandwich?.offerings(getJsonCompletion(result))
   }
   
   private func setDefinedUserProperty(_ args: [String: Any], _ result: @escaping FlutterResult) {
@@ -226,7 +226,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       return result(FlutterError.noData)
     }
     
-    qonversionSandwich?.checkTrialIntroEligibility(ids, completion: getDefaultCompletion(result))
+    qonversionSandwich?.checkTrialIntroEligibility(ids, completion: getJsonCompletion(result))
   }
   
   private func storeSdkInfo(_ args: [String: Any], _ result: @escaping FlutterResult) {
@@ -287,22 +287,41 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
   }
   
   private func getDefaultCompletion(_ result: @escaping FlutterResult) -> BridgeCompletion {
-    return { permissions, error in
+    return { data, error in
       if let error = error {
         return result(FlutterError.sandwichError(error))
       }
       
-      result(permissions)
+      result(data)
+    }
+  }
+  
+  private func getJsonCompletion(_ result: @escaping FlutterResult) -> BridgeCompletion {
+    return { data, error in
+      if let error = error {
+        return result(FlutterError.sandwichError(error))
+      }
+
+      guard let data = data else {
+        return result(nil)
+      }
+
+      guard let jsonData = try? JSONSerialization.data(withJSONObject: data) else {
+        return result(FlutterError.serializationError)
+      }
+      
+      let stringData = String(data: jsonData, encoding: .utf8)
+      result(stringData)
     }
   }
   
   private func getPurchaseCompletion(_ result: @escaping FlutterResult) -> BridgeCompletion {
-    return { permissions, error in
+    return { data, error in
       if let error = error {
         return result(FlutterError.purchaseError(error))
       }
       
-      result(permissions)
+      result(data)
     }
   }
 }

@@ -74,6 +74,10 @@ extension FlutterError {
                                          message: "Could not find offeringId value",
                                          details: "Please provide valid offeringId")
   
+  static let serializationError = FlutterError(code: "18",
+                                            message: "Failed to serialize response from native bridge",
+                                            details: "")
+  
   private static func mapQonversionError(_ error: NSError, errorCode: String, errorMessage: String? = nil) -> FlutterError {
     var message = ""
     
