@@ -9,29 +9,29 @@ part of 'product.dart';
 QProduct _$QProductFromJson(Map<String, dynamic> json) {
   return QProduct(
     json['id'] as String,
-    json['store_id'] as String?,
+    json['storeId'] as String?,
     _$enumDecode(_$QProductTypeEnumMap, json['type'],
         unknownValue: QProductType.unknown),
     _$enumDecodeNullable(_$QProductDurationEnumMap, json['duration'],
         unknownValue: QProductDuration.unknown),
-    json['pretty_price'] as String?,
-    _$enumDecodeNullable(_$QTrialDurationEnumMap, json['trial_duration']),
-    QMapper.skProductFromJson(json['sk_product']),
-    QMapper.skuDetailsFromJson(json['sku_details']),
-    json['offering_id'] as String?,
+    json['prettyPrice'] as String?,
+    _$enumDecodeNullable(_$QTrialDurationEnumMap, json['trialDuration']),
+    QMapper.skProductFromJson(json['skProduct']),
+    QMapper.skuDetailsFromJson(json['skuDetails']),
+    json['offeringId'] as String?,
   );
 }
 
 Map<String, dynamic> _$QProductToJson(QProduct instance) => <String, dynamic>{
       'id': instance.qonversionId,
-      'store_id': instance.storeId,
-      'pretty_price': instance.prettyPrice,
+      'storeId': instance.storeId,
+      'prettyPrice': instance.prettyPrice,
       'type': _$QProductTypeEnumMap[instance.type],
       'duration': _$QProductDurationEnumMap[instance.duration],
-      'trial_duration': _$QTrialDurationEnumMap[instance.trialDuration],
-      'sk_product': instance.skProduct,
-      'sku_details': instance.skuDetails,
-      'offering_id': instance.offeringID,
+      'trialDuration': _$QTrialDurationEnumMap[instance.trialDuration],
+      'skProduct': instance.skProduct,
+      'skuDetails': instance.skuDetails,
+      'offeringId': instance.offeringID,
     };
 
 K _$enumDecode<K, V>(

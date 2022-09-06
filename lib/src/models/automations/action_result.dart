@@ -7,10 +7,10 @@ part 'action_result.g.dart';
 
 @JsonSerializable()
 class ActionResult {
-  @JsonKey(name: "action_type", defaultValue: ActionResultType.unknown)
+  @JsonKey(name: "type", defaultValue: ActionResultType.unknown)
   final ActionResultType type;
 
-  @JsonKey(name: "parameters")
+  @JsonKey(name: "value")
   final Map<String, String>? parameters;
 
   @JsonKey(

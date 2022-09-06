@@ -8,13 +8,13 @@ part 'event.g.dart';
 @JsonSerializable()
 class AutomationsEvent {
   @JsonKey(
-    name: 'event_type',
+    name: 'type',
     unknownEnumValue: AutomationsEventType.unknown,
   )
   final AutomationsEventType type;
 
   @JsonKey(
-    name: 'date',
+    name: 'timestamp',
     fromJson: QMapper.dateTimeFromSecondsTimestamp,
   )
   final DateTime date;
