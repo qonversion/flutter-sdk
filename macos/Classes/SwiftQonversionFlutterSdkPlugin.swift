@@ -4,11 +4,12 @@ import FlutterMacOS
 import Flutter
 #endif
 
-import Qonversion
+import QonversionSandwich
 
 public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
-  var purchasesEventStreamHandler: BaseEventStreamHandler?
-  
+  var deferredPurchasesStreamHandler: BaseEventStreamHandler?
+  var qonversionSandwich: QonversionSandwich?
+
   public static func register(with registrar: FlutterPluginRegistrar) {
     let messenger: FlutterBinaryMessenger
     #if canImport(FlutterMacOS)
@@ -19,82 +20,80 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     let channel = FlutterMethodChannel(name: "qonversion_flutter_sdk", binaryMessenger: messenger)
     let instance = SwiftQonversionFlutterSdkPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
-    
-    // Register events listeners
+
+    // Register deferred purchases events
     let purchasesListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "updated_purchases")
-    purchasesListener.register() { instance.purchasesEventStreamHandler = $0 }
-    
-    // Setting delegate as soon as plugin is registered
-    Qonversion.setPurchasesDelegate(instance)
+    purchasesListener.register() { instance.deferredPurchasesStreamHandler = $0 }
+
+    // Register sandwich
+    let sandwichInstance = QonversionSandwich.init(qonversionEventListener: instance)
+    instance.qonversionSandwich = sandwichInstance
   }
-  
+
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    
+
     // MARK: - Calls without arguments
-    
+
     switch (call.method) {
     case "products":
       return products(result)
-      
+
     case "checkPermissions":
       return checkPermissions(result)
-      
+
     case "restore":
       return restore(result)
-      
+
     case "setDebugMode":
-      Qonversion.setDebugMode()
+      qonversionSandwich?.setDebugMode()
       return result(nil)
 
     case "setAdvertisingID":
-      Qonversion.setAdvertisingID()
+      qonversionSandwich?.setAdvertisingId()
       return result(nil)
-      
+
     case "offerings":
       return offerings(result)
-        
+
     case "logout":
-      Qonversion.logout()
+      qonversionSandwich?.logout()
       return result(nil)
-      
+
     default:
       break
     }
-    
+
     // MARK: - Calls with arguments
-    
+
     guard let args = call.arguments as? [String: Any] else {
       return result(FlutterError.noArgs)
     }
-    
+
     switch call.method {
     case "launch":
       return launch(with: args["key"] as? String, result)
-      
+
     case "purchase":
       return purchase(args["productId"] as? String, result)
-        
+
     case "purchaseProduct":
-      return purchaseProduct(args["product"] as? String, result)
-      
-    case "setUserId":
-      return setUserId(args["userId"] as? String, result)
-      
+      return purchaseProduct(args["productId"] as? String, args["offeringId"] as? String, result)
+
     case "addAttributionData":
       return addAttributionData(args, result)
-      
-    case "setProperty":
-      return setProperty(args, result)
-      
-    case "setUserProperty":
-      return setUserProperty(args, result)
-      
+
+    case "setDefinedUserProperty":
+      return setDefinedUserProperty(args, result)
+
+    case "setCustomUserProperty":
+      return setCustomUserProperty(args, result)
+
     case "checkTrialIntroEligibility":
       return checkTrialIntroEligibility(args, result)
-      
+
     case "storeSdkInfo":
       return storeSdkInfo(args, result)
-        
+
     case "identify":
         return identify(args["userId"] as? String, result)
 
@@ -105,218 +104,121 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       return result(FlutterMethodNotImplemented)
     }
   }
-  
+
   private func launch(with apiKey: String?, _ result: @escaping FlutterResult) {
     guard let apiKey = apiKey, !apiKey.isEmpty else {
       return result(FlutterError.noApiKey)
     }
-    
-    Qonversion.launch(withKey: apiKey) { launchResult, error in
-      if let error = error {
-        return result(FlutterError.qonversionError(error.localizedDescription))
-      }
-      
-      let resultMap = launchResult.toMap()
-      result(resultMap)
-    }
+
+    qonversionSandwich?.launch(projectKey: apiKey, completion: getDefaultCompletion(result))
   }
-  
+
   private func identify(_ userId: String?, _ result: @escaping FlutterResult) {
     guard let userId = userId else {
       result(FlutterError.noUserId)
       return
     }
-      
-    Qonversion.identify(userId)
+
+    qonversionSandwich?.identify(userId)
     result(nil)
   }
-    
+
   private func products(_ result: @escaping FlutterResult) {
-    Qonversion.products { (products, error) in
+    qonversionSandwich?.products({ products, error in
       if let error = error {
-        return result(FlutterError.failedToGetProducts(error.localizedDescription))
+        return result(FlutterError.failedToGetProducts(error))
       }
-      
-      let productsMap = products.mapValues { $0.toMap() }
-      
-      result(productsMap)
-    }
+
+      result(products)
+    })
   }
-  
+
   private func purchase(_ productId: String?, _ result: @escaping FlutterResult) {
     guard let productId = productId else {
       return result(FlutterError.noProductId)
     }
-    
-    Qonversion.purchase(productId) { (permissions, error, isCancelled) in
-      let purchaseResult = PurchaseResult(permissions: permissions,
-                                          error: error,
-                                          isCancelled: isCancelled)
-      result(purchaseResult.toMap())
-    }
-  }
-    
-  private func purchaseProduct(_ jsonProduct: String?, _ result: @escaping FlutterResult) {
-    guard let jsonProduct = jsonProduct else {
-      return result(FlutterError.noProduct)
-    }
-    
-    do {
-      let data = Data(jsonProduct.utf8)
-      if let jsonMap = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
 
-        guard let product = jsonMap.toProduct() else {
-          let errorMessage = "Failed to deserialize Qonversion Product. There is no qonversionId"
-          return result(FlutterError.noProductIdField(errorMessage))
-        }
-        
-        Qonversion.purchaseProduct(product) { (permissions, error, isCancelled) in
-          let nsError = error as NSError?
-          let purchaseResult = PurchaseResult(permissions: permissions,
-                                              error: nsError,
-                                              isCancelled: isCancelled)
-          result(purchaseResult.toMap())
-        }
-      }
-    } catch let error as NSError {
-      let errorMessage = "Failed to deserialize Qonversion Product: \(error.localizedDescription)"
-      result(FlutterError.jsonSerializationError(errorMessage))
-    }
+    qonversionSandwich?.purchase(productId, completion: getPurchaseCompletion(result))
   }
-    
+
+  private func purchaseProduct(_ productId: String?, _ offeringId: String?, _ result: @escaping FlutterResult) {
+    guard let productId = productId else {
+      return result(FlutterError.noProductId)
+    }
+    guard let offeringId = offeringId else {
+      return result(FlutterError.noOfferingId)
+    }
+
+    qonversionSandwich?.purchaseProduct(productId, offeringId, completion: getPurchaseCompletion(result))
+  }
+
   private func checkPermissions(_ result: @escaping FlutterResult) {
-    Qonversion.checkPermissions { (permissions, error) in
-      if let error = error {
-        return result(FlutterError.qonversionError(error.localizedDescription))
-      }
-      
-      let permissionsDict = permissions.mapValues { $0.toMap() }
-      result(permissionsDict)
-    }
+    qonversionSandwich?.checkPermissions(getDefaultCompletion(result))
   }
-  
+
   private func restore(_ result: @escaping FlutterResult) {
-    Qonversion.restore { (permissions, error) in
-      if let error = error {
-        return result(FlutterError.qonversionError(error.localizedDescription))
-      }
-      
-      let permissionsDict = permissions.mapValues { $0.toMap() }
-      result(permissionsDict)
-    }
+    qonversionSandwich?.restore(getDefaultCompletion(result))
   }
-  
+
   private func offerings(_ result: @escaping FlutterResult) {
-    Qonversion.offerings { offerings, error in
-      if let error = error {
-        result(FlutterError.offeringsError(error.localizedDescription))
-      }
-      
-      guard let offerings = offerings else {
-        return result(nil)
-      }
-      
-      
-      result(offerings.toMap().toJson())
-    }
+    qonversionSandwich?.offerings(getJsonCompletion(result))
   }
-  
-  private func setUserId(_ userId: String?, _ result: @escaping FlutterResult) {
-    guard let userId = userId else {
-      result(FlutterError.noUserId)
-      return
-    }
-    
-    Qonversion.setUserID(userId)
-    result(nil)
-  }
-  
-  private func setProperty(_ args: [String: Any], _ result: @escaping FlutterResult) {
+
+  private func setDefinedUserProperty(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let rawProperty = args["property"] as? String else {
       return result(FlutterError.noProperty)
     }
-    
+
     guard let value = args["value"] as? String else {
       return result(FlutterError.noPropertyValue)
     }
-    
-    do {
-      let property = try Qonversion.Property.fromString(rawProperty)
-      
-      Qonversion.setProperty(property, value: value)
-      result(nil)
-    } catch ParsingError.runtimeError(let message) {
-      result(FlutterError.parsingError(message))
-    } catch {
-      result(FlutterError.qonversionError(error.localizedDescription))
-    }
+
+    qonversionSandwich?.setDefinedProperty(rawProperty, value: value)
+    result(nil)
   }
-  
-  private func setUserProperty(_ args: [String: Any], _ result: @escaping FlutterResult) {
+
+  private func setCustomUserProperty(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let property = args["property"] as? String else {
       return result(FlutterError.noProperty)
     }
-    
+
     guard let value = args["value"] as? String else {
       return result(FlutterError.noPropertyValue)
     }
-    
-    Qonversion.setUserProperty(property, value: value)
-    
+
+    qonversionSandwich?.setCustomProperty(property, value: value)
     result(nil)
   }
-  
+
   private func checkTrialIntroEligibility(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let ids = args["ids"] as? [String] else {
       return result(FlutterError.noData)
     }
-    
-    Qonversion.checkTrialIntroEligibility(forProductIds: ids) { eligibilities, error in
-      if let error = error {
-        return result(FlutterError.qonversionError(error.localizedDescription))
-      }
-      
-      result(eligibilities.mapValues { $0.toMap() }.toJson())
-    }
+
+    qonversionSandwich?.checkTrialIntroEligibility(ids, completion: getJsonCompletion(result))
   }
-  
+
   private func storeSdkInfo(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let version = args["version"] as? String,
-        let source = args["source"] as? String,
-        let sourceKey = args["sourceKey"] as? String,
-        let versionKey = args["versionKey"] as? String
+        let source = args["source"] as? String
     else {
         return result(FlutterError.noSdkInfo)
     }
-    
-    let defaults = UserDefaults.standard
-    defaults.set(version, forKey: versionKey)
-    defaults.set(source, forKey: sourceKey)
-    
+
+    qonversionSandwich?.storeSdkInfo(source: source, version: version)
     result(nil)
   }
-  
+
   private func addAttributionData(_ args: [String: Any], _ result: @escaping FlutterResult) {
-    guard let data = args["data"] as? [AnyHashable: Any] else {
+    guard let data = args["data"] as? [String: Any] else {
       return result(FlutterError.noData)
     }
-    
+
     guard let provider = args["provider"] as? String else {
       return result(FlutterError.noProvider)
     }
-    
-    // Using appsFlyer by default since there are only 2 cases in an enum yet.
-    var castedProvider = Qonversion.AttributionProvider.appsFlyer
-    
-    switch provider {
-    case "branch":
-      castedProvider = Qonversion.AttributionProvider.branch
-    default:
-      break
-    }
-    
-    Qonversion.addAttributionData(data, from: castedProvider)
-    
+
+    qonversionSandwich?.addAttributionData(sourceKey: provider, value: data)
     result(nil)
   }
 
@@ -325,25 +227,55 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       return result(FlutterError.noLifetime)
     }
 
-    do {
-      let lifetime = try Qonversion.PermissionsCacheLifetime.fromString(rawLifetime)
+    qonversionSandwich?.setPermissionsCacheLifetime(rawLifetime)
+    result(nil)
+  }
 
-      Qonversion.setPermissionsCacheLifetime(lifetime)
-      result(nil)
-    } catch ParsingError.runtimeError(let message) {
-      result(FlutterError.parsingError(message))
-    } catch {
-      if let nsError = error as NSError? {
-        result(FlutterError.qonversionError(nsError))
+  private func getDefaultCompletion(_ result: @escaping FlutterResult) -> BridgeCompletion {
+    return { data, error in
+      if let error = error {
+        return result(FlutterError.sandwichError(error))
       }
+
+      result(data)
+    }
+  }
+
+  private func getJsonCompletion(_ result: @escaping FlutterResult) -> BridgeCompletion {
+    return { data, error in
+      if let error = error {
+        return result(FlutterError.sandwichError(error))
+      }
+
+      guard let data = data else {
+        return result(nil)
+      }
+
+      guard let jsonData = data.toJson() else {
+        return result(FlutterError.serializationError)
+      }
+
+      result(jsonData)
+    }
+  }
+
+  private func getPurchaseCompletion(_ result: @escaping FlutterResult) -> BridgeCompletion {
+    return { data, error in
+      if let error = error {
+        return result(FlutterError.purchaseError(error))
+      }
+
+      result(data)
     }
   }
 }
 
-extension SwiftQonversionFlutterSdkPlugin: Qonversion.PurchasesDelegate {
-  public func qonversionDidReceiveUpdatedPermissions(_ permissions: [String : Qonversion.Permission]) {
-    let payload = permissions.mapValues { $0.toMap() }.toJson()
-    
-    purchasesEventStreamHandler?.eventSink?(payload)
+extension SwiftQonversionFlutterSdkPlugin: QonversionEventListener {
+  public func shouldPurchasePromoProduct(with productId: String) {
+    // Promo purchases are not supported.
+  }
+
+  public func qonversionDidReceiveUpdatedPermissions(_ permissions: [String : Any]) {
+    deferredPurchasesStreamHandler?.eventSink?(permissions)
   }
 }
