@@ -49,8 +49,8 @@ extension FlutterError {
   }
   
   static func purchaseError(_ error: SandwichError) -> FlutterError {
-    let isCancelled = error.additionalInfo["isCancelled"]
-    let code = isCancelled != nil ? "PurchaseCancelledByUser" : "9"
+    let isCancelled = error.additionalInfo["isCancelled"] as? Bool ?? false
+    let code = isCancelled ? "PurchaseCancelledByUser" : "9"
     return mapSandwichError(error, errorCode: code)
   }
   
@@ -75,27 +75,8 @@ extension FlutterError {
                                          details: "Please provide valid offeringId")
   
   static let serializationError = FlutterError(code: "18",
-                                            message: "Failed to serialize response from native bridge",
-                                            details: "")
-  
-  private static func mapQonversionError(_ error: NSError, errorCode: String, errorMessage: String? = nil) -> FlutterError {
-    var message = ""
-    
-    if let errorMessage = errorMessage {
-      message = errorMessage + ". "
-    }
-    message += error.localizedDescription
-    
-    var details = "Qonversion Error Code: \(error.code)"
-    
-    if let additionalMessage = error.userInfo[NSDebugDescriptionErrorKey] {
-      details = "\(details). Additional Message: \(additionalMessage)"
-    }
-    
-    return FlutterError(code: errorCode,
-                        message: message,
-                        details: details)
-  }
+                                               message: "Failed to serialize response from native bridge",
+                                               details: "")
   
   private static func mapSandwichError(_ error: SandwichError, errorCode: String, errorMessage: String? = nil) -> FlutterError {
     var message = ""

@@ -272,7 +272,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
 
 extension SwiftQonversionFlutterSdkPlugin: QonversionEventListener {
   public func shouldPurchasePromoProduct(with productId: String) {
-    // Promo purchases are not supported.
+    // Promo purchases are not supported on MacOS.
   }
 
   public func qonversionDidReceiveUpdatedPermissions(_ permissions: [String : Any]) {

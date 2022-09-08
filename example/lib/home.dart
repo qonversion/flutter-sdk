@@ -98,9 +98,8 @@ class _HomeViewState extends State<HomeView> {
                         child: Text('Set custom userId'),
                         color: Colors.blue,
                         textColor: Colors.white,
-                        onPressed: () {
-
-                        }),
+                        onPressed: () => Qonversion.setProperty(
+                            QUserProperty.customUserId, 'userId')),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(

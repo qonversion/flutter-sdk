@@ -20,8 +20,8 @@ public class AutomationsPlugin: NSObject {
   private var finishedActionsStreamHandler: BaseEventStreamHandler?
   private var finishedAutomationsStreamHandler: BaseEventStreamHandler?
   
-  private lazy var automationSandwich: AutomationsSandwich = AutomationsSandwich()
-
+  private var automationSandwich = AutomationsSandwich()
+  
   public func register(_ registrar: FlutterPluginRegistrar) {
     let shownScreensListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: eventChannelShownScreens)
     shownScreensListener.register() { self.shownScreensStreamHandler = $0 }
@@ -45,26 +45,20 @@ public class AutomationsPlugin: NSObject {
 extension AutomationsPlugin: AutomationsEventListener {
   
   public func automationDidTrigger(event: String, payload: [String: Any]?) {
+    guard let resultEvent = AutomationsEvent(rawValue: event) else { return }
+    
     let handler: BaseEventStreamHandler?
-    switch (event) {
-   
-    case AutomationsEvent.screenShown.rawValue:
-      handler = self.shownScreensStreamHandler
-      
-    case AutomationsEvent.actionStarted.rawValue:
+    switch (resultEvent) {
+    case .screenShown:
+      handler = shownScreensStreamHandler
+    case .actionStarted:
       handler = startedActionsStreamHandler
-    
-    case AutomationsEvent.actionFailed.rawValue:
+    case .actionFailed:
       handler = failedActionsStreamHandler
-    
-    case AutomationsEvent.actionFinished.rawValue:
+    case .actionFinished:
       handler = finishedActionsStreamHandler
-    
-    case AutomationsEvent.automationsFinished.rawValue:
+    case .automationsFinished:
       handler = finishedAutomationsStreamHandler
-
-    default:
-      handler = nil
     }
     
     handler?.eventSink?(payload?.toJson())
