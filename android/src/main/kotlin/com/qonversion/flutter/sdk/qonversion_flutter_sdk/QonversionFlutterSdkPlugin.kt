@@ -4,14 +4,6 @@ import android.app.Activity
 import android.app.Application
 import androidx.annotation.NonNull
 import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
-import com.qonversion.android.sdk.*
-import com.qonversion.android.sdk.dto.QLaunchResult
-import com.qonversion.android.sdk.dto.QPermission
-import com.qonversion.android.sdk.dto.QPermissionsCacheLifetime
-import com.qonversion.android.sdk.dto.eligibility.QEligibility
-import com.qonversion.android.sdk.dto.offerings.QOfferings
-import com.qonversion.android.sdk.dto.products.QProduct
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -128,8 +120,8 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             "purchaseProduct" -> purchaseProduct(args, result)
             "updatePurchase" -> updatePurchase(args, result)
             "updatePurchaseWithProduct" -> updatePurchaseWithProduct(args, result)
-            "setProperty" -> setProperty(args, result)
-            "setUserProperty" -> setUserProperty(args, result)
+            "setDefinedUserProperty" -> setDefinedUserProperty(args, result)
+            "setCustomUserProperty" -> setCustomUserProperty(args, result)
             "addAttributionData" -> addAttributionData(args, result)
             "checkTrialIntroEligibility" -> checkTrialIntroEligibility(args, result)
             "storeSdkInfo" -> storeSdkInfo(args, result)
@@ -221,7 +213,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
         qonversionSandwich.products(result.toResultListener())
     }
 
-    private fun setProperty(args: Map<String, Any>, result: Result) {
+    private fun setDefinedUserProperty(args: Map<String, Any>, result: Result) {
         val rawProperty = args["property"] as? String ?: return result.noProperty()
         val value = args["value"] as? String ?: return result.noPropertyValue()
 
@@ -229,7 +221,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
         result.success(null)
     }
 
-    private fun setUserProperty(args: Map<String, Any>, result: Result) {
+    private fun setCustomUserProperty(args: Map<String, Any>, result: Result) {
         val property = args["property"] as? String ?: return result.noProperty()
         val value = args["value"] as? String ?: return result.noPropertyValue()
 

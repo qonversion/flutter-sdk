@@ -31,8 +31,8 @@ class Constants {
   static const mUpdatePurchaseWithProduct = 'updatePurchaseWithProduct';
   static const mCheckPermissions = 'checkPermissions';
   static const mRestore = 'restore';
-  static const mSetProperty = 'setProperty';
-  static const mSetUserProperty = 'setUserProperty';
+  static const mSetDefinedUserProperty = 'setDefinedUserProperty';
+  static const mSetCustomUserProperty = 'setCustomUserProperty';
   static const mSetPermissionsCacheLifetime = 'setPermissionsCacheLifetime';
   static const mSyncPurchases = 'syncPurchases';
   static const mAddAttributionData = 'addAttributionData';

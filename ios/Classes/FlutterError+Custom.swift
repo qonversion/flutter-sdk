@@ -11,6 +11,8 @@ import FlutterMacOS
 import Flutter
 #endif
 
+import QonversionSandwich
+
 extension FlutterError {
   static private let passValidValue = "Please make sure you pass a valid value"
   
@@ -26,10 +28,6 @@ extension FlutterError {
                                      message: "Could not find userID",
                                      details: passValidValue)
   
-  static let noAutoTrackPurchases = FlutterError(code: "3",
-                                                 message: "Could not find autoTrackPurchases boolean value",
-                                                 details: passValidValue)
-  
   static let noData = FlutterError(code: "4",
                                    message: "Could not find data",
                                    details: passValidValue)
@@ -38,26 +36,22 @@ extension FlutterError {
                                        message: "Could not find provider",
                                        details: passValidValue)
   
-  static func failedToGetProducts(_ error: NSError) -> FlutterError {
-    return mapQonversionError(error, errorCode: "7", errorMessage: "Failed to get products")
+  static func failedToGetProducts(_ error: SandwichError) -> FlutterError {
+    return mapSandwichError(error, errorCode: "7", errorMessage: "Failed to get products")
   }
   
   static let noProductId = FlutterError(code: "8",
                                         message: "Could not find productId value",
                                         details: "Please provide valid productId")
-  
-  static let noProduct = FlutterError(code: "ProductNotProvided",
-                                      message: "Could not find product",
-                                      details: "Please provide a valid product")
-  
-  static func qonversionError(_ error: NSError) -> FlutterError {
-    return mapQonversionError(error, errorCode: "9")
+
+  static func sandwichError(_ error: SandwichError) -> FlutterError {
+    return mapSandwichError(error, errorCode: "9")
   }
   
-  static func parsingError(_ description: String) -> FlutterError {
-    return FlutterError(code: "12",
-                        message: "Arguments Parsing Error",
-                        details: description)
+  static func purchaseError(_ error: SandwichError) -> FlutterError {
+    let isCancelled = error.additionalInfo["isCancelled"] as? Bool ?? false
+    let code = isCancelled ? "PurchaseCancelledByUser" : "9"
+    return mapSandwichError(error, errorCode: code)
   }
   
   static let noProperty = FlutterError(code: "13",
@@ -67,11 +61,7 @@ extension FlutterError {
   static let noPropertyValue = FlutterError(code: "14",
                                             message: "Could not find property value",
                                             details: passValidValue)
-  
-  static func offeringsError(_ error: NSError) -> FlutterError {
-    return mapQonversionError(error, errorCode: "Offerings", errorMessage: "Could not get offerings")
-  }
-  
+
   static let noSdkInfo = FlutterError(code: "15",
                                       message: "Could not find sdk info",
                                       details: passValidValue)
@@ -79,37 +69,26 @@ extension FlutterError {
   static let noLifetime = FlutterError(code: "16",
                                        message: "Could not find lifetime",
                                        details: passValidValue)
-
-  static func promoPurchaseError(_ productId: String) -> FlutterError {
-    return FlutterError (code: "PromoPurchase",
-                         message: "Could not find completion block for Product ID: \(productId)",
-                         details: passValidValue)
-  }
   
-  static func jsonSerializationError(_ description: String) -> FlutterError {
-    return FlutterError(code: "JSONSerialization",
-                        message: "JSON Serialization Error",
-                        details: description)
-    
-  }
+  static let noOfferingId = FlutterError(code: "17",
+                                         message: "Could not find offeringId value",
+                                         details: "Please provide valid offeringId")
   
-  static func noProductIdField(_ description: String) -> FlutterError {
-    return FlutterError(code: "NoProductIdField",
-                        message: "Could not find qonversionId in Product",
-                        details: description)
-  }
+  static let serializationError = FlutterError(code: "18",
+                                               message: "Failed to serialize response from native bridge",
+                                               details: "")
   
-  private static func mapQonversionError(_ error: NSError, errorCode: String, errorMessage: String? = nil) -> FlutterError {
+  private static func mapSandwichError(_ error: SandwichError, errorCode: String, errorMessage: String? = nil) -> FlutterError {
     var message = ""
     
     if let errorMessage = errorMessage {
       message = errorMessage + ". "
     }
-    message += error.localizedDescription
+    message += error.details
     
     var details = "Qonversion Error Code: \(error.code)"
     
-    if let additionalMessage = error.userInfo[NSDebugDescriptionErrorKey] {
+    if let additionalMessage = error.additionalMessage {
       details = "\(details). Additional Message: \(additionalMessage)"
     }
     
