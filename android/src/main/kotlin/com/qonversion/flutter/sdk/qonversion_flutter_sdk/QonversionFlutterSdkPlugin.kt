@@ -2,18 +2,8 @@ package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 
 import android.app.Activity
 import android.app.Application
-import android.preference.PreferenceManager
-import android.util.Log
 import androidx.annotation.NonNull
 import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
-import com.qonversion.android.sdk.*
-import com.qonversion.android.sdk.dto.QLaunchResult
-import com.qonversion.android.sdk.dto.QPermission
-import com.qonversion.android.sdk.dto.QPermissionsCacheLifetime
-import com.qonversion.android.sdk.dto.eligibility.QEligibility
-import com.qonversion.android.sdk.dto.offerings.QOfferings
-import com.qonversion.android.sdk.dto.products.QProduct
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -23,7 +13,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import java.lang.Exception
+import io.qonversion.sandwich.*
 
 /** QonversionFlutterSdkPlugin */
 class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
@@ -32,6 +22,26 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
     private var channel: MethodChannel? = null
     private var deferredPurchasesStreamHandler: BaseEventStreamHandler? = null
     private var automationsPlugin: AutomationsPlugin? = null
+
+    private val qonversionSandwich by lazy {
+        application?.let {
+            QonversionSandwich(
+                it,
+                object : ActivityProvider {
+                    override val currentActivity: Activity?
+                        get() = activity
+                },
+                qonversionEventsListener
+            )
+        } ?: throw IllegalStateException("Failed to initialize Qonversion Sandwich. Application is null.")
+    }
+
+    private val qonversionEventsListener: QonversionEventsListener = object : QonversionEventsListener {
+        override fun onPermissionsUpdate(permissions: BridgeData) {
+            val payload = Gson().toJson(permissions)
+            deferredPurchasesStreamHandler?.eventSink?.success(payload)
+        }
+    }
 
     companion object {
         const val METHOD_CHANNEL = "qonversion_flutter_sdk"
@@ -88,14 +98,14 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
                 return restore(result)
             }
             "setDebugMode" -> {
-                Qonversion.setDebugMode()
+                qonversionSandwich.setDebugMode()
                 return result.success(null)
             }
             "offerings" -> {
                 return offerings(result)
             }
             "logout" -> {
-                Qonversion.logout()
+                qonversionSandwich.logout()
                 return result.success(null)
             }
         }
@@ -107,11 +117,11 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
         when (call.method) {
             "launch" -> launch(args, result)
             "purchase" -> purchase(args["productId"] as? String, result)
-            "purchaseProduct" -> purchaseProduct(args["product"] as? String, result)
+            "purchaseProduct" -> purchaseProduct(args, result)
             "updatePurchase" -> updatePurchase(args, result)
             "updatePurchaseWithProduct" -> updatePurchaseWithProduct(args, result)
-            "setProperty" -> setProperty(args, result)
-            "setUserProperty" -> setUserProperty(args, result)
+            "setDefinedUserProperty" -> setDefinedUserProperty(args, result)
+            "setCustomUserProperty" -> setCustomUserProperty(args, result)
             "addAttributionData" -> addAttributionData(args, result)
             "checkTrialIntroEligibility" -> checkTrialIntroEligibility(args, result)
             "storeSdkInfo" -> storeSdkInfo(args, result)
@@ -124,27 +134,9 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
     }
 
     private fun launch(args: Map<String, Any>, result: Result) {
-        application?.let { application ->
-            val apiKey = args["key"] as? String ?: return result.noApiKeyError()
-            val isObserveMode = args["isObserveMode"] as? Boolean ?: return result.noArgsError()
-            Qonversion.launch(
-                    application,
-                    apiKey,
-                    isObserveMode,
-                    callback = object : QonversionLaunchCallback {
-                        override fun onSuccess(launchResult: QLaunchResult) {
-                            result.success(launchResult.toMap())
-                        }
-
-                        override fun onError(error: QonversionError) {
-                            result.qonversionError(error)
-                        }
-                    }
-            )
-            startListeningPendingPurchasesEvents()
-            automationsPlugin?.setAutomationsDelegate()
-        }
-                ?: result.error(QonversionErrorCode.UnknownError.name, "Couldn't launch Qonversion. There is no Application context", null)
+        val projectKey = args["key"] as? String ?: return result.noApiKeyError()
+        val isObserveMode = args["isObserveMode"] as? Boolean ?: return result.noArgsError()
+        qonversionSandwich.launch(projectKey, isObserveMode, result.toResultListener())
     }
 
     private fun identify(userId: String?, result: Result) {
@@ -153,18 +145,8 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             return
         }
 
-        Qonversion.identify(userId)
+        qonversionSandwich.identify(userId)
         result.success(null)
-    }
-
-    private fun startListeningPendingPurchasesEvents() {
-        Qonversion.setUpdatedPurchasesListener(object : UpdatedPurchasesListener {
-            override fun onPermissionsUpdate(permissions: Map<String, QPermission>) {
-                val payload = Gson().toJson(permissions.mapValues { it.value.toMap() })
-
-                deferredPurchasesStreamHandler?.eventSink?.success(payload)
-            }
-        })
     }
 
     private fun purchase(productId: String?, result: Result) {
@@ -172,32 +154,14 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             return result.noProductIdError()
         }
 
-        activity?.let {
-            Qonversion.purchase(it, productId, getPurchasesListener(result))
-        } ?: handleMissingActivityOnPurchase(result, object {}.javaClass.enclosingMethod?.name)
+        qonversionSandwich.purchase(productId, result.toPurchaseResultListener())
     }
 
-    private fun purchaseProduct(jsonProduct: String?, result: Result) {
-        if (jsonProduct == null) {
-            return result.noProduct()
-        }
+    private fun purchaseProduct(args: Map<String, Any>, result: Result) {
+        val productId = args["productId"] as? String ?: return result.noProductIdError()
+        val offeringId = args["offeringId"] as? String
 
-        val funcName = object {}.javaClass.enclosingMethod?.name
-        try {
-            val product = mapQProduct(jsonProduct)
-                    ?: return handleMissingProductIdField(result, funcName)
-
-            activity?.let {
-                Qonversion.purchase(it, product, getPurchasesListener(result))
-            } ?: handleMissingActivityOnPurchase(result, funcName)
-
-        } catch (e: JsonSyntaxException) {
-            handleJsonExceptionOnPurchase(result, e, funcName)
-        } catch (e: IllegalArgumentException) {
-            handleExceptionOnPurchase(result, e, funcName)
-        } catch (e: ClassCastException) {
-            handleExceptionOnPurchase(result, e, funcName)
-        }
+        qonversionSandwich.purchaseProduct(productId, offeringId, result.toPurchaseResultListener())
     }
 
     private fun updatePurchase(args: Map<String, Any>, result: Result) {
@@ -205,106 +169,68 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
         val oldProductId = args["oldProductId"] as? String ?: return result.noOldProductIdError()
         val prorationMode = args["proration_mode"] as? Int
 
-        activity?.let {
-            Qonversion.updatePurchase(it, newProductId, oldProductId, prorationMode, getUpdatePurchasesListener(result))
-        } ?: handleMissingActivityOnPurchase(result, object {}.javaClass.enclosingMethod?.name)
+        qonversionSandwich.updatePurchase(newProductId, oldProductId, prorationMode, result.toPurchaseResultListener())
     }
 
     private fun updatePurchaseWithProduct(args: Map<String, Any>, result: Result) {
-        val jsonProduct = args["product"] as? String ?: return result.noProduct()
+        val newProductId = args["newProductId"] as? String ?: return result.noNewProductIdError()
+        val offeringId = args["offeringId"] as? String
         val oldProductId = args["oldProductId"] as? String ?: return result.noOldProductIdError()
         val prorationMode = args["proration_mode"] as? Int
 
-        val funcName = object {}.javaClass.enclosingMethod?.name
-        try {
-            val product = mapQProduct(jsonProduct)
-                    ?: return handleMissingProductIdField(result, funcName)
-
-            activity?.let {
-                Qonversion.updatePurchase(it, product, oldProductId, prorationMode, getUpdatePurchasesListener(result))
-            } ?: handleMissingActivityOnPurchase(result, funcName)
-        } catch (e: JsonSyntaxException) {
-            handleJsonExceptionOnPurchase(result, e, funcName)
-        } catch (e: IllegalArgumentException) {
-            handleExceptionOnPurchase(result, e, funcName)
-        } catch (e: ClassCastException) {
-            handleExceptionOnPurchase(result, e, funcName)
-        }
+        qonversionSandwich.updatePurchaseWithProduct(
+            newProductId,
+            offeringId,
+            oldProductId,
+            prorationMode,
+            result.toPurchaseResultListener()
+        )
     }
 
     private fun checkPermissions(result: Result) {
-        Qonversion.checkPermissions(object : QonversionPermissionsCallback {
-            override fun onSuccess(permissions: Map<String, QPermission>) {
-                result.success(permissions.mapValues { it.value.toMap() })
-            }
-
-            override fun onError(error: QonversionError) {
-                result.qonversionError(error)
-            }
-        })
+        qonversionSandwich.checkPermissions(result.toResultListener())
     }
 
     private fun restore(result: Result) {
-        Qonversion.restore(object : QonversionPermissionsCallback {
-            override fun onSuccess(permissions: Map<String, QPermission>) {
-                result.success(permissions.mapValues { it.value.toMap() })
-            }
-
-            override fun onError(error: QonversionError) {
-                result.qonversionError(error)
-            }
-        })
+        qonversionSandwich.restore(result.toResultListener())
     }
 
     private fun offerings(result: Result) {
-        Qonversion.offerings(callback = object : QonversionOfferingsCallback {
-            override fun onSuccess(offerings: QOfferings) {
-                val jsonOfferings = Gson().toJson(offerings.toMap())
-                result.success(jsonOfferings)
-            }
+        qonversionSandwich.offerings(
+            object : ResultListener {
+                override fun onError(error: SandwichError) {
+                    result.offeringsError(error)
+                }
 
-            override fun onError(error: QonversionError) {
-                result.offeringsError(error)
+                override fun onSuccess(data: Map<String, Any?>) {
+                    result.success(Gson().toJson(data))
+                }
             }
-        })
+        )
     }
 
     private fun products(result: Result) {
-        Qonversion.products(callback = object : QonversionProductsCallback {
-            override fun onSuccess(products: Map<String, QProduct>) {
-                result.success(products.mapValues { it.value.toMap() })
-            }
-
-            override fun onError(error: QonversionError) {
-                result.qonversionError(error)
-            }
-        })
+        qonversionSandwich.products(result.toResultListener())
     }
 
-    private fun setProperty(args: Map<String, Any>, result: Result) {
+    private fun setDefinedUserProperty(args: Map<String, Any>, result: Result) {
         val rawProperty = args["property"] as? String ?: return result.noProperty()
-
         val value = args["value"] as? String ?: return result.noPropertyValue()
 
-        try {
-            Qonversion.setProperty(QUserProperties.valueOf(rawProperty), value)
-            result.success(null)
-        } catch (e: IllegalArgumentException) {
-            result.parsingError(e.localizedMessage)
-        }
+        qonversionSandwich.setDefinedProperty(rawProperty, value)
+        result.success(null)
     }
 
-    private fun setUserProperty(args: Map<String, Any>, result: Result) {
+    private fun setCustomUserProperty(args: Map<String, Any>, result: Result) {
         val property = args["property"] as? String ?: return result.noProperty()
-
         val value = args["value"] as? String ?: return result.noPropertyValue()
 
-        Qonversion.setUserProperty(property, value)
+        qonversionSandwich.setCustomProperty(property, value)
         result.success(null)
     }
 
     private fun syncPurchases(result: Result) {
-        Qonversion.syncPurchases()
+        qonversionSandwich.syncPurchases()
         result.success(null)
     }
 
@@ -317,28 +243,20 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
 
         val provider = args["provider"] as? String ?: return result.noProviderError()
 
-        val castedProvider = when (provider) {
-            "appsFlyer" -> AttributionSource.AppsFlyer
-            else -> null
-        }
-                ?: return result.success(null)
-
-        Qonversion.attribution(data, castedProvider)
-
+        qonversionSandwich.addAttributionData(provider, data)
         result.success(null)
     }
 
     private fun checkTrialIntroEligibility(args: Map<String, Any>, result: Result) {
         val ids = args["ids"] as? List<String> ?: return result.noDataError()
 
-        Qonversion.checkTrialIntroEligibilityForProductIds(ids, callback = object : QonversionEligibilityCallback {
-            override fun onSuccess(eligibilities: Map<String, QEligibility>) {
-                val jsonEligibilities = Gson().toJson(eligibilities.mapValues { it.value.toMap() })
-                result.success(jsonEligibilities)
+        qonversionSandwich.checkTrialIntroEligibility(ids, object : ResultListener {
+            override fun onError(error: SandwichError) {
+                result.sandwichError(error)
             }
 
-            override fun onError(error: QonversionError) {
-                result.qonversionError(error)
+            override fun onSuccess(data: Map<String, Any?>) {
+                result.success(Gson().toJson(data))
             }
         })
     }
@@ -346,18 +264,13 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
     private fun setPermissionsCacheLifetime(args: Map<String, Any>, result: Result) {
         val rawLifetime = args["lifetime"] as? String ?: return result.noLifetime()
 
-        val lifetime = parsePermissionsCacheLifetime(rawLifetime) ?: run {
-            result.parsingError("No permissions cache lifetime associated with the provided value: $rawLifetime")
-            return
-        }
-
-        Qonversion.setPermissionsCacheLifetime(lifetime)
+        qonversionSandwich.setPermissionsCacheLifetime(rawLifetime)
         result.success(null)
     }
 
     private fun setNotificationsToken(token: String?, result: Result) {
         token?.let {
-            Qonversion.setNotificationsToken(it)
+            qonversionSandwich.setNotificationToken(it)
             result.success(null)
         } ?: result.noArgsError()
     }
@@ -369,62 +282,15 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             return result.noDataError()
         }
 
-        val stringsMap: Map<String, String> = data.mapValues { it.value.toString() }
-        val isQonversionNotification = Qonversion.handleNotification(stringsMap)
+        val isQonversionNotification = qonversionSandwich.handleNotification(data)
         result.success(isQonversionNotification)
-    }
-
-    private fun getPurchasesListener(result: Result) = object : QonversionPermissionsCallback {
-        override fun onSuccess(permissions: Map<String, QPermission>) =
-                result.success(PurchaseResult(permissions).toMap())
-
-        override fun onError(error: QonversionError) =
-                result.success(PurchaseResult(error = error).toMap())
-    }
-
-    private fun getUpdatePurchasesListener(result: Result) = object : QonversionPermissionsCallback {
-        override fun onSuccess(permissions: Map<String, QPermission>) =
-                result.success(permissions.mapValues { it.value.toMap() })
-
-        override fun onError(error: QonversionError) =
-                result.qonversionError(error)
-    }
-
-    private fun handleMissingProductIdField(result: Result, functionName: String?) {
-        val errorMessage = "Failed to deserialize Qonversion Product. There is no qonversionId"
-        Log.d("Qonversion", "$functionName() -> $errorMessage")
-        result.noProductIdField(errorMessage)
-    }
-
-    private fun handleMissingActivityOnPurchase(result: Result, functionName: String?) {
-        val errorMessage = "Couldn't make a purchase. There is no Activity context"
-        Log.d("Qonversion", "$functionName() -> $errorMessage")
-        result.error(QonversionErrorCode.PurchaseInvalid.name, errorMessage, null)
-    }
-
-    private fun handleExceptionOnPurchase(result: Result, e: Exception, functionName: String?) {
-        val errorMessage = "Couldn't make a purchase as an Exception occurred. ${e.localizedMessage}."
-        Log.d("Qonversion", "$functionName() -> $errorMessage")
-        result.error(QonversionErrorCode.PurchaseInvalid.name, errorMessage, null)
-    }
-
-    private fun handleJsonExceptionOnPurchase(result: Result, e: JsonSyntaxException, functionName: String?) {
-        val errorMessage = "Failed to deserialize Qonversion Product: ${e.localizedMessage}."
-        Log.d("Qonversion", "$functionName() -> $errorMessage")
-        result.jsonSerializationError(errorMessage)
     }
 
     private fun storeSdkInfo(args: Map<String, Any>, result: Result) {
         val version = args["version"] as? String ?: return result.noSdkInfo()
-        val versionKey = args["versionKey"] as? String ?: return result.noSdkInfo()
         val source = args["source"] as? String ?: return result.noSdkInfo()
-        val sourceKey = args["sourceKey"] as? String ?: return result.noSdkInfo()
 
-        val editor = PreferenceManager.getDefaultSharedPreferences(application).edit()
-        editor.putString(sourceKey, source)
-        editor.putString(versionKey, version)
-        editor.apply()
-
+        qonversionSandwich.storeSdkInfo(source, version)
         result.success(null)
     }
 
@@ -441,9 +307,8 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
         // Register promo purchases events. Android SDK does not generate any promo purchases yet
         val promoPurchasesListener = BaseListenerWrapper(messenger, EVENT_CHANNEL_PROMO_PURCHASES)
         promoPurchasesListener.register()
-        automationsPlugin = AutomationsPlugin().apply {
-            register(messenger)
-        }
+
+        automationsPlugin = AutomationsPlugin(messenger).also { it.subscribe() }
     }
 
     private fun tearDown() {
@@ -451,5 +316,29 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
         channel = null
         this.deferredPurchasesStreamHandler = null
         this.application = null
+    }
+
+    private fun Result.toResultListener(): ResultListener {
+        return object : ResultListener {
+            override fun onError(error: SandwichError) {
+                sandwichError(error)
+            }
+
+            override fun onSuccess(data: Map<String, Any?>) {
+                success(data)
+            }
+        }
+    }
+
+    private fun Result.toPurchaseResultListener(): PurchaseResultListener {
+        return object : PurchaseResultListener {
+            override fun onError(error: SandwichError, isCancelled: Boolean) {
+                purchaseError(error, isCancelled)
+            }
+
+            override fun onSuccess(data: Map<String, Any?>) {
+                success(data)
+            }
+        }
     }
 }

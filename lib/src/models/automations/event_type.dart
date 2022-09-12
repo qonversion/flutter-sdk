@@ -1,38 +1,38 @@
 import 'package:json_annotation/json_annotation.dart';
 
 enum AutomationsEventType {
-  @JsonValue(0)
+  @JsonValue("unknown")
   unknown,
-  @JsonValue(1)
+  @JsonValue("trial_started")
   trialStarted,
-  @JsonValue(2)
+  @JsonValue("trial_converted")
   trialConverted,
-  @JsonValue(3)
+  @JsonValue("trial_canceled")
   trialCanceled,
-  @JsonValue(4)
+  @JsonValue("trial_billing_retry_entered")
   trialBillingRetry,
-  @JsonValue(5)
+  @JsonValue("subscription_started")
   subscriptionStarted,
-  @JsonValue(6)
+  @JsonValue("subscription_renewed")
   subscriptionRenewed,
-  @JsonValue(7)
+  @JsonValue("subscription_refunded")
   subscriptionRefunded,
-  @JsonValue(8)
+  @JsonValue("subscription_canceled")
   subscriptionCanceled,
-  @JsonValue(9)
+  @JsonValue("subscription_billing_retry_entered")
   subscriptionBillingRetry,
-  @JsonValue(10)
+  @JsonValue("in_app_purchase")
   inAppPurchase,
-  @JsonValue(11)
+  @JsonValue("subscription_upgraded")
   subscriptionUpgraded,
-  @JsonValue(12)
+  @JsonValue("trial_still_active")
   trialStillActive,
-  @JsonValue(13)
+  @JsonValue("trial_expired")
   trialExpired,
-  @JsonValue(14)
+  @JsonValue("subscription_expired")
   subscriptionExpired,
-  @JsonValue(15)
+  @JsonValue("subscription_downgraded")
   subscriptionDowngraded,
-  @JsonValue(16)
+  @JsonValue("subscription_product_changed")
   subscriptionProductChanged,
 }

@@ -16,7 +16,7 @@ class QOfferings {
   @JsonKey(name: 'main')
   final QOffering? main;
 
-  @JsonKey(name: 'available_offerings')
+  @JsonKey(name: 'availableOfferings')
   final List<QOffering> availableOfferings;
 
   const QOfferings(this.main, this.availableOfferings);

@@ -12,6 +12,6 @@ QLaunchResult _$QLaunchResultFromJson(Map<String, dynamic> json) {
     QMapper.dateTimeFromNullableSecondsTimestamp(json['timestamp'] as num?),
     QMapper.productsFromJson(json['products']),
     QMapper.permissionsFromJson(json['permissions']),
-    QMapper.productsFromJson(json['user_products']),
+    QMapper.productsFromJson(json['userProducts']),
   );
 }

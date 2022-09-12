@@ -3,13 +3,13 @@ import 'package:json_annotation/json_annotation.dart';
 part 'eligibility.g.dart';
 
 enum QEligibilityStatus {
-  @JsonValue(0)
+  @JsonValue('unknown')
   unknown,
-  @JsonValue(1)
+  @JsonValue('non_intro_or_trial_product')
   nonIntroProduct,
-  @JsonValue(2)
+  @JsonValue('intro_or_trial_ineligible')
   ineligible,
-  @JsonValue(3)
+  @JsonValue('intro_or_trial_eligible')
   eligible,
 }
 

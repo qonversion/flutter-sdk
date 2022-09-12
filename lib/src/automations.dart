@@ -17,8 +17,13 @@ class Automations {
 
   /// Called when Automations' screen is shown
   /// [screenId] shown screen Id
-  static Stream<String> get shownScreensStream =>
-      _shownScreensEventChannel.receiveBroadcastStream().cast<String>();
+  static Stream<String> get shownScreensStream => _shownScreensEventChannel
+          .receiveBroadcastStream()
+          .cast<String>()
+          .map((event) {
+        final Map<String, dynamic> decodedEvent = jsonDecode(event);
+        return decodedEvent["screenId"];
+      });
 
   /// Called when Automations flow starts executing an action
   /// [actionResult] action that is being executed

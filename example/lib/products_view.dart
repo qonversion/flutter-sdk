@@ -79,7 +79,7 @@ class _ProductsViewState extends State<ProductsView> {
                         textColor: Colors.black,
                         onPressed: () async {
                           try {
-                            final ids = _products.map((product) => product.storeId).toList();
+                            final ids = _products.map((product) => product.qonversionId).toList();
                             final res =
                                 await Qonversion.checkTrialIntroEligibility(ids);
 
