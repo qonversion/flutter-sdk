@@ -58,7 +58,8 @@ class Qonversion {
     };
     final rawResult = await _channel.invokeMethod(Constants.mLaunch, args);
 
-    return QLaunchResult.fromJson(Map<String, dynamic>.from(rawResult));
+    final result = QLaunchResult.fromJson(Map<String, dynamic>.from(rawResult));
+    return result;
   }
 
   /// Call this function to link a user to his unique ID in your system and share purchase data.
@@ -98,17 +99,23 @@ class Qonversion {
   static Future<Map<String, QProduct>> products() async {
     final rawResult = await _channel.invokeMethod(Constants.mProducts);
 
-    return QMapper.productsFromJson(rawResult);
+    final result = QMapper.productsFromJson(rawResult);
+    return result;
   }
 
   /// Starts a process of purchasing product with [productId].
   ///
   /// Throws `QPurchaseException` in case of error in purchase flow.
   static Future<Map<String, QPermission>> purchase(String productId) async {
-    final rawResult = await _channel
-        .invokeMethod(Constants.mPurchase, {Constants.kProductId: productId});
+    try {
+      final rawResult = await _channel
+          .invokeMethod(Constants.mPurchase, {Constants.kProductId: productId});
 
-    return _handlePurchaseResult(rawResult);
+      final result = QMapper.permissionsFromJson(rawResult);
+      return result;
+    } on PlatformException catch (e) {
+      throw _convertPurchaseException(e);
+    }
   }
 
   /// Starts a process of purchasing product with Qonversion's [product] object.
@@ -116,12 +123,20 @@ class Qonversion {
   /// Throws `QPurchaseException` in case of error in purchase flow.
   static Future<Map<String, QPermission>> purchaseProduct(
       QProduct product) async {
-    final jsonProduct = jsonEncode(product);
+    try {
+      final rawResult = await _channel.invokeMethod(
+          Constants.mPurchaseProduct,
+          {
+            Constants.kProductId: product.qonversionId,
+            Constants.kOfferingId: product.offeringID
+          }
+      );
 
-    final rawResult = await _channel.invokeMethod(
-        Constants.mPurchaseProduct, {Constants.kProduct: jsonProduct});
-
-    return _handlePurchaseResult(rawResult);
+      final result = QMapper.permissionsFromJson(rawResult);
+      return result;
+    } on PlatformException catch (e) {
+      throw _convertPurchaseException(e);
+    }
   }
 
   /// Android only. Returns `null` if called on iOS.
@@ -138,13 +153,17 @@ class Qonversion {
       return null;
     }
 
-    final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchase, {
-      Constants.kNewProductId: newProductId,
-      Constants.kOldProductId: oldProductId,
-      Constants.kProrationMode:
-          prorationMode != null ? prorationMode.index : null,
-    });
-    return QMapper.permissionsFromJson(rawResult);
+    try {
+      final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchase, {
+        Constants.kNewProductId: newProductId,
+        Constants.kOldProductId: oldProductId,
+        Constants.kProrationMode: prorationMode != null ? prorationMode.index : null,
+      });
+      final result = QMapper.permissionsFromJson(rawResult);
+      return result;
+    } on PlatformException catch (e) {
+      throw _convertPurchaseException(e);
+    }
   }
 
   /// Android only. Returns `null` if called on iOS.
@@ -161,15 +180,18 @@ class Qonversion {
       return null;
     }
 
-    final jsonProduct = jsonEncode(newProduct);
-    final rawResult =
-        await _channel.invokeMethod(Constants.mUpdatePurchaseWithProduct, {
-      Constants.kProduct: jsonProduct,
-      Constants.kOldProductId: oldProductId,
-      Constants.kProrationMode:
-          prorationMode != null ? prorationMode.index : null,
-    });
-    return QMapper.permissionsFromJson(rawResult);
+    try {
+      final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchaseWithProduct, {
+        Constants.kNewProductId: newProduct.qonversionId,
+        Constants.kOfferingId: newProduct.offeringID,
+        Constants.kOldProductId: oldProductId,
+        Constants.kProrationMode: prorationMode != null ? prorationMode.index : null,
+      });
+      final result = QMapper.permissionsFromJson(rawResult);
+      return result;
+    } on PlatformException catch (e) {
+      throw _convertPurchaseException(e);
+    }
   }
 
   /// iOS only. Returns `null` if called on Android.
@@ -182,10 +204,14 @@ class Qonversion {
       return null;
     }
 
-    final rawResult = await _channel.invokeMethod(
-        Constants.mPromoPurchase, {Constants.kProductId: productId});
-
-    return _handlePurchaseResult(rawResult);
+    try {
+      final rawResult = await _channel.invokeMethod(
+          Constants.mPromoPurchase, {Constants.kProductId: productId});
+      final result = QMapper.permissionsFromJson(rawResult);
+      return result;
+    } on PlatformException catch (e) {
+      throw _convertPurchaseException(e);
+    }
   }
 
   /// You need to call the checkPermissions method at the start of your app to check if a user has the required permission.
@@ -196,7 +222,8 @@ class Qonversion {
   static Future<Map<String, QPermission>> checkPermissions() async {
     final rawResult = await _channel.invokeMethod(Constants.mCheckPermissions);
 
-    return QMapper.permissionsFromJson(rawResult);
+    final result = QMapper.permissionsFromJson(rawResult);
+    return result;
   }
 
   /// Restoring purchases restores users purchases in your app, to maintain access to purchased content.
@@ -204,7 +231,8 @@ class Qonversion {
   static Future<Map<String, QPermission>> restore() async {
     final rawResult = await _channel.invokeMethod(Constants.mRestore);
 
-    return QMapper.permissionsFromJson(rawResult);
+    final result = QMapper.permissionsFromJson(rawResult);
+    return result;
   }
 
   /// Qonversion SDK provides an asynchronous method to set your side User ID that can be used to match users in third-party integrations.
@@ -222,7 +250,7 @@ class Qonversion {
   ///
   /// See more in [documentation](https://documentation.qonversion.io/docs/user-properties)
   static Future<void> setProperty(QUserProperty property, String value) =>
-      _channel.invokeMethod(Constants.mSetProperty, {
+      _channel.invokeMethod(Constants.mSetDefinedUserProperty, {
         Constants.kProperty: StringUtils.capitalize(describeEnum(property)),
         Constants.kValue: value,
       });
@@ -234,26 +262,22 @@ class Qonversion {
   ///
   /// See more in [documentation](https://documentation.qonversion.io/docs/user-properties)
   static Future<void> setUserProperty(String property, String value) =>
-      _channel.invokeMethod(Constants.mSetUserProperty, {
+      _channel.invokeMethod(Constants.mSetCustomUserProperty, {
         Constants.kProperty: property,
         Constants.kValue: value,
       });
 
   /// Sends your attribution [data] to the [provider].
   ///
-  /// [userId], if specified, will also be sent to the provider.
-  /// Note that you can pass `null` as [userId] on iOS.
-  ///
-  /// On Android [userId] is non-nullable.
+  /// [userId] parameter is deprecated and not used.
   static Future<void> addAttributionData(
     Map<dynamic, dynamic> data, {
     required QAttributionProvider provider,
-    required String userId,
+    @deprecated String? userId,
   }) {
     final args = {
       Constants.kData: data,
-      Constants.kProvider: describeEnum(provider),
-      Constants.kUserId: userId,
+      Constants.kProvider: StringUtils.capitalize(describeEnum(provider)),
     };
 
     return _channel.invokeMethod(Constants.mAddAttributionData, args);
@@ -283,7 +307,8 @@ class Qonversion {
     final offeringsString =
         await _channel.invokeMethod<String>(Constants.mOfferings);
 
-    return QMapper.offeringsFromJson(offeringsString);
+    final result = QMapper.offeringsFromJson(offeringsString);
+    return result;
   }
 
   /// You can check if a user is eligible for an introductory offer, including a free trial.
@@ -294,7 +319,8 @@ class Qonversion {
     final eligibilitiesString = await _channel.invokeMethod<String>(
         Constants.mCheckTrialIntroEligibility, {"ids": ids});
 
-    return QMapper.eligibilityFromJson(eligibilitiesString);
+    final result = QMapper.eligibilityFromJson(eligibilitiesString);
+    return result;
   }
 
   /// Enable attribution collection from Apple Search Ads. NO by default.
@@ -329,8 +355,7 @@ class Qonversion {
   /// See [Firebase RemoteMessage data](https://pub.dev/documentation/firebase_messaging_platform_interface/latest/firebase_messaging_platform_interface/RemoteMessage/data.html)
   /// See [APNs notification data](https://developer.apple.com/documentation/usernotifications/unnotificationcontent/1649869-userinfo)
   /// Returns true when a push notification was received from Qonversion. Otherwise returns false, so you need to handle a notification yourself
-  static Future<bool> handleNotification(
-      Map<String, dynamic> notificationData) async {
+  static Future<bool> handleNotification(Map<String, dynamic> notificationData) async {
     try {
       final bool rawResult = await _channel.invokeMethod(
           Constants.mHandleNotification,
@@ -345,25 +370,15 @@ class Qonversion {
   static Future<void> _storeSdkInfo() =>
       _channel.invokeMethod(Constants.mStoreSdkInfo, {
         "version": _sdkVersion,
-        "versionKey": Constants.versionKey,
         "source": "flutter",
-        "sourceKey": Constants.sourceKey
       });
 
-  static Map<String, QPermission> _handlePurchaseResult(
-      Map<dynamic, dynamic> rawResult) {
-    final resultMap = Map<String, dynamic>.from(rawResult);
-
-    final error = resultMap[Constants.kError];
-    if (error != null) {
-      throw QPurchaseException(
-        error[Constants.errorCode]?.toString() ?? "",
-        error[Constants.errorDescription] ?? "",
-        error[Constants.errorAdditionalMessage],
-        isUserCancelled: resultMap[Constants.kIsCancelled] ?? false,
-      );
-    }
-
-    return QMapper.permissionsFromJson(resultMap[Constants.kPermissions]);
+  static QPurchaseException _convertPurchaseException(PlatformException error) {
+    return QPurchaseException(
+      error.code,
+      error.message ?? "",
+      error.details,
+      isUserCancelled: error.code == "PurchaseCancelledByUser"
+    );
   }
 }

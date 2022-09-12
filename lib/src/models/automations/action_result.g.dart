@@ -8,9 +8,9 @@ part of 'action_result.dart';
 
 ActionResult _$ActionResultFromJson(Map<String, dynamic> json) {
   return ActionResult(
-    _$enumDecodeNullable(_$ActionResultTypeEnumMap, json['action_type']) ??
+    _$enumDecodeNullable(_$ActionResultTypeEnumMap, json['type']) ??
         ActionResultType.unknown,
-    (json['parameters'] as Map<String, dynamic>?)?.map(
+    (json['value'] as Map<String, dynamic>?)?.map(
       (k, e) => MapEntry(k, e as String),
     ),
     QMapper.qonversionErrorFromJson(json['error']),
@@ -19,8 +19,8 @@ ActionResult _$ActionResultFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$ActionResultToJson(ActionResult instance) =>
     <String, dynamic>{
-      'action_type': _$ActionResultTypeEnumMap[instance.type],
-      'parameters': instance.parameters,
+      'type': _$ActionResultTypeEnumMap[instance.type],
+      'value': instance.parameters,
       'error': instance.error,
     };
 
@@ -62,11 +62,11 @@ K? _$enumDecodeNullable<K, V>(
 }
 
 const _$ActionResultTypeEnumMap = {
-  ActionResultType.unknown: 0,
-  ActionResultType.url: 1,
-  ActionResultType.deepLink: 2,
-  ActionResultType.navigation: 3,
-  ActionResultType.purchase: 4,
-  ActionResultType.restore: 5,
-  ActionResultType.close: 6,
+  ActionResultType.unknown: 'unknown',
+  ActionResultType.url: 'url',
+  ActionResultType.deepLink: 'deeplink',
+  ActionResultType.navigation: 'navigate',
+  ActionResultType.purchase: 'purchase',
+  ActionResultType.restore: 'restore',
+  ActionResultType.close: 'close',
 };

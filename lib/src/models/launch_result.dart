@@ -35,7 +35,7 @@ class QLaunchResult {
 
   /// User products
   @JsonKey(
-    name: 'user_products',
+    name: 'userProducts',
     fromJson: QMapper.productsFromJson,
   )
   final Map<String, QProduct> userProducts;

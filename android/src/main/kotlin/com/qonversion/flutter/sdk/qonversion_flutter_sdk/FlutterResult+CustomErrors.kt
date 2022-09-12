@@ -1,7 +1,7 @@
 package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 
-import com.qonversion.android.sdk.QonversionError
 import io.flutter.plugin.common.MethodChannel
+import io.qonversion.sandwich.SandwichError
 
 private const val passValidValue = "Please make sure you pass a valid value"
 
@@ -37,9 +37,14 @@ fun MethodChannel.Result.noProductIdError() {
     return this.error("8", "Could not find productId value", "Please provide valid productId")
 }
 
-fun MethodChannel.Result.qonversionError(error: QonversionError) {
+fun MethodChannel.Result.sandwichError(error: SandwichError) {
     val errorDetails = getErrorDetails(error)
-    return this.error("9", error.description, errorDetails)
+    return this.error("9", error.code, errorDetails)
+}
+
+fun MethodChannel.Result.purchaseError(error: SandwichError, isCancelled: Boolean) {
+    val errorDetails = getErrorDetails(error)
+    return this.error(if (isCancelled) "PurchaseCancelledByUser" else "9", error.code, errorDetails)
 }
 
 fun MethodChannel.Result.noNewProductIdError() {
@@ -50,10 +55,6 @@ fun MethodChannel.Result.noOldProductIdError() {
     return this.error("11", "Could not find old product id", passValidValue)
 }
 
-fun MethodChannel.Result.parsingError(message: String?) {
-    return this.error("12", "Arguments Parsing Error", message)
-}
-
 fun MethodChannel.Result.noProperty() {
     return this.error("13", "Could not find property", passValidValue)
 }
@@ -62,7 +63,7 @@ fun MethodChannel.Result.noPropertyValue() {
     return this.error("14", "Could not find property value", passValidValue)
 }
 
-fun MethodChannel.Result.offeringsError(error: QonversionError) {
+fun MethodChannel.Result.offeringsError(error: SandwichError) {
     val errorDetails = getErrorDetails(error)
     return this.error("Offerings", "Could not get offerings. ${error.description}.", errorDetails)
 }
@@ -83,8 +84,8 @@ fun MethodChannel.Result.jsonSerializationError(details: String?) {
     return this.error("JSONSerialization", "JSON Serialization Error", details)
 }
 
-private fun getErrorDetails(error: QonversionError): String {
-    var result = "Qonversion Error Code: ${error.code}"
+private fun getErrorDetails(error: SandwichError): String {
+    var result = error.description
     if (error.additionalMessage.isNotEmpty()) {
         result += ". Additional Message: ${error.additionalMessage}"
     }

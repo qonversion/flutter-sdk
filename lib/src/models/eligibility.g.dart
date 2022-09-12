@@ -56,8 +56,8 @@ K? _$enumDecodeNullable<K, V>(
 }
 
 const _$QEligibilityStatusEnumMap = {
-  QEligibilityStatus.unknown: 0,
-  QEligibilityStatus.nonIntroProduct: 1,
-  QEligibilityStatus.ineligible: 2,
-  QEligibilityStatus.eligible: 3,
+  QEligibilityStatus.unknown: 'unknown',
+  QEligibilityStatus.nonIntroProduct: 'non_intro_or_trial_product',
+  QEligibilityStatus.ineligible: 'intro_or_trial_ineligible',
+  QEligibilityStatus.eligible: 'intro_or_trial_eligible',
 };

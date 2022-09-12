@@ -9,13 +9,13 @@ part of 'permission.dart';
 QPermission _$QPermissionFromJson(Map<String, dynamic> json) {
   return QPermission(
     json['id'] as String,
-    json['associated_product'] as String,
-    _$enumDecode(_$QProductRenewStateEnumMap, json['renew_state'],
+    json['associatedProduct'] as String,
+    _$enumDecode(_$QProductRenewStateEnumMap, json['renewState'],
         unknownValue: QProductRenewState.unknown),
     QMapper.dateTimeFromNullableSecondsTimestamp(
-        json['started_timestamp'] as num?),
+        json['startedTimestamp'] as num?),
     QMapper.dateTimeFromNullableSecondsTimestamp(
-        json['expiration_timestamp'] as num?),
+        json['expirationTimestamp'] as num?),
     json['active'] as bool,
   );
 }
