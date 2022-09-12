@@ -1,3 +1,6 @@
+## 4.5.0
+* // Update changelog here
+
 ## 4.4.0
 * Added support of network connection lack or unexpected backend errors. Now Qonversion SDK will handle user permissions correctly even if it can't reach out to the API and will actualize them with the next successful request. Also, products and offerings become permanently available after the first successful launch - nothing will interfere user from the purchase.
 * Added method `setPermissionsCacheLifetime` to configure the lifetime of permissions cache. It is used if we faced any error trying to get permissions from our API. Defaults to one month.
