@@ -1,5 +1,5 @@
 ## 4.5.1
-* // Update changelog here
+* Fixed `Could not find offeringId value` error for `purchaseProduct` call on iOS.
 
 ## 4.5.0
 * Big refactoring of the native modules made to simplify further upgrades and make it easy to keep the SDK functionality up-to-date.
