@@ -1,3 +1,6 @@
+## 4.5.1
+* // Update changelog here
+
 ## 4.5.0
 * Big refactoring of the native modules made to simplify further upgrades and make it easy to keep the SDK functionality up-to-date.
 
