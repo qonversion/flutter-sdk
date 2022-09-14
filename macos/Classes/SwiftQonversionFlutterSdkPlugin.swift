@@ -145,11 +145,8 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     guard let productId = productId else {
       return result(FlutterError.noProductId)
     }
-    guard let offeringId = offeringId else {
-      return result(FlutterError.noOfferingId)
-    }
 
-    qonversionSandwich?.purchaseProduct(productId, offeringId, completion: getPurchaseCompletion(result))
+    qonversionSandwich?.purchaseProduct(productId, offeringId: offeringId, completion: getPurchaseCompletion(result))
   }
 
   private func checkPermissions(_ result: @escaping FlutterResult) {

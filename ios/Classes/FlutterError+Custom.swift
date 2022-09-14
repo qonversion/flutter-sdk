@@ -69,11 +69,7 @@ extension FlutterError {
   static let noLifetime = FlutterError(code: "16",
                                        message: "Could not find lifetime",
                                        details: passValidValue)
-  
-  static let noOfferingId = FlutterError(code: "17",
-                                         message: "Could not find offeringId value",
-                                         details: "Please provide valid offeringId")
-  
+
   static let serializationError = FlutterError(code: "18",
                                                message: "Failed to serialize response from native bridge",
                                                details: "")
