@@ -1,3 +1,6 @@
+## 4.5.2
+* // Update changelog here
+
 ## 4.5.1
 * Fixed `Could not find offeringId value` error for `purchaseProduct` call on iOS.
 
