@@ -6,4 +6,5 @@ enum QUserProperty {
   kochavaDeviceId,
   customUserId,
   firebaseAppInstanceId,
+  appSetId, // Android only
 }
