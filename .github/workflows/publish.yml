@@ -30,5 +30,8 @@ jobs:
       - name: Download pub dependencies
         run: flutter pub get
 
+      - name: Check Publish Warnings
+        run: flutter pub publish --dry-run
+
       - name: Publish SDK
-        run: flutter pub publish
+        run: flutter pub publish --force
