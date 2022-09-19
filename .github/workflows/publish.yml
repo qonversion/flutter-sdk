@@ -38,7 +38,7 @@ jobs:
             "accessToken": "${{ secrets.PUB_DEV_PUBLISH_ACCESS_TOKEN }}",
             "refreshToken": "${{ secrets.PUB_DEV_PUBLISH_REFRESH_TOKEN }}",
             "idToken": "${{ secrets.PUB_DEV_PUBLISH_ID_TOKEN }}",
-            "tokenEndpoint": ${{ secrets.PUB_DEV_PUBLISH_TOKEN_ENDPOINT }}
+            "tokenEndpoint": ${{ secrets.PUB_DEV_PUBLISH_TOKEN_ENDPOINT }},
             "scopes": [ "openid", "https://www.googleapis.com/auth/userinfo.email" ],
             "expiration": ${{ secrets.PUB_DEV_PUBLISH_EXPIRATION }}
           }
