@@ -48,4 +48,4 @@ jobs:
         run: flutter pub publish --dry-run
 
       - name: Publish SDK
-        run: flutter pub publish --force
+        run: flutter pub publish -f
