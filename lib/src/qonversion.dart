@@ -366,6 +366,16 @@ class Qonversion {
     }
   }
 
+  /// iOS only.
+  /// On iOS 14.0+ shows up a sheet for users to redeem AppStore offer codes.
+  static Future<void> presentCodeRedemptionSheet() async {
+    if (!Platform.isIOS) {
+      return;
+    }
+
+    return _channel.invokeMethod(Constants.mPresentCodeRedemptionSheet);
+  }
+
   // Private methods
   static Future<void> _storeSdkInfo() =>
       _channel.invokeMethod(Constants.mStoreSdkInfo, {
