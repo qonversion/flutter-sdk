@@ -1,3 +1,6 @@
+## 4.6.0
+* // Update changelog here
+
 ## 4.5.2
 * Added a new user property `AppSetId` - a unique user identifier for all the developer's applications. May be used for some integrations.
 
