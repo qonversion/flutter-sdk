@@ -366,6 +366,25 @@ class Qonversion {
     }
   }
 
+
+  /// Get parsed custom payload, which you added to the notification in the dashboard
+  /// [notificationData] notification payload data
+  /// See [Firebase RemoteMessage data](https://pub.dev/documentation/firebase_messaging_platform_interface/latest/firebase_messaging_platform_interface/RemoteMessage/data.html)
+  /// See [APNs notification data](https://developer.apple.com/documentation/usernotifications/unnotificationcontent/1649869-userinfo)
+  /// Returns a map with custom payload from the notification or null if it's not provided.
+  static Future<Map<String, dynamic>?> getNotificationCustomPayload(Map<String, dynamic> notificationData) async {
+    try {
+      final String rawResult = await _channel.invokeMethod(
+          Constants.mGetNotificationCustomPayload,
+          {Constants.kNotificationData: notificationData}) as String;
+
+      final Map<String, dynamic> result = jsonDecode(rawResult);
+      return result;
+    } catch (e) {
+      return null;
+    }
+  }
+
   // Private methods
   static Future<void> _storeSdkInfo() =>
       _channel.invokeMethod(Constants.mStoreSdkInfo, {

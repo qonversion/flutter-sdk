@@ -47,6 +47,7 @@ class Constants {
       'setAppleSearchAdsAttributionEnabled';
   static const mSetNotificationsToken = 'setNotificationsToken';
   static const mHandleNotification = 'handleNotification';
+  static const mGetNotificationCustomPayload = 'getNotificationCustomPayload';
 
   // Numeric constants
   static const skuDetailsPriceRatio = 1000000;

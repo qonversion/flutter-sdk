@@ -123,6 +123,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     case "handleNotification":
       return handleNotification(args, result)
       
+    case "getNotificationCustomPayload":
+      return getNotificationCustomPayload(args, result)
+      
     default:
       return result(FlutterMethodNotImplemented)
     }
@@ -281,6 +284,15 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     
     let isPushHandled: Bool = qonversionSandwich?.handleNotification(notificationData) ?? false
     result(isPushHandled)
+  }
+  
+  private func getNotificationCustomPayload(_ args: [AnyHashable: Any], _ result: @escaping FlutterResult) {
+    guard let notificationData = args["notificationData"] as? [AnyHashable: Any] else {
+      return result(FlutterError.noData)
+    }
+    
+    let customPayload: [AnyHashable: Any]? = qonversionSandwich?.getNotificationCustomPayload(notificationData)
+    result(customPayload?.toJson())
   }
   
   private func getDefaultCompletion(_ result: @escaping FlutterResult) -> BridgeCompletion {
