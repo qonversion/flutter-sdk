@@ -129,6 +129,7 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
             "setPermissionsCacheLifetime" -> setPermissionsCacheLifetime(args, result)
             "setNotificationsToken" -> setNotificationsToken(args["notificationsToken"] as? String, result)
             "handleNotification" -> handleNotification(args, result)
+            "getNotificationCustomPayload" -> getNotificationCustomPayload(args, result)
             else -> result.notImplemented()
         }
     }
@@ -284,6 +285,18 @@ class QonversionFlutterSdkPlugin : MethodCallHandler, FlutterPlugin, ActivityAwa
 
         val isQonversionNotification = qonversionSandwich.handleNotification(data)
         result.success(isQonversionNotification)
+    }
+
+    private fun getNotificationCustomPayload(args: Map<String, Any>, result: Result) {
+        val data = args["notificationData"] as? Map<String, Any> ?: return result.noDataError()
+
+        if (data.isEmpty()) {
+            return result.noDataError()
+        }
+
+        val payload = qonversionSandwich.getNotificationCustomPayload(data)
+        val payloadJson = Gson().toJson(payload)
+        result.success(payloadJson)
     }
 
     private fun storeSdkInfo(args: Map<String, Any>, result: Result) {
