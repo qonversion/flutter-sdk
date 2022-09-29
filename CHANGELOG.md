@@ -1,3 +1,9 @@
+## 4.6.0
+* Added a `source` property to the `Permission` object - use it to know where this permission is originally from - App Store, Play Store, Stripe, etc.
+* Added a method `getNotificationCustomPayload` to get the extra data you've added to automation notifications.
+* Added a method `presentCodeRedemptionSheet` to show up a sheet for users to redeem AppStore offer codes (iOS 14+ only).
+* Purchase tracking error handling improved to guarantee delivery.
+
 ## 4.5.2
 * Added a new user property `AppSetId` - a unique user identifier for all the developer's applications. May be used for some integrations.
 

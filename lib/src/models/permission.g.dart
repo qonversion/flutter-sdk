@@ -12,6 +12,8 @@ QPermission _$QPermissionFromJson(Map<String, dynamic> json) {
     json['associatedProduct'] as String,
     _$enumDecode(_$QProductRenewStateEnumMap, json['renewState'],
         unknownValue: QProductRenewState.unknown),
+    _$enumDecode(_$QPermissionSourceEnumMap, json['source'],
+        unknownValue: QPermissionSource.unknown),
     QMapper.dateTimeFromNullableSecondsTimestamp(
         json['startedTimestamp'] as num?),
     QMapper.dateTimeFromNullableSecondsTimestamp(
@@ -52,4 +54,12 @@ const _$QProductRenewStateEnumMap = {
   QProductRenewState.willRenew: 1,
   QProductRenewState.canceled: 2,
   QProductRenewState.billingIssue: 3,
+};
+
+const _$QPermissionSourceEnumMap = {
+  QPermissionSource.unknown: 'Unknown',
+  QPermissionSource.appStore: 'AppStore',
+  QPermissionSource.playStore: 'PlayStore',
+  QPermissionSource.stripe: 'Stripe',
+  QPermissionSource.manual: 'Manual',
 };

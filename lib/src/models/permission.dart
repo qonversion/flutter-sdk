@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:qonversion_flutter/src/models/permission_source.dart';
 import 'package:qonversion_flutter/src/models/product_renew_state.dart';
 import 'package:qonversion_flutter/src/models/utils/mapper.dart';
 
@@ -25,6 +26,13 @@ class QPermission {
   )
   final QProductRenewState renewState;
 
+  /// A source determining where this permission is originally from - App Store, Play Store, Stripe, etc.
+  @JsonKey(
+    name: 'source',
+    unknownEnumValue: QPermissionSource.unknown,
+  )
+  final QPermissionSource source;
+
   /// Purchase date
   @JsonKey(
     name: 'startedTimestamp',
@@ -49,6 +57,7 @@ class QPermission {
     this.permissionId,
     this.productId,
     this.renewState,
+    this.source,
     this.startedDate,
     this.expirationDate,
     this.isActive,

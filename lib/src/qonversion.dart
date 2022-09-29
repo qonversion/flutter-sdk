@@ -17,7 +17,7 @@ import 'models/purchase_exception.dart';
 import 'qa_provider.dart';
 
 class Qonversion {
-  static const String _sdkVersion = "4.5.2";
+  static const String _sdkVersion = "4.6.0";
 
   static const MethodChannel _channel = MethodChannel('qonversion_flutter_sdk');
 
@@ -364,6 +364,34 @@ class Qonversion {
     } catch (e) {
       return false;
     }
+  }
+
+  /// Get parsed custom payload, which you added to the notification in the dashboard
+  /// [notificationData] notification payload data
+  /// See [Firebase RemoteMessage data](https://pub.dev/documentation/firebase_messaging_platform_interface/latest/firebase_messaging_platform_interface/RemoteMessage/data.html)
+  /// See [APNs notification data](https://developer.apple.com/documentation/usernotifications/unnotificationcontent/1649869-userinfo)
+  /// Returns a map with custom payload from the notification or null if it's not provided.
+  static Future<Map<String, dynamic>?> getNotificationCustomPayload(Map<String, dynamic> notificationData) async {
+    try {
+      final String rawResult = await _channel.invokeMethod(
+          Constants.mGetNotificationCustomPayload,
+          {Constants.kNotificationData: notificationData}) as String;
+
+      final Map<String, dynamic> result = jsonDecode(rawResult);
+      return result;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// iOS only.
+  /// On iOS 14.0+ shows up a sheet for users to redeem AppStore offer codes.
+  static Future<void> presentCodeRedemptionSheet() async {
+    if (!Platform.isIOS) {
+      return;
+    }
+
+    return _channel.invokeMethod(Constants.mPresentCodeRedemptionSheet);
   }
 
   // Private methods
