@@ -69,6 +69,9 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       qonversionSandwich?.logout()
       return result(nil)
 
+    case "presentCodeRedemptionSheet":
+      return presentCodeRedemptionSheet(result)
+
     default:
       break
     }
@@ -125,7 +128,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       
     case "getNotificationCustomPayload":
       return getNotificationCustomPayload(args, result)
-      
+
     default:
       return result(FlutterMethodNotImplemented)
     }
@@ -290,11 +293,18 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     guard let notificationData = args["notificationData"] as? [AnyHashable: Any] else {
       return result(FlutterError.noData)
     }
-    
+
     let customPayload: [AnyHashable: Any]? = qonversionSandwich?.getNotificationCustomPayload(notificationData)
     result(customPayload?.toJson())
   }
-  
+
+  private func presentCodeRedemptionSheet(_ result: @escaping FlutterResult) {
+    if #available(iOS 14.0, *) {
+      qonversionSandwich?.presentCodeRedemptionSheet()
+    }
+    result(nil)
+  }
+
   private func getDefaultCompletion(_ result: @escaping FlutterResult) -> BridgeCompletion {
     return { data, error in
       if let error = error {

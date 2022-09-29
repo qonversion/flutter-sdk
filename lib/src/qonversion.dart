@@ -366,7 +366,6 @@ class Qonversion {
     }
   }
 
-
   /// Get parsed custom payload, which you added to the notification in the dashboard
   /// [notificationData] notification payload data
   /// See [Firebase RemoteMessage data](https://pub.dev/documentation/firebase_messaging_platform_interface/latest/firebase_messaging_platform_interface/RemoteMessage/data.html)
@@ -383,6 +382,16 @@ class Qonversion {
     } catch (e) {
       return null;
     }
+  }
+
+  /// iOS only.
+  /// On iOS 14.0+ shows up a sheet for users to redeem AppStore offer codes.
+  static Future<void> presentCodeRedemptionSheet() async {
+    if (!Platform.isIOS) {
+      return;
+    }
+
+    return _channel.invokeMethod(Constants.mPresentCodeRedemptionSheet);
   }
 
   // Private methods

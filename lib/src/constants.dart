@@ -48,6 +48,7 @@ class Constants {
   static const mSetNotificationsToken = 'setNotificationsToken';
   static const mHandleNotification = 'handleNotification';
   static const mGetNotificationCustomPayload = 'getNotificationCustomPayload';
+  static const mPresentCodeRedemptionSheet = 'presentCodeRedemptionSheet';
 
   // Numeric constants
   static const skuDetailsPriceRatio = 1000000;
