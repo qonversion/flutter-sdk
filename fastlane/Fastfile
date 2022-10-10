@@ -29,10 +29,40 @@ def update_changelog(new_version)
   }
 end
 
+def upgrade_sandwich_android(new_version)
+  path = "../android/build.gradle"
+  regex = /implementation "io.qonversion.sandwich:sandwich:.*"/
+  result_value = "implementation \"io.qonversion.sandwich:sandwich:#{new_version}\""
+
+  update_file(path, regex, result_value)
+end
+
+def upgrade_sandwich_apple(platform, new_version)
+  path = "../#{platform}/qonversion_flutter.podspec"
+  regex = /s.dependency "QonversionSandwich", ".*"/
+  result_value = "s.dependency \"QonversionSandwich\", \"#{new_version}\""
+
+  update_file(path, regex, result_value)
+end
+
+def update_file(path, regex, result_value)
+  file = File.read(path)
+  new_content = file.gsub(regex, result_value)
+  File.open(path, 'w') { |line| line.puts new_content }
+end
+
 lane :bump do |options|
   new_version = options[:version]
 
   update_dart(new_version)
   update_yaml(new_version)
   update_changelog(new_version)
+end
+
+lane :upgrade_sandwich do |options|
+  new_version = options[:version]
+
+  upgrade_sandwich_android(new_version)
+  upgrade_sandwich_apple("ios", new_version)
+  upgrade_sandwich_apple("macos", new_version)
 end

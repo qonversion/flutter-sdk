@@ -1,0 +1,32 @@
+name: Upgrade Sandwich
+on:
+  workflow_dispatch:
+    inputs:
+      sandwich_version:
+        description: 'Sandwich version'
+        required: true
+        default: '0.0.0'
+
+jobs:
+  upgrade_sandwich:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Echo requested version
+        run: echo 'Upgrading Sandwich to version ${{ github.event.inputs.sandwich_version }}'
+
+      - name: Bump version
+        run: |
+          fastlane upgrade_sandwich version:${{ github.event.inputs.sandwich_version }}
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: Sandwich upgrade to ${{ github.event.inputs.sandwich_version }}
+          body: Sandwich upgrade to ${{ github.event.inputs.sandwich_version }}
+          labels: autocreated
+          branch: tech/sandwich_${{ github.event.inputs.sandwich_version }}
+          base: develop
