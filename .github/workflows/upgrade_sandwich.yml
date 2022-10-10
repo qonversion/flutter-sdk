@@ -1,7 +1,11 @@
 name: Upgrade Sandwich
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      sandwich_version:
+        description: 'Sandwich version'
+        required: true
+        default: '0.0.0'
 
 jobs:
   upgrade_sandwich:
