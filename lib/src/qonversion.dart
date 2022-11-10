@@ -19,17 +19,17 @@ import 'qa_provider.dart';
 class Qonversion {
   static const String _sdkVersion = "4.6.0";
 
-  static const MethodChannel _channel = MethodChannel('qonversion_flutter_sdk');
+  static const MethodChannel _channel = MethodChannel('qonversion_plugin');
 
-  static const _purchasesEventChannel =
-      EventChannel('qonversion_flutter_updated_purchases');
+  static const _updatedEntitlementsEventChannel =
+      EventChannel('qonversion_flutter_updated_entitlements');
 
   static const _promoPurchasesEventChannel =
       EventChannel('qonversion_flutter_promo_purchases');
 
   /// Yields an event each time a deferred transaction happens
-  static Stream<Map<String, QPermission>> get updatedPurchasesStream =>
-      _purchasesEventChannel
+  static Stream<Map<String, QPermission>> get updatedEntitlementsStream =>
+      _updatedEntitlementsEventChannel
           .receiveBroadcastStream()
           .cast<String>()
           .map((event) {
@@ -53,7 +53,7 @@ class Qonversion {
     _storeSdkInfo();
 
     final args = {
-      Constants.kApiKey: apiKey,
+      Constants.kProjectKey: apiKey,
       Constants.kObserveMode: isObserveMode,
     };
     final rawResult = await _channel.invokeMethod(Constants.mLaunch, args);

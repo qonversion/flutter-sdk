@@ -11,7 +11,7 @@ class ProductsView extends StatefulWidget {
 class _ProductsViewState extends State<ProductsView> {
   var _products = <QProduct>[];
   QOfferings _offerings;
-  StreamSubscription<Map<String, QPermission>> _deferredPurchasesStream;
+  StreamSubscription<Map<String, QPermission>> _updatedEntitlementsStream;
   StreamSubscription<String> _promoPurchasesStream;
 
   @override
@@ -19,8 +19,8 @@ class _ProductsViewState extends State<ProductsView> {
     super.initState();
     _loadOfferings();
 
-    _deferredPurchasesStream =
-        Qonversion.updatedPurchasesStream.listen((event) => print(event));
+    _updatedEntitlementsStream =
+        Qonversion.updatedEntitlementsStream.listen((event) => print(event));
 
     _promoPurchasesStream =
         Qonversion.promoPurchasesStream.listen((promoPurchaseId) async {
@@ -46,7 +46,7 @@ class _ProductsViewState extends State<ProductsView> {
 
   @override
   void dispose() {
-    _deferredPurchasesStream.cancel();
+    _updatedEntitlementsStream.cancel();
     _promoPurchasesStream.cancel();
 
     super.dispose();
