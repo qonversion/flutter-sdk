@@ -11,7 +11,7 @@ class ProductsView extends StatefulWidget {
 class _ProductsViewState extends State<ProductsView> {
   var _products = <QProduct>[];
   QOfferings _offerings;
-  StreamSubscription<Map<String, QPermission>> _updatedEntitlementsStream;
+  StreamSubscription<Map<String, QEntitlement>> _updatedEntitlementsStream;
   StreamSubscription<String> _promoPurchasesStream;
 
   @override
@@ -20,22 +20,22 @@ class _ProductsViewState extends State<ProductsView> {
     _loadOfferings();
 
     _updatedEntitlementsStream =
-        Qonversion.updatedEntitlementsStream.listen((event) => print(event));
+        Qonversion.getSharedInstance().updatedEntitlementsStream.listen((event) => print(event));
 
     _promoPurchasesStream =
-        Qonversion.promoPurchasesStream.listen((promoPurchaseId) async {
+        Qonversion.getSharedInstance().promoPurchasesStream.listen((promoPurchaseId) async {
       try {
-        final permissions = await Qonversion.promoPurchase(promoPurchaseId);
+        final entitlements = await Qonversion.getSharedInstance().promoPurchase(promoPurchaseId);
         // Get Qonversion product by App Store ID
         final qProduct = _products.firstWhere(
             (element) => element.storeId == promoPurchaseId,
             orElse: () => null);
-        // Get permission by Qonversion product
-        final permission = permissions.values.firstWhere(
+        // Get entitlement by Qonversion product
+        final entitlement = entitlements.values.firstWhere(
             (element) => element.productId == qProduct?.qonversionId,
             orElse: () => null);
 
-        print(permission?.isActive);
+        print(entitlement?.isActive);
       } on QPurchaseException catch (e) {
         // check if a user canceled the purchase
         // e.isUserCancelled
@@ -81,7 +81,7 @@ class _ProductsViewState extends State<ProductsView> {
                           try {
                             final ids = _products.map((product) => product.qonversionId).toList();
                             final res =
-                                await Qonversion.checkTrialIntroEligibility(ids);
+                                await Qonversion.getSharedInstance().checkTrialIntroEligibility(ids);
 
                             print(res.map(
                                 (key, value) => MapEntry(key, value.status)));
@@ -99,7 +99,7 @@ class _ProductsViewState extends State<ProductsView> {
 
   Future<void> _loadOfferings() async {
     try {
-      _offerings = await Qonversion.offerings();
+      _offerings = await Qonversion.getSharedInstance().offerings();
       _loadProducts();
       setState(() {});
     } catch (e) {
@@ -134,13 +134,13 @@ class _ProductsViewState extends State<ProductsView> {
             textColor: Colors.white,
             onPressed: () async {
               try {
-                final permissions =
-                    await Qonversion.purchaseProduct(product);
-                final permission = permissions.values.firstWhere(
+                final entitlements =
+                    await Qonversion.getSharedInstance().purchaseProduct(product);
+                final entitlement = entitlements.values.firstWhere(
                     (element) => element.productId == product.qonversionId,
                     orElse: () => null);
 
-                print(permission?.isActive);
+                print(entitlement?.isActive);
               } on QPurchaseException catch (e) {
                 // check if a user canceled the purchase
                 // e.isUserCancelled

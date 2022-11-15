@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-enum QPermissionSource {
+enum QEntitlementSource {
   @JsonValue("Unknown")
   unknown,
 

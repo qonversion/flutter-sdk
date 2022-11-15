@@ -1,37 +1,37 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:qonversion_flutter/src/models/permission_source.dart';
-import 'package:qonversion_flutter/src/models/product_renew_state.dart';
+import 'package:qonversion_flutter/src/models/entitlement_source.dart';
+import 'package:qonversion_flutter/src/models/entitlement_renew_state.dart';
 import 'package:qonversion_flutter/src/models/utils/mapper.dart';
 
-part 'permission.g.dart';
+part 'entitlement.g.dart';
 
 @JsonSerializable(createToJson: false)
-class QPermission {
-  /// Qonversion Permission ID, like premium.
+class QEntitlement {
+  /// Qonversion Entitlement ID, like premium.
   ///
-  /// See [Create Permission](https://qonversion.io/docs/create-permission)
+  /// See [Create Entitlement](https://qonversion.io/docs/create-entitlement)
   @JsonKey(name: 'id')
-  final String permissionId;
+  final String entitlementId;
 
   /// Product ID created in Qonversion Dashboard.
   ///
   /// See [Create Products](https://qonversion.io/docs/create-products)
-  @JsonKey(name: 'associatedProduct')
+  @JsonKey(name: 'productId')
   final String productId;
 
-  /// A renew state for an associate product that unlocked permission
+  /// A renew state for an associate product that unlocked entitlement
   @JsonKey(
     name: 'renewState',
-    unknownEnumValue: QProductRenewState.unknown,
+    unknownEnumValue: QEntitlementRenewState.unknown,
   )
-  final QProductRenewState renewState;
+  final QEntitlementRenewState renewState;
 
-  /// A source determining where this permission is originally from - App Store, Play Store, Stripe, etc.
+  /// A source determining where this entitlement is originally from - App Store, Play Store, Stripe, etc.
   @JsonKey(
     name: 'source',
-    unknownEnumValue: QPermissionSource.unknown,
+    unknownEnumValue: QEntitlementSource.unknown,
   )
-  final QPermissionSource source;
+  final QEntitlementSource source;
 
   /// Purchase date
   @JsonKey(
@@ -47,14 +47,14 @@ class QPermission {
   )
   final DateTime? expirationDate;
 
-  /// Use for checking permission for current user.
+  /// Use for checking entitlement for current user.
   /// Pay attention, isActive == true does not mean that subscription is renewable.
-  /// Subscription could be canceled, but the user could still have a permission
+  /// Subscription could be canceled, but the user could still have a entitlement
   @JsonKey(name: 'active')
   final bool isActive;
 
-  const QPermission(
-    this.permissionId,
+  const QEntitlement(
+    this.entitlementId,
     this.productId,
     this.renewState,
     this.source,
@@ -63,6 +63,6 @@ class QPermission {
     this.isActive,
   );
 
-  factory QPermission.fromJson(Map<String, dynamic> json) =>
-      _$QPermissionFromJson(json);
+  factory QEntitlement.fromJson(Map<String, dynamic> json) =>
+      _$QEntitlementFromJson(json);
 }

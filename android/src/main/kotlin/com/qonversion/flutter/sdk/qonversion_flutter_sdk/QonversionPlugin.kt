@@ -110,6 +110,9 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
                 qonversionSandwich.logout()
                 return result.success(null)
             }
+            "userInfo" -> {
+                return userInfo(result)
+            }
             "automationsInitialize" -> {
                 return automationsPlugin.initialize()
             }
@@ -271,6 +274,10 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
                 result.success(Gson().toJson(data))
             }
         })
+    }
+
+    private fun userInfo(result: Result) {
+        qonversionSandwich.userInfo(result.toResultListener())
     }
 
     private fun storeSdkInfo(args: Map<String, Any>, result: Result) {

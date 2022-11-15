@@ -1,4 +1,4 @@
-enum ProrationMode {
+enum QProrationMode {
   unknownSubscriptionUpgradeDowngradePolicy,
   immediateWithTimeProration,
   immediateAndChargeProratedPrice,

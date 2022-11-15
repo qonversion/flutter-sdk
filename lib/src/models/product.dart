@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import '../constants.dart';
+import '../internal/constants.dart';
 import 'product_duration.dart';
 import 'product_type.dart';
 import 'sk_product/sk_product_wrapper.dart';
