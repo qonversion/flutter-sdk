@@ -24,7 +24,7 @@ flutter:
   plugin:
     platforms:
       android:
-        pluginClass: QonversionFlutterSdkPlugin
+        pluginClass: QonversionPlugin
         package: com.qonversion.flutter.sdk.qonversion_flutter_sdk
       ios:
         pluginClass: QonversionFlutterSdkPlugin

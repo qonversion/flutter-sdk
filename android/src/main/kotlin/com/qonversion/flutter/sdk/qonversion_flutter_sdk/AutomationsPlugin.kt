@@ -10,9 +10,7 @@ import io.qonversion.sandwich.AutomationsEventListener
 import io.qonversion.sandwich.AutomationsSandwich
 import io.qonversion.sandwich.BridgeData
 
-class AutomationsPlugin : MethodChannel.MethodCallHandler, FlutterPlugin, AutomationsEventListener {
-    private var channel: MethodChannel? = null
-
+class AutomationsPlugin(private val messenger: BinaryMessenger) : AutomationsEventListener {
     private var shownScreensStreamHandler: BaseEventStreamHandler? = null
     private var startedActionsStreamHandler: BaseEventStreamHandler? = null
     private var failedActionsStreamHandler: BaseEventStreamHandler? = null
@@ -24,46 +22,11 @@ class AutomationsPlugin : MethodChannel.MethodCallHandler, FlutterPlugin, Automa
     }
 
     companion object {
-        private const val METHOD_CHANNEL = "automations_plugin"
-
         private const val EVENT_CHANNEL_SHOWN_SCREENS = "shown_screens"
         private const val EVENT_CHANNEL_STARTED_ACTIONS = "started_actions"
         private const val EVENT_CHANNEL_FAILED_ACTIONS = "failed_actions"
         private const val EVENT_CHANNEL_FINISHED_ACTIONS = "finished_actions"
         private const val EVENT_CHANNEL_FINISHED_AUTOMATIONS = "finished_automations"
-
-        // Used for compatibility with the apps, which don't use Android Embedding v2.
-        @Suppress("DEPRECATION", "unused")
-        @JvmStatic
-        fun registerWith(registrar: PluginRegistry.Registrar) {
-            val instance = AutomationsPlugin()
-            instance.setup(registrar.messenger())
-        }
-    }
-
-    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-        // Methods without args
-        when (call.method) {
-            "initialize" -> initialize()
-            "subscribe" -> subscribe()
-        }
-
-        // Methods with args
-        val args = call.arguments() as? Map<String, Any> ?: return result.noArgsError()
-        when (call.method) {
-            "setNotificationsToken" -> setNotificationsToken(args["notificationsToken"] as? String, result)
-            "handleNotification" -> handleNotification(args, result)
-            "getNotificationCustomPayload" -> getNotificationCustomPayload(args, result)
-            else -> result.notImplemented()
-        }
-    }
-
-    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        setup(binding.binaryMessenger)
-    }
-
-    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        tearDown()
     }
 
     override fun onAutomationEvent(event: AutomationsEventListener.Event, payload: BridgeData?) {
@@ -78,22 +41,23 @@ class AutomationsPlugin : MethodChannel.MethodCallHandler, FlutterPlugin, Automa
         stream?.eventSink?.success(data)
     }
 
-    private fun initialize() {
+    fun initialize() {
         automationSandwich.initialize()
+        setup()
     }
 
-    private fun subscribe() {
+    fun subscribe() {
         automationSandwich.setDelegate(this)
     }
 
-    private fun setNotificationsToken(token: String?, result: MethodChannel.Result) {
+    fun setNotificationsToken(token: String?, result: MethodChannel.Result) {
         token?.let {
             automationSandwich.setNotificationToken(it)
             result.success(null)
         } ?: result.noArgsError()
     }
 
-    private fun handleNotification(args: Map<String, Any>, result: MethodChannel.Result) {
+    fun handleNotification(args: Map<String, Any>, result: MethodChannel.Result) {
         @Suppress("UNCHECKED_CAST")
         val data = args["notificationData"] as? Map<String, Any> ?: return result.noDataError()
 
@@ -105,7 +69,7 @@ class AutomationsPlugin : MethodChannel.MethodCallHandler, FlutterPlugin, Automa
         result.success(isQonversionNotification)
     }
 
-    private fun getNotificationCustomPayload(args: Map<String, Any>, result: MethodChannel.Result) {
+    fun getNotificationCustomPayload(args: Map<String, Any>, result: MethodChannel.Result) {
         @Suppress("UNCHECKED_CAST")
         val data = args["notificationData"] as? Map<String, Any> ?: return result.noDataError()
 
@@ -118,10 +82,7 @@ class AutomationsPlugin : MethodChannel.MethodCallHandler, FlutterPlugin, Automa
         result.success(payloadJson)
     }
 
-    private fun setup(messenger: BinaryMessenger) {
-        channel = MethodChannel(messenger, METHOD_CHANNEL)
-        channel?.setMethodCallHandler(this)
-
+    private fun setup() {
         val shownScreensListener = BaseListenerWrapper(messenger, EVENT_CHANNEL_SHOWN_SCREENS)
         shownScreensListener.register()
         shownScreensStreamHandler = shownScreensListener.eventStreamHandler
@@ -141,10 +102,5 @@ class AutomationsPlugin : MethodChannel.MethodCallHandler, FlutterPlugin, Automa
         val finishedAutomationsListener = BaseListenerWrapper(messenger, EVENT_CHANNEL_FINISHED_AUTOMATIONS)
         finishedAutomationsListener.register()
         finishedAutomationsStreamHandler = finishedAutomationsListener.eventStreamHandler
-    }
-
-    private fun tearDown() {
-        channel?.setMethodCallHandler(null)
-        channel = null
     }
 }

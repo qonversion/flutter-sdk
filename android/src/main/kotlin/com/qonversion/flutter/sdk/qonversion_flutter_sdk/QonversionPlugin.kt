@@ -40,6 +40,8 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         } ?: throw IllegalStateException("Failed to initialize Qonversion Sandwich. Application is null.")
     }
 
+    private lateinit var automationsPlugin: AutomationsPlugin
+
     private val qonversionEventsListener: QonversionEventsListener = object : QonversionEventsListener {
         override fun onEntitlementsUpdated(entitlements: BridgeData) {
             val payload = Gson().toJson(entitlements)
@@ -108,6 +110,12 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
                 qonversionSandwich.logout()
                 return result.success(null)
             }
+            "automationsInitialize" -> {
+                return automationsPlugin.initialize()
+            }
+            "automationsSubscribe" -> {
+                return automationsPlugin.subscribe()
+            }
         }
 
         // Methods with args
@@ -124,6 +132,9 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "checkTrialIntroEligibility" -> checkTrialIntroEligibility(args, result)
             "storeSdkInfo" -> storeSdkInfo(args, result)
             "identify" -> identify(args["userId"] as? String, result)
+            "automationsSetNotificationsToken" -> automationsPlugin.setNotificationsToken(args["notificationsToken"] as? String, result)
+            "automationsHandleNotification" -> automationsPlugin.handleNotification(args, result)
+            "automationsGetNotificationCustomPayload" -> automationsPlugin.getNotificationCustomPayload(args, result)
             else -> result.notImplemented()
         }
     }
@@ -283,6 +294,8 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         // Register promo purchases events. Android SDK does not generate any promo purchases yet
         val promoPurchasesListener = BaseListenerWrapper(messenger, EVENT_CHANNEL_PROMO_PURCHASES)
         promoPurchasesListener.register()
+
+        automationsPlugin = AutomationsPlugin(messenger)
     }
 
     private fun tearDown() {
