@@ -1,5 +1,6 @@
 ## 4.6.1
-* // Update changelog here
+* Fixed an issue causing automation event losses on Android.
+* Fixed a rare issue with the permissions cache on Android.
 
 ## 4.6.0
 * Added a `source` property to the `Permission` object - use it to know where this permission is originally from - App Store, Play Store, Stripe, etc.
