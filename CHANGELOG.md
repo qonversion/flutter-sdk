@@ -1,3 +1,6 @@
+## 4.6.1
+* // Update changelog here
+
 ## 4.6.0
 * Added a `source` property to the `Permission` object - use it to know where this permission is originally from - App Store, Play Store, Stripe, etc.
 * Added a method `getNotificationCustomPayload` to get the extra data you've added to automation notifications.
