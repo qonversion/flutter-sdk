@@ -42,12 +42,12 @@ class QMapper {
     return QOfferings.fromJson(offeringJson);
   }
 
-  static QUser userFromJson(String? jsonString) {
+  static QUser userFromJson(dynamic jsonString) {
     if (jsonString == null) return QUser('', '');
 
-    final userJson = Map<String, dynamic>.from(jsonDecode(jsonString));
+    final userMap = Map<String, dynamic>.from(jsonString);
 
-    return QUser.fromJson(userJson);
+    return QUser.fromJson(userMap);
   }
 
   static Map<String, QEligibility> eligibilityFromJson(String? jsonString) {

@@ -13,12 +13,12 @@ import 'constants.dart';
 class QonversionInternal implements Qonversion {
   static const String _sdkVersion = "4.6.0";
 
-  static const MethodChannel _channel = MethodChannel('qonversion_plugin');
+  final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
-  static const _updatedEntitlementsEventChannel =
+  final _updatedEntitlementsEventChannel =
       EventChannel('qonversion_flutter_updated_entitlements');
 
-  static const _promoPurchasesEventChannel =
+  final _promoPurchasesEventChannel =
       EventChannel('qonversion_flutter_promo_purchases');
 
 
@@ -27,9 +27,9 @@ class QonversionInternal implements Qonversion {
 
     final args = {
       Constants.kProjectKey: config.projectKey,
-      Constants.kLaunchMode: config.launchMode,
-      Constants.kEnvironment: config.launchMode,
-      Constants.kEntitlementsCacheLifetime: config.entitlementsCacheLifetime,
+      Constants.kLaunchMode: StringUtils.capitalize(describeEnum(config.launchMode)),
+      Constants.kEnvironment: StringUtils.capitalize(describeEnum(config.environment)),
+      Constants.kEntitlementsCacheLifetime: StringUtils.capitalize(describeEnum(config.entitlementsCacheLifetime)),
     };
     _channel.invokeMethod(Constants.mInitialize, args);
   }
@@ -253,48 +253,8 @@ class QonversionInternal implements Qonversion {
     }
   }
 
-  /// Set push token to Qonversion to enable Qonversion push notifications
-  /// [token] Firebase device token on Android. APNs device token on iOS
-  static Future<void> setNotificationsToken(String token) {
-    return _channel.invokeMethod(Constants.mSetNotificationsToken,
-        {Constants.kNotificationsToken: token});
-  }
-
-  /// [notificationData] notification payload data
-  /// See [Firebase RemoteMessage data](https://pub.dev/documentation/firebase_messaging_platform_interface/latest/firebase_messaging_platform_interface/RemoteMessage/data.html)
-  /// See [APNs notification data](https://developer.apple.com/documentation/usernotifications/unnotificationcontent/1649869-userinfo)
-  /// Returns true when a push notification was received from Qonversion. Otherwise returns false, so you need to handle a notification yourself
-  static Future<bool> handleNotification(Map<String, dynamic> notificationData) async {
-    try {
-      final bool rawResult = await _channel.invokeMethod(
-          Constants.mHandleNotification,
-          {Constants.kNotificationData: notificationData}) as bool;
-      return rawResult;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  /// Get parsed custom payload, which you added to the notification in the dashboard
-  /// [notificationData] notification payload data
-  /// See [Firebase RemoteMessage data](https://pub.dev/documentation/firebase_messaging_platform_interface/latest/firebase_messaging_platform_interface/RemoteMessage/data.html)
-  /// See [APNs notification data](https://developer.apple.com/documentation/usernotifications/unnotificationcontent/1649869-userinfo)
-  /// Returns a map with custom payload from the notification or null if it's not provided.
-  static Future<Map<String, dynamic>?> getNotificationCustomPayload(Map<String, dynamic> notificationData) async {
-    try {
-      final String rawResult = await _channel.invokeMethod(
-          Constants.mGetNotificationCustomPayload,
-          {Constants.kNotificationData: notificationData}) as String;
-
-      final Map<String, dynamic> result = jsonDecode(rawResult);
-      return result;
-    } catch (e) {
-      return null;
-    }
-  }
-
   // Private methods
-  static Future<void> _storeSdkInfo() =>
+  Future<void> _storeSdkInfo() =>
       _channel.invokeMethod(Constants.mStoreSdkInfo, {
         "version": _sdkVersion,
         "source": "flutter",

@@ -6,17 +6,17 @@ import 'package:qonversion_flutter/qonversion_flutter.dart';
 import 'constants.dart';
 
 class AutomationsInternal implements Automations {
-  static const MethodChannel _channel = MethodChannel('qonversion_plugin');
+  final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
-  static const _shownScreensEventChannel =
+  final _shownScreensEventChannel =
       EventChannel('qonversion_flutter_shown_screens');
-  static const _startedActionsEventChannel =
+  final _startedActionsEventChannel =
       EventChannel('qonversion_flutter_started_actions');
-  static const _failedActionsEventChannel =
+  final _failedActionsEventChannel =
       EventChannel('qonversion_flutter_failed_actions');
-  static const _finishedActionsEventChannel =
+  final _finishedActionsEventChannel =
       EventChannel('qonversion_flutter_finished_actions');
-  static const _finishedAutomationsEventChannel =
+  final _finishedAutomationsEventChannel =
       EventChannel('qonversion_flutter_finished_automations');
 
   @override
@@ -58,6 +58,11 @@ class AutomationsInternal implements Automations {
   @override
   Stream<Null> get finishedAutomationsStream =>
       _finishedAutomationsEventChannel.receiveBroadcastStream().cast();
+
+  AutomationsInternal() {
+    _channel.invokeMethod(Constants.mInitializeAutomations);
+    _channel.invokeMethod(Constants.mSubscribeAutomations);
+  }
 
   @override
   Future<void> setNotificationsToken(String token) {

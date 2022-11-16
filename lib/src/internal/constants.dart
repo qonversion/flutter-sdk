@@ -48,10 +48,12 @@ class Constants {
   static const mUserInfo = 'userInfo';
   static const mSetAppleSearchAdsAttributionEnabled =
       'setAppleSearchAdsAttributionEnabled';
-  static const mSetNotificationsToken = 'setNotificationsToken';
-  static const mHandleNotification = 'handleNotification';
-  static const mGetNotificationCustomPayload = 'getNotificationCustomPayload';
   static const mPresentCodeRedemptionSheet = 'presentCodeRedemptionSheet';
+  static const mInitializeAutomations = 'automationsInitialize';
+  static const mSubscribeAutomations = 'automationsSubscribe';
+  static const mSetNotificationsToken = 'automationsSetNotificationsToken';
+  static const mHandleNotification = 'automationsHandleNotification';
+  static const mGetNotificationCustomPayload = 'automationsGetNotificationCustomPayload';
 
   // Numeric constants
   static const skuDetailsPriceRatio = 1000000;

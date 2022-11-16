@@ -21,6 +21,10 @@ class AutomationsPlugin(private val messenger: BinaryMessenger) : AutomationsEve
         AutomationsSandwich()
     }
 
+    init {
+        setup()
+    }
+
     companion object {
         private const val EVENT_CHANNEL_SHOWN_SCREENS = "shown_screens"
         private const val EVENT_CHANNEL_STARTED_ACTIONS = "started_actions"
@@ -43,7 +47,6 @@ class AutomationsPlugin(private val messenger: BinaryMessenger) : AutomationsEve
 
     fun initialize() {
         automationSandwich.initialize()
-        setup()
     }
 
     fun subscribe() {
