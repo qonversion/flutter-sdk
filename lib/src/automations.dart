@@ -34,7 +34,7 @@ abstract class Automations {
           "Automations initialization should be called after Qonversion is initialized.");
     }
 
-    Automations instance = new AutomationsInternal();
+    final instance = new AutomationsInternal();
     _backingInstance = instance;
     return instance;
   }
