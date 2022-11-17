@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:qonversion_flutter/src/models/entitlement_source.dart';
-import 'package:qonversion_flutter/src/models/entitlement_renew_state.dart';
-import 'package:qonversion_flutter/src/models/utils/mapper.dart';
+import 'package:qonversion_flutter/src/dto/entitlement_source.dart';
+import 'package:qonversion_flutter/src/dto/entitlement_renew_state.dart';
+import 'package:qonversion_flutter/src/dto/utils/mapper.dart';
 
 part 'entitlement.g.dart';
 

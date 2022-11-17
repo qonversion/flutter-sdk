@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:qonversion_flutter/src/models/utils/mapper.dart';
+import 'package:qonversion_flutter/src/dto/utils/mapper.dart';
 
 import 'discount_payment_mode.dart';
 import 'sk_product_wrapper.dart';
