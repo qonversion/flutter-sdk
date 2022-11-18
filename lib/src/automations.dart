@@ -4,7 +4,7 @@ import 'package:qonversion_flutter/src/internal/automations_internal.dart';
 abstract class Automations {
   static Automations? _backingInstance;
 
-  /// Use this variable to get a current initialized instance of the Qonversion SDK.
+  /// Use this variable to get a current initialized instance of the Qonversion Automations.
   /// Please, use the property only after calling {@link Automations.initialize}.
   /// Otherwise, trying to access the variable will cause an exception.
   ///
