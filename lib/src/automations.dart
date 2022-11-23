@@ -8,7 +8,7 @@ abstract class Automations {
   /// Please, use the property only after calling [Automations.initialize].
   /// Otherwise, trying to access the variable will cause an exception.
   ///
-  /// Returns current initialized instance of the Automations SDK.
+  /// Returns current initialized instance of the Qonversion Automations.
   /// Throws [Exception] if the instance has not been initialized.
   static Automations getSharedInstance() {
     Automations? instance = _backingInstance;
@@ -24,7 +24,7 @@ abstract class Automations {
   /// An entry point to use Qonversion Automations. Call to initialize Automations.
   /// Make sure you have initialized [Qonversion] first.
   ///
-  /// Returns initialized instance of the Automations SDK.
+  /// Returns initialized instance of the Qonversion Automations.
   /// Throws [Exception] if [Qonversion] has not been initialized.
   static Automations initialize() {
     try {

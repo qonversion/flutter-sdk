@@ -57,15 +57,15 @@ class AutomationsPlugin(private val messenger: BinaryMessenger) : AutomationsEve
         token?.let {
             automationSandwich.setNotificationToken(it)
             result.success(null)
-        } ?: result.noArgsError()
+        } ?: result.noNecessaryDataError()
     }
 
     fun handleNotification(args: Map<String, Any>, result: MethodChannel.Result) {
         @Suppress("UNCHECKED_CAST")
-        val data = args["notificationData"] as? Map<String, Any> ?: return result.noDataError()
+        val data = args["notificationData"] as? Map<String, Any> ?: return result.noNecessaryDataError()
 
         if (data.isEmpty()) {
-            return result.noDataError()
+            return result.noNecessaryDataError()
         }
 
         val isQonversionNotification = automationSandwich.handleNotification(data)
@@ -74,10 +74,10 @@ class AutomationsPlugin(private val messenger: BinaryMessenger) : AutomationsEve
 
     fun getNotificationCustomPayload(args: Map<String, Any>, result: MethodChannel.Result) {
         @Suppress("UNCHECKED_CAST")
-        val data = args["notificationData"] as? Map<String, Any> ?: return result.noDataError()
+        val data = args["notificationData"] as? Map<String, Any> ?: return result.noNecessaryDataError()
 
         if (data.isEmpty()) {
-            return result.noDataError()
+            return result.noNecessaryDataError()
         }
 
         val payload = automationSandwich.getNotificationCustomPayload(data)

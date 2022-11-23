@@ -122,7 +122,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         }
 
         // Methods with args
-        val args = call.arguments() as? Map<String, Any> ?: return result.noArgsError()
+        val args = call.arguments() as? Map<String, Any> ?: return result.noNecessaryDataError()
         when (call.method) {
             "initialize" -> initialize(args, result)
             "purchase" -> purchase(args["productId"] as? String, result)
@@ -143,18 +143,18 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
     }
 
     private fun initialize(args: Map<String, Any>, result: Result) {
-        val context = application ?: return result.noDataError()
-        val projectKey = args["projectKey"] as? String ?: return result.noApiKeyError()
-        val launchModeKey = args["launchMode"] as? String ?: return result.noApiKeyError()
-        val environmentKey = args["environment"] as? String ?: return result.noApiKeyError()
-        val entitlementsCacheLifetimeKey = args["entitlementsCacheLifetime"] as? String ?: return result.noApiKeyError()
+        val context = application ?: return result.noNecessaryDataError()
+        val projectKey = args["projectKey"] as? String ?: return result.noNecessaryDataError()
+        val launchModeKey = args["launchMode"] as? String ?: return result.noNecessaryDataError()
+        val environmentKey = args["environment"] as? String ?: return result.noNecessaryDataError()
+        val entitlementsCacheLifetimeKey = args["entitlementsCacheLifetime"] as? String ?: return result.noNecessaryDataError()
         qonversionSandwich.initialize(context, projectKey, launchModeKey, environmentKey, entitlementsCacheLifetimeKey)
         result.success(null)
     }
 
     private fun identify(userId: String?, result: Result) {
         if (userId == null) {
-            result.noUserIdError()
+            result.noNecessaryDataError()
             return
         }
 
@@ -164,31 +164,31 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
 
     private fun purchase(productId: String?, result: Result) {
         if (productId == null) {
-            return result.noProductIdError()
+            return result.noNecessaryDataError()
         }
 
         qonversionSandwich.purchase(productId, result.toPurchaseResultListener())
     }
 
     private fun purchaseProduct(args: Map<String, Any>, result: Result) {
-        val productId = args["productId"] as? String ?: return result.noProductIdError()
+        val productId = args["productId"] as? String ?: return result.noNecessaryDataError()
         val offeringId = args["offeringId"] as? String
 
         qonversionSandwich.purchaseProduct(productId, offeringId, result.toPurchaseResultListener())
     }
 
     private fun updatePurchase(args: Map<String, Any>, result: Result) {
-        val newProductId = args["newProductId"] as? String ?: return result.noNewProductIdError()
-        val oldProductId = args["oldProductId"] as? String ?: return result.noOldProductIdError()
+        val newProductId = args["newProductId"] as? String ?: return result.noNecessaryDataError()
+        val oldProductId = args["oldProductId"] as? String ?: return result.noNecessaryDataError()
         val prorationMode = args["proration_mode"] as? Int
 
         qonversionSandwich.updatePurchase(newProductId, oldProductId, prorationMode, result.toPurchaseResultListener())
     }
 
     private fun updatePurchaseWithProduct(args: Map<String, Any>, result: Result) {
-        val newProductId = args["newProductId"] as? String ?: return result.noNewProductIdError()
+        val newProductId = args["newProductId"] as? String ?: return result.noNecessaryDataError()
         val offeringId = args["offeringId"] as? String
-        val oldProductId = args["oldProductId"] as? String ?: return result.noOldProductIdError()
+        val oldProductId = args["oldProductId"] as? String ?: return result.noNecessaryDataError()
         val prorationMode = args["proration_mode"] as? Int
 
         qonversionSandwich.updatePurchaseWithProduct(
@@ -209,17 +209,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
     }
 
     private fun offerings(result: Result) {
-        qonversionSandwich.offerings(
-            object : ResultListener {
-                override fun onError(error: SandwichError) {
-                    result.offeringsError(error)
-                }
-
-                override fun onSuccess(data: Map<String, Any?>) {
-                    result.success(Gson().toJson(data))
-                }
-            }
-        )
+        qonversionSandwich.offerings(result.toResultListener())
     }
 
     private fun products(result: Result) {
@@ -227,16 +217,16 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
     }
 
     private fun setDefinedUserProperty(args: Map<String, Any>, result: Result) {
-        val rawProperty = args["property"] as? String ?: return result.noProperty()
-        val value = args["value"] as? String ?: return result.noPropertyValue()
+        val rawProperty = args["property"] as? String ?: return result.noNecessaryDataError()
+        val value = args["value"] as? String ?: return result.noNecessaryDataError()
 
         qonversionSandwich.setDefinedProperty(rawProperty, value)
         result.success(null)
     }
 
     private fun setCustomUserProperty(args: Map<String, Any>, result: Result) {
-        val property = args["property"] as? String ?: return result.noProperty()
-        val value = args["value"] as? String ?: return result.noPropertyValue()
+        val property = args["property"] as? String ?: return result.noNecessaryDataError()
+        val value = args["value"] as? String ?: return result.noNecessaryDataError()
 
         qonversionSandwich.setCustomProperty(property, value)
         result.success(null)
@@ -249,13 +239,13 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
 
     private fun addAttributionData(args: Map<String, Any>, result: Result) {
         @Suppress("UNCHECKED_CAST")
-        val data = args["data"] as? Map<String, Any> ?: return result.noDataError()
+        val data = args["data"] as? Map<String, Any> ?: return result.noNecessaryDataError()
 
         if (data.isEmpty()) {
-            return result.noDataError()
+            return result.noNecessaryDataError()
         }
 
-        val provider = args["provider"] as? String ?: return result.noProviderError()
+        val provider = args["provider"] as? String ?: return result.noNecessaryDataError()
 
         qonversionSandwich.addAttributionData(provider, data)
         result.success(null)
@@ -263,7 +253,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
 
     private fun checkTrialIntroEligibility(args: Map<String, Any>, result: Result) {
         @Suppress("UNCHECKED_CAST")
-        val ids = args["ids"] as? List<String> ?: return result.noDataError()
+        val ids = args["ids"] as? List<String> ?: return result.noNecessaryDataError()
 
         qonversionSandwich.checkTrialIntroEligibility(ids, object : ResultListener {
             override fun onError(error: SandwichError) {
@@ -281,8 +271,8 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
     }
 
     private fun storeSdkInfo(args: Map<String, Any>, result: Result) {
-        val version = args["version"] as? String ?: return result.noSdkInfo()
-        val source = args["source"] as? String ?: return result.noSdkInfo()
+        val version = args["version"] as? String ?: return result.noNecessaryDataError()
+        val source = args["source"] as? String ?: return result.noNecessaryDataError()
 
         qonversionSandwich.storeSdkInfo(source, version)
         result.success(null)
