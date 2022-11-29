@@ -5,13 +5,15 @@ import 'product_type.dart';
 import 'sk_product/sk_product_wrapper.dart';
 import 'sku_details/sku_details.dart';
 import 'sk_product/discount.dart';
-import 'utils/mapper.dart';
+import '../internal/mapper.dart';
 
 part 'product.g.dart';
 
 enum QTrialDuration {
   @JsonValue(-1)
   notAvailable,
+  @JsonValue(0)
+  unknown,
   @JsonValue(1)
   threeDays,
   @JsonValue(2)

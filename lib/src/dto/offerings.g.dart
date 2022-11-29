@@ -54,6 +54,7 @@ K _$enumDecode<K, V>(
 }
 
 const _$QOfferingTagEnumMap = {
+  QOfferingTag.unknown: -1,
   QOfferingTag.none: 0,
   QOfferingTag.main: 1,
 };

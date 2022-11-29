@@ -146,12 +146,12 @@ abstract class Qonversion {
   /// iOS only. Does nothing, if called on Android.
   ///
   /// On iOS 14.5+, after requesting the app tracking entitlement using ATT, you need to notify Qonversion if tracking is allowed and IDFA is available.
-  Future<void> setAdvertisingID();
+  Future<void> collectAdvertisingId();
 
   /// iOS only. Does nothing, if called on Android.
   ///
-  /// Enable attribution collection from Apple Search Ads. NO by default.
-  Future<void> setAppleSearchAdsAttributionEnabled(bool enable);
+  /// Enable attribution collection from Apple Search Ads.
+  Future<void> collectAppleSearchAdsAttribution();
 
   /// iOS only. Does nothing, if called on Android.
   ///

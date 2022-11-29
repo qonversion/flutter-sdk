@@ -2,7 +2,6 @@ package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 
 import android.app.Activity
 import android.app.Application
-import androidx.annotation.NonNull
 import com.google.gson.Gson
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -88,7 +87,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         tearDown()
     }
 
-    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    override fun onMethodCall(call: MethodCall, result: Result) {
         // Methods without args
         when (call.method) {
             "products" -> {
@@ -209,7 +208,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
     }
 
     private fun offerings(result: Result) {
-        qonversionSandwich.offerings(result.toResultListener())
+        qonversionSandwich.offerings(result.toJsonResultListener())
     }
 
     private fun products(result: Result) {
@@ -255,15 +254,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         @Suppress("UNCHECKED_CAST")
         val ids = args["ids"] as? List<String> ?: return result.noNecessaryDataError()
 
-        qonversionSandwich.checkTrialIntroEligibility(ids, object : ResultListener {
-            override fun onError(error: SandwichError) {
-                result.sandwichError(error)
-            }
-
-            override fun onSuccess(data: Map<String, Any?>) {
-                result.success(Gson().toJson(data))
-            }
-        })
+        qonversionSandwich.checkTrialIntroEligibility(ids, result.toJsonResultListener())
     }
 
     private fun userInfo(result: Result) {
@@ -310,6 +301,18 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
 
             override fun onSuccess(data: Map<String, Any?>) {
                 success(data)
+            }
+        }
+    }
+
+    private fun Result.toJsonResultListener(): ResultListener {
+        return object : ResultListener {
+            override fun onError(error: SandwichError) {
+                sandwichError(error)
+            }
+
+            override fun onSuccess(data: Map<String, Any?>) {
+                success(Gson().toJson(data))
             }
         }
     }

@@ -37,7 +37,13 @@ public class AutomationsPlugin: NSObject {
     
     let finishedAutomationsListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: eventChannelFinishedAutomations)
     finishedAutomationsListener.register() { self.finishedAutomationsStreamHandler = $0 }
-    
+  }
+  
+  public func initialize() {
+    // todo call automationSandwich.initialize()
+  }
+
+  public func subscribe() {
     automationSandwich.subscribe(self)
   }
 }

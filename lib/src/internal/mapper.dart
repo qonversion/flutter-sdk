@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-import '../qonversion_error.dart';
-import '../eligibility.dart';
-import '../offerings.dart';
-import '../entitlement.dart';
-import '../product.dart';
-import '../user.dart';
-import '../sk_product/discount.dart';
-import '../sk_product/sk_product_wrapper.dart';
-import '../sk_product/subscription_period.dart';
-import '../sku_details/sku_details.dart';
+import '../dto/qonversion_error.dart';
+import '../dto/eligibility.dart';
+import '../dto/offerings.dart';
+import '../dto/entitlement.dart';
+import '../dto/product.dart';
+import '../dto/user.dart';
+import '../dto/sk_product/discount.dart';
+import '../dto/sk_product/sk_product_wrapper.dart';
+import '../dto/sk_product/subscription_period.dart';
+import '../dto/sku_details/sku_details.dart';
 
 class QMapper {
   static Map<String, QProduct> productsFromJson(dynamic json) {

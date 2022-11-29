@@ -4,5 +4,5 @@
 #import <Flutter/Flutter.h>
 #endif
 
-@interface QonversionFlutterSdkPlugin : NSObject<FlutterPlugin>
+@interface QonversionPlugin : NSObject<FlutterPlugin>
 @end

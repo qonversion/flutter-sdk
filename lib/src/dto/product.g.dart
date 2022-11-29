@@ -90,6 +90,7 @@ const _$QProductDurationEnumMap = {
 
 const _$QTrialDurationEnumMap = {
   QTrialDuration.notAvailable: -1,
+  QTrialDuration.unknown: 0,
   QTrialDuration.threeDays: 1,
   QTrialDuration.week: 2,
   QTrialDuration.twoWeeks: 3,

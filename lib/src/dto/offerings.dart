@@ -5,6 +5,8 @@ import 'package:qonversion_flutter/qonversion_flutter.dart';
 part 'offerings.g.dart';
 
 enum QOfferingTag {
+  @JsonValue(-1)
+  unknown,
   @JsonValue(0)
   none,
   @JsonValue(1)
