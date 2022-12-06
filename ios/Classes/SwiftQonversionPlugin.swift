@@ -83,7 +83,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     // MARK: - Calls with arguments
     
     guard let args = call.arguments as? [String: Any] else {
-      return result(FlutterError.noArgs)
+      return result(FlutterError.noNecessaryData)
     }
     
     switch call.method {
@@ -143,10 +143,10 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   
   private func initialize(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let projectKey = args["projectKey"] as? String else {
-      return result(FlutterError.noData)
+      return result(FlutterError.noNecessaryData)
     }
     guard let launchMode = args["launchMode"] as? String else {
-      return result(FlutterError.noData)
+      return result(FlutterError.noNecessaryData)
     }
     let environment = args["environment"] as? String
     let entitlementsCacheLifetime = args["entitlementsCacheLifetime"] as? String
@@ -161,7 +161,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
   private func identify(_ userId: String?, _ result: @escaping FlutterResult) {
     guard let userId = userId else {
-      result(FlutterError.noUserId)
+      result(FlutterError.noNecessaryData)
       return
     }
     
@@ -175,7 +175,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   
   private func purchase(_ productId: String?, _ result: @escaping FlutterResult) {
     guard let productId = productId else {
-      return result(FlutterError.noProductId)
+      return result(FlutterError.noNecessaryData)
     }
     
     qonversionSandwich?.purchase(productId, completion: getPurchaseCompletion(result))
@@ -183,7 +183,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   
   private func purchaseProduct(_ productId: String?, _ offeringId: String?, _ result: @escaping FlutterResult) {
     guard let productId = productId else {
-      return result(FlutterError.noProductId)
+      return result(FlutterError.noNecessaryData)
     }
     
     qonversionSandwich?.purchaseProduct(productId, offeringId: offeringId, completion: getPurchaseCompletion(result))
@@ -191,7 +191,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   
   private func promoPurchase(_ productId: String?, _ result: @escaping FlutterResult) {
     guard let productId = productId else {
-      return result(FlutterError.noProductId)
+      return result(FlutterError.noNecessaryData)
     }
     
     qonversionSandwich?.promoPurchase(productId, completion: getPurchaseCompletion(result))
@@ -211,11 +211,11 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   
   private func setDefinedUserProperty(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let rawProperty = args["property"] as? String else {
-      return result(FlutterError.noProperty)
+      return result(FlutterError.noNecessaryData)
     }
     
     guard let value = args["value"] as? String else {
-      return result(FlutterError.noPropertyValue)
+      return result(FlutterError.noNecessaryData)
     }
     
     qonversionSandwich?.setDefinedProperty(rawProperty, value: value)
@@ -224,11 +224,11 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
   private func setCustomUserProperty(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let property = args["property"] as? String else {
-      return result(FlutterError.noProperty)
+      return result(FlutterError.noNecessaryData)
     }
     
     guard let value = args["value"] as? String else {
-      return result(FlutterError.noPropertyValue)
+      return result(FlutterError.noNecessaryData)
     }
     
     qonversionSandwich?.setCustomProperty(property, value: value)
@@ -237,7 +237,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   
   private func checkTrialIntroEligibility(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let ids = args["ids"] as? [String] else {
-      return result(FlutterError.noData)
+      return result(FlutterError.noNecessaryData)
     }
     
     qonversionSandwich?.checkTrialIntroEligibility(ids, completion: getJsonCompletion(result))
@@ -247,7 +247,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     guard let version = args["version"] as? String,
         let source = args["source"] as? String
     else {
-        return result(FlutterError.noSdkInfo)
+        return result(FlutterError.noNecessaryData)
     }
     
     qonversionSandwich?.storeSdkInfo(source: source, version: version)
@@ -256,11 +256,11 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
   private func addAttributionData(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let data = args["data"] as? [String: Any] else {
-      return result(FlutterError.noData)
+      return result(FlutterError.noNecessaryData)
     }
     
     guard let provider = args["provider"] as? String else {
-      return result(FlutterError.noProvider)
+      return result(FlutterError.noNecessaryData)
     }
     
     qonversionSandwich?.attribution(providerKey: provider, value: data)

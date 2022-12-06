@@ -45,7 +45,7 @@ public class AutomationsPlugin: NSObject {
   
   public func setNotificationsToken(_ token: String?, _ result: @escaping FlutterResult) {
     guard let token = token else {
-      result(FlutterError.noArgs)
+      result(FlutterError.noNecessaryData)
       return
     }
     
@@ -55,7 +55,7 @@ public class AutomationsPlugin: NSObject {
   
   public func handleNotification(_ args: [AnyHashable: Any], _ result: @escaping FlutterResult) {
     guard let notificationData = args["notificationData"] as? [AnyHashable: Any] else {
-      return result(FlutterError.noData)
+      return result(FlutterError.noNecessaryData)
     }
     
     let isPushHandled: Bool = automationSandwich.handleNotification(notificationData)
@@ -64,7 +64,7 @@ public class AutomationsPlugin: NSObject {
   
   public func getNotificationCustomPayload(_ args: [AnyHashable: Any], _ result: @escaping FlutterResult) {
     guard let notificationData = args["notificationData"] as? [AnyHashable: Any] else {
-      return result(FlutterError.noData)
+      return result(FlutterError.noNecessaryData)
     }
 
     let customPayload: [AnyHashable: Any]? = automationSandwich.getNotificationCustomPayload(notificationData)
@@ -73,7 +73,7 @@ public class AutomationsPlugin: NSObject {
 
   public func showScreen(_ screenId: String?, _ result: @escaping FlutterResult) {
     guard let screenId = screenId else {
-      result(FlutterError.noArgs)
+      result(FlutterError.noNecessaryData)
       return
     }
 
