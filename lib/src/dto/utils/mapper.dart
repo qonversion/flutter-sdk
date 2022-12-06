@@ -3,8 +3,9 @@ import 'dart:convert';
 import '../qonversion_error.dart';
 import '../eligibility.dart';
 import '../offerings.dart';
-import '../permission.dart';
+import '../entitlement.dart';
 import '../product.dart';
+import '../user.dart';
 import '../sk_product/discount.dart';
 import '../sk_product/sk_product_wrapper.dart';
 import '../sk_product/subscription_period.dart';
@@ -22,14 +23,14 @@ class QMapper {
     });
   }
 
-  static Map<String, QPermission> permissionsFromJson(dynamic json) {
-    if (json == null) return <String, QPermission>{};
+  static Map<String, QEntitlement> entitlementsFromJson(dynamic json) {
+    if (json == null) return <String, QEntitlement>{};
 
-    final permissionsMap = Map<String, dynamic>.from(json);
+    final entitlementsMap = Map<String, dynamic>.from(json);
 
-    return permissionsMap.map((key, value) {
-      final permissionMap = Map<String, dynamic>.from(value);
-      return MapEntry(key, QPermission.fromJson(permissionMap));
+    return entitlementsMap.map((key, value) {
+      final entitlementMap = Map<String, dynamic>.from(value);
+      return MapEntry(key, QEntitlement.fromJson(entitlementMap));
     });
   }
 
@@ -39,6 +40,14 @@ class QMapper {
     final offeringJson = Map<String, dynamic>.from(jsonDecode(jsonString));
 
     return QOfferings.fromJson(offeringJson);
+  }
+
+  static QUser userFromJson(dynamic jsonString) {
+    if (jsonString == null) return QUser('', '');
+
+    final userMap = Map<String, dynamic>.from(jsonString);
+
+    return QUser.fromJson(userMap);
   }
 
   static Map<String, QEligibility> eligibilityFromJson(String? jsonString) {

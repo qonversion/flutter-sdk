@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:qonversion_flutter/src/models/qonversion_error.dart';
-import 'package:qonversion_flutter/src/models/utils/mapper.dart';
+import 'package:qonversion_flutter/src/dto/qonversion_error.dart';
+import 'package:qonversion_flutter/src/dto/utils/mapper.dart';
 import 'action_result_type.dart';
 
 part 'action_result.g.dart';

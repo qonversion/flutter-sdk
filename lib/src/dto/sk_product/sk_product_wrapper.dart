@@ -3,7 +3,7 @@
 import 'dart:ui' show hashValues;
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:qonversion_flutter/src/models/utils/mapper.dart';
+import 'package:qonversion_flutter/src/dto/utils/mapper.dart';
 
 import 'discount.dart';
 import 'subscription_period.dart';

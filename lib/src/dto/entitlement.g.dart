@@ -1,19 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'permission.dart';
+part of 'entitlement.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-QPermission _$QPermissionFromJson(Map<String, dynamic> json) {
-  return QPermission(
+QEntitlement _$QEntitlementFromJson(Map<String, dynamic> json) {
+  return QEntitlement(
     json['id'] as String,
-    json['associatedProduct'] as String,
-    _$enumDecode(_$QProductRenewStateEnumMap, json['renewState'],
-        unknownValue: QProductRenewState.unknown),
-    _$enumDecode(_$QPermissionSourceEnumMap, json['source'],
-        unknownValue: QPermissionSource.unknown),
+    json['productId'] as String,
+    _$enumDecode(_$QEntitlementRenewStateEnumMap, json['renewState'],
+        unknownValue: QEntitlementRenewState.unknown),
+    _$enumDecode(_$QEntitlementSourceEnumMap, json['source'],
+        unknownValue: QEntitlementSource.unknown),
     QMapper.dateTimeFromNullableSecondsTimestamp(
         json['startedTimestamp'] as num?),
     QMapper.dateTimeFromNullableSecondsTimestamp(
@@ -48,18 +48,18 @@ K _$enumDecode<K, V>(
   ).key;
 }
 
-const _$QProductRenewStateEnumMap = {
-  QProductRenewState.nonRenewable: -1,
-  QProductRenewState.unknown: 0,
-  QProductRenewState.willRenew: 1,
-  QProductRenewState.canceled: 2,
-  QProductRenewState.billingIssue: 3,
+const _$QEntitlementRenewStateEnumMap = {
+  QEntitlementRenewState.nonRenewable: 'non_renewable',
+  QEntitlementRenewState.unknown: 'unknown',
+  QEntitlementRenewState.willRenew: 'will_renew',
+  QEntitlementRenewState.canceled: 'canceled',
+  QEntitlementRenewState.billingIssue: 'billing_issue',
 };
 
-const _$QPermissionSourceEnumMap = {
-  QPermissionSource.unknown: 'Unknown',
-  QPermissionSource.appStore: 'AppStore',
-  QPermissionSource.playStore: 'PlayStore',
-  QPermissionSource.stripe: 'Stripe',
-  QPermissionSource.manual: 'Manual',
+const _$QEntitlementSourceEnumMap = {
+  QEntitlementSource.unknown: 'Unknown',
+  QEntitlementSource.appStore: 'AppStore',
+  QEntitlementSource.playStore: 'PlayStore',
+  QEntitlementSource.stripe: 'Stripe',
+  QEntitlementSource.manual: 'Manual',
 };

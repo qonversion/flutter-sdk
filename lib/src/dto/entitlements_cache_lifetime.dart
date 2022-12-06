@@ -1,4 +1,4 @@
-enum QPermissionsCacheLifetime {
+enum QEntitlementsCacheLifetime {
   week,
   twoWeeks,
   month,

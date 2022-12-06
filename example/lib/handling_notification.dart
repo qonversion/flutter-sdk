@@ -31,7 +31,7 @@ Future<void> showNotification(RemoteMessage message) async {
 Future<void> onNotificationClick(Map <String, dynamic> messageData) async {
   print("onNotificationClick");
   if (messageData != null) {
-    final isNotificationHandled = await Qonversion.handleNotification(messageData);
+    final isNotificationHandled = await Automations.getSharedInstance().handleNotification(messageData);
     if (!isNotificationHandled) {
       // Handle notification yourself
     }
