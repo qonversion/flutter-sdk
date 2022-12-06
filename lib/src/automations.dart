@@ -52,13 +52,13 @@ abstract class Automations {
   Stream<Null> get finishedAutomationsStream;
 
   /// Set push token to Qonversion to enable Qonversion push notifications
-  /// [token] Firebase device token on Android. APNs device token on iOS
+  /// [token] Firebase device token for Android. APNs device token for iOS
   Future<void> setNotificationsToken(String token);
 
   /// [notificationData] notification payload data
   /// See [Firebase RemoteMessage data](https://pub.dev/documentation/firebase_messaging_platform_interface/latest/firebase_messaging_platform_interface/RemoteMessage/data.html)
   /// See [APNs notification data](https://developer.apple.com/documentation/usernotifications/unnotificationcontent/1649869-userinfo)
-  /// Returns true when a push notification was received from Qonversion. Otherwise returns false, so you need to handle a notification yourself
+  /// Returns true when a push notification was received from Qonversion. Otherwise returns false, so you need to handle the notification yourself
   Future<bool> handleNotification(Map<String, dynamic> notificationData);
 
   /// Get parsed custom payload, which you added to the notification in the dashboard
