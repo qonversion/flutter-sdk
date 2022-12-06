@@ -188,6 +188,9 @@ class QonversionInternal implements Qonversion {
     final rawResult = await _channel.invokeMethod(Constants.mUserInfo);
 
     final result = QMapper.userFromJson(rawResult);
+    if (result == null) {
+      throw new Exception("User deserialization failed");
+    }
     return result;
   }
 

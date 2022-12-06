@@ -42,8 +42,8 @@ class QMapper {
     return QOfferings.fromJson(offeringJson);
   }
 
-  static QUser userFromJson(dynamic jsonString) {
-    if (jsonString == null) return QUser('', '');
+  static QUser? userFromJson(dynamic jsonString) {
+    if (jsonString == null) return null;
 
     final userMap = Map<String, dynamic>.from(jsonString);
 

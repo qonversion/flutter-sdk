@@ -84,11 +84,11 @@ class AutomationsInternal implements Automations {
   @override
   Future<Map<String, dynamic>?> getNotificationCustomPayload(Map<String, dynamic> notificationData) async {
     try {
-      final String rawResult = await _channel.invokeMethod(
+      final String? rawResult = await _channel.invokeMethod(
           Constants.mGetNotificationCustomPayload,
-          {Constants.kNotificationData: notificationData}) as String;
+          {Constants.kNotificationData: notificationData}) as String?;
 
-      final Map<String, dynamic> result = jsonDecode(rawResult);
+      final Map<String, dynamic>? result = rawResult == null ? null : jsonDecode(rawResult);
       return result;
     } catch (e) {
       return null;
