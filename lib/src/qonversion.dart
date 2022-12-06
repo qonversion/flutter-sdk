@@ -35,7 +35,8 @@ abstract class Qonversion {
     return instance;
   }
 
-  /// Yields an event each time a deferred transaction happens
+  /// Yields an event each time user entitlements update.
+  /// For example, when pending purchases like SCA, Ask to buy, etc., happen.
   Stream<Map<String, QEntitlement>> get updatedEntitlementsStream;
 
   /// Yields an event each time a promo transaction happens on iOS.
