@@ -11,7 +11,6 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   var promoPurchasesStreamHandler: BaseEventStreamHandler?
   var qonversionSandwich: QonversionSandwich?
   private var automationsPlugin: AutomationsPlugin?
-  private var shownScreensStreamHandler: BaseEventStreamHandler?
   
   public static func register(with registrar: FlutterPluginRegistrar) {
     let messenger: FlutterBinaryMessenger
