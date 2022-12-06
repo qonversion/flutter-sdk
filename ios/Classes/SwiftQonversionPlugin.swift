@@ -319,8 +319,8 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 }
 
 extension SwiftQonversionPlugin: QonversionEventListener {
-  public func qonversionDidReceiveUpdatedEntitlements(_ permissions: [String : Any]) {
-    guard let jsonData = permissions.toJson() else {
+  public func qonversionDidReceiveUpdatedEntitlements(_ entitlements: [String : Any]) {
+    guard let jsonData = entitlements.toJson() else {
       return
     }
     updatedEntitlementsStreamHandler?.eventSink?(jsonData)
