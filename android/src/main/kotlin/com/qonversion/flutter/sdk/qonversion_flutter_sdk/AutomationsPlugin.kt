@@ -45,10 +45,6 @@ class AutomationsPlugin(private val messenger: BinaryMessenger) : AutomationsEve
         stream?.eventSink?.success(data)
     }
 
-    fun initialize() {
-        automationSandwich.initialize()
-    }
-
     fun subscribe() {
         automationSandwich.setDelegate(this)
     }
@@ -83,6 +79,11 @@ class AutomationsPlugin(private val messenger: BinaryMessenger) : AutomationsEve
         val payload = automationSandwich.getNotificationCustomPayload(data)
         val payloadJson = Gson().toJson(payload)
         result.success(payloadJson)
+    }
+
+    fun showScreen(screenId: String?, result: MethodChannel.Result) {
+        screenId ?: return result.noNecessaryDataError()
+        automationSandwich.showScreen(screenId, result.toResultListener())
     }
 
     private fun setup() {

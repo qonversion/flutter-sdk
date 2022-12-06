@@ -60,7 +60,6 @@ class AutomationsInternal implements Automations {
       _finishedAutomationsEventChannel.receiveBroadcastStream().cast();
 
   AutomationsInternal() {
-    _channel.invokeMethod(Constants.mInitializeAutomations);
     _channel.invokeMethod(Constants.mSubscribeAutomations);
   }
 
@@ -94,6 +93,12 @@ class AutomationsInternal implements Automations {
     } catch (e) {
       return null;
     }
+  }
+
+  @override
+  Future<void> showScreen(String screenId) {
+    return _channel.invokeMethod(Constants.mShowScreen,
+        {Constants.kScreenId: screenId});
   }
 
   static ActionResult _handleActionEvent(String event) {

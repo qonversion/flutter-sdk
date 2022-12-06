@@ -55,7 +55,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       return restore(result)
 
     case "collectAdvertisingId":
-      qonversionSandwich?.setAdvertisingId()
+      qonversionSandwich?.collectAdvertisingId()
       return result(nil)
       
     case "offerings":
@@ -66,16 +66,12 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       return result(nil)
       
     case "userInfo":
-      // todo add implementation
+      qonversionSandwich?.userInfo(getDefaultCompletion(result))
       return result(nil)
 
     case "presentCodeRedemptionSheet":
       return presentCodeRedemptionSheet(result)
 
-    case "automationsInitialize":
-      automationsPlugin?.initialize()
-      return result(nil)
-      
     case "automationsSubscribe":
       automationsPlugin?.subscribe()
       return result(nil)
@@ -119,19 +115,26 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       return storeSdkInfo(args, result)
 
     case "identify":
-        return identify(args["userId"] as? String, result)
+      return identify(args["userId"] as? String, result)
       
     case "collectAppleSearchAdsAttribution":
       return collectAppleSearchAdsAttribution(result)
 
     case "automationsSetNotificationsToken":
-      return setNotificationsToken(args["notificationsToken"] as? String, result)
+      automationsPlugin?.setNotificationsToken(args["notificationsToken"] as? String, result)
+      return
       
     case "automationsHandleNotification":
-      return handleNotification(args, result)
+      automationsPlugin?.handleNotification(args, result)
+      return
       
     case "automationsGetNotificationCustomPayload":
-      return getNotificationCustomPayload(args, result)
+      automationsPlugin?.getNotificationCustomPayload(args, result)
+      return
+      
+    case "automationsShowScreen":
+      automationsPlugin?.showScreen(args["screenId"] as? String, result)
+      return
 
     default:
       return result(FlutterMethodNotImplemented)
@@ -260,42 +263,13 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       return result(FlutterError.noProvider)
     }
     
-    qonversionSandwich?.attribution(sourceKey: provider, value: data)
+    qonversionSandwich?.attribution(providerKey: provider, value: data)
     result(nil)
   }
   
   private func collectAppleSearchAdsAttribution(_ result: @escaping FlutterResult) {
-    qonversionSandwich?.setAppleSearchAdsAttributionEnabled(true)
+    qonversionSandwich?.collectAppleSearchAdsAttribution()
     result(nil)
-  }
-
-  // todo move to automationsPlugin
-  private func setNotificationsToken(_ token: String?, _ result: @escaping FlutterResult) {
-    guard let token = token else {
-      result(FlutterError.noArgs)
-      return
-    }
-    
-    qonversionSandwich?.setNotificationToken(token)
-    result(nil)
-  }
-  
-  private func handleNotification(_ args: [AnyHashable: Any], _ result: @escaping FlutterResult) {
-    guard let notificationData = args["notificationData"] as? [AnyHashable: Any] else {
-      return result(FlutterError.noData)
-    }
-    
-    let isPushHandled: Bool = qonversionSandwich?.handleNotification(notificationData) ?? false
-    result(isPushHandled)
-  }
-  
-  private func getNotificationCustomPayload(_ args: [AnyHashable: Any], _ result: @escaping FlutterResult) {
-    guard let notificationData = args["notificationData"] as? [AnyHashable: Any] else {
-      return result(FlutterError.noData)
-    }
-
-    let customPayload: [AnyHashable: Any]? = qonversionSandwich?.getNotificationCustomPayload(notificationData)
-    result(customPayload?.toJson())
   }
 
   private func presentCodeRedemptionSheet(_ result: @escaping FlutterResult) {
@@ -346,7 +320,10 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
 extension SwiftQonversionPlugin: QonversionEventListener {
   public func qonversionDidReceiveUpdatedEntitlements(_ permissions: [String : Any]) {
-    updatedEntitlementsStreamHandler?.eventSink?(permissions)
+    guard let jsonData = permissions.toJson() else {
+      return
+    }
+    updatedEntitlementsStreamHandler?.eventSink?(jsonData)
   }
   
   public func shouldPurchasePromoProduct(with productId: String) {

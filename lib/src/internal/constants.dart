@@ -21,6 +21,7 @@ class Constants {
   static const kNotificationsToken = 'notificationsToken';
   static const kNotificationData = 'notificationData';
   static const kLifetime = 'lifetime';
+  static const kScreenId = 'screenId';
 
   // MethodChannel methods names
   static const mInitialize = 'initialize';
@@ -47,11 +48,11 @@ class Constants {
   static const mUserInfo = 'userInfo';
   static const mCollectAppleSearchAdsAttribution = 'collectAppleSearchAdsAttribution';
   static const mPresentCodeRedemptionSheet = 'presentCodeRedemptionSheet';
-  static const mInitializeAutomations = 'automationsInitialize';
   static const mSubscribeAutomations = 'automationsSubscribe';
   static const mSetNotificationsToken = 'automationsSetNotificationsToken';
   static const mHandleNotification = 'automationsHandleNotification';
   static const mGetNotificationCustomPayload = 'automationsGetNotificationCustomPayload';
+  static const mShowScreen = 'automationsShowScreen';
 
   // Numeric constants
   static const skuDetailsPriceRatio = 1000000;

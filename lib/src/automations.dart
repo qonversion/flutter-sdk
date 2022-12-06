@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:qonversion_flutter/qonversion_flutter.dart';
 import 'package:qonversion_flutter/src/internal/automations_internal.dart';
 
@@ -5,37 +7,26 @@ abstract class Automations {
   static Automations? _backingInstance;
 
   /// Use this variable to get a current initialized instance of the Qonversion Automations.
-  /// Please, use the property only after calling [Automations.initialize].
+  /// Please, use Automations only after calling [Qonversion.initialize].
   /// Otherwise, trying to access the variable will cause an exception.
   ///
   /// Returns current initialized instance of the Qonversion Automations.
-  /// Throws [Exception] if the instance has not been initialized.
+  /// Throws [Exception] if Qonversion has not been initialized.
   static Automations getSharedInstance() {
     Automations? instance = _backingInstance;
 
     if (instance == null) {
-      throw new Exception("Automations have not been initialized. You should call " +
-          "the initialize method before accessing the shared instance of Automations.");
+      try {
+        Qonversion.getSharedInstance();
+      } catch (e) {
+        throw new Exception("Qonversion has not been initialized. " +
+            "Automations should be used after Qonversion is initialized.");
+      }
+
+      instance = new AutomationsInternal();
+      _backingInstance = instance;
     }
 
-    return instance;
-  }
-
-  /// An entry point to use Qonversion Automations. Call to initialize Automations.
-  /// Make sure you have initialized [Qonversion] first.
-  ///
-  /// Returns initialized instance of the Qonversion Automations.
-  /// Throws [Exception] if [Qonversion] has not been initialized.
-  static Automations initialize() {
-    try {
-      Qonversion.getSharedInstance();
-    } catch (e) {
-      throw new Exception("Qonversion has not been initialized. " +
-          "Automations initialization should be called after Qonversion is initialized.");
-    }
-
-    final instance = new AutomationsInternal();
-    _backingInstance = instance;
     return instance;
   }
 
@@ -76,4 +67,8 @@ abstract class Automations {
   /// See [APNs notification data](https://developer.apple.com/documentation/usernotifications/unnotificationcontent/1649869-userinfo)
   /// Returns a map with custom payload from the notification or null if it's not provided.
   Future<Map<String, dynamic>?> getNotificationCustomPayload(Map<String, dynamic> notificationData);
+
+  /// Show the screen using its ID.
+  /// [screenId] Identifier of the screen which must be shown
+  Future<void> showScreen(String screenId);
 }
