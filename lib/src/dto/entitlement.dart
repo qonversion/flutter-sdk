@@ -11,7 +11,7 @@ class QEntitlement {
   ///
   /// See [Create Entitlement](https://qonversion.io/docs/create-entitlement)
   @JsonKey(name: 'id')
-  final String entitlementId;
+  final String id;
 
   /// Product ID created in Qonversion Dashboard.
   ///
@@ -54,7 +54,7 @@ class QEntitlement {
   final bool isActive;
 
   const QEntitlement(
-    this.entitlementId,
+    this.id,
     this.productId,
     this.renewState,
     this.source,
