@@ -18,10 +18,10 @@ class Constants {
   static const kProperty = 'property';
   static const kValue = 'value';
   static const kProrationMode = 'proration_mode';
-  static const kEnableAppleSearchAdsAttribution = 'enable';
   static const kNotificationsToken = 'notificationsToken';
   static const kNotificationData = 'notificationData';
   static const kLifetime = 'lifetime';
+  static const kScreenId = 'screenId';
 
   // MethodChannel methods names
   static const mInitialize = 'initialize';
@@ -39,21 +39,20 @@ class Constants {
   static const mSyncPurchases = 'syncPurchases';
   static const mAddAttributionData = 'addAttributionData';
   static const mSetDebugMode = 'setDebugMode';
-  static const mSetAdvertisingID = 'setAdvertisingID';
+  static const mCollectAdvertisingId = 'collectAdvertisingId';
   static const mOfferings = 'offerings';
   static const mCheckTrialIntroEligibility = 'checkTrialIntroEligibility';
   static const mStoreSdkInfo = 'storeSdkInfo';
   static const mIdentify = 'identify';
   static const mLogout = 'logout';
   static const mUserInfo = 'userInfo';
-  static const mSetAppleSearchAdsAttributionEnabled =
-      'setAppleSearchAdsAttributionEnabled';
+  static const mCollectAppleSearchAdsAttribution = 'collectAppleSearchAdsAttribution';
   static const mPresentCodeRedemptionSheet = 'presentCodeRedemptionSheet';
-  static const mInitializeAutomations = 'automationsInitialize';
   static const mSubscribeAutomations = 'automationsSubscribe';
   static const mSetNotificationsToken = 'automationsSetNotificationsToken';
   static const mHandleNotification = 'automationsHandleNotification';
   static const mGetNotificationCustomPayload = 'automationsGetNotificationCustomPayload';
+  static const mShowScreen = 'automationsShowScreen';
 
   // Numeric constants
   static const skuDetailsPriceRatio = 1000000;

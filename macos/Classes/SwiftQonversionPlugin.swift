@@ -6,8 +6,8 @@ import Flutter
 
 import QonversionSandwich
 
-public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
-  var deferredPurchasesStreamHandler: BaseEventStreamHandler?
+public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
+  var updatedEntitlementsStreamHandler: BaseEventStreamHandler?
   var qonversionSandwich: QonversionSandwich?
 
   public static func register(with registrar: FlutterPluginRegistrar) {
@@ -17,13 +17,13 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     #else
       messenger = registrar.messenger()
     #endif
-    let channel = FlutterMethodChannel(name: "qonversion_flutter_sdk", binaryMessenger: messenger)
-    let instance = SwiftQonversionFlutterSdkPlugin()
+    let channel = FlutterMethodChannel(name: "qonversion_plugin", binaryMessenger: messenger)
+    let instance = SwiftQonversionPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
 
-    // Register deferred purchases events
-    let purchasesListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "updated_purchases")
-    purchasesListener.register() { instance.deferredPurchasesStreamHandler = $0 }
+    // Register updated entitlements events
+    let updatedEntitlementsListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "updated_entitlements")
+    updatedEntitlementsListener.register() { instance.updatedEntitlementsStreamHandler = $0 }
 
     // Register sandwich
     let sandwichInstance = QonversionSandwich.init(qonversionEventListener: instance)
@@ -38,18 +38,14 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     case "products":
       return products(result)
 
-    case "checkPermissions":
-      return checkPermissions(result)
+    case "checkEntitlements":
+      return checkEntitlements(result)
 
     case "restore":
       return restore(result)
 
-    case "setDebugMode":
-      qonversionSandwich?.setDebugMode()
-      return result(nil)
-
-    case "setAdvertisingID":
-      qonversionSandwich?.setAdvertisingId()
+    case "collectAdvertisingId":
+      qonversionSandwich?.collectAdvertisingId()
       return result(nil)
 
     case "offerings":
@@ -59,6 +55,10 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       qonversionSandwich?.logout()
       return result(nil)
 
+    case "userInfo":
+      qonversionSandwich?.userInfo(getDefaultCompletion(result))
+      return result(nil)
+
     default:
       break
     }
@@ -66,12 +66,12 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     // MARK: - Calls with arguments
 
     guard let args = call.arguments as? [String: Any] else {
-      return result(FlutterError.noArgs)
+      return result(FlutterError.noNecessaryData)
     }
 
     switch call.method {
-    case "launch":
-      return launch(with: args["key"] as? String, result)
+    case "initialize":
+      return initialize(args, result)
 
     case "purchase":
       return purchase(args["productId"] as? String, result)
@@ -79,14 +79,14 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     case "purchaseProduct":
       return purchaseProduct(args["productId"] as? String, args["offeringId"] as? String, result)
 
-    case "addAttributionData":
-      return addAttributionData(args, result)
-
     case "setDefinedUserProperty":
       return setDefinedUserProperty(args, result)
 
     case "setCustomUserProperty":
       return setCustomUserProperty(args, result)
+
+    case "addAttributionData":
+      return addAttributionData(args, result)
 
     case "checkTrialIntroEligibility":
       return checkTrialIntroEligibility(args, result)
@@ -95,27 +95,34 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
       return storeSdkInfo(args, result)
 
     case "identify":
-        return identify(args["userId"] as? String, result)
-
-    case "setPermissionsCacheLifetime":
-      return setPermissionsCacheLifetime(args, result)
+      return identify(args["userId"] as? String, result)
 
     default:
       return result(FlutterMethodNotImplemented)
     }
   }
 
-  private func launch(with apiKey: String?, _ result: @escaping FlutterResult) {
-    guard let apiKey = apiKey, !apiKey.isEmpty else {
-      return result(FlutterError.noApiKey)
+  private func initialize(_ args: [String: Any], _ result: @escaping FlutterResult) {
+    guard let projectKey = args["projectKey"] as? String else {
+      return result(FlutterError.noNecessaryData)
     }
+    guard let launchMode = args["launchMode"] as? String else {
+      return result(FlutterError.noNecessaryData)
+    }
+    let environment = args["environment"] as? String
+    let entitlementsCacheLifetime = args["entitlementsCacheLifetime"] as? String
 
-    qonversionSandwich?.launch(projectKey: apiKey, completion: getDefaultCompletion(result))
+    qonversionSandwich?.initialize(
+      projectKey: projectKey,
+      launchModeKey: launchMode,
+      environmentKey: environment,
+      entitlementsCacheLifetimeKey: entitlementsCacheLifetime
+    )
   }
 
   private func identify(_ userId: String?, _ result: @escaping FlutterResult) {
     guard let userId = userId else {
-      result(FlutterError.noUserId)
+      result(FlutterError.noNecessaryData)
       return
     }
 
@@ -124,18 +131,12 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
   }
 
   private func products(_ result: @escaping FlutterResult) {
-    qonversionSandwich?.products({ products, error in
-      if let error = error {
-        return result(FlutterError.failedToGetProducts(error))
-      }
-
-      result(products)
-    })
+    qonversionSandwich?.products(getDefaultCompletion(result))
   }
 
   private func purchase(_ productId: String?, _ result: @escaping FlutterResult) {
     guard let productId = productId else {
-      return result(FlutterError.noProductId)
+      return result(FlutterError.noNecessaryData)
     }
 
     qonversionSandwich?.purchase(productId, completion: getPurchaseCompletion(result))
@@ -143,14 +144,14 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
 
   private func purchaseProduct(_ productId: String?, _ offeringId: String?, _ result: @escaping FlutterResult) {
     guard let productId = productId else {
-      return result(FlutterError.noProductId)
+      return result(FlutterError.noNecessaryData)
     }
 
     qonversionSandwich?.purchaseProduct(productId, offeringId: offeringId, completion: getPurchaseCompletion(result))
   }
 
-  private func checkPermissions(_ result: @escaping FlutterResult) {
-    qonversionSandwich?.checkPermissions(getDefaultCompletion(result))
+  private func checkEntitlements(_ result: @escaping FlutterResult) {
+    qonversionSandwich?.checkEntitlements(getDefaultCompletion(result))
   }
 
   private func restore(_ result: @escaping FlutterResult) {
@@ -163,11 +164,11 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
 
   private func setDefinedUserProperty(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let rawProperty = args["property"] as? String else {
-      return result(FlutterError.noProperty)
+      return result(FlutterError.noNecessaryData)
     }
 
     guard let value = args["value"] as? String else {
-      return result(FlutterError.noPropertyValue)
+      return result(FlutterError.noNecessaryData)
     }
 
     qonversionSandwich?.setDefinedProperty(rawProperty, value: value)
@@ -176,11 +177,11 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
 
   private func setCustomUserProperty(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let property = args["property"] as? String else {
-      return result(FlutterError.noProperty)
+      return result(FlutterError.noNecessaryData)
     }
 
     guard let value = args["value"] as? String else {
-      return result(FlutterError.noPropertyValue)
+      return result(FlutterError.noNecessaryData)
     }
 
     qonversionSandwich?.setCustomProperty(property, value: value)
@@ -189,7 +190,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
 
   private func checkTrialIntroEligibility(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let ids = args["ids"] as? [String] else {
-      return result(FlutterError.noData)
+      return result(FlutterError.noNecessaryData)
     }
 
     qonversionSandwich?.checkTrialIntroEligibility(ids, completion: getJsonCompletion(result))
@@ -199,7 +200,7 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
     guard let version = args["version"] as? String,
         let source = args["source"] as? String
     else {
-        return result(FlutterError.noSdkInfo)
+        return result(FlutterError.noNecessaryData)
     }
 
     qonversionSandwich?.storeSdkInfo(source: source, version: version)
@@ -208,23 +209,14 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
 
   private func addAttributionData(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let data = args["data"] as? [String: Any] else {
-      return result(FlutterError.noData)
+      return result(FlutterError.noNecessaryData)
     }
 
     guard let provider = args["provider"] as? String else {
-      return result(FlutterError.noProvider)
+      return result(FlutterError.noNecessaryData)
     }
 
-    qonversionSandwich?.addAttributionData(sourceKey: provider, value: data)
-    result(nil)
-  }
-
-  private func setPermissionsCacheLifetime(_ args: [String: Any], _ result: @escaping FlutterResult) {
-    guard let rawLifetime = args["lifetime"] as? String else {
-      return result(FlutterError.noLifetime)
-    }
-
-    qonversionSandwich?.setPermissionsCacheLifetime(rawLifetime)
+    qonversionSandwich?.attribution(providerKey: provider, value: data)
     result(nil)
   }
 
@@ -267,12 +259,15 @@ public class SwiftQonversionFlutterSdkPlugin: NSObject, FlutterPlugin {
   }
 }
 
-extension SwiftQonversionFlutterSdkPlugin: QonversionEventListener {
-  public func shouldPurchasePromoProduct(with productId: String) {
-    // Promo purchases are not supported on MacOS.
+extension SwiftQonversionPlugin: QonversionEventListener {
+  public func qonversionDidReceiveUpdatedEntitlements(_ entitlements: [String : Any]) {
+    guard let jsonData = entitlements.toJson() else {
+      return
+    }
+    updatedEntitlementsStreamHandler?.eventSink?(jsonData)
   }
 
-  public func qonversionDidReceiveUpdatedPermissions(_ permissions: [String : Any]) {
-    deferredPurchasesStreamHandler?.eventSink?(permissions)
+  public func shouldPurchasePromoProduct(with productId: String) {
+    // Promo purchases are not supported on MacOS.
   }
 }

@@ -2,7 +2,6 @@ package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 
 import android.app.Activity
 import android.app.Application
-import androidx.annotation.NonNull
 import com.google.gson.Gson
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -15,11 +14,8 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.qonversion.sandwich.ActivityProvider
 import io.qonversion.sandwich.BridgeData
-import io.qonversion.sandwich.PurchaseResultListener
 import io.qonversion.sandwich.QonversionEventsListener
 import io.qonversion.sandwich.QonversionSandwich
-import io.qonversion.sandwich.ResultListener
-import io.qonversion.sandwich.SandwichError
 
 class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
     private var activity: Activity? = null
@@ -88,7 +84,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         tearDown()
     }
 
-    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    override fun onMethodCall(call: MethodCall, result: Result) {
         // Methods without args
         when (call.method) {
             "products" -> {
@@ -113,9 +109,6 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "userInfo" -> {
                 return userInfo(result)
             }
-            "automationsInitialize" -> {
-                return automationsPlugin.initialize()
-            }
             "automationsSubscribe" -> {
                 return automationsPlugin.subscribe()
             }
@@ -138,6 +131,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "automationsSetNotificationsToken" -> automationsPlugin.setNotificationsToken(args["notificationsToken"] as? String, result)
             "automationsHandleNotification" -> automationsPlugin.handleNotification(args, result)
             "automationsGetNotificationCustomPayload" -> automationsPlugin.getNotificationCustomPayload(args, result)
+            "automationsShowScreen" -> automationsPlugin.showScreen(args["screenId"] as? String, result)
             else -> result.notImplemented()
         }
     }
@@ -209,7 +203,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
     }
 
     private fun offerings(result: Result) {
-        qonversionSandwich.offerings(result.toResultListener())
+        qonversionSandwich.offerings(result.toJsonResultListener())
     }
 
     private fun products(result: Result) {
@@ -255,15 +249,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         @Suppress("UNCHECKED_CAST")
         val ids = args["ids"] as? List<String> ?: return result.noNecessaryDataError()
 
-        qonversionSandwich.checkTrialIntroEligibility(ids, object : ResultListener {
-            override fun onError(error: SandwichError) {
-                result.sandwichError(error)
-            }
-
-            override fun onSuccess(data: Map<String, Any?>) {
-                result.success(Gson().toJson(data))
-            }
-        })
+        qonversionSandwich.checkTrialIntroEligibility(ids, result.toJsonResultListener())
     }
 
     private fun userInfo(result: Result) {
@@ -300,29 +286,5 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         channel = null
         this.updatedEntitlementsStreamHandler = null
         this.application = null
-    }
-
-    private fun Result.toResultListener(): ResultListener {
-        return object : ResultListener {
-            override fun onError(error: SandwichError) {
-                sandwichError(error)
-            }
-
-            override fun onSuccess(data: Map<String, Any?>) {
-                success(data)
-            }
-        }
-    }
-
-    private fun Result.toPurchaseResultListener(): PurchaseResultListener {
-        return object : PurchaseResultListener {
-            override fun onError(error: SandwichError, isCancelled: Boolean) {
-                purchaseError(error, isCancelled)
-            }
-
-            override fun onSuccess(data: Map<String, Any?>) {
-                success(data)
-            }
-        }
     }
 }

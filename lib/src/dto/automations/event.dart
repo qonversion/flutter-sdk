@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:qonversion_flutter/src/dto/utils/mapper.dart';
+import 'package:qonversion_flutter/src/internal/mapper.dart';
 
 import 'event_type.dart';
 

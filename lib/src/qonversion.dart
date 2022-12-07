@@ -24,7 +24,7 @@ abstract class Qonversion {
 
   /// An entry point to use Qonversion SDK. Call to initialize Qonversion SDK with required and extra configs.
   /// The function is the best way to set additional configs you need to use Qonversion SDK.
-  /// You still have an option to set a part of additional configs later via calling separated setters.
+  /// You still have an option to set a part of additional configs later via calling separate setters.
   ///
   /// [config] a config that contains key SDK settings.
   /// Call [QonversionConfigBuilder.build] to configure and create a [QonversionConfig] instance.
@@ -35,7 +35,8 @@ abstract class Qonversion {
     return instance;
   }
 
-  /// Yields an event each time a deferred transaction happens
+  /// Yields an event each time user entitlements update.
+  /// For example, when pending purchases like SCA, Ask to buy, etc., happen.
   Stream<Map<String, QEntitlement>> get updatedEntitlementsStream;
 
   /// Yields an event each time a promo transaction happens on iOS.
@@ -146,12 +147,12 @@ abstract class Qonversion {
   /// iOS only. Does nothing, if called on Android.
   ///
   /// On iOS 14.5+, after requesting the app tracking entitlement using ATT, you need to notify Qonversion if tracking is allowed and IDFA is available.
-  Future<void> setAdvertisingID();
+  Future<void> collectAdvertisingId();
 
   /// iOS only. Does nothing, if called on Android.
   ///
-  /// Enable attribution collection from Apple Search Ads. NO by default.
-  Future<void> setAppleSearchAdsAttributionEnabled(bool enable);
+  /// Enable attribution collection from Apple Search Ads.
+  Future<void> collectAppleSearchAdsAttribution();
 
   /// iOS only. Does nothing, if called on Android.
   ///

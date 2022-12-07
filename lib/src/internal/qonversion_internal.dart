@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
-import 'package:qonversion_flutter/src/dto/utils/mapper.dart';
+import 'package:qonversion_flutter/src/internal/mapper.dart';
 import 'package:qonversion_flutter/src/internal/utils/string.dart';
 
 import 'constants.dart';
@@ -188,6 +188,9 @@ class QonversionInternal implements Qonversion {
     final rawResult = await _channel.invokeMethod(Constants.mUserInfo);
 
     final result = QMapper.userFromJson(rawResult);
+    if (result == null) {
+      throw new Exception("User deserialization failed");
+    }
     return result;
   }
 
@@ -216,17 +219,16 @@ class QonversionInternal implements Qonversion {
       });
 
   @override
-  Future<void> setAdvertisingID() async {
+  Future<void> collectAdvertisingId() async {
     if (Platform.isIOS) {
-      return _channel.invokeMethod(Constants.mSetAdvertisingID);
+      return _channel.invokeMethod(Constants.mCollectAdvertisingId);
     }
   }
 
   @override
-  Future<void> setAppleSearchAdsAttributionEnabled(bool enable) async {
+  Future<void> collectAppleSearchAdsAttribution() async {
     if (Platform.isIOS) {
-      return _channel.invokeMethod(Constants.mSetAppleSearchAdsAttributionEnabled,
-          {Constants.kEnableAppleSearchAdsAttribution: enable});
+      return _channel.invokeMethod(Constants.mCollectAppleSearchAdsAttribution);
     }
   }
 

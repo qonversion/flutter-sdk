@@ -60,7 +60,6 @@ class AutomationsInternal implements Automations {
       _finishedAutomationsEventChannel.receiveBroadcastStream().cast();
 
   AutomationsInternal() {
-    _channel.invokeMethod(Constants.mInitializeAutomations);
     _channel.invokeMethod(Constants.mSubscribeAutomations);
   }
 
@@ -85,15 +84,21 @@ class AutomationsInternal implements Automations {
   @override
   Future<Map<String, dynamic>?> getNotificationCustomPayload(Map<String, dynamic> notificationData) async {
     try {
-      final String rawResult = await _channel.invokeMethod(
+      final String? rawResult = await _channel.invokeMethod(
           Constants.mGetNotificationCustomPayload,
-          {Constants.kNotificationData: notificationData}) as String;
+          {Constants.kNotificationData: notificationData}) as String?;
 
-      final Map<String, dynamic> result = jsonDecode(rawResult);
+      final Map<String, dynamic>? result = rawResult == null ? null : jsonDecode(rawResult);
       return result;
     } catch (e) {
       return null;
     }
+  }
+
+  @override
+  Future<void> showScreen(String screenId) {
+    return _channel.invokeMethod(Constants.mShowScreen,
+        {Constants.kScreenId: screenId});
   }
 
   static ActionResult _handleActionEvent(String event) {

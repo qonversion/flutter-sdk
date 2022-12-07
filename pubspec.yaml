@@ -27,9 +27,9 @@ flutter:
         pluginClass: QonversionPlugin
         package: com.qonversion.flutter.sdk.qonversion_flutter_sdk
       ios:
-        pluginClass: QonversionFlutterSdkPlugin
+        pluginClass: QonversionPlugin
       macos:
-        pluginClass: QonversionFlutterSdkPlugin
+        pluginClass: QonversionPlugin
 
 false_secrets:
   - /example/android/app/google-services.json

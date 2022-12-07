@@ -1,4 +1,4 @@
-#import "QonversionFlutterSdkPlugin.h"
+#import "QonversionPlugin.h"
 #if __has_include(<qonversion_flutter/qonversion_flutter-Swift.h>)
 #import <qonversion_flutter/qonversion_flutter-Swift.h>
 #else
@@ -8,8 +8,8 @@
 #import "qonversion_flutter-Swift.h"
 #endif
 
-@implementation QonversionFlutterSdkPlugin
+@implementation QonversionPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  [SwiftQonversionFlutterSdkPlugin registerWithRegistrar:registrar];
+  [SwiftQonversionPlugin registerWithRegistrar:registrar];
 }
 @end
