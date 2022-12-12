@@ -208,7 +208,7 @@ class _HomeViewState extends State<HomeView> {
             title: Text(e.key),
             subtitle: Text(
               e.value.productId ??
-                  '' + '\n' + e.value.entitlementId ??
+                  '' + '\n' + e.value.id ??
                   '' +
                       '\n' +
                       e.value.renewState.toString() +
