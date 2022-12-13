@@ -22,7 +22,7 @@ class ParamsView extends StatelessWidget {
               color: Colors.green,
               textColor: Colors.white,
               onPressed: () {
-                Qonversion.setProperty(QUserProperty.customUserId, 'customId');
+                Qonversion.getSharedInstance().setProperty(QUserProperty.customUserId, 'customId');
                 print('did set user id');
               },
             ),
@@ -31,7 +31,7 @@ class ParamsView extends StatelessWidget {
               color: Colors.blue,
               textColor: Colors.white,
               onPressed: () {
-                Qonversion.setUserProperty('customProperty', 'customValue');
+                Qonversion.getSharedInstance().setUserProperty('customProperty', 'customValue');
                 print('did set user property');
               },
             ),
@@ -41,7 +41,7 @@ class ParamsView extends StatelessWidget {
                 color: Colors.purple,
                 textColor: Colors.white,
                 onPressed: () {
-                  Qonversion.setProperty(v, 'email@email.com');
+                  Qonversion.getSharedInstance().setProperty(v, 'email@email.com');
                   print('did set property');
                 },
               ),

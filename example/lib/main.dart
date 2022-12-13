@@ -73,7 +73,7 @@ Future<void> main() async {
       sound: true,
     );
   }
-  /// Grant permissions for iOS
+  /// Grant entitlements for iOS
   if (Platform.isIOS) {
     NotificationSettings settings =
         await FirebaseMessaging.instance.requestPermission(
