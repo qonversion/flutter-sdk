@@ -1,6 +1,6 @@
-## 5.0.0-RC1
-It contains a lot of changes, which are described in our [migration guide](https://documentation.qonversion.io/v3.1/docs/flutter-5-migration-guide).
-Please, note that future releases may be backward incompatible with release candidates.
+## 4.6.1
+* Fixed an issue causing automation event losses on Android.
+* Fixed a rare issue with the permissions cache on Android.
 
 ## 4.6.0
 * Added a `source` property to the `Permission` object - use it to know where this permission is originally from - App Store, Play Store, Stripe, etc.
