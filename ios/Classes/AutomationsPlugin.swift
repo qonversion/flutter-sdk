@@ -37,8 +37,53 @@ public class AutomationsPlugin: NSObject {
     
     let finishedAutomationsListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: eventChannelFinishedAutomations)
     finishedAutomationsListener.register() { self.finishedAutomationsStreamHandler = $0 }
-    
+  }
+  
+  public func subscribe() {
     automationSandwich.subscribe(self)
+  }
+  
+  public func setNotificationsToken(_ token: String?, _ result: @escaping FlutterResult) {
+    guard let token = token else {
+      result(FlutterError.noNecessaryData)
+      return
+    }
+    
+    automationSandwich.setNotificationToken(token)
+    result(nil)
+  }
+  
+  public func handleNotification(_ args: [AnyHashable: Any], _ result: @escaping FlutterResult) {
+    guard let notificationData = args["notificationData"] as? [AnyHashable: Any] else {
+      return result(FlutterError.noNecessaryData)
+    }
+    
+    let isPushHandled: Bool = automationSandwich.handleNotification(notificationData)
+    result(isPushHandled)
+  }
+  
+  public func getNotificationCustomPayload(_ args: [AnyHashable: Any], _ result: @escaping FlutterResult) {
+    guard let notificationData = args["notificationData"] as? [AnyHashable: Any] else {
+      return result(FlutterError.noNecessaryData)
+    }
+
+    let customPayload: [AnyHashable: Any]? = automationSandwich.getNotificationCustomPayload(notificationData)
+    result(customPayload?.toJson())
+  }
+
+  public func showScreen(_ screenId: String?, _ result: @escaping FlutterResult) {
+    guard let screenId = screenId else {
+      result(FlutterError.noNecessaryData)
+      return
+    }
+
+    automationSandwich.showScreen(screenId) { data, error in
+      if let error = error {
+        return result(FlutterError.sandwichError(error))
+      }
+      
+      result(data)
+    }
   }
 }
 

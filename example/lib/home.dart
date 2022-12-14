@@ -13,7 +13,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  Map<String, QPermission> _permissions;
+  Map<String, QEntitlement> _entitlements;
   Map<String, QProduct> _products;
 
   StreamSubscription<String> _shownScreensStream;
@@ -45,22 +45,22 @@ class _HomeViewState extends State<HomeView> {
       }
     });
 
-    _shownScreensStream = Automations.shownScreensStream.listen((event) {
+    _shownScreensStream = Automations.getSharedInstance().shownScreensStream.listen((event) {
       // do any logic you need
     });
-    _startedActionsStream = Automations.startedActionsStream.listen((event) {
+    _startedActionsStream = Automations.getSharedInstance().startedActionsStream.listen((event) {
       // do any logic you need or track event
     });
-    _failedActionsStream = Automations.failedActionsStream.listen((event) {
+    _failedActionsStream = Automations.getSharedInstance().failedActionsStream.listen((event) {
       // do any logic you need or track event
     });
-    _finishedActionsStream = Automations.finishedActionsStream.listen((event) {
+    _finishedActionsStream = Automations.getSharedInstance().finishedActionsStream.listen((event) {
       if (event.type == ActionResultType.purchase) {
         // do any logic you need
       }
     });
     _finishedAutomationsStream =
-        Automations.finishedAutomationsStream.listen((event) {
+        Automations.getSharedInstance().finishedAutomationsStream.listen((event) {
       // do any logic you need or track event
     });
   }
@@ -83,7 +83,7 @@ class _HomeViewState extends State<HomeView> {
         title: const Text('Qonversion example app'),
       ),
       body: Center(
-        child: _products == null && _permissions == null
+        child: _products == null && _entitlements == null
             ? CircularProgressIndicator()
             : ListView(
                 children: [
@@ -91,14 +91,14 @@ class _HomeViewState extends State<HomeView> {
                   ListTile(title: Text('PRODUCTS:')),
                   ..._productsFromMap(_products ?? {}),
                   ListTile(title: Text('PERMISSIONS:')),
-                  ..._permissionsFromMap(_permissions ?? {}),
+                  ..._entitlementsFromMap(_entitlements ?? {}),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: FlatButton(
                         child: Text('Set custom userId'),
                         color: Colors.blue,
                         textColor: Colors.white,
-                        onPressed: () => Qonversion.setProperty(
+                        onPressed: () => Qonversion.getSharedInstance().setProperty(
                             QUserProperty.customUserId, 'userId')),
                   ),
                   Padding(
@@ -140,7 +140,7 @@ class _HomeViewState extends State<HomeView> {
                         child: Text('Sync Purchases'),
                         color: Colors.orange,
                         textColor: Colors.white,
-                        onPressed: () => Qonversion.syncPurchases(),
+                        onPressed: () => Qonversion.getSharedInstance().syncPurchases(),
                       ),
                     ),
                 ],
@@ -150,28 +150,27 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Future<void> _initPlatformState() async {
-    if (kDebugMode) {
-      Qonversion.setDebugMode();
-    }
-
-    Qonversion.launch(
-      'PV77YHL7qnGvsdmpTs7gimsxUvY-Znl2',
-      isObserveMode: false,
-    );
-
-    Qonversion.setAppleSearchAdsAttributionEnabled(true);
+    const environment = kDebugMode ? QEnvironment.sandbox : QEnvironment.production;
+    final config = new QonversionConfigBuilder(
+        'PV77YHL7qnGvsdmpTs7gimsxUvY-Znl2',
+        QLaunchMode.subscriptionManagement
+    )
+        .setEnvironment(environment)
+        .build();
+    Qonversion.initialize(config);
+    Qonversion.getSharedInstance().collectAppleSearchAdsAttribution();
     _sendNotificationsToken();
     _loadQonversionObjects();
   }
 
   Future<void> _loadQonversionObjects() async {
     try {
-      _products = await Qonversion.products();
-      _permissions = await Qonversion.checkPermissions();
+      _products = await Qonversion.getSharedInstance().products();
+      _entitlements = await Qonversion.getSharedInstance().checkEntitlements();
     } catch (e) {
       print(e);
       _products = {};
-      _permissions = {};
+      _entitlements = {};
     }
 
     setState(() {});
@@ -197,19 +196,19 @@ class _HomeViewState extends State<HomeView> {
     }
 
     if (deviceToken != null) {
-      Qonversion.setNotificationsToken(deviceToken);
+      Automations.getSharedInstance().setNotificationsToken(deviceToken);
       print('Device token: $deviceToken');
     }
   }
 
-  List<Widget> _permissionsFromMap(Map<String, QPermission> permissions) {
-    return permissions.entries
+  List<Widget> _entitlementsFromMap(Map<String, QEntitlement> entitlements) {
+    return entitlements.entries
         .map<Widget>(
           (e) => ListTile(
             title: Text(e.key),
             subtitle: Text(
               e.value.productId ??
-                  '' + '\n' + e.value.permissionId ??
+                  '' + '\n' + e.value.id ??
                   '' +
                       '\n' +
                       e.value.renewState.toString() +
