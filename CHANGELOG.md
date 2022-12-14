@@ -1,3 +1,6 @@
+## 5.0.1
+* // Update changelog here
+
 ## 4.6.1
 * Fixed an issue causing automation event losses on Android.
 * Fixed a rare issue with the permissions cache on Android.
