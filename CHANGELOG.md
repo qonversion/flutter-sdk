@@ -1,3 +1,9 @@
+## 5.0.0
+* // Update changelog here
+
+## 5.0.0
+* New major version of Qonversion Flutter SDK. See the documentation for the changes list of changes and the migration guide.
+
 ## 4.6.1
 * Fixed an issue causing automation event losses on Android.
 * Fixed a rare issue with the permissions cache on Android.
