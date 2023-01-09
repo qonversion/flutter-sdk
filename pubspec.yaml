@@ -1,6 +1,6 @@
 name: qonversion_flutter
 description: Flutter plugin to implement in-app subscriptions and purchases. Validate user receipts and manage cross-platform access to paid content on your app. Android & iOS.
-version: 5.0.0
+version: 5.0.1
 homepage: 'https://qonversion.io'
 repository: 'https://github.com/qonversion/flutter-sdk'
 
