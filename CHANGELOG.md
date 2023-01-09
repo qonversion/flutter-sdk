@@ -1,5 +1,5 @@
 ## 5.0.1
-* // Update changelog here
+* Fixed rare runtime error after migrating from previous major SDK version.
 
 ## 5.0.0
 * New major version of Qonversion Flutter SDK. See the documentation for the changes list of changes and the migration guide.
