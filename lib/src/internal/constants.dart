@@ -22,6 +22,7 @@ class Constants {
   static const kNotificationData = 'notificationData';
   static const kLifetime = 'lifetime';
   static const kScreenId = 'screenId';
+  static const kConfigData = 'configData';
 
   // MethodChannel methods names
   static const mInitialize = 'initialize';
@@ -53,6 +54,7 @@ class Constants {
   static const mHandleNotification = 'automationsHandleNotification';
   static const mGetNotificationCustomPayload = 'automationsGetNotificationCustomPayload';
   static const mShowScreen = 'automationsShowScreen';
+  static const mSetScreenPresentationConfig = 'setScreenPresentationConfig';
 
   // Numeric constants
   static const skuDetailsPriceRatio = 1000000;

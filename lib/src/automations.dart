@@ -71,4 +71,10 @@ abstract class Automations {
   /// Show the screen using its ID.
   /// [screenId] Identifier of the screen which must be shown
   Future<void> showScreen(String screenId);
+
+  /// Set the configuration of screen representation.
+  /// [config] a configuration to be user.
+  /// [screenId] identifier of screen, to which a config should be applied.
+  ///            If not provided, the config is used for all the screens.
+  Future<void> setScreenPresentationConfig(QScreenPresentationConfig config, [String? screenId]);
 }

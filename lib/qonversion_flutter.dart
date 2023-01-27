@@ -18,6 +18,8 @@ export 'src/dto/product_type.dart';
 export 'src/dto/proration_mode.dart';
 export 'src/dto/purchase_exception.dart';
 export 'src/dto/qonversion_error.dart';
+export 'src/dto/screen_presentation_config.dart';
+export 'src/dto/screen_presentation_style.dart';
 export 'src/dto/user.dart';
 export 'src/dto/user_property.dart';
 export 'src/dto/sk_product/discount_payment_mode.dart';

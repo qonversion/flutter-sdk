@@ -86,6 +86,11 @@ class AutomationsPlugin(private val messenger: BinaryMessenger) : AutomationsEve
         automationSandwich.showScreen(screenId, result.toResultListener())
     }
 
+    fun setScreenPresentationConfig(config: Map<String, Any>?, screenId: String?, result: MethodChannel.Result) {
+        config ?: return result.noNecessaryDataError()
+        automationSandwich.setScreenPresentationConfig(config, screenId)
+    }
+
     private fun setup() {
         val shownScreensListener = BaseListenerWrapper(messenger, EVENT_CHANNEL_SHOWN_SCREENS)
         shownScreensListener.register()

@@ -101,6 +101,13 @@ class AutomationsInternal implements Automations {
         {Constants.kScreenId: screenId});
   }
 
+  @override
+  Future<void> setScreenPresentationConfig(QScreenPresentationConfig config, [String? screenId]) {
+    final Map<String, dynamic> configData = config.toJson();
+    return _channel.invokeMethod(Constants.mSetScreenPresentationConfig,
+        {Constants.kScreenId: screenId, Constants.kConfigData: configData});
+  }
+
   static ActionResult _handleActionEvent(String event) {
     final Map<String, dynamic> decodedEvent = jsonDecode(event);
 
