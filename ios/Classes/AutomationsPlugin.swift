@@ -73,8 +73,7 @@ public class AutomationsPlugin: NSObject {
 
   public func showScreen(_ screenId: String?, _ result: @escaping FlutterResult) {
     guard let screenId = screenId else {
-      result(FlutterError.noNecessaryData)
-      return
+      return result(FlutterError.noNecessaryData)
     }
 
     automationSandwich.showScreen(screenId) { data, error in
