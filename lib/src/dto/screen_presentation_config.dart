@@ -12,9 +12,14 @@ class QScreenPresentationConfig {
   /// iOS only. Ignored on Android.
   /// Describes whether should transaction be animated or not.
   /// Default value is true.
-  final bool animate;
+  @JsonKey(toJson: animatedToJson)
+  final bool animated;
 
-  QScreenPresentationConfig(this.presentationStyle, [this.animate = true]);
+  QScreenPresentationConfig(this.presentationStyle, [this.animated = true]);
 
   Map<String, dynamic> toJson() => _$QScreenPresentationConfigToJson(this);
+}
+
+String animatedToJson(bool animated) {
+  return animated ? '1' : '0';
 }

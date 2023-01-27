@@ -135,6 +135,10 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       automationsPlugin?.showScreen(args["screenId"] as? String, result)
       return
 
+    case "setScreenPresentationConfig":
+      automationsPlugin?.setScreenPresentationConfig(args["configData"] as? [String: Any], args["screenId"] as? String, result)
+      return
+
     default:
       return result(FlutterMethodNotImplemented)
     }

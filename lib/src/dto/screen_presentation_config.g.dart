@@ -10,7 +10,7 @@ QScreenPresentationConfig _$QScreenPresentationConfigFromJson(
     Map<String, dynamic> json) {
   return QScreenPresentationConfig(
     _$enumDecode(_$QScreenPresentationStyleEnumMap, json['presentationStyle']),
-    json['animate'] as bool,
+    json['animated'] as bool,
   );
 }
 
@@ -19,7 +19,7 @@ Map<String, dynamic> _$QScreenPresentationConfigToJson(
     <String, dynamic>{
       'presentationStyle':
           _$QScreenPresentationStyleEnumMap[instance.presentationStyle],
-      'animate': instance.animate,
+      'animated': animatedToJson(instance.animated),
     };
 
 K _$enumDecode<K, V>(

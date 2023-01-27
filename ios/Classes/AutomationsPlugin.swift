@@ -85,6 +85,16 @@ public class AutomationsPlugin: NSObject {
       result(data)
     }
   }
+
+  public func setScreenPresentationConfig(_ configData: [String: Any]?, _ screenId: String?,  _ result: @escaping FlutterResult) {
+    guard let configData = configData else {
+      result(FlutterError.noNecessaryData)
+      return
+    }
+
+    automationSandwich.setScreenPresentationConfig(configData, forScreenId:screenId)
+    result(nil)
+  }
 }
 
 extension AutomationsPlugin: AutomationsEventListener {

@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 enum QScreenPresentationStyle {
   /// on Android - default screen transaction animation will be used.
   /// on iOS - not a modal presentation. This style pushes a controller to a current navigation stack.
+  /// For iOS NavigationController on the top of the stack is required.
   @JsonValue('Push')
   push,
 
