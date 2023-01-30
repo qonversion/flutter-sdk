@@ -63,6 +63,12 @@ class _HomeViewState extends State<HomeView> {
         Automations.getSharedInstance().finishedAutomationsStream.listen((event) {
       // do any logic you need or track event
     });
+
+    Automations.getSharedInstance().setScreenPresentationConfig(
+        new QScreenPresentationConfig(QScreenPresentationStyle.push));
+    Automations.getSharedInstance().setScreenPresentationConfig(
+        new QScreenPresentationConfig(QScreenPresentationStyle.popover),
+        "eQMi3E7V");
   }
 
   @override
@@ -98,8 +104,7 @@ class _HomeViewState extends State<HomeView> {
                         child: Text('Set custom userId'),
                         color: Colors.blue,
                         textColor: Colors.white,
-                        onPressed: () => Qonversion.getSharedInstance().setProperty(
-                            QUserProperty.customUserId, 'userId')),
+                        onPressed: () => Automations.getSharedInstance().showScreen("RnJoXdez")),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
@@ -112,7 +117,7 @@ class _HomeViewState extends State<HomeView> {
                       color: Colors.green,
                       textColor: Colors.white,
                       onPressed: () =>
-                          Navigator.of(context).pushNamed('products'),
+                          Automations.getSharedInstance().showScreen("eQMi3E7V"),
                     ),
                   ),
                   Padding(
@@ -140,7 +145,12 @@ class _HomeViewState extends State<HomeView> {
                         child: Text('Sync Purchases'),
                         color: Colors.orange,
                         textColor: Colors.white,
-                        onPressed: () => Qonversion.getSharedInstance().syncPurchases(),
+                        onPressed: () =>
+                            Automations.getSharedInstance().setScreenPresentationConfig(
+                                new QScreenPresentationConfig(
+                                    QScreenPresentationStyle.noAnimation
+                                ), "eQMi3E7V"
+                            ),
                       ),
                     ),
                 ],

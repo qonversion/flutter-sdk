@@ -9,7 +9,7 @@ class QScreenPresentationConfig {
   /// For mode details see the enum description.
   final QScreenPresentationStyle presentationStyle;
 
-  /// iOS only. Ignored on Android.
+  /// iOS only. For Android consider using [QScreenPresentationStyle.noAnimation].
   /// Describes whether should transaction be animated or not.
   /// Default value is true.
   @JsonKey(toJson: animatedToJson)

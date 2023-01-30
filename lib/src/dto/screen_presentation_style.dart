@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:qonversion_flutter/qonversion_flutter.dart';
 
 enum QScreenPresentationStyle {
   /// on Android - default screen transaction animation will be used.
@@ -17,6 +18,7 @@ enum QScreenPresentationStyle {
   popover,
 
   /// Android only - screen will appear/disappear without any animation
+  /// For iOS consider providing the [QScreenPresentationConfig.animated] flag.
   @JsonValue('NoAnimation')
   noAnimation,
 }
