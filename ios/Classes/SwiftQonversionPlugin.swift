@@ -153,12 +153,14 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     }
     let environment = args["environment"] as? String
     let entitlementsCacheLifetime = args["entitlementsCacheLifetime"] as? String
+    let proxyUrl = args["proxyUrl"] as? String
 
     qonversionSandwich?.initialize(
       projectKey: projectKey,
       launchModeKey: launchMode,
       environmentKey: environment,
-      entitlementsCacheLifetimeKey: entitlementsCacheLifetime
+      entitlementsCacheLifetimeKey: entitlementsCacheLifetime,
+      proxyUrl: proxyUrl
     )
   }
 

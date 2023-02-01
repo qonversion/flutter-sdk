@@ -11,6 +11,8 @@ class QonversionConfigBuilder {
 
   QEntitlementsCacheLifetime _entitlementsCacheLifetime = QEntitlementsCacheLifetime.month;
 
+  String? _proxyUrl = null;
+
   QonversionConfigBuilder(this.projectKey, this.launchMode);
 
 
@@ -35,6 +37,16 @@ class QonversionConfigBuilder {
     return this;
   }
 
+  /// Provide a URL to your proxy server which will redirect all the requests from the app
+  /// to our API. Please, contact us before using this feature.
+  ///
+  /// [url] your proxy server url
+  /// Returns builder instance for chain calls.
+  /// See [the documentation](https://documentation.qonversion.io/docs/custom-proxy-server-for-sdks)
+  QonversionConfigBuilder setProxyURL(String url) {
+    _proxyUrl = url;
+    return this;
+  }
 
   /// Generate [QonversionConfig] instance with all the provided configurations.
   ///
@@ -44,7 +56,8 @@ class QonversionConfigBuilder {
       projectKey,
       launchMode,
       _environment,
-      _entitlementsCacheLifetime
+      _entitlementsCacheLifetime,
+      _proxyUrl
     );
   }
 }

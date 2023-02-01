@@ -30,6 +30,7 @@ class QonversionInternal implements Qonversion {
       Constants.kLaunchMode: StringUtils.capitalize(describeEnum(config.launchMode)),
       Constants.kEnvironment: StringUtils.capitalize(describeEnum(config.environment)),
       Constants.kEntitlementsCacheLifetime: StringUtils.capitalize(describeEnum(config.entitlementsCacheLifetime)),
+      Constants.kProxyUrl: config.proxyUrl,
     };
     _channel.invokeMethod(Constants.mInitialize, args);
   }

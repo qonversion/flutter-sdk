@@ -4,6 +4,7 @@ class Constants {
   static const kLaunchMode = 'launchMode';
   static const kEnvironment = 'environment';
   static const kEntitlementsCacheLifetime = 'entitlementsCacheLifetime';
+  static const kProxyUrl = 'proxyUrl';
   static const kUserId = 'userId';
   static const kData = 'data';
   static const kProvider = 'provider';
