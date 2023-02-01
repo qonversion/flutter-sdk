@@ -132,6 +132,11 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "automationsHandleNotification" -> automationsPlugin.handleNotification(args, result)
             "automationsGetNotificationCustomPayload" -> automationsPlugin.getNotificationCustomPayload(args, result)
             "automationsShowScreen" -> automationsPlugin.showScreen(args["screenId"] as? String, result)
+            "setScreenPresentationConfig" -> automationsPlugin.setScreenPresentationConfig(
+                args["configData"] as? Map<String, Any>,
+                args["screenId"] as? String,
+                result
+            )
             else -> result.notImplemented()
         }
     }
