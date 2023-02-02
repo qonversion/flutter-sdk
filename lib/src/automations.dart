@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:qonversion_flutter/qonversion_flutter.dart';
 import 'package:qonversion_flutter/src/internal/automations_internal.dart';
 
