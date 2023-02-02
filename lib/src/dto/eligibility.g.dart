@@ -13,11 +13,6 @@ QEligibility _$QEligibilityFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$QEligibilityToJson(QEligibility instance) =>
-    <String, dynamic>{
-      'status': _$QEligibilityStatusEnumMap[instance.status],
-    };
-
 K _$enumDecode<K, V>(
   Map<K, V> enumValues,
   Object? source, {

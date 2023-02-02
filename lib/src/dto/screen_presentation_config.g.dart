@@ -6,14 +6,6 @@ part of 'screen_presentation_config.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-QScreenPresentationConfig _$QScreenPresentationConfigFromJson(
-    Map<String, dynamic> json) {
-  return QScreenPresentationConfig(
-    _$enumDecode(_$QScreenPresentationStyleEnumMap, json['presentationStyle']),
-    json['animated'] as bool,
-  );
-}
-
 Map<String, dynamic> _$QScreenPresentationConfigToJson(
         QScreenPresentationConfig instance) =>
     <String, dynamic>{
@@ -21,32 +13,6 @@ Map<String, dynamic> _$QScreenPresentationConfigToJson(
           _$QScreenPresentationStyleEnumMap[instance.presentationStyle],
       'animated': animatedToJson(instance.animated),
     };
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
 
 const _$QScreenPresentationStyleEnumMap = {
   QScreenPresentationStyle.push: 'Push',

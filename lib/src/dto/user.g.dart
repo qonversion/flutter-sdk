@@ -12,8 +12,3 @@ QUser _$QUserFromJson(Map<String, dynamic> json) {
     json['identityId'] as String,
   );
 }
-
-Map<String, dynamic> _$QUserToJson(QUser instance) => <String, dynamic>{
-      'qonversionId': instance.qonversionId,
-      'identityId': instance.identityId,
-    };

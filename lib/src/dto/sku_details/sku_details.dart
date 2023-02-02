@@ -1,7 +1,5 @@
 // Copyright 2019 The Chromium Authors. All rights reserved.
 
-import 'dart:ui' show hashValues;
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'sku_details.g.dart';
@@ -112,29 +110,28 @@ class SkuDetailsWrapper {
       return false;
     }
 
-    final SkuDetailsWrapper typedOther = other;
-    return typedOther is SkuDetailsWrapper &&
-        typedOther.description == description &&
-        typedOther.freeTrialPeriod == freeTrialPeriod &&
-        typedOther.introductoryPrice == introductoryPrice &&
-        typedOther.introductoryPriceAmountMicros ==
+    return other is SkuDetailsWrapper &&
+        other.description == description &&
+        other.freeTrialPeriod == freeTrialPeriod &&
+        other.introductoryPrice == introductoryPrice &&
+        other.introductoryPriceAmountMicros ==
             introductoryPriceAmountMicros &&
-        typedOther.introductoryPriceCycles == introductoryPriceCycles &&
-        typedOther.introductoryPricePeriod == introductoryPricePeriod &&
-        typedOther.price == price &&
-        typedOther.priceAmountMicros == priceAmountMicros &&
-        typedOther.sku == sku &&
-        typedOther.subscriptionPeriod == subscriptionPeriod &&
-        typedOther.title == title &&
-        typedOther.type == type &&
-        typedOther.originalPrice == originalPrice &&
-        typedOther.originalPriceAmountMicros == originalPriceAmountMicros &&
-        typedOther.originalJson == originalJson;
+        other.introductoryPriceCycles == introductoryPriceCycles &&
+        other.introductoryPricePeriod == introductoryPricePeriod &&
+        other.price == price &&
+        other.priceAmountMicros == priceAmountMicros &&
+        other.sku == sku &&
+        other.subscriptionPeriod == subscriptionPeriod &&
+        other.title == title &&
+        other.type == type &&
+        other.originalPrice == originalPrice &&
+        other.originalPriceAmountMicros == originalPriceAmountMicros &&
+        other.originalJson == originalJson;
   }
 
   @override
   int get hashCode {
-    return hashValues(
+    return Object.hash(
         description.hashCode,
         freeTrialPeriod.hashCode,
         introductoryPrice.hashCode,
