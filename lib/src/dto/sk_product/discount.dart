@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:qonversion_flutter/src/internal/mapper.dart';
 
@@ -72,6 +70,6 @@ class SKProductDiscountWrapper {
   }
 
   @override
-  int get hashCode => hashValues(this.price, this.priceLocale,
+  int get hashCode => Object.hash(this.price, this.priceLocale,
       this.numberOfPeriods, this.paymentMode, this.subscriptionPeriod);
 }

@@ -1,7 +1,5 @@
 // Copyright 2019 The Chromium Authors. All rights reserved.
 
-import 'dart:ui' show hashValues;
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:qonversion_flutter/src/internal/mapper.dart';
 
@@ -92,7 +90,7 @@ class SKProductWrapper {
   }
 
   @override
-  int get hashCode => hashValues(
+  int get hashCode => Object.hash(
       this.productIdentifier,
       this.localizedTitle,
       this.localizedDescription,
@@ -139,5 +137,5 @@ class SKPriceLocaleWrapper {
   }
 
   @override
-  int get hashCode => hashValues(this.currencySymbol, this.currencyCode);
+  int get hashCode => Object.hash(this.currencySymbol, this.currencyCode);
 }
