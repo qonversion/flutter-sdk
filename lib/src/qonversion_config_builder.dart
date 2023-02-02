@@ -1,5 +1,3 @@
-import 'package:qonversion_flutter/src/qonversion_config.dart';
-
 import '../qonversion_flutter.dart';
 
 class QonversionConfigBuilder {
@@ -11,7 +9,7 @@ class QonversionConfigBuilder {
 
   QEntitlementsCacheLifetime _entitlementsCacheLifetime = QEntitlementsCacheLifetime.month;
 
-  String? _proxyUrl = null;
+  String? _proxyUrl;
 
   QonversionConfigBuilder(this.projectKey, this.launchMode);
 
