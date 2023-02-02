@@ -11,7 +11,7 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String _sdkVersion = "5.0.1";
+  static const String _sdkVersion = "5.1.0";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
@@ -30,6 +30,7 @@ class QonversionInternal implements Qonversion {
       Constants.kLaunchMode: StringUtils.capitalize(describeEnum(config.launchMode)),
       Constants.kEnvironment: StringUtils.capitalize(describeEnum(config.environment)),
       Constants.kEntitlementsCacheLifetime: StringUtils.capitalize(describeEnum(config.entitlementsCacheLifetime)),
+      Constants.kProxyUrl: config.proxyUrl,
     };
     _channel.invokeMethod(Constants.mInitialize, args);
   }

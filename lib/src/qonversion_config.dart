@@ -9,5 +9,7 @@ class QonversionConfig {
 
   final QEntitlementsCacheLifetime entitlementsCacheLifetime;
 
-  QonversionConfig(this.projectKey, this.launchMode, this.environment, this.entitlementsCacheLifetime);
+  final String? proxyUrl;
+
+  QonversionConfig(this.projectKey, this.launchMode, this.environment, this.entitlementsCacheLifetime, this.proxyUrl);
 }

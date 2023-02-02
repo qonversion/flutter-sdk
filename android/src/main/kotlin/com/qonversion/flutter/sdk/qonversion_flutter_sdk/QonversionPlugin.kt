@@ -132,6 +132,11 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "automationsHandleNotification" -> automationsPlugin.handleNotification(args, result)
             "automationsGetNotificationCustomPayload" -> automationsPlugin.getNotificationCustomPayload(args, result)
             "automationsShowScreen" -> automationsPlugin.showScreen(args["screenId"] as? String, result)
+            "setScreenPresentationConfig" -> automationsPlugin.setScreenPresentationConfig(
+                args["configData"] as? Map<String, Any>,
+                args["screenId"] as? String,
+                result
+            )
             else -> result.notImplemented()
         }
     }
@@ -142,7 +147,8 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         val launchModeKey = args["launchMode"] as? String ?: return result.noNecessaryDataError()
         val environmentKey = args["environment"] as? String ?: return result.noNecessaryDataError()
         val entitlementsCacheLifetimeKey = args["entitlementsCacheLifetime"] as? String ?: return result.noNecessaryDataError()
-        qonversionSandwich.initialize(context, projectKey, launchModeKey, environmentKey, entitlementsCacheLifetimeKey)
+        val proxyUrl = args["proxyUrl"] as? String
+        qonversionSandwich.initialize(context, projectKey, launchModeKey, environmentKey, entitlementsCacheLifetimeKey, proxyUrl)
         result.success(null)
     }
 

@@ -1,3 +1,7 @@
+## 5.1.0
+* Added an option to customize screen presentation style.
+* Added an option to set proxy URL for Qonversion API.
+
 ## 5.0.1
 * Fixed rare runtime error after migrating from previous major SDK version.
 
