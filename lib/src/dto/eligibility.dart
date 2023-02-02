@@ -13,7 +13,7 @@ enum QEligibilityStatus {
   eligible,
 }
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class QEligibility {
   @JsonKey(name: "status", defaultValue: QEligibilityStatus.unknown)
   final QEligibilityStatus status;

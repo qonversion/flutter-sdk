@@ -3,7 +3,7 @@ import 'screen_presentation_style.dart';
 
 part 'screen_presentation_config.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createFactory: false)
 class QScreenPresentationConfig {
   /// Describes how screens will be displayed.
   /// For mode details see the enum description.
