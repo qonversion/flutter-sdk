@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:json_annotation/json_annotation.dart';
 
 import 'subscription_period_unit.dart';
@@ -53,5 +51,5 @@ class SKProductSubscriptionPeriodWrapper {
   }
 
   @override
-  int get hashCode => hashValues(this.numberOfUnits, this.unit);
+  int get hashCode => Object.hash(this.numberOfUnits, this.unit);
 }
