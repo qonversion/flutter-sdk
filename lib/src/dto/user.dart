@@ -8,7 +8,7 @@ class QUser {
   final String qonversionId;
 
   @JsonKey(name: "identityId")
-  final String identityId;
+  final String? identityId;
 
   QUser(this.qonversionId, this.identityId);
 

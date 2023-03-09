@@ -9,6 +9,6 @@ part of 'user.dart';
 QUser _$QUserFromJson(Map<String, dynamic> json) {
   return QUser(
     json['qonversionId'] as String,
-    json['identityId'] as String,
+    json['identityId'] as String?,
   );
 }
