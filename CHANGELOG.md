@@ -1,5 +1,7 @@
 ## 5.2.0
-* // Update changelog here
+* Added a function to enable Qonversion SDK Kids mode via the builder on Android. With this mode activated, our SDK does not collect any information that violates Google Children’s Privacy Policy.
+* Fixed possible rare ANR (Application Not Responding) errors during Facebook Attribution collection on Android.
+* ! Small breaking change - the property `QUser.identityId` is made nullable as it should be. Take it into account if you are using Dart null-safety.
 
 ## 5.1.0
 * Added an option to customize screen presentation style.
