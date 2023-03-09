@@ -1,3 +1,6 @@
+## 5.2.0
+* // Update changelog here
+
 ## 5.1.0
 * Added an option to customize screen presentation style.
 * Added an option to set proxy URL for Qonversion API.
