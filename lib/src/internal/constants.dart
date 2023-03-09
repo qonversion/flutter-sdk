@@ -5,6 +5,7 @@ class Constants {
   static const kEnvironment = 'environment';
   static const kEntitlementsCacheLifetime = 'entitlementsCacheLifetime';
   static const kProxyUrl = 'proxyUrl';
+  static const kKidsMode = 'kidsMode';
   static const kUserId = 'userId';
   static const kData = 'data';
   static const kProvider = 'provider';

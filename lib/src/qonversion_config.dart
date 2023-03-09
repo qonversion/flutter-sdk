@@ -11,5 +11,7 @@ class QonversionConfig {
 
   final String? proxyUrl;
 
-  QonversionConfig(this.projectKey, this.launchMode, this.environment, this.entitlementsCacheLifetime, this.proxyUrl);
+  final bool kidsMode;
+
+  QonversionConfig(this.projectKey, this.launchMode, this.environment, this.entitlementsCacheLifetime, this.proxyUrl, this.kidsMode);
 }

@@ -11,6 +11,8 @@ class QonversionConfigBuilder {
 
   String? _proxyUrl;
 
+  bool _kidsMode = false;
+
   QonversionConfigBuilder(this.projectKey, this.launchMode);
 
 
@@ -46,6 +48,17 @@ class QonversionConfigBuilder {
     return this;
   }
 
+  /// Android only.
+  /// Use this function to enable Qonversion SDK Kids mode.
+  /// With this mode activated, our SDK does not collect any information that violates Google Children’s Privacy Policy.
+  ///
+  /// Returns builder instance for chain calls.
+  QonversionConfigBuilder enableKidsMode()
+  {
+    _kidsMode = true;
+    return this;
+  }
+
   /// Generate [QonversionConfig] instance with all the provided configurations.
   ///
   /// Returns the complete [QonversionConfig] instance.
@@ -55,7 +68,8 @@ class QonversionConfigBuilder {
       launchMode,
       _environment,
       _entitlementsCacheLifetime,
-      _proxyUrl
+      _proxyUrl,
+      _kidsMode
     );
   }
 }

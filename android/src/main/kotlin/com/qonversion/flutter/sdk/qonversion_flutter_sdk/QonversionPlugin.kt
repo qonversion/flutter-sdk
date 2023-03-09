@@ -148,7 +148,8 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         val environmentKey = args["environment"] as? String ?: return result.noNecessaryDataError()
         val entitlementsCacheLifetimeKey = args["entitlementsCacheLifetime"] as? String ?: return result.noNecessaryDataError()
         val proxyUrl = args["proxyUrl"] as? String
-        qonversionSandwich.initialize(context, projectKey, launchModeKey, environmentKey, entitlementsCacheLifetimeKey, proxyUrl)
+        val kidsMode = args["kidsMode"] as? Boolean ?: false
+        qonversionSandwich.initialize(context, projectKey, launchModeKey, environmentKey, entitlementsCacheLifetimeKey, proxyUrl, kidsMode)
         result.success(null)
     }
 
