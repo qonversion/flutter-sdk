@@ -87,6 +87,10 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
     override fun onMethodCall(call: MethodCall, result: Result) {
         // Methods without args
         when (call.method) {
+            "syncHistoricalData" -> {
+                qonversionSandwich.syncHistoricalData()
+                return result.success(null)
+            }
             "products" -> {
                 return products(result)
             }

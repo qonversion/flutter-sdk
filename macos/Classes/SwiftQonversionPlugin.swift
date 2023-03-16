@@ -35,6 +35,10 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     // MARK: - Calls without arguments
 
     switch (call.method) {
+    case "syncHistoricalData":
+        qonversionSandwich?.syncHistoricalData()
+        return result(nil)
+
     case "products":
       return products(result)
 
