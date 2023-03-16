@@ -53,6 +53,9 @@ class QonversionInternal implements Qonversion {
       _promoPurchasesEventChannel.receiveBroadcastStream().cast<String>();
 
   @override
+  Future<void> syncHistoricalData() => _channel.invokeMethod(Constants.mSyncHistoricalData);
+
+  @override
   Future<Map<String, QEntitlement>> purchase(String productId) async {
     try {
       final rawResult = await _channel

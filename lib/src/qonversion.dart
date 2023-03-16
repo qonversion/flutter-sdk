@@ -43,6 +43,9 @@ abstract class Qonversion {
   /// Returns App Store product ID
   Stream<String> get promoPurchasesStream;
 
+  /// Call this function to sync the subscriber data with the first launch when Qonversion is implemented.
+  Future<void> syncHistoricalData();
+
   /// Starts a process of purchasing product with [productId].
   ///
   /// Throws [QPurchaseException] in case of error in purchase flow.
