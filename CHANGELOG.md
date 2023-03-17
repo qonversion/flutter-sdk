@@ -1,5 +1,5 @@
 ## 5.3.0
-* // Update changelog here
+* Added function to sync the user's historical data.
 
 ## 5.2.0
 * Added a function to enable Qonversion SDK Kids mode via the builder on Android. With this mode activated, our SDK does not collect any information that violates Google Children’s Privacy Policy.
