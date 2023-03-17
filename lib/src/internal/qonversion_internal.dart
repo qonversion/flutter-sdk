@@ -11,7 +11,7 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String _sdkVersion = "5.2.0";
+  static const String _sdkVersion = "5.3.0";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
@@ -51,6 +51,9 @@ class QonversionInternal implements Qonversion {
   @override
   Stream<String> get promoPurchasesStream =>
       _promoPurchasesEventChannel.receiveBroadcastStream().cast<String>();
+
+  @override
+  Future<void> syncHistoricalData() => _channel.invokeMethod(Constants.mSyncHistoricalData);
 
   @override
   Future<Map<String, QEntitlement>> purchase(String productId) async {
