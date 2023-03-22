@@ -1,3 +1,6 @@
+## 5.3.1
+* // Update changelog here
+
 ## 5.3.0
 * Added function to sync the user's historical data.
 
