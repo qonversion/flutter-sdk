@@ -1,3 +1,6 @@
+## 5.3.1
+* Fixed `collectAppleSearchAdsAttribution` call bug (`NoNecessaryDataError, Could not find necessary arguments`).
+
 ## 5.3.0
 * Added function to sync the user's historical data.
 

@@ -75,6 +75,9 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     case "presentCodeRedemptionSheet":
       return presentCodeRedemptionSheet(result)
 
+    case "collectAppleSearchAdsAttribution":
+      return collectAppleSearchAdsAttribution(result)
+
     case "automationsSubscribe":
       automationsPlugin?.subscribe()
       return result(nil)
@@ -119,9 +122,6 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
     case "identify":
       return identify(args["userId"] as? String, result)
-      
-    case "collectAppleSearchAdsAttribution":
-      return collectAppleSearchAdsAttribution(result)
 
     case "automationsSetNotificationsToken":
       automationsPlugin?.setNotificationsToken(args["notificationsToken"] as? String, result)
