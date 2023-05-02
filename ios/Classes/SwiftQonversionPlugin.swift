@@ -48,6 +48,10 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
         qonversionSandwich?.syncHistoricalData()
         return result(nil)
 
+    case "syncStoreKit2Purchases":
+        qonversionSandwich?.syncStoreKit2Purchases()
+        return result(nil)
+
     case "products":
       return products(result)
       
