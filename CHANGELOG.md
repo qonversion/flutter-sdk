@@ -1,3 +1,6 @@
+## 5.4.0
+* // Update changelog here
+
 ## 5.3.1
 * Fixed `collectAppleSearchAdsAttribution` call bug (`NoNecessaryDataError, Could not find necessary arguments`).
 
