@@ -29,6 +29,7 @@ class Constants {
   // MethodChannel methods names
   static const mInitialize = 'initialize';
   static const mSyncHistoricalData = 'syncHistoricalData';
+  static const mSyncStoreKit2Purchases = 'syncStoreKit2Purchases';
   static const mProducts = 'products';
   static const mPurchase = 'purchase';
   static const mPurchaseProduct = 'purchaseProduct';

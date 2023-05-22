@@ -46,6 +46,11 @@ abstract class Qonversion {
   /// Call this function to sync the subscriber data with the first launch when Qonversion is implemented.
   Future<void> syncHistoricalData();
 
+  /// iOS only
+  /// Contact us before you start using this function
+  /// Call this function to sync purchases if you are using StoreKit2 and our SDK in Analytics mode.
+  Future<void> syncStoreKit2Purchases();
+
   /// Starts a process of purchasing product with [productId].
   ///
   /// Throws [QPurchaseException] in case of error in purchase flow.

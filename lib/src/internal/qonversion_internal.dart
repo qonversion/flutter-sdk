@@ -56,6 +56,13 @@ class QonversionInternal implements Qonversion {
   Future<void> syncHistoricalData() => _channel.invokeMethod(Constants.mSyncHistoricalData);
 
   @override
+  Future<void> syncStoreKit2Purchases() async {
+    if (Platform.isIOS) {
+      return _channel.invokeMethod(Constants.mSyncStoreKit2Purchases);
+    }
+  }
+
+  @override
   Future<Map<String, QEntitlement>> purchase(String productId) async {
     try {
       final rawResult = await _channel
@@ -100,7 +107,9 @@ class QonversionInternal implements Qonversion {
       final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchase, {
         Constants.kNewProductId: newProductId,
         Constants.kOldProductId: oldProductId,
-        Constants.kProrationMode: prorationMode != null ? prorationMode.index : null,
+        Constants.kProrationMode: prorationMode != null
+            ? prorationMode.index
+            : null,
       });
       final result = QMapper.entitlementsFromJson(rawResult);
       return result;
@@ -124,7 +133,9 @@ class QonversionInternal implements Qonversion {
         Constants.kNewProductId: newProduct.qonversionId,
         Constants.kOfferingId: newProduct.offeringID,
         Constants.kOldProductId: oldProductId,
-        Constants.kProrationMode: prorationMode != null ? prorationMode.index : null,
+        Constants.kProrationMode: prorationMode != null
+            ? prorationMode.index
+            : null,
       });
       final result = QMapper.entitlementsFromJson(rawResult);
       return result;
@@ -269,10 +280,10 @@ class QonversionInternal implements Qonversion {
 
   static QPurchaseException _convertPurchaseException(PlatformException error) {
     return QPurchaseException(
-      error.code,
-      error.message ?? "",
-      error.details,
-      isUserCancelled: error.code == "PurchaseCancelledByUser"
+        error.code,
+        error.message ?? "",
+        error.details,
+        isUserCancelled: error.code == "PurchaseCancelledByUser"
     );
   }
 }
