@@ -129,8 +129,7 @@ class QonversionInternal implements Qonversion {
     }
 
     try {
-      final rawResult = await _channel.invokeMethod(
-          Constants.mUpdatePurchaseWithProduct, {
+      final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchaseWithProduct, {
         Constants.kNewProductId: newProduct.qonversionId,
         Constants.kOfferingId: newProduct.offeringID,
         Constants.kOldProductId: oldProductId,
