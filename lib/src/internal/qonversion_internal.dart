@@ -11,7 +11,7 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String _sdkVersion = "5.3.1";
+  static const String _sdkVersion = "5.4.0";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
@@ -54,6 +54,13 @@ class QonversionInternal implements Qonversion {
 
   @override
   Future<void> syncHistoricalData() => _channel.invokeMethod(Constants.mSyncHistoricalData);
+
+  @override
+  Future<void> syncStoreKit2Purchases() async {
+    if (Platform.isIOS) {
+      return _channel.invokeMethod(Constants.mSyncStoreKit2Purchases);
+    }
+  }
 
   @override
   Future<Map<String, QEntitlement>> purchase(String productId) async {
@@ -100,7 +107,9 @@ class QonversionInternal implements Qonversion {
       final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchase, {
         Constants.kNewProductId: newProductId,
         Constants.kOldProductId: oldProductId,
-        Constants.kProrationMode: prorationMode != null ? prorationMode.index : null,
+        Constants.kProrationMode: prorationMode != null
+            ? prorationMode.index
+            : null,
       });
       final result = QMapper.entitlementsFromJson(rawResult);
       return result;
@@ -124,7 +133,9 @@ class QonversionInternal implements Qonversion {
         Constants.kNewProductId: newProduct.qonversionId,
         Constants.kOfferingId: newProduct.offeringID,
         Constants.kOldProductId: oldProductId,
-        Constants.kProrationMode: prorationMode != null ? prorationMode.index : null,
+        Constants.kProrationMode: prorationMode != null
+            ? prorationMode.index
+            : null,
       });
       final result = QMapper.entitlementsFromJson(rawResult);
       return result;
@@ -269,10 +280,10 @@ class QonversionInternal implements Qonversion {
 
   static QPurchaseException _convertPurchaseException(PlatformException error) {
     return QPurchaseException(
-      error.code,
-      error.message ?? "",
-      error.details,
-      isUserCancelled: error.code == "PurchaseCancelledByUser"
+        error.code,
+        error.message ?? "",
+        error.details,
+        isUserCancelled: error.code == "PurchaseCancelledByUser"
     );
   }
 }

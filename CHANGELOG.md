@@ -1,3 +1,7 @@
+## 5.4.0
+* Added function to sync transactions for StoreKit 2. The function should be used only in rare cases to avoid StoreKit 2 bugs. Contact us before using that function.
+* Parallel requests and race conditions fixed for entitlements state changing calls.
+
 ## 5.3.1
 * Fixed `collectAppleSearchAdsAttribution` call bug (`NoNecessaryDataError, Could not find necessary arguments`).
 
