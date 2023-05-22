@@ -16,10 +16,10 @@ class QonversionInternal implements Qonversion {
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
   final _updatedEntitlementsEventChannel =
-  EventChannel('qonversion_flutter_updated_entitlements');
+      EventChannel('qonversion_flutter_updated_entitlements');
 
   final _promoPurchasesEventChannel =
-  EventChannel('qonversion_flutter_promo_purchases');
+      EventChannel('qonversion_flutter_promo_purchases');
 
 
   QonversionInternal(QonversionConfig config) {
@@ -27,12 +27,9 @@ class QonversionInternal implements Qonversion {
 
     final args = {
       Constants.kProjectKey: config.projectKey,
-      Constants.kLaunchMode: StringUtils.capitalize(
-          describeEnum(config.launchMode)),
-      Constants.kEnvironment: StringUtils.capitalize(
-          describeEnum(config.environment)),
-      Constants.kEntitlementsCacheLifetime: StringUtils.capitalize(
-          describeEnum(config.entitlementsCacheLifetime)),
+      Constants.kLaunchMode: StringUtils.capitalize(describeEnum(config.launchMode)),
+      Constants.kEnvironment: StringUtils.capitalize(describeEnum(config.environment)),
+      Constants.kEntitlementsCacheLifetime: StringUtils.capitalize(describeEnum(config.entitlementsCacheLifetime)),
       Constants.kProxyUrl: config.proxyUrl,
       Constants.kKidsMode: config.kidsMode,
     };
@@ -56,8 +53,7 @@ class QonversionInternal implements Qonversion {
       _promoPurchasesEventChannel.receiveBroadcastStream().cast<String>();
 
   @override
-  Future<void> syncHistoricalData() =>
-      _channel.invokeMethod(Constants.mSyncHistoricalData);
+  Future<void> syncHistoricalData() => _channel.invokeMethod(Constants.mSyncHistoricalData);
 
   @override
   Future<void> syncStoreKit2Purchases() async {
@@ -159,16 +155,14 @@ class QonversionInternal implements Qonversion {
 
   @override
   Future<QOfferings> offerings() async {
-    final offeringsString = await _channel.invokeMethod<String>(
-        Constants.mOfferings);
+    final offeringsString = await _channel.invokeMethod<String>(Constants.mOfferings);
 
     final result = QMapper.offeringsFromJson(offeringsString);
     return result;
   }
 
   @override
-  Future<Map<String, QEligibility>> checkTrialIntroEligibility(
-      List<String> ids) async {
+  Future<Map<String, QEligibility>> checkTrialIntroEligibility(List<String> ids) async {
     final eligibilitiesString = await _channel.invokeMethod<String>(
         Constants.mCheckTrialIntroEligibility, {"ids": ids});
 
@@ -218,8 +212,7 @@ class QonversionInternal implements Qonversion {
   }
 
   @override
-  Future<void> attribution(Map<dynamic, dynamic> data,
-      QAttributionProvider provider) {
+  Future<void> attribution(Map<dynamic, dynamic> data, QAttributionProvider provider) {
     final args = {
       Constants.kData: data,
       Constants.kProvider: StringUtils.capitalize(describeEnum(provider)),
@@ -294,4 +287,4 @@ class QonversionInternal implements Qonversion {
         isUserCancelled: error.code == "PurchaseCancelledByUser"
     );
   }
-}}
+}

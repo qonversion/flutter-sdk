@@ -45,12 +45,12 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     
     switch (call.method) {
     case "syncHistoricalData":
-        qonversionSandwich?.syncHistoricalData()
-        return result(nil)
+      qonversionSandwich?.syncHistoricalData()
+      return result(nil)
 
     case "syncStoreKit2Purchases":
-        qonversionSandwich?.syncStoreKit2Purchases()
-        return result(nil)
+      qonversionSandwich?.syncStoreKit2Purchases()
+      return result(nil)
 
     case "products":
       return products(result)
