@@ -1,5 +1,5 @@
 ## 5.4.1
-* // Update changelog here
+* Added native SDK crash tracking.
 
 ## 5.4.0
 * Added function to sync transactions for StoreKit 2. The function should be used only in rare cases to avoid StoreKit 2 bugs. Contact us before using that function.
