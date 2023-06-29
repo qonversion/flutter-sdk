@@ -167,6 +167,12 @@ abstract class Qonversion {
   /// On iOS 14.0+ shows up a sheet for users to redeem AppStore offer codes.
   Future<void> presentCodeRedemptionSheet();
 
+  Future<QRemoteConfig> remoteConfig();
+
+  Future<void> attachUserToExperiment(String experimentId, String groupId);
+
+  Future<void> detachUserFromExperiment(String experimentId);
+
   /// iOS only. Returns `null` if called on Android.
   ///
   /// Starts a promo purchase process with App Store [productId].

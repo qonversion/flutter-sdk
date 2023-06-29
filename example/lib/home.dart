@@ -159,6 +159,8 @@ class _HomeViewState extends State<HomeView> {
         .build();
     Qonversion.initialize(config);
     Qonversion.getSharedInstance().collectAppleSearchAdsAttribution();
+    final dd = await Qonversion.getSharedInstance().remoteConfig();
+    print(dd);
     _sendNotificationsToken();
     _loadQonversionObjects();
   }
