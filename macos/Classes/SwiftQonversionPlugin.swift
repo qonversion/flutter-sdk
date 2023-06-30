@@ -48,6 +48,9 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
     case "checkEntitlements":
       return checkEntitlements(result)
+      
+    case "remoteConfig":
+      return remoteConfig(result)
 
     case "restore":
       return restore(result)
@@ -104,6 +107,12 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
     case "identify":
       return identify(args["userId"] as? String, result)
+      
+    case "attachUserToExperiment":
+      return attachUserToExperiment(args, result)
+      
+    case "detachUserFromExperiment":
+      return detachUserFromExperiment(args, result)
 
     default:
       return result(FlutterMethodNotImplemented)
@@ -162,6 +171,10 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
   private func checkEntitlements(_ result: @escaping FlutterResult) {
     qonversionSandwich?.checkEntitlements(getDefaultCompletion(result))
+  }
+  
+  private func remoteConfig(_ result: @escaping FlutterResult) {
+    qonversionSandwich?.remoteConfig(getJsonCompletion(result))
   }
 
   private func restore(_ result: @escaping FlutterResult) {
@@ -229,7 +242,24 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     qonversionSandwich?.attribution(providerKey: provider, value: data)
     result(nil)
   }
-
+  
+  private func attachUserToExperiment(_ args: [String: Any], _ result: @escaping FlutterResult) {
+    guard let experimentId = args["experimentId"] as? String,
+          let groupId = args["groupId"] as? String else {
+      return result(FlutterError.noNecessaryData)
+    }
+    
+    qonversionSandwich?.attachUserToExperiment(with: experimentId, groupId: groupId, completion: getJsonCompletion(result))
+  }
+  
+  private func detachUserFromExperiment(_ args: [String: Any], _ result: @escaping FlutterResult) {
+    guard let experimentId = args["experimentId"] as? String else {
+      return result(FlutterError.noNecessaryData)
+    }
+    
+    qonversionSandwich?.detachUserFromExperiment(with: experimentId, completion: getJsonCompletion(result))
+  }
+  
   private func getDefaultCompletion(_ result: @escaping FlutterResult) -> BridgeCompletion {
     return { data, error in
       if let error = error {
