@@ -174,7 +174,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   }
   
   private func remoteConfig(_ result: @escaping FlutterResult) {
-    qonversionSandwich?.remoteConfig(getDefaultCompletion(result))
+    qonversionSandwich?.remoteConfig(getJsonCompletion(result))
   }
 
   private func restore(_ result: @escaping FlutterResult) {
