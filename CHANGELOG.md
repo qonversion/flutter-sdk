@@ -1,3 +1,6 @@
+## 6.0.0
+* // Update changelog here
+
 ## 5.4.1
 * Added native SDK crash tracking.
 
