@@ -167,18 +167,6 @@ abstract class Qonversion {
   /// On iOS 14.0+ shows up a sheet for users to redeem AppStore offer codes.
   Future<void> presentCodeRedemptionSheet();
 
-  /// Returns Qonversion remote config object
-  /// Use this function to get the remote config with specific payload and experiment info.
-  Future<QRemoteConfig> remoteConfig();
-
-  /// This function should be used for the test purposes only. Do not forget to delete the usage of this function before the release.
-  /// Use this function to attach the user to the experiment.
-  Future<void> attachUserToExperiment(String experimentId, String groupId);
-
-  /// This function should be used for the test purposes only. Do not forget to delete the usage of this function before the release.
-  /// Use this function to detach the user from the experiment.
-  Future<void> detachUserFromExperiment(String experimentId);
-
   /// iOS only. Returns `null` if called on Android.
   ///
   /// Starts a promo purchase process with App Store [productId].

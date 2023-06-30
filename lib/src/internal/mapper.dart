@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:qonversion_flutter/qonversion_flutter.dart';
-
 import '../dto/qonversion_error.dart';
 import '../dto/eligibility.dart';
 import '../dto/offerings.dart';
@@ -50,14 +48,6 @@ class QMapper {
     final userMap = Map<String, dynamic>.from(jsonString);
 
     return QUser.fromJson(userMap);
-  }
-
-  static QRemoteConfig? remoteConfigFromJson(String? jsonString) {
-    if (jsonString == null) return null;
-
-    final remoteConfigMap = Map<String, dynamic>.from(jsonDecode(jsonString));
-
-    return QRemoteConfig.fromJson(remoteConfigMap);
   }
 
   static Map<String, QEligibility> eligibilityFromJson(String? jsonString) {

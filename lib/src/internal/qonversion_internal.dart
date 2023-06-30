@@ -211,36 +211,6 @@ class QonversionInternal implements Qonversion {
   }
 
   @override
-  Future<QRemoteConfig> remoteConfig() async {
-    final rawResult = await _channel.invokeMethod(Constants.mRemoteConfig);
-
-    final result = QMapper.remoteConfigFromJson(rawResult);
-    if (result == null) {
-      throw new Exception("Remote config deserialization failed");
-    }
-    return result;
-  }
-
-  @override
-  Future<void> attachUserToExperiment(String experimentId, String groupId) async {
-    final args = {
-      Constants.kExperimentId: experimentId,
-      Constants.kGroupId: groupId,
-    };
-    await _channel.invokeMethod(Constants.mAttachUserToExperiment, args);
-    return;
-  }
-
-  @override
-  Future<void> detachUserFromExperiment(String experimentId) async {
-    final args = {
-      Constants.kExperimentId: experimentId,
-    };
-    await _channel.invokeMethod(Constants.mDetachUserFromExperiment, args);
-    return;
-  }
-
-  @override
   Future<void> attribution(Map<dynamic, dynamic> data, QAttributionProvider provider) {
     final args = {
       Constants.kData: data,

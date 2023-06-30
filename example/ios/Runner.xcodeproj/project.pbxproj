@@ -10,12 +10,6 @@
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		4CB27CA1276762D900DE51FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CB27CA0276762D900DE51FD /* GoogleService-Info.plist */; };
-		70A6004A2A4DE85F00B4378E /* QonversionPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 70A600432A4DE85F00B4378E /* QonversionPlugin.m */; };
-		70A6004B2A4DE85F00B4378E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A600442A4DE85F00B4378E /* Extensions.swift */; };
-		70A6004C2A4DE85F00B4378E /* SwiftQonversionPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A600462A4DE85F00B4378E /* SwiftQonversionPlugin.swift */; };
-		70A6004D2A4DE85F00B4378E /* BaseListenerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A600472A4DE85F00B4378E /* BaseListenerWrapper.swift */; };
-		70A6004E2A4DE85F00B4378E /* BaseEventStreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A600482A4DE85F00B4378E /* BaseEventStreamHandler.swift */; };
-		70A6004F2A4DE85F00B4378E /* FlutterError+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A600492A4DE85F00B4378E /* FlutterError+Custom.swift */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		8876821AD52624FFC742CB13 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B61BD248B3C1CEFD8465871F /* Pods_Runner.framework */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
@@ -43,13 +37,6 @@
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		4CB27CA0276762D900DE51FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6A76C3422936312F0071A79A /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
-		70A600432A4DE85F00B4378E /* QonversionPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QonversionPlugin.m; sourceTree = "<group>"; };
-		70A600442A4DE85F00B4378E /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		70A600452A4DE85F00B4378E /* QonversionPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QonversionPlugin.h; sourceTree = "<group>"; };
-		70A600462A4DE85F00B4378E /* SwiftQonversionPlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftQonversionPlugin.swift; sourceTree = "<group>"; };
-		70A600472A4DE85F00B4378E /* BaseListenerWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseListenerWrapper.swift; sourceTree = "<group>"; };
-		70A600482A4DE85F00B4378E /* BaseEventStreamHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseEventStreamHandler.swift; sourceTree = "<group>"; };
-		70A600492A4DE85F00B4378E /* FlutterError+Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FlutterError+Custom.swift"; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
@@ -85,21 +72,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		70A600422A4DE85F00B4378E /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				70A600432A4DE85F00B4378E /* QonversionPlugin.m */,
-				70A600442A4DE85F00B4378E /* Extensions.swift */,
-				70A600452A4DE85F00B4378E /* QonversionPlugin.h */,
-				70A600462A4DE85F00B4378E /* SwiftQonversionPlugin.swift */,
-				70A600472A4DE85F00B4378E /* BaseListenerWrapper.swift */,
-				70A600482A4DE85F00B4378E /* BaseEventStreamHandler.swift */,
-				70A600492A4DE85F00B4378E /* FlutterError+Custom.swift */,
-			);
-			name = Classes;
-			path = ../../macos/Classes;
-			sourceTree = "<group>";
-		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
 			isa = PBXGroup;
 			children = (
@@ -114,7 +86,6 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
-				70A600422A4DE85F00B4378E /* Classes */,
 				4CB27CA0276762D900DE51FD /* GoogleService-Info.plist */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
@@ -122,9 +93,7 @@
 				BA1CD22BB5800E684769C062 /* Pods */,
 				59AF16F90FB67258EC083A19 /* Frameworks */,
 			);
-			indentWidth = 2;
 			sourceTree = "<group>";
-			tabWidth = 2;
 		};
 		97C146EF1CF9000F007C117D /* Products */ = {
 			isa = PBXGroup;
@@ -343,14 +312,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70A6004D2A4DE85F00B4378E /* BaseListenerWrapper.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
-				70A6004F2A4DE85F00B4378E /* FlutterError+Custom.swift in Sources */,
-				70A6004A2A4DE85F00B4378E /* QonversionPlugin.m in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
-				70A6004B2A4DE85F00B4378E /* Extensions.swift in Sources */,
-				70A6004C2A4DE85F00B4378E /* SwiftQonversionPlugin.swift in Sources */,
-				70A6004E2A4DE85F00B4378E /* BaseEventStreamHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
