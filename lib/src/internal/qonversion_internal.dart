@@ -11,7 +11,7 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String _sdkVersion = "5.4.1";
+  static const String _sdkVersion = "6.0.0";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
@@ -208,36 +208,6 @@ class QonversionInternal implements Qonversion {
       throw new Exception("User deserialization failed");
     }
     return result;
-  }
-
-  @override
-  Future<QRemoteConfig> remoteConfig() async {
-    final rawResult = await _channel.invokeMethod(Constants.mRemoteConfig);
-
-    final result = QMapper.remoteConfigFromJson(rawResult);
-    if (result == null) {
-      throw new Exception("Remote config deserialization failed");
-    }
-    return result;
-  }
-
-  @override
-  Future<void> attachUserToExperiment(String experimentId, String groupId) async {
-    final args = {
-      Constants.kExperimentId: experimentId,
-      Constants.kGroupId: groupId,
-    };
-    await _channel.invokeMethod(Constants.mAttachUserToExperiment, args);
-    return;
-  }
-
-  @override
-  Future<void> detachUserFromExperiment(String experimentId) async {
-    final args = {
-      Constants.kExperimentId: experimentId,
-    };
-    await _channel.invokeMethod(Constants.mDetachUserFromExperiment, args);
-    return;
   }
 
   @override
