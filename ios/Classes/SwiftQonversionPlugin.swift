@@ -57,6 +57,9 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       
     case "checkEntitlements":
       return checkEntitlements(result)
+
+    case "remoteConfig":
+      return remoteConfig(result)
       
     case "restore":
       return restore(result)
@@ -126,6 +129,12 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
     case "identify":
       return identify(args["userId"] as? String, result)
+
+    case "attachUserToExperiment":
+      return attachUserToExperiment(args, result)
+      
+    case "detachUserFromExperiment":
+      return detachUserFromExperiment(args, result)
 
     case "automationsSetNotificationsToken":
       automationsPlugin?.setNotificationsToken(args["notificationsToken"] as? String, result)
@@ -213,6 +222,10 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   private func checkEntitlements(_ result: @escaping FlutterResult) {
     qonversionSandwich?.checkEntitlements(getDefaultCompletion(result))
   }
+
+  private func remoteConfig(_ result: @escaping FlutterResult) {
+    qonversionSandwich?.remoteConfig(getJsonCompletion(result))
+  }
   
   private func restore(_ result: @escaping FlutterResult) {
     qonversionSandwich?.restore(getDefaultCompletion(result))
@@ -254,6 +267,23 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     }
     
     qonversionSandwich?.checkTrialIntroEligibility(ids, completion: getJsonCompletion(result))
+  }
+
+  private func attachUserToExperiment(_ args: [String: Any], _ result: @escaping FlutterResult) {
+    guard let experimentId = args["experimentId"] as? String,
+          let groupId = args["groupId"] as? String else {
+      return result(FlutterError.noNecessaryData)
+    }
+    
+    qonversionSandwich?.attachUserToExperiment(with: experimentId, groupId: groupId, completion: getJsonCompletion(result))
+  }
+  
+  private func detachUserFromExperiment(_ args: [String: Any], _ result: @escaping FlutterResult) {
+    guard let experimentId = args["experimentId"] as? String else {
+      return result(FlutterError.noNecessaryData)
+    }
+    
+    qonversionSandwich?.detachUserFromExperiment(with: experimentId, completion: getJsonCompletion(result))
   }
   
   private func storeSdkInfo(_ args: [String: Any], _ result: @escaping FlutterResult) {
