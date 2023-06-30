@@ -133,7 +133,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     case "attachUserToExperiment":
       return attachUserToExperiment(args, result)
       
-    case "detachUserToExperiment":
+    case "detachUserFromExperiment":
       return detachUserFromExperiment(args, result)
 
     case "automationsSetNotificationsToken":
@@ -224,7 +224,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   }
 
   private func remoteConfig(_ result: @escaping FlutterResult) {
-    qonversionSandwich?.remoteConfig(getDefaultCompletion(result))
+    qonversionSandwich?.remoteConfig(getJsonCompletion(result))
   }
   
   private func restore(_ result: @escaping FlutterResult) {

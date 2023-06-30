@@ -52,10 +52,10 @@ class QMapper {
     return QUser.fromJson(userMap);
   }
 
-  static QRemoteConfig? remoteConfigFromJson(dynamic jsonString) {
+  static QRemoteConfig? remoteConfigFromJson(String? jsonString) {
     if (jsonString == null) return null;
 
-    final remoteConfigMap = Map<String, dynamic>.from(jsonString);
+    final remoteConfigMap = Map<String, dynamic>.from(jsonDecode(jsonString));
 
     return QRemoteConfig.fromJson(remoteConfigMap);
   }

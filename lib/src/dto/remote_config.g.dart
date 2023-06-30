@@ -9,6 +9,8 @@ part of 'remote_config.dart';
 QRemoteConfig _$QRemoteConfigFromJson(Map<String, dynamic> json) {
   return QRemoteConfig(
     json['payload'] as Map<String, dynamic>,
-    QExperiment.fromJson(json['experiment'] as Map<String, dynamic>),
+    json['experiment'] == null
+        ? null
+        : QExperiment.fromJson(json['experiment'] as Map<String, dynamic>),
   );
 }

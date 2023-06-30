@@ -22,10 +22,10 @@ class QExperimentGroup {
   final QExperimentGroupType type;
 
   const QExperimentGroup(
-      this.id,
-      this.name,
-      this.type,
-      );
+    this.id,
+    this.name,
+    this.type,
+  );
 
   factory QExperimentGroup.fromJson(Map<String, dynamic> json) =>
       _$QExperimentGroupFromJson(json);

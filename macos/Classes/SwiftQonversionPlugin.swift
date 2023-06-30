@@ -111,7 +111,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     case "attachUserToExperiment":
       return attachUserToExperiment(args, result)
       
-    case "detachUserToExperiment":
+    case "detachUserFromExperiment":
       return detachUserFromExperiment(args, result)
 
     default:

@@ -19,10 +19,10 @@ class QExperiment {
   final QExperimentGroup group;
 
   const QExperiment(
-      this.id,
-      this.name,
-      this.group,
-      );
+    this.id,
+    this.name,
+    this.group,
+  );
 
   factory QExperiment.fromJson(Map<String, dynamic> json) =>
       _$QExperimentFromJson(json);

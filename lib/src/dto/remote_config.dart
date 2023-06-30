@@ -12,7 +12,7 @@ class QRemoteConfig {
 
   /// Object with the experiment's information.
   @JsonKey(name: 'experiment')
-  final QExperiment experiment;
+  final QExperiment? experiment;
 
   const QRemoteConfig(
       this.payload,

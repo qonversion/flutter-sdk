@@ -55,7 +55,7 @@ class Constants {
   static const mUserInfo = 'userInfo';
   static const mRemoteConfig = 'remoteConfig';
   static const mAttachUserToExperiment = 'attachUserToExperiment';
-  static const mDetachUserFromExperiment = 'DetachUserFromExperiment';
+  static const mDetachUserFromExperiment = 'detachUserFromExperiment';
   static const mCollectAppleSearchAdsAttribution = 'collectAppleSearchAdsAttribution';
   static const mPresentCodeRedemptionSheet = 'presentCodeRedemptionSheet';
   static const mSubscribeAutomations = 'automationsSubscribe';
