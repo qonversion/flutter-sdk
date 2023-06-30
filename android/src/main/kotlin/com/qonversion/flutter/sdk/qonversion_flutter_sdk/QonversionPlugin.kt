@@ -106,9 +106,6 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "offerings" -> {
                 return offerings(result)
             }
-            "remoteConfig" -> {
-                return remoteConfig(result)
-            }
             "logout" -> {
                 qonversionSandwich.logout()
                 return result.success(null)
@@ -133,8 +130,6 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "setCustomUserProperty" -> setCustomUserProperty(args, result)
             "addAttributionData" -> addAttributionData(args, result)
             "checkTrialIntroEligibility" -> checkTrialIntroEligibility(args, result)
-            "attachUserToExperiment" -> attachUserToExperiment(args, result)
-            "detachUserFromExperiment" -> detachUserFromExperiment(args, result)
             "storeSdkInfo" -> storeSdkInfo(args, result)
             "identify" -> identify(args["userId"] as? String, result)
             "automationsSetNotificationsToken" -> automationsPlugin.setNotificationsToken(args["notificationsToken"] as? String, result)
@@ -222,10 +217,6 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         qonversionSandwich.offerings(result.toJsonResultListener())
     }
 
-    private fun remoteConfig(result: Result) {
-        qonversionSandwich.remoteConfig(result.toJsonResultListener())
-    }
-
     private fun products(result: Result) {
         qonversionSandwich.products(result.toResultListener())
     }
@@ -270,21 +261,6 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         val ids = args["ids"] as? List<String> ?: return result.noNecessaryDataError()
 
         qonversionSandwich.checkTrialIntroEligibility(ids, result.toJsonResultListener())
-    }
-
-    private fun attachUserToExperiment(args: Map<String, Any>, result: Result) {
-        @Suppress("UNCHECKED_CAST")
-        val experimentId = args["experimentId"] as? String ?: return result.noNecessaryDataError()
-        val groupId = args["groupId"] as? String ?: return result.noNecessaryDataError()
-
-        qonversionSandwich.attachUserToExperiment(experimentId, groupId, result.toJsonResultListener())
-    }
-
-    private fun detachUserFromExperiment(args: Map<String, Any>, result: Result) {
-        @Suppress("UNCHECKED_CAST")
-        val experimentId = args["experimentId"] as? String ?: return result.noNecessaryDataError()
-
-        qonversionSandwich.detachUserFromExperiment(experimentId, result.toJsonResultListener())
     }
 
     private fun userInfo(result: Result) {
