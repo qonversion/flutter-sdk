@@ -17,7 +17,7 @@ class QRemoteConfig {
   const QRemoteConfig(
       this.payload,
       this.experiment,
-      );
+  );
 
   factory QRemoteConfig.fromJson(Map<String, dynamic> json) =>
       _$QRemoteConfigFromJson(json);
