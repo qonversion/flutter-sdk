@@ -1,4 +1,4 @@
-## 6.0.0
+## 6.1.0
 * Updated A/B experiments
 
 ## 5.4.1
