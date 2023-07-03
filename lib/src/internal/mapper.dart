@@ -2,12 +2,6 @@ import 'dart:convert';
 
 import 'package:qonversion_flutter/qonversion_flutter.dart';
 
-import '../dto/qonversion_error.dart';
-import '../dto/eligibility.dart';
-import '../dto/offerings.dart';
-import '../dto/entitlement.dart';
-import '../dto/product.dart';
-import '../dto/user.dart';
 import '../dto/sk_product/discount.dart';
 import '../dto/sk_product/sk_product_wrapper.dart';
 import '../dto/sk_product/subscription_period.dart';
