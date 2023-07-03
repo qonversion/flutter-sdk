@@ -1,3 +1,6 @@
+## 6.1.0
+* Updated A/B experiments
+
 ## 5.4.1
 * Added native SDK crash tracking.
 
