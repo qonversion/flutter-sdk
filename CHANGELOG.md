@@ -1,5 +1,5 @@
 ## 6.1.1
-* // Update changelog here
+* Internal logic update
 
 ## 6.1.0
 * Updated A/B experiments
