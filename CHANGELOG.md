@@ -1,3 +1,6 @@
+## 6.1.1
+* Internal logic update
+
 ## 6.1.0
 * Updated A/B experiments
 
