@@ -1,3 +1,6 @@
+## 6.1.2
+* Android 14 support.
+
 ## 6.1.1
 * Internal logic update
 
