@@ -1,3 +1,6 @@
+## 6.1.2
+* // Update changelog here
+
 ## 6.1.1
 * Internal logic update
 
