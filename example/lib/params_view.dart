@@ -22,8 +22,18 @@ class ParamsView extends StatelessWidget {
               color: Colors.amber,
               textColor: Colors.white,
               onPressed: () async {
-                QUserProperties properties = await Qonversion.getSharedInstance().userProperties();
-                print('received user properties');
+                try {
+                  QUserProperties userProperties =
+                      await Qonversion.getSharedInstance().userProperties();
+                  userProperties.properties.forEach((userProperty) {
+                    print('User property - key: ' +
+                        userProperty.key +
+                        ', value: ' +
+                        userProperty.value);
+                  });
+                } catch (e) {
+                  // handle error here
+                }
               },
             ),
             FlatButton(
