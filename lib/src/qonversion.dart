@@ -141,8 +141,11 @@ abstract class Qonversion {
   /// User properties are attributes you can set on a user level.
   /// You can send user properties to third party platforms as well as use them in Qonversion for customer segmentation and analytics.
   ///
+  /// Note that using [QUserPropertyKey.custom] here will do nothing.
+  /// To set custom user property, use [setCustomUserProperty] method instead.
+  ///
   /// See more in [documentation](https://documentation.qonversion.io/docs/user-properties)
-  Future<void> setProperty(QUserProperty property, String value);
+  Future<void> setUserProperty(QUserPropertyKey key, String value);
 
   /// Adds custom user property.
   ///
@@ -150,7 +153,13 @@ abstract class Qonversion {
   /// You can send user properties to third party platforms as well as use them in Qonversion for customer segmentation and analytics.
   ///
   /// See more in [documentation](https://documentation.qonversion.io/docs/user-properties)
-  Future<void> setUserProperty(String property, String value);
+  Future<void> setCustomUserProperty(String key, String value);
+
+  /// This method returns all the properties, set for the current Qonversion user.
+  /// All set properties are sent to the server with delay, so if you call
+  /// this function right after setting some property, it may not be included
+  /// in the result.
+  Future<QUserProperties> userProperties();
 
   /// iOS only. Does nothing, if called on Android.
   ///

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:qonversion_flutter/qonversion_flutter.dart';
+import 'package:qonversion_flutter/src/dto/user_property_key.dart';
 
 import '../dto/sk_product/discount.dart';
 import '../dto/sk_product/sk_product_wrapper.dart';
@@ -61,6 +62,41 @@ class QMapper {
 
     return eligibilityJson
         .map((key, value) => MapEntry(key, QEligibility.fromJson(value)));
+  }
+
+  static QUserPropertyKey userPropertyKeyFromString(String sourceKey) {
+    switch (sourceKey) {
+      case '_q_email':
+        return QUserPropertyKey.email;
+      case '_q_name':
+        return QUserPropertyKey.name;
+      case '_q_kochava_device_id':
+        return QUserPropertyKey.kochavaDeviceId;
+      case '_q_appsflyer_user_id':
+        return QUserPropertyKey.appsFlyerUserId;
+      case '_q_adjust_adid':
+        return QUserPropertyKey.adjustAdId;
+      case '_q_custom_user_id':
+        return QUserPropertyKey.customUserId;
+      case '_q_fb_attribution':
+        return QUserPropertyKey.facebookAttribution;
+      case '_q_firebase_instance_id':
+        return QUserPropertyKey.firebaseAppInstanceId;
+      case '_q_app_set_id':
+        return QUserPropertyKey.appSetId;
+      case '_q_advertising_id':
+        return QUserPropertyKey.advertisingId;
+    }
+
+    return QUserPropertyKey.custom;
+  }
+
+  static QUserProperties? userPropertiesFromJson(String? jsonString) {
+    if (jsonString == null) return null;
+
+    final propertiesMap = Map<String, dynamic>.from(jsonDecode(jsonString));
+
+    return QUserProperties.fromJson(propertiesMap);
   }
 
   static SKProductWrapper? skProductFromJson(dynamic json) {
