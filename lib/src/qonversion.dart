@@ -136,7 +136,7 @@ abstract class Qonversion {
   /// Sends your attribution [data] to the [provider].
   Future<void> attribution(Map<dynamic, dynamic> data, QAttributionProvider provider);
 
-  /// Sets user property for pre-defined case property.
+  /// Sets Qonversion reserved user properties, like email or user id.
   ///
   /// User properties are attributes you can set on a user level.
   /// You can send user properties to third party platforms as well as use them in Qonversion for customer segmentation and analytics.
