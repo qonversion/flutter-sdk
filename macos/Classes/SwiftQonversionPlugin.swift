@@ -67,8 +67,10 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       return result(nil)
 
     case "userInfo":
-      qonversionSandwich?.userInfo(getDefaultCompletion(result))
-      return result(nil)
+      return userInfo(result)
+
+    case "userProperties":
+      return userProperties(result)
 
     default:
       break
@@ -175,6 +177,14 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   
   private func remoteConfig(_ result: @escaping FlutterResult) {
     qonversionSandwich?.remoteConfig(getJsonCompletion(result))
+  }
+
+  private func userInfo(_ result: @escaping FlutterResult) {
+    qonversionSandwich?.userInfo(getDefaultCompletion(result))
+  }
+
+  private func userProperties(_ result: @escaping FlutterResult) {
+    qonversionSandwich?.userProperties(getJsonCompletion(result))
   }
 
   private func restore(_ result: @escaping FlutterResult) {
