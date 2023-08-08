@@ -1,5 +1,6 @@
 ## 7.0.0
-* // Update changelog here
+* New `userProperties` method to get all the properties set for the current user.
+* Renamings of several entities and public methods to make our namings and structure clearer.
 
 ## 6.1.2
 * Android 14 support.
