@@ -1,3 +1,6 @@
+## 7.0.0
+* // Update changelog here
+
 ## 6.1.2
 * Android 14 support.
 
