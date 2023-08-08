@@ -106,6 +106,9 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "offerings" -> {
                 return offerings(result)
             }
+            "userProperties" -> {
+                return userProperties(result)
+            }
             "remoteConfig" -> {
                 return remoteConfig(result)
             }
@@ -220,6 +223,10 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
 
     private fun offerings(result: Result) {
         qonversionSandwich.offerings(result.toJsonResultListener())
+    }
+
+    private fun userProperties(result: Result) {
+        qonversionSandwich.userProperties(result.toJsonResultListener())
     }
 
     private fun remoteConfig(result: Result) {
