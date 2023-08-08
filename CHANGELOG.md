@@ -1,3 +1,6 @@
+## 7.0.1
+* Fixed a small bug with setting `advertisingId` property on Android.
+
 ## 7.0.0
 * New `userProperties` method to get all the properties set for the current user.
 * Renamings of several entities and public methods to make our namings and structure clearer.
