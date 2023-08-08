@@ -18,11 +18,30 @@ class ParamsView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FlatButton(
+              child: Text('Get user properties'),
+              color: Colors.amber,
+              textColor: Colors.white,
+              onPressed: () async {
+                try {
+                  QUserProperties userProperties =
+                      await Qonversion.getSharedInstance().userProperties();
+                  userProperties.properties.forEach((userProperty) {
+                    print('User property - key: ' +
+                        userProperty.key +
+                        ', value: ' +
+                        userProperty.value);
+                  });
+                } catch (e) {
+                  // handle error here
+                }
+              },
+            ),
+            FlatButton(
               child: Text('Set User ID'),
               color: Colors.green,
               textColor: Colors.white,
               onPressed: () {
-                Qonversion.getSharedInstance().setProperty(QUserProperty.customUserId, 'customId');
+                Qonversion.getSharedInstance().setUserProperty(QUserPropertyKey.customUserId, 'customId');
                 print('did set user id');
               },
             ),
@@ -31,17 +50,17 @@ class ParamsView extends StatelessWidget {
               color: Colors.blue,
               textColor: Colors.white,
               onPressed: () {
-                Qonversion.getSharedInstance().setUserProperty('customProperty', 'customValue');
+                Qonversion.getSharedInstance().setCustomUserProperty('customProperty', 'customValue');
                 print('did set user property');
               },
             ),
-            for (final v in QUserProperty.values)
+            for (final v in QUserPropertyKey.values)
               FlatButton(
                 child: Text('Set ${describeEnum(v)}'),
                 color: Colors.purple,
                 textColor: Colors.white,
                 onPressed: () {
-                  Qonversion.getSharedInstance().setProperty(v, 'email@email.com');
+                  Qonversion.getSharedInstance().setUserProperty(v, 'email@email.com');
                   print('did set property');
                 },
               ),
