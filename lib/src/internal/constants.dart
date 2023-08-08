@@ -42,6 +42,7 @@ class Constants {
   static const mRestore = 'restore';
   static const mSetDefinedUserProperty = 'setDefinedUserProperty';
   static const mSetCustomUserProperty = 'setCustomUserProperty';
+  static const mUserProperties = 'userProperties';
   static const mSetEntitlementsCacheLifetime = 'setEntitlementsCacheLifetime';
   static const mSyncPurchases = 'syncPurchases';
   static const mAddAttributionData = 'addAttributionData';

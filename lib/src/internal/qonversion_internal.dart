@@ -251,18 +251,36 @@ class QonversionInternal implements Qonversion {
   }
 
   @override
-  Future<void> setProperty(QUserProperty property, String value) =>
-      _channel.invokeMethod(Constants.mSetDefinedUserProperty, {
-        Constants.kProperty: StringUtils.capitalize(describeEnum(property)),
-        Constants.kValue: value,
-      });
+  Future<void> setUserProperty(QUserPropertyKey property, String value) async {
+    if (property == QUserPropertyKey.custom) {
+      print("Can not set user property with the key `QUserPropertyKey.custom`. " +
+          "To set custom user property, use the `setCustomUserProperty` method.");
+      return;
+    }
+
+    _channel.invokeMethod(Constants.mSetDefinedUserProperty, {
+      Constants.kProperty: StringUtils.capitalize(describeEnum(property)),
+      Constants.kValue: value,
+    });
+  }
 
   @override
-  Future<void> setUserProperty(String property, String value) =>
+  Future<void> setCustomUserProperty(String property, String value) =>
       _channel.invokeMethod(Constants.mSetCustomUserProperty, {
         Constants.kProperty: property,
         Constants.kValue: value,
       });
+
+  @override
+  Future<QUserProperties> userProperties() async {
+    final rawResult = await _channel.invokeMethod(Constants.mUserProperties);
+
+    final result = QMapper.userPropertiesFromJson(rawResult);
+    if (result == null) {
+      throw new Exception("User properties deserialization failed");
+    }
+    return result;
+  }
 
   @override
   Future<void> collectAdvertisingId() async {
