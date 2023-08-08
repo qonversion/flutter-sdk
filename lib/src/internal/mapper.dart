@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:qonversion_flutter/qonversion_flutter.dart';
-import 'package:qonversion_flutter/src/dto/user_property_key.dart';
 
 import '../dto/sk_product/discount.dart';
 import '../dto/sk_product/sk_product_wrapper.dart';
