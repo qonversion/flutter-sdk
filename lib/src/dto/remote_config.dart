@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'experiment.dart';
+import 'remote_configuration_source.dart';
 
 part 'remote_config.g.dart';
 
@@ -14,9 +15,13 @@ class QRemoteConfig {
   @JsonKey(name: 'experiment')
   final QExperiment? experiment;
 
+  @JsonKey(name: 'source')
+  final QRemoteConfigurationSource source;
+
   const QRemoteConfig(
       this.payload,
       this.experiment,
+      this.source
   );
 
   factory QRemoteConfig.fromJson(Map<String, dynamic> json) =>
