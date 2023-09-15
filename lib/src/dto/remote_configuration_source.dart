@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:qonversion_flutter/src/dto/remote_configuration_assignment_type.dart';
-
 import 'remote_configuration_source_type.dart';
+
 part 'remote_configuration_source.g.dart';
 
 @JsonSerializable(createToJson: false)
@@ -34,5 +34,5 @@ class QRemoteConfigurationSource {
       );
 
   factory QRemoteConfigurationSource.fromJson(Map<String, dynamic> json) =>
-      _$QRemoteConfigurationSource(json);
+      _$QRemoteConfigurationSourceFromJson(json);
 }

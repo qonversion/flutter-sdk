@@ -12,5 +12,6 @@ QRemoteConfig _$QRemoteConfigFromJson(Map<String, dynamic> json) {
     json['experiment'] == null
         ? null
         : QExperiment.fromJson(json['experiment'] as Map<String, dynamic>),
+    QRemoteConfigurationSource.fromJson(json['source'] as Map<String, dynamic>),
   );
 }
