@@ -31,7 +31,7 @@ class QRemoteConfigurationSource {
       this.name,
       this.type,
       this.assignmentType
-      );
+  );
 
   factory QRemoteConfigurationSource.fromJson(Map<String, dynamic> json) =>
       _$QRemoteConfigurationSourceFromJson(json);
