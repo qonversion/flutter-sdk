@@ -1,3 +1,7 @@
+## 7.1.0
+* Added remote configuration source property.
+* Added rate limits for API calls.
+
 ## 7.0.1
 * Fixed a small bug with setting `advertisingId` property on Android.
 
