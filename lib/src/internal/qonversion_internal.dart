@@ -240,6 +240,22 @@ class QonversionInternal implements Qonversion {
     return;
   }
 
+  Future<void> attachUserToRemoteConfiguration(String remoteConfigurationId) async {
+    final args = {
+      Constants.kRemoteConfigurationId: remoteConfigurationId,
+    };
+    await _channel.invokeMethod(Constants.mAttachUserToRemoteConfiguration, args);
+    return;
+  }
+
+  Future<void> detachUserFromRemoteConfiguration(String remoteConfigurationId) async {
+    final args = {
+      Constants.kRemoteConfigurationId: remoteConfigurationId,
+    };
+    await _channel.invokeMethod(Constants.mDetachUserFromRemoteConfiguration, args);
+    return;
+  }
+
   @override
   Future<void> attribution(Map<dynamic, dynamic> data, QAttributionProvider provider) {
     final args = {
