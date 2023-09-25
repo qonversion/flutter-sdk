@@ -190,7 +190,7 @@ abstract class Qonversion {
 
   /// This function should be used for the test purposes only. Do not forget to delete the usage of this function before the release.
   /// Use this function to attach the user to the remote configuration.
-  Future<void> attachUserToRemoteConfiguration(String remoteConfigurationId;
+  Future<void> attachUserToRemoteConfiguration(String remoteConfigurationId);
 
   /// This function should be used for the test purposes only. Do not forget to delete the usage of this function before the release.
   /// Use this function to detach the user from the remote configuration.

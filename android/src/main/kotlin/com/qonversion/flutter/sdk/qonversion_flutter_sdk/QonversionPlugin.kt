@@ -300,7 +300,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         @Suppress("UNCHECKED_CAST")
         val remoteConfigurationId = args["remoteConfigurationId"] as? String ?: return result.noNecessaryDataError()
 
-        qonversionSandwich.attachUserToRemoteConfiguration(remoteConfigurationId, groupId, result.toJsonResultListener())
+        qonversionSandwich.attachUserToRemoteConfiguration(remoteConfigurationId, result.toJsonResultListener())
     }
 
     private fun detachUserFromRemoteConfiguration(args: Map<String, Any>, result: Result) {

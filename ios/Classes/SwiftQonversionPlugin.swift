@@ -315,7 +315,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
         return result(FlutterError.noNecessaryData)
       }
 
-      qonversionSandwich?.detachUserFromExperiment(with: remoteConfigurationId, completion: getJsonCompletion(result))
+      qonversionSandwich?.detachUserFromRemoteConfiguration(with: remoteConfigurationId, completion: getJsonCompletion(result))
     }
   
   private func storeSdkInfo(_ args: [String: Any], _ result: @escaping FlutterResult) {
