@@ -1,5 +1,5 @@
 ## 7.2.0
-* // Update changelog here
+* Added attach/detach remote configuration functions
 
 ## 7.1.0
 * Added remote configuration source property.
