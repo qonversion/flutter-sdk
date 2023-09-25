@@ -282,7 +282,6 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
     }
 
     private fun attachUserToExperiment(args: Map<String, Any>, result: Result) {
-        @Suppress("UNCHECKED_CAST")
         val experimentId = args["experimentId"] as? String ?: return result.noNecessaryDataError()
         val groupId = args["groupId"] as? String ?: return result.noNecessaryDataError()
 
@@ -290,21 +289,18 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
     }
 
     private fun detachUserFromExperiment(args: Map<String, Any>, result: Result) {
-        @Suppress("UNCHECKED_CAST")
         val experimentId = args["experimentId"] as? String ?: return result.noNecessaryDataError()
 
         qonversionSandwich.detachUserFromExperiment(experimentId, result.toJsonResultListener())
     }
 
     private fun attachUserToRemoteConfiguration(args: Map<String, Any>, result: Result) {
-        @Suppress("UNCHECKED_CAST")
         val remoteConfigurationId = args["remoteConfigurationId"] as? String ?: return result.noNecessaryDataError()
 
         qonversionSandwich.attachUserToRemoteConfiguration(remoteConfigurationId, result.toJsonResultListener())
     }
 
     private fun detachUserFromRemoteConfiguration(args: Map<String, Any>, result: Result) {
-        @Suppress("UNCHECKED_CAST")
         val remoteConfigurationId = args["remoteConfigurationId"] as? String ?: return result.noNecessaryDataError()
 
         qonversionSandwich.detachUserFromRemoteConfiguration(remoteConfigurationId, result.toJsonResultListener())
