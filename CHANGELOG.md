@@ -1,3 +1,6 @@
+## 7.2.0
+* // Update changelog here
+
 ## 7.1.0
 * Added remote configuration source property.
 * Added rate limits for API calls.
