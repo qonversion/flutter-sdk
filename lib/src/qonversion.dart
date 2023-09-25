@@ -188,6 +188,14 @@ abstract class Qonversion {
   /// Use this function to detach the user from the experiment.
   Future<void> detachUserFromExperiment(String experimentId);
 
+  /// This function should be used for the test purposes only. Do not forget to delete the usage of this function before the release.
+  /// Use this function to attach the user to the remote configuration.
+  Future<void> attachUserToRemoteConfiguration(String remoteConfigurationId);
+
+  /// This function should be used for the test purposes only. Do not forget to delete the usage of this function before the release.
+  /// Use this function to detach the user from the remote configuration.
+  Future<void> detachUserFromRemoteConfiguration(String remoteConfigurationId);
+
   /// iOS only. Returns `null` if called on Android.
   ///
   /// Starts a promo purchase process with App Store [productId].

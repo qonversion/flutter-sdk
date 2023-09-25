@@ -1,3 +1,6 @@
+## 7.2.0
+* Added attach/detach remote configuration functions
+
 ## 7.1.0
 * Added remote configuration source property.
 * Added rate limits for API calls.

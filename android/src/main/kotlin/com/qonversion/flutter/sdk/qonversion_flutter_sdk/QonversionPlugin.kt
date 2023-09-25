@@ -138,6 +138,8 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "checkTrialIntroEligibility" -> checkTrialIntroEligibility(args, result)
             "attachUserToExperiment" -> attachUserToExperiment(args, result)
             "detachUserFromExperiment" -> detachUserFromExperiment(args, result)
+            "attachUserToRemoteConfiguration" -> attachUserToRemoteConfiguration(args, result)
+            "detachUserFromRemoteConfiguration" -> detachUserFromRemoteConfiguration(args, result)
             "storeSdkInfo" -> storeSdkInfo(args, result)
             "identify" -> identify(args["userId"] as? String, result)
             "automationsSetNotificationsToken" -> automationsPlugin.setNotificationsToken(args["notificationsToken"] as? String, result)
@@ -280,7 +282,6 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
     }
 
     private fun attachUserToExperiment(args: Map<String, Any>, result: Result) {
-        @Suppress("UNCHECKED_CAST")
         val experimentId = args["experimentId"] as? String ?: return result.noNecessaryDataError()
         val groupId = args["groupId"] as? String ?: return result.noNecessaryDataError()
 
@@ -288,10 +289,21 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
     }
 
     private fun detachUserFromExperiment(args: Map<String, Any>, result: Result) {
-        @Suppress("UNCHECKED_CAST")
         val experimentId = args["experimentId"] as? String ?: return result.noNecessaryDataError()
 
         qonversionSandwich.detachUserFromExperiment(experimentId, result.toJsonResultListener())
+    }
+
+    private fun attachUserToRemoteConfiguration(args: Map<String, Any>, result: Result) {
+        val remoteConfigurationId = args["remoteConfigurationId"] as? String ?: return result.noNecessaryDataError()
+
+        qonversionSandwich.attachUserToRemoteConfiguration(remoteConfigurationId, result.toJsonResultListener())
+    }
+
+    private fun detachUserFromRemoteConfiguration(args: Map<String, Any>, result: Result) {
+        val remoteConfigurationId = args["remoteConfigurationId"] as? String ?: return result.noNecessaryDataError()
+
+        qonversionSandwich.detachUserFromRemoteConfiguration(remoteConfigurationId, result.toJsonResultListener())
     }
 
     private fun userInfo(result: Result) {

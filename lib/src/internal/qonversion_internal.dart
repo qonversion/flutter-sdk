@@ -11,7 +11,7 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String _sdkVersion = "7.1.0";
+  static const String _sdkVersion = "7.2.0";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
@@ -237,6 +237,22 @@ class QonversionInternal implements Qonversion {
       Constants.kExperimentId: experimentId,
     };
     await _channel.invokeMethod(Constants.mDetachUserFromExperiment, args);
+    return;
+  }
+
+  Future<void> attachUserToRemoteConfiguration(String remoteConfigurationId) async {
+    final args = {
+      Constants.kRemoteConfigurationId: remoteConfigurationId,
+    };
+    await _channel.invokeMethod(Constants.mAttachUserToRemoteConfiguration, args);
+    return;
+  }
+
+  Future<void> detachUserFromRemoteConfiguration(String remoteConfigurationId) async {
+    final args = {
+      Constants.kRemoteConfigurationId: remoteConfigurationId,
+    };
+    await _channel.invokeMethod(Constants.mDetachUserFromRemoteConfiguration, args);
     return;
   }
 

@@ -27,6 +27,7 @@ class Constants {
   static const kConfigData = 'configData';
   static const kExperimentId = 'experimentId';
   static const kGroupId = 'groupId';
+  static const kRemoteConfigurationId = 'remoteConfigurationId';
 
   // MethodChannel methods names
   static const mInitialize = 'initialize';
@@ -57,6 +58,8 @@ class Constants {
   static const mRemoteConfig = 'remoteConfig';
   static const mAttachUserToExperiment = 'attachUserToExperiment';
   static const mDetachUserFromExperiment = 'detachUserFromExperiment';
+  static const mAttachUserToRemoteConfiguration = 'attachUserToRemoteConfiguration';
+  static const mDetachUserFromRemoteConfiguration = 'detachUserFromRemoteConfiguration';
   static const mCollectAppleSearchAdsAttribution = 'collectAppleSearchAdsAttribution';
   static const mPresentCodeRedemptionSheet = 'presentCodeRedemptionSheet';
   static const mSubscribeAutomations = 'automationsSubscribe';
