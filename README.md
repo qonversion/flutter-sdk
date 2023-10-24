@@ -16,11 +16,8 @@ Qonversion - In-app subscription monetization: implement subscriptions and grow 
      </a>
 </p>
 
-[![Platform](https://img.shields.io/cocoapods/p/Qonversion.svg?style=flat)](https://documentation.qonversion.io/docs/ios-sdk-setup)
-[![Version](https://img.shields.io/cocoapods/v/Qonversion.svg?style=flat)](https://documentation.qonversion.io/docs/ios-sdk-setup#install-via-cocoapods)
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://documentation.qonversion.io/docs/ios-sdk-setup#install-via-carthage)
-[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-4BC51D.svg?style=flat)](https://documentation.qonversion.io/docs/ios-sdk-setup#install-via-swift-package-manager)
-[![MIT License](http://img.shields.io/cocoapods/l/Qonversion.svg?style=flat)](https://qonversion.io)
+[![pub](https://img.shields.io/pub/v/qonversion_flutter)](https://pub.dev/packages/qonversion_flutter)
+[![MIT License](https://img.shields.io/cocoapods/l/Qonversion.svg?style=flat)](https://qonversion.io)
 
 
 ## In-App Subscription Implementation & Management
