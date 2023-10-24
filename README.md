@@ -110,7 +110,7 @@ Whether you’re a core user or trying it out for the first time, you can make a
 
 * sending us feedback about something you thought was confusing or simply missing
 * sending us a pull request via GitHub
-* suggesting better wording or ways of explaining certain topics in the [Qonversion documentation](http://documentation.qonversion.io). Use `SUGGEST EDITS` button in the top right corner.
+* suggesting better wording or ways of explaining certain topics in the [Qonversion documentation](https://documentation.qonversion.io). Use `SUGGEST EDITS` button in the top right corner.
 
 ## Contributing
 
@@ -125,7 +125,7 @@ Contributions are what make the open source community such an amazing place to l
 
 ## Have a question?
 
-Contact us via [issues on GitHub](https://github.com/qonversion/qonversion-ios-sdk/issues) or [ask a question](https://documentation.qonversion.io/discuss-new) on the site.
+Contact us via [issues on GitHub](https://github.com/qonversion/flutter-sdk/issues) or [ask a question](https://documentation.qonversion.io/discuss-new) on the site.
 
 ## License
 
