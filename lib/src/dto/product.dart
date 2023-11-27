@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:qonversion_flutter/src/dto/product_store_details.dart';
 import '../internal/constants.dart';
 import 'product_duration.dart';
 import 'product_type.dart';
@@ -106,6 +107,12 @@ class QProduct {
   @JsonKey(name: 'skuDetails', fromJson: QMapper.skuDetailsFromJson)
   final SkuDetailsWrapper? skuDetails;
 
+  /// Associated product store details.
+  ///
+  /// Available for Android only.
+  @JsonKey(name: 'productStoreDetails', fromJson: QMapper.storeProductDetailsFromJson)
+  final QProductStoreDetails? productStoreDetails;
+
   /// Associated Offering Id
   @JsonKey(name: 'offeringId')
   final String? offeringID;
@@ -119,6 +126,7 @@ class QProduct {
       this.trialDuration,
       this.skProduct,
       this.skuDetails,
+      this.productStoreDetails,
       this.offeringID) {
     final skuDetails = this.skuDetails;
     final skProduct = this.skProduct;

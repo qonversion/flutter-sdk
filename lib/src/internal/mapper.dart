@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:qonversion_flutter/qonversion_flutter.dart';
 
+import '../dto/product_store_details.dart';
 import '../dto/sk_product/discount.dart';
 import '../dto/sk_product/sk_product_wrapper.dart';
 import '../dto/sk_product/subscription_period.dart';
@@ -145,6 +146,19 @@ class QMapper {
       return SkuDetailsWrapper.fromJson(map);
     } catch (e) {
       print('Could not parse SkuDetails: $e');
+      return null;
+    }
+  }
+
+  static QProductStoreDetails? storeProductDetailsFromJson(dynamic json) {
+    if (json == null) return null;
+
+    final map = Map<String, dynamic>.from(json);
+
+    try {
+      return QProductStoreDetails.fromJson(map);
+    } catch (e) {
+      print('Could not parse ProductStoreDetails: $e');
       return null;
     }
   }
