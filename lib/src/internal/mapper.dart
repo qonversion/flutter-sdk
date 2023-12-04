@@ -149,12 +149,14 @@ class QMapper {
     return SKProductDiscountWrapper.fromJson(map);
   }
 
+  // ignore: deprecated_member_use_from_same_package
   static SkuDetailsWrapper? skuDetailsFromJson(dynamic json) {
     if (json == null) return null;
 
     final map = Map<String, dynamic>.from(json);
 
     try {
+      // ignore: deprecated_member_use_from_same_package
       return SkuDetailsWrapper.fromJson(map);
     } catch (e) {
       print('Could not parse SkuDetails: $e');

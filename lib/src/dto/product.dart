@@ -38,6 +38,7 @@ class QProduct {
   /// Doesn't take into account [basePlanId].
   /// @deprecated Consider using [storeDetails] instead.
   @JsonKey(name: 'skuDetails', fromJson: QMapper.skuDetailsFromJson)
+  // ignore: deprecated_member_use_from_same_package
   final SkuDetailsWrapper? skuDetails;
 
   /// Google Play Store details of this product.
