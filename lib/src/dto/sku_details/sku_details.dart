@@ -26,6 +26,8 @@ enum SkuType {
 /// Dart wrapper around [`com.android.billingclient.api.SkuDetails`](https://developer.android.com/reference/com/android/billingclient/api/SkuDetails).
 ///
 /// Contains the details of an available product in Google Play Billing.
+///
+@Deprecated("Consider using QProductStoreDetails instead")
 @JsonSerializable()
 class SkuDetailsWrapper {
   /// Textual description of the product.
