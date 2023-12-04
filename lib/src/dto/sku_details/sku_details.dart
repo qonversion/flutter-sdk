@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'sku_details.g.dart';
 
+// ignore: deprecated_member_use_from_same_package
 /// Enum representing potential [SkuDetailsWrapper.type]s.
 ///
 /// Wraps
