@@ -26,7 +26,7 @@ class QSubscriptionPeriod {
   @JsonKey(name: 'unit', unknownEnumValue: QSubscriptionPeriodUnit.unknown)
   final QSubscriptionPeriodUnit unit;
 
-  /// ISO 8601 representation of the period.
+  /// ISO 8601 representation of the period, e.g. "P7D", meaning 7 days period.
   @JsonKey(name: 'iso')
   final String iso;
 
