@@ -1,16 +1,23 @@
 import 'package:json_annotation/json_annotation.dart';
 
 enum QProductType {
-  /// Provides access to content on a recurring basis with a free introductory offer
-  @JsonValue(0)
+  /// Provides access to content on a recurring basis with a free trial offer
+  @JsonValue('Trial')
   trial,
 
+  /// Provides access to content on a recurring basis with an introductory price offer
+  /// Currently works for Android only. iOS support will be added soon.
+  @JsonValue('Intro')
+  intro,
+
   /// Provides access to content on a recurring basis
-  @JsonValue(1)
+  @JsonValue('Subscription')
   subscription,
 
   /// Content that users can purchase with a single, non-recurring charge
-  @JsonValue(2)
+  @JsonValue('InApp')
   inApp,
+
+  @JsonValue('Unknown')
   unknown,
 }
