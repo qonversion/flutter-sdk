@@ -1,7 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:qonversion_flutter/src/dto/purchase_update_policy.dart';
-import 'package:qonversion_flutter/src/dto/store_product/product_offer_details.dart';
-import 'package:qonversion_flutter/src/dto/store_product/product_store_details.dart';
+import 'purchase_update_policy.dart';
+import './store_product/product_inapp_details.dart';
+import './store_product/product_offer_details.dart';
+import './store_product/product_store_details.dart';
 import '../internal/constants.dart';
 import 'product_type.dart';
 import 'purchase_model.dart';
@@ -97,7 +98,7 @@ class QProduct {
   @JsonKey(ignore: true)
   String? storeDescription;
 
-  /// Formatted introductory price of a subscription, including its currency sign, such as €2.99
+  /// Formatted introductory price of the subscription, including its currency sign, such as €2.99
   @JsonKey(ignore: true)
   String? prettyIntroductoryPrice;
 
@@ -151,10 +152,15 @@ class QProduct {
         storeDescription = storeDetails.description;
 
         final QProductOfferDetails? defaultOffer = storeDetails.defaultSubscriptionOfferDetails;
+        final QProductInAppDetails? inAppOffer = storeDetails.inAppOfferDetails;
         if (defaultOffer != null) {
           priceMicros = defaultOffer.basePlan?.price.priceAmountMicros;
           currencyCode = defaultOffer.basePlan?.price.priceCurrencyCode;
           prettyIntroductoryPrice = defaultOffer.introPhase?.price.formattedPrice;
+        } else if (inAppOffer != null) {
+          priceMicros = inAppOffer.price.priceAmountMicros;
+          currencyCode = inAppOffer.price.priceCurrencyCode;
+          prettyIntroductoryPrice = null;
         }
       }
 

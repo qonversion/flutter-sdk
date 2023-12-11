@@ -15,24 +15,24 @@ class QProductStoreDetails {
   @JsonKey(name: 'basePlanId')
   final String? basePlanId;
 
-  /// Identifier of a subscription or an in-app product.
+  /// Identifier of the subscription or the in-app product.
   @JsonKey(name: 'productId')
   final String productId;
 
-  /// Name of a subscription or an in-app product.
+  /// Name of the subscription or the in-app product.
   @JsonKey(name: 'name')
   final String name;
 
-  /// Title of a subscription or an in-app product.
+  /// Title of the subscription or the in-app product.
   /// The title includes the name of the app.
   @JsonKey(name: 'title')
   final String title;
 
-  /// Description of a subscription or an in-app product.
+  /// Description of the subscription or the in-app product.
   @JsonKey(name: 'description')
   final String description;
 
-  /// Offer details for a subscription.
+  /// Offer details for the subscription.
   /// Offer details contain all the available variations of purchase offers,
   /// including both base plan and eligible base plan + offer combinations
   /// from Google Play Console for current [basePlanId].
@@ -50,7 +50,7 @@ class QProductStoreDetails {
   @JsonKey(name: 'basePlanSubscriptionOfferDetails', fromJson: QMapper.productOfferDetailsFromJson)
   final QProductOfferDetails? basePlanSubscriptionOfferDetails;
 
-  /// Offer details for an in-app product.
+  /// Offer details for the in-app product.
   /// Null for subscriptions.
   @JsonKey(name: 'inAppOfferDetails', fromJson: QMapper.productInAppDetailsFromJson)
   final QProductInAppDetails? inAppOfferDetails;

@@ -6,6 +6,7 @@ enum QProductType {
   trial,
 
   /// Provides access to content on a recurring basis with an introductory price offer
+  /// Currently works for Android only. iOS support will be added soon.
   @JsonValue('Intro')
   intro,
 

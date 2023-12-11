@@ -8,7 +8,7 @@ part 'product_inapp_details.g.dart';
 /// This class contains all the information about the Google in-app product details.
 @JsonSerializable()
 class QProductInAppDetails {
-  /// The price of an in-app product.
+  /// The price of the in-app product.
   @JsonKey(name: 'price', fromJson: QMapper.requiredProductPriceFromJson)
   final QProductPrice price;
 
@@ -19,4 +19,3 @@ class QProductInAppDetails {
 
   Map<String, dynamic> toJson() => _$QProductInAppDetailsToJson(this);
 }
-
