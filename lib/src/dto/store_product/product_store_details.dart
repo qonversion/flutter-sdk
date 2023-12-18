@@ -85,6 +85,11 @@ class QProductStoreDetails {
   @JsonKey(name: 'isSubscription')
   final bool isSubscription;
 
+  /// True if the subscription product is prepaid, which means that users pay in advance -
+  /// they will need to make a new payment to extend their plan.
+  @JsonKey(name: 'isPrepaid')
+  final bool isPrepaid;
+
   const QProductStoreDetails(
       this.basePlanId,
       this.productId,
@@ -101,6 +106,7 @@ class QProductStoreDetails {
       this.productType,
       this.isInApp,
       this.isSubscription,
+      this.isPrepaid,
   );
 
   factory QProductStoreDetails.fromJson(Map<String, dynamic> json) =>
