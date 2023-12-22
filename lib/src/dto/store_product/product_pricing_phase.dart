@@ -7,16 +7,16 @@ part 'product_pricing_phase.g.dart';
 
 /// Recurrence mode of the pricing phase.
 enum QPricingPhaseRecurrenceMode {
-  /// The billing plan payment recurs for infinite billing periods unless cancelled.
+  /// The billing plan payment recurs for infinite billing periods unless canceled.
   @JsonValue("InfiniteRecurring")
   infiniteRecurring,
 
-  /// The billing plan payment recurs for a fixed number of billing period
+  /// The billing plan payment recurs for a fixed number of billing periods
   /// set in [QProductPricingPhase.billingCycleCount].
   @JsonValue("FiniteRecurring")
   finiteRecurring,
 
-  /// The billing plan payment is a one time charge that does not repeat.
+  /// The billing plan payment is a one-time charge that does not repeat.
   @JsonValue("NonRecurring")
   nonRecurring,
 
@@ -55,7 +55,7 @@ class QProductPricingPhase {
   @JsonKey(name: 'price', fromJson: QMapper.requiredProductPriceFromJson)
   final QProductPrice price;
 
-  /// Billing period for which the given price applies.
+  /// The billing period for which the given price applies.
   @JsonKey(name: 'billingPeriod', fromJson: QMapper.requiredSubscriptionPeriodFromJson)
   final QSubscriptionPeriod billingPeriod;
 
@@ -71,16 +71,16 @@ class QProductPricingPhase {
   @JsonKey(name: 'type', unknownEnumValue: QPricingPhaseType.unknown)
   final QPricingPhaseType type;
 
-  /// True if the current phase is a trial period. False otherwise.
+  /// True, if the current phase is a trial period. False otherwise.
   @JsonKey(name: 'isTrial')
   final bool isTrial;
 
-  /// True if the current phase is an intro period. False otherwise.
-  /// Intro phase is one of single or recurrent discounted payments.
+  /// True, if the current phase is an intro period. False otherwise.
+  /// The intro phase is one of single or recurrent discounted payments.
   @JsonKey(name: 'isIntro')
   final bool isIntro;
 
-  /// True if the current phase represents the base plan. False otherwise.
+  /// True, if the current phase represents the base plan. False otherwise.
   @JsonKey(name: 'isBasePlan')
   final bool isBasePlan;
 

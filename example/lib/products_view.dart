@@ -134,7 +134,14 @@ class _ProductsViewState extends State<ProductsView> {
             textColor: Colors.white,
             onPressed: () async {
               try {
-                final purchaseModel = product.toPurchaseModel();
+                final QPurchaseModel purchaseModel = product.toPurchaseModel();
+                final QPurchaseUpdateModel purchaseUpdateModel = product.toPurchaseUpdateModel('oldProductId', updatePolicy: QPurchaseUpdatePolicy.withTimeProration);
+                final QPurchaseModel purchaseModel = new QPurchaseModel();
+                purchaseModel.offerId = 'frefr';
+                final QPurchaseUpdateModel purchaseUpdateModel = new QPurchaseUpdateModel("newProductId", "oldProductId", updatePolicy: QPurchaseUpdatePolicy.withTimeProration);
+
+// Specifying purchase update policy after the purchase update model creation:
+                purchaseUpdateModel.updatePolicy = QPurchaseUpdatePolicy.withTimeProration;
                 final entitlements =
                     await Qonversion.getSharedInstance().purchase(purchaseModel);
                 final entitlement = entitlements.values.firstWhere(
