@@ -14,7 +14,6 @@ export 'src/dto/launch_mode.dart';
 export 'src/dto/offerings.dart';
 export 'src/dto/product.dart';
 export 'src/dto/product_type.dart';
-export 'src/dto/proration_mode.dart';
 export 'src/dto/purchase_model.dart';
 export 'src/dto/purchase_update_model.dart';
 export 'src/dto/purchase_update_policy.dart';

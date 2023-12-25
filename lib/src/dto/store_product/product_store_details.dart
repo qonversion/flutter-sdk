@@ -42,7 +42,7 @@ class QProductStoreDetails {
 
   /// The most profitable subscription offer for the client in our opinion from all the available offers.
   /// We calculate the cheapest price for the client by comparing all the trial or intro phases
-  /// along with the base plan.
+  /// and the base plan.
   @JsonKey(name: 'defaultSubscriptionOfferDetails', fromJson: QMapper.productOfferDetailsFromJson)
   final QProductOfferDetails? defaultSubscriptionOfferDetails;
 
@@ -55,19 +55,19 @@ class QProductStoreDetails {
   @JsonKey(name: 'inAppOfferDetails', fromJson: QMapper.productInAppDetailsFromJson)
   final QProductInAppDetails? inAppOfferDetails;
 
-  /// True if there is any eligible offer with trial
+  /// True, if there is any eligible offer with a trial
   /// for this subscription and base plan combination.
   /// False otherwise or for an in-app product.
   @JsonKey(name: 'hasTrialOffer')
   final bool hasTrialOffer;
 
-  /// True if there is any eligible offer with intro price
+  /// True, if there is any eligible offer with an intro price
   /// for this subscription and base plan combination.
   /// False otherwise or for an in-app product.
   @JsonKey(name: 'hasIntroOffer')
   final bool hasIntroOffer;
 
-  /// True if there is any eligible offer with trial or intro price
+  /// True, if there is any eligible offer with a trial or an intro price
   /// for this subscription and base plan combination.
   /// False otherwise or for an in-app product.
   @JsonKey(name: 'hasTrialOrIntroOffer')
@@ -77,15 +77,15 @@ class QProductStoreDetails {
   @JsonKey(name: 'productType', unknownEnumValue: QProductType.unknown)
   final QProductType productType;
 
-  /// True if the product type is InApp.
+  /// True, if the product type is InApp.
   @JsonKey(name: 'isInApp')
   final bool isInApp;
 
-  /// True if the product type is Subscription.
+  /// True, if the product type is Subscription.
   @JsonKey(name: 'isSubscription')
   final bool isSubscription;
 
-  /// True if the subscription product is prepaid, which means that users pay in advance -
+  /// True, if the subscription product is prepaid, which means that users pay in advance -
   /// they will need to make a new payment to extend their plan.
   @JsonKey(name: 'isPrepaid')
   final bool isPrepaid;

@@ -12,7 +12,7 @@ import 'purchase_update_policy.dart';
 /// If [offerId] is not specified for Android, then the default offer will be applied.
 /// To know how we choose the default offer, see [QProductStoreDetails.defaultSubscriptionOfferDetails].
 ///
-/// If you want to remove any intro/trial offer from the purchase on Android (use only bare base plan),
+/// If you want to remove any intro/trial offer from the purchase on Android (use only a bare base plan),
 /// call the [removeOffer] method.
 class QPurchaseUpdateModel {
 

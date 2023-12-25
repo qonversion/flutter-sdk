@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'product_price.g.dart';
 
-/// Information about Google product's price.
+/// Information about the Google product's price.
 @JsonSerializable()
 class QProductPrice {
   /// Total amount of money in micro-units,
