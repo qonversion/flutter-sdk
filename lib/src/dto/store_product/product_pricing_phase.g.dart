@@ -71,7 +71,7 @@ const _$QPricingPhaseRecurrenceModeEnumMap = {
 const _$QPricingPhaseTypeEnumMap = {
   QPricingPhaseType.regular: 'Regular',
   QPricingPhaseType.freeTrial: 'FreeTrial',
-  QPricingPhaseType.singlePayment: 'SinglePayment',
+  QPricingPhaseType.discountedSinglePayment: 'DiscountedSinglePayment',
   QPricingPhaseType.discountedRecurringPayment: 'DiscountedRecurringPayment',
   QPricingPhaseType.unknown: 'Unknown',
 };

@@ -36,8 +36,8 @@ enum QPricingPhaseType {
   freeTrial,
 
   /// A phase with a discounted payment for a single period.
-  @JsonValue("SinglePayment")
-  singlePayment,
+  @JsonValue("DiscountedSinglePayment")
+  discountedSinglePayment,
 
   /// A phase with a discounted payment for several periods, described in [QProductPricingPhase.billingCycleCount].
   @JsonValue("DiscountedRecurringPayment")
