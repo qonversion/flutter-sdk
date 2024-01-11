@@ -37,7 +37,7 @@ internal fun MethodChannel.Result.toPurchaseResultListener(): PurchaseResultList
         }
 
         override fun onSuccess(data: Map<String, Any?>) {
-            success(data)
+            success(Gson().toJson(data))
         }
     }
 }

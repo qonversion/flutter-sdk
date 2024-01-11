@@ -19,10 +19,10 @@ class QMapper {
     });
   }
 
-  static Map<String, QEntitlement> entitlementsFromJson(dynamic json) {
-    if (json == null) return <String, QEntitlement>{};
+  static Map<String, QEntitlement> entitlementsFromJson(String? jsonString) {
+    if (jsonString == null) return <String, QEntitlement>{};
 
-    final entitlementsMap = Map<String, dynamic>.from(json);
+    final entitlementsMap = Map<String, dynamic>.from(jsonDecode(jsonString));
 
     return entitlementsMap.map((key, value) {
       final entitlementMap = Map<String, dynamic>.from(value);

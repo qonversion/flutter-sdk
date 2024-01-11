@@ -388,7 +388,15 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
         return result(FlutterError.purchaseError(error))
       }
       
-      result(data)
+        guard let data = data else {
+          return result(nil)
+        }
+
+        guard let jsonData = data.toJson() else {
+          return result(FlutterError.serializationError)
+        }
+
+        result(jsonData)
     }
   }
 }

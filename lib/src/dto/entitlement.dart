@@ -115,6 +115,10 @@ class QEntitlement {
     this.transactions
   );
 
-  factory QEntitlement.fromJson(Map<String, dynamic> json) =>
-      _$QEntitlementFromJson(json);
+  factory QEntitlement.fromJson(Map<String, dynamic> json) {
+    String grantType = json["grantType"] ?? "Purchase";
+    json["grantType"] = grantType;
+
+    return _$QEntitlementFromJson(json);
+  }
 }
