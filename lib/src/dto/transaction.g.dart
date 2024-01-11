@@ -25,21 +25,6 @@ QTransaction _$QTransactionFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$QTransactionToJson(QTransaction instance) =>
-    <String, dynamic>{
-      'originalTransactionId': instance.originalTransactionId,
-      'transactionId': instance.transactionId,
-      'offerCode': instance.offerCode,
-      'transactionTimestamp': instance.transactionDate.toIso8601String(),
-      'expirationTimestamp': instance.expirationDate?.toIso8601String(),
-      'transactionRevocationTimestamp':
-          instance.transactionRevocationDate?.toIso8601String(),
-      'environment': _$QTransactionEnvironmentEnumMap[instance.environment],
-      'ownershipType':
-          _$QTransactionOwnershipTypeEnumMap[instance.ownershipType],
-      'type': _$QTransactionTypeEnumMap[instance.type],
-    };
-
 K _$enumDecode<K, V>(
   Map<K, V> enumValues,
   Object? source, {
