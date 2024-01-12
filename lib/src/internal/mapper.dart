@@ -154,7 +154,7 @@ class QMapper {
   static QEntitlementGrantType grantTypeFromNullableValue(String? value) {
     if (value == null) return QEntitlementGrantType.purchase;
 
-    final type = QEntitlementGrantTypeEnumMap[value];
+    final type = _QEntitlementGrantTypeEnumMap[value];
     if (type == null) return QEntitlementGrantType.purchase;
 
     return type;
@@ -190,7 +190,7 @@ class QMapper {
     }
   }
 
-  static const QEntitlementGrantTypeEnumMap = {
+  static const _QEntitlementGrantTypeEnumMap = {
     'Purchase': QEntitlementGrantType.purchase,
     'FamilySharing': QEntitlementGrantType.familySharing,
     'OfferCode': QEntitlementGrantType.offerCode,
