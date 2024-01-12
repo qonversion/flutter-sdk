@@ -1,3 +1,6 @@
+## 7.3.0
+* Updated entitlements fields
+
 ## 7.2.0
 * Added attach/detach remote configuration functions
 
