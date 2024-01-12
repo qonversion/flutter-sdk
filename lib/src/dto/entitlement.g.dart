@@ -19,6 +19,18 @@ QEntitlement _$QEntitlementFromJson(Map<String, dynamic> json) {
     QMapper.dateTimeFromNullableSecondsTimestamp(
         json['expirationTimestamp'] as num?),
     json['active'] as bool,
+    json['renewsCount'] as int? ?? 0,
+    QMapper.dateTimeFromNullableSecondsTimestamp(
+        json['trialStartTimestamp'] as num?),
+    QMapper.dateTimeFromNullableSecondsTimestamp(
+        json['firstPurchaseTimestamp'] as num?),
+    QMapper.dateTimeFromNullableSecondsTimestamp(
+        json['lastPurchaseTimestamp'] as num?),
+    json['lastActivatedOfferCode'] as String?,
+    QMapper.grantTypeFromNullableValue(json['grantType'] as String?),
+    QMapper.dateTimeFromNullableSecondsTimestamp(
+        json['autoRenewDisableTimestamp'] as num?),
+    QMapper.transactionsFromNullableValue(json['transactions'] as List?),
   );
 }
 

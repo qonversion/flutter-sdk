@@ -216,7 +216,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
     }
 
     private fun checkEntitlements(result: Result) {
-        qonversionSandwich.checkEntitlements(result.toResultListener())
+        qonversionSandwich.checkEntitlements(result.toJsonResultListener())
     }
 
     private fun restore(result: Result) {
