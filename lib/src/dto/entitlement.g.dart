@@ -19,7 +19,7 @@ QEntitlement _$QEntitlementFromJson(Map<String, dynamic> json) {
     QMapper.dateTimeFromNullableSecondsTimestamp(
         json['expirationTimestamp'] as num?),
     json['active'] as bool,
-    json['renewsCount'] as int,
+    json['renewsCount'] as int? ?? 0,
     QMapper.dateTimeFromNullableSecondsTimestamp(
         json['trialStartTimestamp'] as num?),
     QMapper.dateTimeFromNullableSecondsTimestamp(
@@ -27,13 +27,10 @@ QEntitlement _$QEntitlementFromJson(Map<String, dynamic> json) {
     QMapper.dateTimeFromNullableSecondsTimestamp(
         json['lastPurchaseTimestamp'] as num?),
     json['lastActivatedOfferCode'] as String?,
-    _$enumDecode(_$QEntitlementGrantTypeEnumMap, json['grantType'],
-        unknownValue: QEntitlementGrantType.purchase),
+    QMapper.grantTypeFromNullableValue(json['grantType'] as String?),
     QMapper.dateTimeFromNullableSecondsTimestamp(
         json['autoRenewDisableTimestamp'] as num?),
-    (json['transactions'] as List<dynamic>)
-        .map((e) => QTransaction.fromJson(e as Map<String, dynamic>))
-        .toList(),
+    QMapper.transactionsFromNullableValue(json['transactions'] as List?),
   );
 }
 
@@ -77,11 +74,4 @@ const _$QEntitlementSourceEnumMap = {
   QEntitlementSource.playStore: 'PlayStore',
   QEntitlementSource.stripe: 'Stripe',
   QEntitlementSource.manual: 'Manual',
-};
-
-const _$QEntitlementGrantTypeEnumMap = {
-  QEntitlementGrantType.purchase: 'Purchase',
-  QEntitlementGrantType.familySharing: 'FamilySharing',
-  QEntitlementGrantType.offerCode: 'OfferCode',
-  QEntitlementGrantType.manual: 'Manual',
 };

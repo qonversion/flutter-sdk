@@ -7,47 +7,57 @@ import '../internal/mapper.dart';
 
 part 'transaction.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class QTransaction {
+  /// Original transaction identifier.
   @JsonKey(name: 'originalTransactionId')
   final String originalTransactionId;
 
+  /// Transaction identifier.
   @JsonKey(name: 'transactionId')
   final String transactionId;
 
+  /// Offer code.
   @JsonKey(name: 'offerCode')
   final String? offerCode;
 
+  /// Transaction date.
   @JsonKey(
     name: 'transactionTimestamp',
     fromJson: QMapper.dateTimeFromSecondsTimestamp,
   )
   final DateTime transactionDate;
 
+  /// Expiration date for subscriptions.
   @JsonKey(
     name: 'expirationTimestamp',
     fromJson: QMapper.dateTimeFromNullableSecondsTimestamp,
   )
   final DateTime? expirationDate;
 
+  /// The date when transaction was revoked.
+  /// This field represents the time and date the App Store refunded a transaction or revoked it from family sharing.
   @JsonKey(
     name: 'transactionRevocationTimestamp',
     fromJson: QMapper.dateTimeFromNullableSecondsTimestamp,
   )
   final DateTime? transactionRevocationDate;
 
+  /// Environment of the transaction.
   @JsonKey(
     name: 'environment',
     unknownEnumValue: QTransactionEnvironment.production,
   )
   final QTransactionEnvironment environment;
 
+  /// Type of ownership for the transaction.  Owner/Family sharing.
   @JsonKey(
     name: 'ownershipType',
     unknownEnumValue: QTransactionOwnershipType.owner,
   )
   final QTransactionOwnershipType ownershipType;
 
+  /// Type of the transaction.
   @JsonKey(
     name: 'type',
     unknownEnumValue: QTransactionType.unknown,

@@ -50,45 +50,62 @@ class QEntitlement {
   )
   final DateTime? expirationDate;
 
-  @JsonKey(name: 'renewsCount')
+  /// Renews count for the entitlement. Renews count starts from the second paid subscription.
+  ///  For example, we have 20 transactions. One is the trial, and one is the first paid transaction after the trial.
+  ///  Renews count is equal to 18.
+  @JsonKey(
+    name: 'renewsCount',
+    defaultValue: 0
+  )
   final int renewsCount;
 
+  /// Trial start date.
   @JsonKey(
     name: 'trialStartTimestamp',
     fromJson: QMapper.dateTimeFromNullableSecondsTimestamp,
   )
   final DateTime? trialStartDate;
 
+  /// First purchase date.
   @JsonKey(
     name: 'firstPurchaseTimestamp',
     fromJson: QMapper.dateTimeFromNullableSecondsTimestamp,
   )
   final DateTime? firstPurchaseDate;
 
+  /// Last purchase date.
   @JsonKey(
     name: 'lastPurchaseTimestamp',
     fromJson: QMapper.dateTimeFromNullableSecondsTimestamp,
   )
   final DateTime? lastPurchaseDate;
 
+  /// Last activated offer code.
   @JsonKey(
     name: 'lastActivatedOfferCode'
   )
   final String? lastActivatedOfferCode;
 
+  /// Grant type of the entitlement.
   @JsonKey(
     name: 'grantType',
     unknownEnumValue: QEntitlementGrantType.purchase,
+    fromJson: QMapper.grantTypeFromNullableValue
   )
   final QEntitlementGrantType grantType;
 
+  /// Auto-renew disable date.
   @JsonKey(
     name: 'autoRenewDisableTimestamp',
     fromJson: QMapper.dateTimeFromNullableSecondsTimestamp,
   )
   final DateTime? autoRenewDisableDate;
 
-  @JsonKey(name: 'transactions')
+  /// Array of the transactions that unlocked current entitlement.
+  @JsonKey(
+    name: 'transactions',
+    fromJson: QMapper.transactionsFromNullableValue
+  )
   final List<QTransaction> transactions;
 
   /// Use for checking entitlement for current user.
@@ -115,10 +132,5 @@ class QEntitlement {
     this.transactions
   );
 
-  factory QEntitlement.fromJson(Map<String, dynamic> json) {
-    String grantType = json["grantType"] ?? "Purchase";
-    json["grantType"] = grantType;
-
-    return _$QEntitlementFromJson(json);
-  }
+  factory QEntitlement.fromJson(Map<String, dynamic> json) => _$QEntitlementFromJson(json);
 }

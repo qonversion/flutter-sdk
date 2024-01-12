@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:qonversion_flutter/qonversion_flutter.dart';
+import 'package:qonversion_flutter/src/dto/transaction.dart';
 
+import '../dto/entitlement_grant_type.dart';
 import '../dto/sk_product/discount.dart';
 import '../dto/sk_product/sk_product_wrapper.dart';
 import '../dto/sk_product/subscription_period.dart';
@@ -149,6 +151,21 @@ class QMapper {
     }
   }
 
+  static QEntitlementGrantType grantTypeFromNullableValue(String? value) {
+    if (value == null) return QEntitlementGrantType.purchase;
+
+    final type = QEntitlementGrantTypeEnumMap[value];
+    if (type == null) return QEntitlementGrantType.purchase;
+
+    return type;
+  }
+
+  static List<QTransaction> transactionsFromNullableValue(List<dynamic>? json) {
+    if (json == null) return [];
+    return json.map((e) => QTransaction.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
   static DateTime? dateTimeFromNullableSecondsTimestamp(num? timestamp) {
     if (timestamp == null) return null;
 
@@ -172,4 +189,11 @@ class QMapper {
       return null;
     }
   }
+
+  static const QEntitlementGrantTypeEnumMap = {
+    'Purchase': QEntitlementGrantType.purchase,
+    'FamilySharing': QEntitlementGrantType.familySharing,
+    'OfferCode': QEntitlementGrantType.offerCode,
+    'Manual': QEntitlementGrantType.manual,
+  };
 }
