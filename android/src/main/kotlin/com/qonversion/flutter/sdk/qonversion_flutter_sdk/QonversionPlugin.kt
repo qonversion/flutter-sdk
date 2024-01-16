@@ -220,7 +220,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
     }
 
     private fun restore(result: Result) {
-        qonversionSandwich.restore(result.toResultListener())
+        qonversionSandwich.restore(result.toJsonResultListener())
     }
 
     private fun offerings(result: Result) {
