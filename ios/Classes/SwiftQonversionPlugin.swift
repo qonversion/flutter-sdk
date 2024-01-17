@@ -244,7 +244,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   }
   
   private func restore(_ result: @escaping FlutterResult) {
-    qonversionSandwich?.restore(getDefaultCompletion(result))
+    qonversionSandwich?.restore(getJsonCompletion(result))
   }
   
   private func offerings(_ result: @escaping FlutterResult) {
