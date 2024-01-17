@@ -1,5 +1,5 @@
 ## 7.3.2
-* // Update changelog here
+* Fixed restore issue for iOS
 
 ## 7.3.1
 * Fixed restore issue
