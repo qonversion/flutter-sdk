@@ -1,3 +1,6 @@
+## 7.3.1
+* Fixed restore issue
+
 ## 7.3.0
 * Updated entitlements fields
 
