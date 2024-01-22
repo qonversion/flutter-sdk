@@ -1,3 +1,13 @@
+## 8.0.0
+New major release of Qonversion Android SDK with the new Google Play Billing features support!
+* added base plans and offers support;
+* Gradle on Android was upgraded to the version 8;
+* the `checkTrialIntroEligibility` method improved and now detects the eligibility based on store details on Android;
+* the `QProductDuration` and `QTrialDuration` classes were removed;
+* the `QProrationMode` enum was removed and replaced with `QPurchaseUpdatePolicy`.
+
+For the complete release notes with the migration guide please see [the documentation](https://documentation.qonversion.io/docs/unity-7-migration-guide).
+
 ## 7.3.2
 * Fixed restore issue for iOS
 
