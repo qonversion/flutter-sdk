@@ -134,8 +134,9 @@ class _ProductsViewState extends State<ProductsView> {
             textColor: Colors.white,
             onPressed: () async {
               try {
+                final purchaseModel = product.toPurchaseModel();
                 final entitlements =
-                    await Qonversion.getSharedInstance().purchaseProduct(product);
+                    await Qonversion.getSharedInstance().purchase(purchaseModel);
                 final entitlement = entitlements.values.firstWhere(
                     (element) => element.productId == product.qonversionId,
                     orElse: () => null);

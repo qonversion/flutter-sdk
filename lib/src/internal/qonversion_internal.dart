@@ -63,10 +63,14 @@ class QonversionInternal implements Qonversion {
   }
 
   @override
-  Future<Map<String, QEntitlement>> purchase(String productId) async {
+  Future<Map<String, QEntitlement>> purchase(QPurchaseModel purchaseModel) async {
     try {
       final rawResult = await _channel
-          .invokeMethod(Constants.mPurchase, {Constants.kProductId: productId});
+          .invokeMethod(Constants.mPurchase, {
+            Constants.kProductId: purchaseModel.productId,
+            Constants.kOfferId: purchaseModel.offerId,
+            Constants.kApplyOffer: purchaseModel.applyOffer
+          });
 
       final result = QMapper.entitlementsFromJson(rawResult);
       return result;
@@ -76,65 +80,21 @@ class QonversionInternal implements Qonversion {
   }
 
   @override
-  Future<Map<String, QEntitlement>> purchaseProduct(QProduct product) async {
-    try {
-      final rawResult = await _channel.invokeMethod(
-          Constants.mPurchaseProduct,
-          {
-            Constants.kProductId: product.qonversionId,
-            Constants.kOfferingId: product.offeringID
-          }
-      );
-
-      final result = QMapper.entitlementsFromJson(rawResult);
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPurchaseException(e);
-    }
-  }
-
-  @override
-  Future<Map<String, QEntitlement>?> updatePurchase({
-    required String newProductId,
-    required String oldProductId,
-    QProrationMode? prorationMode,
-  }) async {
+  Future<Map<String, QEntitlement>?> updatePurchase(QPurchaseUpdateModel purchaseUpdateModel) async {
     if (!Platform.isAndroid) {
       return null;
     }
 
     try {
+      final updatePolicy = purchaseUpdateModel.updatePolicy;
+
       final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchase, {
-        Constants.kNewProductId: newProductId,
-        Constants.kOldProductId: oldProductId,
-        Constants.kProrationMode: prorationMode != null
-            ? prorationMode.index
-            : null,
-      });
-      final result = QMapper.entitlementsFromJson(rawResult);
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPurchaseException(e);
-    }
-  }
-
-  @override
-  Future<Map<String, QEntitlement>?> updatePurchaseWithProduct({
-    required QProduct newProduct,
-    required String oldProductId,
-    QProrationMode? prorationMode,
-  }) async {
-    if (!Platform.isAndroid) {
-      return null;
-    }
-
-    try {
-      final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchaseWithProduct, {
-        Constants.kNewProductId: newProduct.qonversionId,
-        Constants.kOfferingId: newProduct.offeringID,
-        Constants.kOldProductId: oldProductId,
-        Constants.kProrationMode: prorationMode != null
-            ? prorationMode.index
+        Constants.kNewProductId: purchaseUpdateModel.productId,
+        Constants.kOfferId: purchaseUpdateModel.offerId,
+        Constants.kApplyOffer: purchaseUpdateModel.applyOffer,
+        Constants.kOldProductId: purchaseUpdateModel.oldProductId,
+        Constants.kUpdatePolicyKey: updatePolicy != null
+            ? StringUtils.capitalize(describeEnum(updatePolicy))
             : null,
       });
       final result = QMapper.entitlementsFromJson(rawResult);

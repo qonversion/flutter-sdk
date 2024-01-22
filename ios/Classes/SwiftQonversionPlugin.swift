@@ -107,10 +107,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       
     case "purchase":
       return purchase(args["productId"] as? String, result)
-      
-    case "purchaseProduct":
-      return purchaseProduct(args["productId"] as? String, args["offeringId"] as? String, result)
-      
+
     case "promoPurchase":
       return promoPurchase(args["productId"] as? String, result)
       
@@ -209,14 +206,6 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     }
     
     qonversionSandwich?.purchase(productId, completion: getPurchaseCompletion(result))
-  }
-  
-  private func purchaseProduct(_ productId: String?, _ offeringId: String?, _ result: @escaping FlutterResult) {
-    guard let productId = productId else {
-      return result(FlutterError.noNecessaryData)
-    }
-    
-    qonversionSandwich?.purchaseProduct(productId, offeringId: offeringId, completion: getPurchaseCompletion(result))
   }
   
   private func promoPurchase(_ productId: String?, _ result: @escaping FlutterResult) {
