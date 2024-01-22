@@ -1,3 +1,6 @@
+## 8.0.0
+* // Update changelog here
+
 ## 7.3.2
 * Fixed restore issue for iOS
 
