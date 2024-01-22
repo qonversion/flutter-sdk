@@ -6,7 +6,7 @@ New major release of Qonversion Android SDK with the new Google Play Billing fea
 * the `QProductDuration` and `QTrialDuration` classes were removed;
 * the `QProrationMode` enum was removed and replaced with `QPurchaseUpdatePolicy`.
 
-For the complete release notes with the migration guide please see [the documentation](https://documentation.qonversion.io/docs/unity-7-migration-guide).
+For the complete release notes with the migration guide please see [the documentation](https://documentation.qonversion.io/docs/flutter-8-migration-guide).
 
 ## 7.3.2
 * Fixed restore issue for iOS
