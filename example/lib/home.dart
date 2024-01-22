@@ -234,7 +234,9 @@ class _HomeViewState extends State<HomeView> {
                   '' + '\n' + e.value.storeId ??
                   '' +
                       '\n' +
-                      e.value.duration.toString() +
+                      e.value.subscriptionPeriod.unitCount.toString() +
+                      ' ' +
+                      e.value.subscriptionPeriod.unit.toString() +
                       '\n' +
                       e.value.type.toString() +
                       '\n',

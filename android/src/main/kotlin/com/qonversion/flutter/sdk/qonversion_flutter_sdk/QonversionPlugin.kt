@@ -128,10 +128,8 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         val args = call.arguments() as? Map<String, Any> ?: return result.noNecessaryDataError()
         when (call.method) {
             "initialize" -> initialize(args, result)
-            "purchase" -> purchase(args["productId"] as? String, result)
-            "purchaseProduct" -> purchaseProduct(args, result)
+            "purchase" -> purchase(args, result)
             "updatePurchase" -> updatePurchase(args, result)
-            "updatePurchaseWithProduct" -> updatePurchaseWithProduct(args, result)
             "setDefinedUserProperty" -> setDefinedUserProperty(args, result)
             "setCustomUserProperty" -> setCustomUserProperty(args, result)
             "addAttributionData" -> addAttributionData(args, result)
@@ -177,40 +175,27 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         result.success(null)
     }
 
-    private fun purchase(productId: String?, result: Result) {
-        if (productId == null) {
-            return result.noNecessaryDataError()
-        }
-
-        qonversionSandwich.purchase(productId, result.toPurchaseResultListener())
-    }
-
-    private fun purchaseProduct(args: Map<String, Any>, result: Result) {
+    private fun purchase(args: Map<String, Any>, result: Result) {
         val productId = args["productId"] as? String ?: return result.noNecessaryDataError()
-        val offeringId = args["offeringId"] as? String
+        val offerId = args["offerId"] as? String
+        val applyOffer = args["applyOffer"] as? Boolean
 
-        qonversionSandwich.purchaseProduct(productId, offeringId, result.toPurchaseResultListener())
+        qonversionSandwich.purchase(productId, offerId, applyOffer, result.toPurchaseResultListener())
     }
 
     private fun updatePurchase(args: Map<String, Any>, result: Result) {
         val newProductId = args["newProductId"] as? String ?: return result.noNecessaryDataError()
         val oldProductId = args["oldProductId"] as? String ?: return result.noNecessaryDataError()
-        val prorationMode = args["proration_mode"] as? Int
+        val offerId = args["offerId"] as? String
+        val applyOffer = args["applyOffer"] as? Boolean
+        val updatePolicyKey = args["updatePolicyKey"] as? String
 
-        qonversionSandwich.updatePurchase(newProductId, oldProductId, prorationMode, result.toPurchaseResultListener())
-    }
-
-    private fun updatePurchaseWithProduct(args: Map<String, Any>, result: Result) {
-        val newProductId = args["newProductId"] as? String ?: return result.noNecessaryDataError()
-        val offeringId = args["offeringId"] as? String
-        val oldProductId = args["oldProductId"] as? String ?: return result.noNecessaryDataError()
-        val prorationMode = args["proration_mode"] as? Int
-
-        qonversionSandwich.updatePurchaseWithProduct(
+        qonversionSandwich.updatePurchase(
             newProductId,
-            offeringId,
+            offerId,
+            applyOffer,
             oldProductId,
-            prorationMode,
+            updatePolicyKey,
             result.toPurchaseResultListener()
         )
     }

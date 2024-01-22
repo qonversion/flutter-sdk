@@ -51,41 +51,29 @@ abstract class Qonversion {
   /// Call this function to sync purchases if you are using StoreKit2 and our SDK in Analytics mode.
   Future<void> syncStoreKit2Purchases();
 
-  /// Starts a process of purchasing product with [productId].
+  /// Make a purchase and validate it through server-to-server using Qonversion's Backend.
+  /// [purchaseModel] necessary information for purchase.
   ///
+  /// Returns the promise with the user entitlements including the ones obtained by the purchase.
   /// Throws [QPurchaseException] in case of error in purchase flow.
-  Future<Map<String, QEntitlement>> purchase(String productId);
-
-  /// Starts a process of purchasing product with Qonversion's [product] object.
   ///
-  /// Throws [QPurchaseException] in case of error in purchase flow.
-  Future<Map<String, QEntitlement>> purchaseProduct(QProduct product);
+  /// See [Making Purchases](https://documentation.qonversion.io/docs/making-purchases)
+  Future<Map<String, QEntitlement>> purchase(QPurchaseModel purchaseModel);
 
   /// Android only. Returns `null` if called on iOS.
   ///
-  /// Upgrading, downgrading, or changing a subscription on Google Play Store requires calling updatePurchase() function.
+  /// Update (upgrade/downgrade) subscription on Google Play Store and validate it through server-to-server using Qonversion's Backend
   ///
-  /// See [Google Play Documentation](https://developer.android.com/google/play/billing/subscriptions#upgrade-downgrade) for more details.
-  Future<Map<String, QEntitlement>?> updatePurchase({
-    required String newProductId,
-    required String oldProductId,
-    QProrationMode? prorationMode,
-  });
-
-  /// Android only. Returns `null` if called on iOS.
+  /// [purchaseUpdateModel] necessary information for purchase update
   ///
-  /// Upgrading, downgrading, or changing a subscription on Google Play Store requires calling updatePurchaseWithProduct() function.
+  /// Returns the promise with the user entitlements including updated ones.
+  /// Throws [QPurchaseException] in case of error in purchase flow.
   ///
-  /// See [Google Play Documentation](https://developer.android.com/google/play/billing/subscriptions#upgrade-downgrade) for more details.
-  Future<Map<String, QEntitlement>?> updatePurchaseWithProduct({
-    required QProduct newProduct,
-    required String oldProductId,
-    QProrationMode? prorationMode,
-  });
+  /// See [Update policy](https://developer.android.com/google/play/billing/subscriptions#replacement-modes)
+  /// See [Making Purchases](https://documentation.qonversion.io/docs/making-purchases)
+  Future<Map<String, QEntitlement>?> updatePurchase(QPurchaseUpdateModel purchaseUpdateModel);
 
   /// Returns Qonversion Products in association with Google Play Store Products.
-  ///
-  /// See [Product Center](https://qonversion.io/docs/product-center)
   Future<Map<String, QProduct>> products();
 
   /// Return Qonversion Offerings Object
@@ -94,7 +82,6 @@ abstract class Qonversion {
   /// Offerings allow changing the products offered remotely without releasing app updates.
   ///
   /// See [Offerings](https://qonversion.io/docs/offerings) for more details.
-  /// See [Product Center](https://qonversion.io/docs/product-center) for more details.
   Future<QOfferings> offerings();
 
   /// You can check if a user is eligible for an introductory offer, including a free trial.
