@@ -217,7 +217,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   }
   
   private func checkEntitlements(_ result: @escaping FlutterResult) {
-    qonversionSandwich?.checkEntitlements(getDefaultCompletion(result))
+    qonversionSandwich?.checkEntitlements(getJsonCompletion(result))
   }
 
   private func remoteConfig(_ result: @escaping FlutterResult) {
@@ -233,7 +233,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   }
   
   private func restore(_ result: @escaping FlutterResult) {
-    qonversionSandwich?.restore(getDefaultCompletion(result))
+    qonversionSandwich?.restore(getJsonCompletion(result))
   }
   
   private func offerings(_ result: @escaping FlutterResult) {
@@ -377,7 +377,15 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
         return result(FlutterError.purchaseError(error))
       }
       
-      result(data)
+        guard let data = data else {
+          return result(nil)
+        }
+
+        guard let jsonData = data.toJson() else {
+          return result(FlutterError.serializationError)
+        }
+
+        result(jsonData)
     }
   }
 }
