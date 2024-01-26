@@ -101,6 +101,14 @@ class QMapper {
         return QUserPropertyKey.appSetId;
       case '_q_advertising_id':
         return QUserPropertyKey.advertisingId;
+      case "_q_appmetrica_device_id":
+        return QUserPropertyKey.appMetricaDeviceId;
+      case "_q_appmetrica_user_profile_id":
+        return QUserPropertyKey.appMetricaUserProfileId;
+      case "_q_pushwoosh_hwid":
+        return QUserPropertyKey.pushWooshHwId;
+      case "_q_pushwoosh_user_id":
+        return QUserPropertyKey.pushWooshUserId;
     }
 
     return QUserPropertyKey.custom;

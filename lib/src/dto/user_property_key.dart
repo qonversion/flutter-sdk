@@ -9,5 +9,9 @@ enum QUserPropertyKey {
   firebaseAppInstanceId,
   appSetId, // Android only
   advertisingId, // iOS only
+  appMetricaDeviceId,
+  appMetricaUserProfileId,
+  pushWooshHwId,
+  pushWooshUserId,
   custom,
 }
