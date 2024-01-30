@@ -1,3 +1,7 @@
+## 8.1.0
+* Added 4 new properties for AppMetrica and PushWoosh integrations - `appMetricaDeviceId`, `appMetricaUserProfileId`, `pushWooshHwId`, `pushWooshUserId`.
+* Updated entitlements cache logic - the case with entitlement expiration during the app session handled.
+
 ## 8.0.0
 New major release of Qonversion Android SDK with the new Google Play Billing features support!
 * added base plans and offers support;
