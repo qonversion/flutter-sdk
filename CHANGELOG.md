@@ -1,3 +1,6 @@
+## 8.1.0
+* // Update changelog here
+
 ## 8.0.0
 New major release of Qonversion Android SDK with the new Google Play Billing features support!
 * added base plans and offers support;
