@@ -127,7 +127,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "initialize" -> initialize(args, result)
             "purchase" -> purchase(args, result)
             "updatePurchase" -> updatePurchase(args, result)
-            "remoteConfig" -> remoteConfig(args["contextKey" as? String], result)
+            "remoteConfig" -> remoteConfig(args["contextKey"] as? String, result)
             "setDefinedUserProperty" -> setDefinedUserProperty(args, result)
             "setCustomUserProperty" -> setCustomUserProperty(args, result)
             "addAttributionData" -> addAttributionData(args, result)
