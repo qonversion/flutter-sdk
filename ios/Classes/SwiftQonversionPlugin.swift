@@ -57,9 +57,6 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       
     case "checkEntitlements":
       return checkEntitlements(result)
-
-    case "remoteConfig":
-      return remoteConfig(result)
       
     case "restore":
       return restore(result)
@@ -110,6 +107,9 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
     case "promoPurchase":
       return promoPurchase(args["productId"] as? String, result)
+
+    case "remoteConfig":
+      return remoteConfig(args["contextKey"] as? String, result)
       
     case "setDefinedUserProperty":
       return setDefinedUserProperty(args, result)
@@ -220,8 +220,8 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     qonversionSandwich?.checkEntitlements(getJsonCompletion(result))
   }
 
-  private func remoteConfig(_ result: @escaping FlutterResult) {
-    qonversionSandwich?.remoteConfig(getJsonCompletion(result))
+  private func remoteConfig(_ contextKey: String?, _ result: @escaping FlutterResult) {
+    qonversionSandwich?.remoteConfig(contextKey, getJsonCompletion(result))
   }
 
   private func userInfo(_ result: @escaping FlutterResult) {

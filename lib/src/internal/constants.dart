@@ -30,6 +30,7 @@ class Constants {
   static const kExperimentId = 'experimentId';
   static const kGroupId = 'groupId';
   static const kRemoteConfigurationId = 'remoteConfigurationId';
+  static const kContextKey = 'contextKey';
 
   // MethodChannel methods names
   static const mInitialize = 'initialize';

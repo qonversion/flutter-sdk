@@ -171,8 +171,11 @@ class QonversionInternal implements Qonversion {
   }
 
   @override
-  Future<QRemoteConfig> remoteConfig() async {
-    final rawResult = await _channel.invokeMethod(Constants.mRemoteConfig);
+  Future<QRemoteConfig> remoteConfig({String? contextKey}) async {
+    final args = {
+      Constants.kContextKey: contextKey,
+    };
+    final rawResult = await _channel.invokeMethod(Constants.mRemoteConfig, args);
 
     final result = QMapper.remoteConfigFromJson(rawResult);
     if (result == null) {
