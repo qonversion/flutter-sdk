@@ -1,5 +1,5 @@
 ## 8.2.0
-* // Update changelog here
+* Added an option to load Remote Configs by the specific context keys using the `remoteConfig` method.
 
 ## 8.1.0
 * Added 4 new properties for AppMetrica and PushWoosh integrations - `appMetricaDeviceId`, `appMetricaUserProfileId`, `pushWooshHwId`, `pushWooshUserId`.
