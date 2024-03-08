@@ -48,9 +48,6 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
     case "checkEntitlements":
       return checkEntitlements(result)
-      
-    case "remoteConfig":
-      return remoteConfig(result)
 
     case "restore":
       return restore(result)
@@ -89,8 +86,8 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     case "purchase":
       return purchase(args["productId"] as? String, result)
 
-    case "purchaseProduct":
-      return purchaseProduct(args["productId"] as? String, args["offeringId"] as? String, result)
+    case "remoteConfig":
+      return remoteConfig(args["contextKey"] as? String, result)
 
     case "setDefinedUserProperty":
       return setDefinedUserProperty(args, result)
@@ -169,20 +166,12 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     qonversionSandwich?.purchase(productId, completion: getPurchaseCompletion(result))
   }
 
-  private func purchaseProduct(_ productId: String?, _ offeringId: String?, _ result: @escaping FlutterResult) {
-    guard let productId = productId else {
-      return result(FlutterError.noNecessaryData)
-    }
-
-    qonversionSandwich?.purchaseProduct(productId, offeringId: offeringId, completion: getPurchaseCompletion(result))
-  }
-
   private func checkEntitlements(_ result: @escaping FlutterResult) {
     qonversionSandwich?.checkEntitlements(getJsonCompletion(result))
   }
-  
-  private func remoteConfig(_ result: @escaping FlutterResult) {
-    qonversionSandwich?.remoteConfig(getJsonCompletion(result))
+
+  private func remoteConfig(_ contextKey: String?, _ result: @escaping FlutterResult) {
+    qonversionSandwich?.remoteConfig(contextKey, getJsonCompletion(result))
   }
 
   private func userInfo(_ result: @escaping FlutterResult) {

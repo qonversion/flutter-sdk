@@ -11,7 +11,7 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String _sdkVersion = "8.1.0";
+  static const String _sdkVersion = "8.2.0";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
@@ -171,8 +171,11 @@ class QonversionInternal implements Qonversion {
   }
 
   @override
-  Future<QRemoteConfig> remoteConfig() async {
-    final rawResult = await _channel.invokeMethod(Constants.mRemoteConfig);
+  Future<QRemoteConfig> remoteConfig({String? contextKey}) async {
+    final args = {
+      Constants.kContextKey: contextKey,
+    };
+    final rawResult = await _channel.invokeMethod(Constants.mRemoteConfig, args);
 
     final result = QMapper.remoteConfigFromJson(rawResult);
     if (result == null) {
