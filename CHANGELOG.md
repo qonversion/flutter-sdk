@@ -1,3 +1,6 @@
+## 8.2.0
+* // Update changelog here
+
 ## 8.1.0
 * Added 4 new properties for AppMetrica and PushWoosh integrations - `appMetricaDeviceId`, `appMetricaUserProfileId`, `pushWooshHwId`, `pushWooshUserId`.
 * Updated entitlements cache logic - the case with entitlement expiration during the app session handled.
