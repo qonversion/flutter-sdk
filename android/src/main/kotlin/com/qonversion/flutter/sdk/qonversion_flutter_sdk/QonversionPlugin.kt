@@ -109,9 +109,6 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "userProperties" -> {
                 return userProperties(result)
             }
-            "remoteConfig" -> {
-                return remoteConfig(result)
-            }
             "logout" -> {
                 qonversionSandwich.logout()
                 return result.success(null)
@@ -130,6 +127,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "initialize" -> initialize(args, result)
             "purchase" -> purchase(args, result)
             "updatePurchase" -> updatePurchase(args, result)
+            "remoteConfig" -> remoteConfig(args["contextKey" as? String], result)
             "setDefinedUserProperty" -> setDefinedUserProperty(args, result)
             "setCustomUserProperty" -> setCustomUserProperty(args, result)
             "addAttributionData" -> addAttributionData(args, result)
@@ -216,8 +214,8 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         qonversionSandwich.userProperties(result.toJsonResultListener())
     }
 
-    private fun remoteConfig(result: Result) {
-        qonversionSandwich.remoteConfig(result.toJsonResultListener())
+    private fun remoteConfig(contextKey: String?, result: Result) {
+        qonversionSandwich.remoteConfig(contextKey, result.toJsonResultListener())
     }
 
     private fun products(result: Result) {

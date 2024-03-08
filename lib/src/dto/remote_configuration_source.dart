@@ -26,11 +26,15 @@ class QRemoteConfigurationSource {
   )
   final QRemoteConfigurationAssignmentType assignmentType;
 
+  @JsonKey(name: 'contextKey')
+  final String contextKey;
+
   const QRemoteConfigurationSource(
       this.id,
       this.name,
       this.type,
-      this.assignmentType
+      this.assignmentType,
+      this.contextKey,
   );
 
   factory QRemoteConfigurationSource.fromJson(Map<String, dynamic> json) =>
