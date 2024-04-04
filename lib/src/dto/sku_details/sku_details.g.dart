@@ -6,9 +6,7 @@ part of 'sku_details.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-// ignore: deprecated_member_use_from_same_package
 SkuDetailsWrapper _$SkuDetailsWrapperFromJson(Map<String, dynamic> json) {
-  // ignore: deprecated_member_use_from_same_package
   return SkuDetailsWrapper(
     description: json['description'] as String,
     freeTrialPeriod: json['freeTrialPeriod'] as String,
@@ -29,7 +27,6 @@ SkuDetailsWrapper _$SkuDetailsWrapperFromJson(Map<String, dynamic> json) {
   );
 }
 
-// ignore: deprecated_member_use_from_same_package
 Map<String, dynamic> _$SkuDetailsWrapperToJson(SkuDetailsWrapper instance) =>
     <String, dynamic>{
       'description': instance.description,

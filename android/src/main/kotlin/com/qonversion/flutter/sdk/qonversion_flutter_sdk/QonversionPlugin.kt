@@ -119,6 +119,9 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "automationsSubscribe" -> {
                 return automationsPlugin.subscribe()
             }
+            "remoteConfigList" -> {
+                return remoteConfigList(result)
+            }
         }
 
         // Methods with args
@@ -128,6 +131,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "purchase" -> purchase(args, result)
             "updatePurchase" -> updatePurchase(args, result)
             "remoteConfig" -> remoteConfig(args["contextKey"] as? String, result)
+            "remoteConfigListForContextKeys" -> remoteConfigList(args, result)
             "setDefinedUserProperty" -> setDefinedUserProperty(args, result)
             "setCustomUserProperty" -> setCustomUserProperty(args, result)
             "addAttributionData" -> addAttributionData(args, result)
@@ -216,6 +220,18 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
 
     private fun remoteConfig(contextKey: String?, result: Result) {
         qonversionSandwich.remoteConfig(contextKey, result.toJsonResultListener())
+    }
+
+    private fun remoteConfigList(result: Result) {
+        qonversionSandwich.remoteConfigList(result.toJsonResultListener())
+    }
+
+    private fun remoteConfigList(args: Map<String, Any>, result: Result) {
+        @Suppress("UNCHECKED_CAST")
+        val contextKeys = args["contextKeys"] as? List<String> ?: return result.noNecessaryDataError()
+        val includeEmptyContextKey = args["includeEmptyContextKey"] as? Boolean ?: return result.noNecessaryDataError()
+
+        qonversionSandwich.remoteConfigList(contextKeys, includeEmptyContextKey, result.toJsonResultListener())
     }
 
     private fun products(result: Result) {
