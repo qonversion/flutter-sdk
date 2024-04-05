@@ -185,6 +185,35 @@ class QonversionInternal implements Qonversion {
   }
 
   @override
+  Future<QRemoteConfigList> remoteConfigList() async {
+    final rawResult = await _channel.invokeMethod(Constants.mRemoteConfigList);
+
+    final result = QMapper.remoteConfigListFromJson(rawResult);
+    if (result == null) {
+      throw new Exception("Remote config list deserialization failed");
+    }
+    return result;
+  }
+
+  @override
+  Future<QRemoteConfigList> remoteConfigListForContextKeys(
+      List<String> contextKeys,
+      bool includeEmptyContextKey
+  ) async {
+    final args = {
+      Constants.kContextKeys: contextKeys,
+      Constants.kIncludeEmptyContextKey: includeEmptyContextKey,
+    };
+    final rawResult = await _channel.invokeMethod(Constants.mRemoteConfigListForContextKeys, args);
+
+    final result = QMapper.remoteConfigListFromJson(rawResult);
+    if (result == null) {
+      throw new Exception("Remote config list deserialization failed");
+    }
+    return result;
+  }
+
+  @override
   Future<void> attachUserToExperiment(String experimentId, String groupId) async {
     final args = {
       Constants.kExperimentId: experimentId,

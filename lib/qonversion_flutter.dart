@@ -21,6 +21,7 @@ export 'src/dto/purchase_exception.dart';
 export 'src/dto/subscription_period.dart';
 export 'src/dto/qonversion_error.dart';
 export 'src/dto/remote_config.dart';
+export 'src/dto/remote_config_list.dart';
 export 'src/dto/remote_configuration_source.dart';
 export 'src/dto/remote_configuration_source_type.dart';
 export 'src/dto/remote_configuration_assignment_type.dart';

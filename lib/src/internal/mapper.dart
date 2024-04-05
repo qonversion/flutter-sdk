@@ -18,6 +18,7 @@ import '../dto/offerings.dart';
 import '../dto/subscription_period.dart';
 import '../dto/user.dart';
 import '../dto/remote_config.dart';
+import '../dto/remote_config_list.dart';
 import '../dto/eligibility.dart';
 import '../dto/user_properties.dart';
 import '../dto/user_property_key.dart';
@@ -68,6 +69,14 @@ class QMapper {
     final remoteConfigMap = Map<String, dynamic>.from(jsonDecode(jsonString));
 
     return QRemoteConfig.fromJson(remoteConfigMap);
+  }
+
+  static QRemoteConfigList? remoteConfigListFromJson(String? jsonString) {
+    if (jsonString == null) return null;
+
+    final remoteConfigListMap = Map<String, dynamic>.from(jsonDecode(jsonString));
+
+    return QRemoteConfigList.fromJson(remoteConfigListMap);
   }
 
   static Map<String, QEligibility> eligibilityFromJson(String? jsonString) {

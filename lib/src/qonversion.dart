@@ -88,7 +88,8 @@ abstract class Qonversion {
   /// You can show only a regular price for users who are not eligible for an introductory offer.
   /// [ids] products identifiers that must be checked
   Future<Map<String, QEligibility>> checkTrialIntroEligibility(
-      List<String> ids);
+      List<String> ids
+  );
 
   /// You need to call the checkEntitlements method at the start of your app to check if a user has the required entitlement.
   ///
@@ -166,6 +167,18 @@ abstract class Qonversion {
   /// Returns Qonversion remote config object by [contextKey] or default one if the key is not specified.
   /// Use this function to get the remote config with specific payload and experiment info.
   Future<QRemoteConfig> remoteConfig({String? contextKey});
+
+  /// Returns Qonversion remote config objects for all existing context key (including empty one).
+  /// Use this function to get the remote configs with specific payload and experiment info.
+  Future<QRemoteConfigList> remoteConfigList();
+
+  /// Returns Qonversion remote config objects for a list of [contextKeys].
+  /// Set [includeEmptyContextKey] to true if you want to include remote config with empty context key to the result.
+  /// Use this function to get the remote configs with specific payload and experiment info.
+  Future<QRemoteConfigList> remoteConfigListForContextKeys(
+      List<String> contextKeys,
+      bool includeEmptyContextKey
+  );
 
   /// This function should be used for the test purposes only. Do not forget to delete the usage of this function before the release.
   /// Use this function to attach the user to the experiment.
