@@ -69,6 +69,9 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     case "userProperties":
       return userProperties(result)
 
+    case "remoteConfigList":
+      return remoteConfigList(result)
+
     default:
       break
     }
@@ -88,6 +91,9 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
     case "remoteConfig":
       return remoteConfig(args["contextKey"] as? String, result)
+
+    case "remoteConfigListForContextKeys":
+      return remoteConfigList(args, result)
 
     case "setDefinedUserProperty":
       return setDefinedUserProperty(args, result)
@@ -172,6 +178,22 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
   private func remoteConfig(_ contextKey: String?, _ result: @escaping FlutterResult) {
     qonversionSandwich?.remoteConfig(contextKey, getJsonCompletion(result))
+  }
+
+  private func remoteConfigList(_ result: @escaping FlutterResult) {
+    qonversionSandwich?.remoteConfigList(getJsonCompletion(result))
+  }
+
+  private func remoteConfigList(_ args: [String: Any], _ result: @escaping FlutterResult) {
+    guard let contextKeys = args["contextKeys"] as? [String] else {
+      return result(FlutterError.noNecessaryData)
+    }
+
+    guard let includeEmptyContextKey = args["includeEmptyContextKey"] as? Bool else {
+      return result(FlutterError.noNecessaryData)
+    }
+
+    qonversionSandwich?.remoteConfigList(contextKeys, includeEmptyContextKey:includeEmptyContextKey, getJsonCompletion(result))
   }
 
   private func userInfo(_ result: @escaping FlutterResult) {

@@ -1,3 +1,6 @@
+## 8.3.0
+* Added functions to request remote config list - either all or for a specific set of context keys.
+
 ## 8.2.0
 * Added an option to load Remote Configs by the specific context keys using the `remoteConfig` method.
 

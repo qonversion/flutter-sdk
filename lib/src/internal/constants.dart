@@ -31,6 +31,8 @@ class Constants {
   static const kGroupId = 'groupId';
   static const kRemoteConfigurationId = 'remoteConfigurationId';
   static const kContextKey = 'contextKey';
+  static const kContextKeys = 'contextKeys';
+  static const kIncludeEmptyContextKey = 'includeEmptyContextKey';
 
   // MethodChannel methods names
   static const mInitialize = 'initialize';
@@ -57,6 +59,8 @@ class Constants {
   static const mLogout = 'logout';
   static const mUserInfo = 'userInfo';
   static const mRemoteConfig = 'remoteConfig';
+  static const mRemoteConfigList = 'remoteConfigList';
+  static const mRemoteConfigListForContextKeys = 'remoteConfigListForContextKeys';
   static const mAttachUserToExperiment = 'attachUserToExperiment';
   static const mDetachUserFromExperiment = 'detachUserFromExperiment';
   static const mAttachUserToRemoteConfiguration = 'attachUserToRemoteConfiguration';

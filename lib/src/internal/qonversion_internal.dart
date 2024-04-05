@@ -11,7 +11,7 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String _sdkVersion = "8.2.0";
+  static const String _sdkVersion = "8.3.0";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
@@ -180,6 +180,35 @@ class QonversionInternal implements Qonversion {
     final result = QMapper.remoteConfigFromJson(rawResult);
     if (result == null) {
       throw new Exception("Remote config deserialization failed");
+    }
+    return result;
+  }
+
+  @override
+  Future<QRemoteConfigList> remoteConfigList() async {
+    final rawResult = await _channel.invokeMethod(Constants.mRemoteConfigList);
+
+    final result = QMapper.remoteConfigListFromJson(rawResult);
+    if (result == null) {
+      throw new Exception("Remote config list deserialization failed");
+    }
+    return result;
+  }
+
+  @override
+  Future<QRemoteConfigList> remoteConfigListForContextKeys(
+      List<String> contextKeys,
+      bool includeEmptyContextKey
+  ) async {
+    final args = {
+      Constants.kContextKeys: contextKeys,
+      Constants.kIncludeEmptyContextKey: includeEmptyContextKey,
+    };
+    final rawResult = await _channel.invokeMethod(Constants.mRemoteConfigListForContextKeys, args);
+
+    final result = QMapper.remoteConfigListFromJson(rawResult);
+    if (result == null) {
+      throw new Exception("Remote config list deserialization failed");
     }
     return result;
   }
