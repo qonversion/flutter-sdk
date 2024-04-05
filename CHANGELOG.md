@@ -1,3 +1,6 @@
+## 8.3.0
+* // Update changelog here
+
 ## 8.2.0
 * Added an option to load Remote Configs by the specific context keys using the `remoteConfig` method.
 
