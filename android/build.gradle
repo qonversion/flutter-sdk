@@ -51,6 +51,6 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "io.qonversion.sandwich:sandwich:4.3.1"
+    implementation "io.qonversion.sandwich:sandwich:4.3.2"
     implementation 'com.google.code.gson:gson:2.9.0'
 }
