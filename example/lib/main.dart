@@ -23,10 +23,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 /// Initialize the [FlutterLocalNotificationsPlugin] package.
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 /// Create a [AndroidNotificationChannel] for heads up notifications
-AndroidNotificationChannel channel;
+late AndroidNotificationChannel channel;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,8 +54,8 @@ Future<void> main() async {
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (String payload) async {
-      var notificationData = jsonDecode(payload);
+        onSelectNotification: (String? payload) async {
+      var notificationData = jsonDecode(payload ?? "{}");
       onNotificationClick(notificationData);
     });
 

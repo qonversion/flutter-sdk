@@ -17,7 +17,7 @@ class ParamsView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FlatButton(
+            MaterialButton(
               child: Text('Get user properties'),
               color: Colors.amber,
               textColor: Colors.white,
@@ -36,7 +36,7 @@ class ParamsView extends StatelessWidget {
                 }
               },
             ),
-            FlatButton(
+            MaterialButton(
               child: Text('Set User ID'),
               color: Colors.green,
               textColor: Colors.white,
@@ -45,7 +45,7 @@ class ParamsView extends StatelessWidget {
                 print('did set user id');
               },
             ),
-            FlatButton(
+            MaterialButton(
               child: Text('Set User Property'),
               color: Colors.blue,
               textColor: Colors.white,
@@ -55,7 +55,7 @@ class ParamsView extends StatelessWidget {
               },
             ),
             for (final v in QUserPropertyKey.values)
-              FlatButton(
+              MaterialButton(
                 child: Text('Set ${describeEnum(v)}'),
                 color: Colors.purple,
                 textColor: Colors.white,

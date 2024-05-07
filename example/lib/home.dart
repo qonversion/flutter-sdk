@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -13,14 +14,14 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  Map<String, QEntitlement> _entitlements;
-  Map<String, QProduct> _products;
+  Map<String, QEntitlement>? _entitlements;
+  Map<String, QProduct>? _products;
 
-  StreamSubscription<String> _shownScreensStream;
-  StreamSubscription<ActionResult> _startedActionsStream;
-  StreamSubscription<ActionResult> _failedActionsStream;
-  StreamSubscription<ActionResult> _finishedActionsStream;
-  StreamSubscription<Null> _finishedAutomationsStream;
+  late StreamSubscription<String> _shownScreensStream;
+  late StreamSubscription<ActionResult> _startedActionsStream;
+  late StreamSubscription<ActionResult> _failedActionsStream;
+  late StreamSubscription<ActionResult> _finishedActionsStream;
+  late StreamSubscription<Null> _finishedAutomationsStream;
 
   @override
   void initState() {
@@ -31,17 +32,17 @@ class _HomeViewState extends State<HomeView> {
       showNotification(message);
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) {
       if (message != null) {
-        onNotificationClick(message?.data);
+        onNotificationClick(message.data);
       }
     });
 
     FirebaseMessaging.instance
         .getInitialMessage()
-        .then((RemoteMessage message) {
+        .then((RemoteMessage? message) {
       if (message != null) {
-        onNotificationClick(message?.data);
+        onNotificationClick(message.data);
       }
     });
 
@@ -94,12 +95,14 @@ class _HomeViewState extends State<HomeView> {
                   ..._entitlementsFromMap(_entitlements ?? {}),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: FlatButton(
+                    child: MaterialButton(
                         child: Text('Set custom userId'),
                         color: Colors.blue,
                         textColor: Colors.white,
-                        onPressed: () => Qonversion.getSharedInstance().setUserProperty(
-                            QUserPropertyKey.customUserId, 'userId')),
+                        onPressed: () async {
+                          var config = await Qonversion.getSharedInstance().remoteConfig();
+                          log(config.source.contextKey ?? "");
+                        })
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
@@ -107,7 +110,7 @@ class _HomeViewState extends State<HomeView> {
                       right: 8,
                       bottom: 8,
                     ),
-                    child: FlatButton(
+                    child: MaterialButton(
                       child: Text('Open ProductsView'),
                       color: Colors.green,
                       textColor: Colors.white,
@@ -121,7 +124,7 @@ class _HomeViewState extends State<HomeView> {
                       right: 8,
                       bottom: 8,
                     ),
-                    child: FlatButton(
+                    child: MaterialButton(
                       child: Text('Open ParamsView'),
                       color: Colors.brown,
                       textColor: Colors.white,
@@ -136,7 +139,7 @@ class _HomeViewState extends State<HomeView> {
                         right: 8,
                         bottom: 8,
                       ),
-                      child: FlatButton(
+                      child: MaterialButton(
                         child: Text('Sync Purchases'),
                         color: Colors.orange,
                         textColor: Colors.white,
@@ -152,7 +155,7 @@ class _HomeViewState extends State<HomeView> {
   Future<void> _initPlatformState() async {
     const environment = kDebugMode ? QEnvironment.sandbox : QEnvironment.production;
     final config = new QonversionConfigBuilder(
-        'PV77YHL7qnGvsdmpTs7gimsxUvY-Znl2',
+        'KhjVBtayRmz0KywK_BHXShS1VuMXGguy',
         QLaunchMode.subscriptionManagement
     )
         .setEnvironment(environment)
@@ -177,7 +180,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Future<void> _sendNotificationsToken() async {
-    String deviceToken;
+    String? deviceToken;
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         {
@@ -231,12 +234,12 @@ class _HomeViewState extends State<HomeView> {
             title: Text(e.key),
             subtitle: Text(
               e.value.qonversionId ??
-                  '' + '\n' + e.value.storeId ??
+                  '' + '\n' + (e.value.storeId ?? "") ??
                   '' +
                       '\n' +
-                      e.value.subscriptionPeriod.unitCount.toString() +
+                      (e.value.subscriptionPeriod?.unitCount.toString() ?? "") +
                       ' ' +
-                      e.value.subscriptionPeriod.unit.toString() +
+                      (e.value.subscriptionPeriod?.unit.toString() ?? "") +
                       '\n' +
                       e.value.type.toString() +
                       '\n',
