@@ -11,7 +11,7 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String _sdkVersion = "8.3.1";
+  static const String _sdkVersion = "8.4.0";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
@@ -153,8 +153,15 @@ class QonversionInternal implements Qonversion {
   }
 
   @override
-  Future<void> identify(String userId) =>
-      _channel.invokeMethod(Constants.mIdentify, {Constants.kUserId: userId});
+  Future<QUser> identify(String userId) async {
+    final rawResult = await _channel.invokeMethod(Constants.mIdentify, {Constants.kUserId: userId});
+
+    final result = QMapper.userFromJson(rawResult);
+    if (result == null) {
+      throw new Exception("User deserialization failed");
+    }
+    return result;
+  }
 
   @override
   Future<void> logout() => _channel.invokeMethod(Constants.mLogout);
