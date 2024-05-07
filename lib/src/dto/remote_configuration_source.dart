@@ -27,7 +27,7 @@ class QRemoteConfigurationSource {
   final QRemoteConfigurationAssignmentType assignmentType;
 
   @JsonKey(name: 'contextKey')
-  final String contextKey;
+  final String? contextKey;
 
   const QRemoteConfigurationSource(
       this.id,
