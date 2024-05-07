@@ -173,8 +173,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             return
         }
 
-        qonversionSandwich.identify(userId)
-        result.success(null)
+        qonversionSandwich.identify(userId, result.toResultListener())
     }
 
     private fun purchase(args: Map<String, Any>, result: Result) {
