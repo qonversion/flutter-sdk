@@ -198,8 +198,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       return
     }
     
-    qonversionSandwich?.identify(userId)
-    result(nil)
+    qonversionSandwich?.identify(userId, getDefaultCompletion(result))
   }
 
   private func products(_ result: @escaping FlutterResult) {

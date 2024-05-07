@@ -113,7 +113,7 @@ abstract class Qonversion {
 
   /// Call this function to link a user to his unique ID in your system and share purchase data.
   /// [userId] unique user ID in your system
-  Future<void> identify(String userId);
+  Future<QUser> identify(String userId);
 
   /// Call this function to unlink a user from his unique ID in your system and his purchase data.
   Future<void> logout();
