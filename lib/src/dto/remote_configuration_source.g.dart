@@ -16,7 +16,7 @@ QRemoteConfigurationSource _$QRemoteConfigurationSourceFromJson(
     _$enumDecode(
         _$QRemoteConfigurationAssignmentTypeEnumMap, json['assignmentType'],
         unknownValue: QRemoteConfigurationAssignmentType.unknown),
-    json['contextKey'] as String,
+    json['contextKey'] as String?,
   );
 }
 
