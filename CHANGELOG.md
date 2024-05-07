@@ -1,3 +1,6 @@
+## 8.4.0
+* // Update changelog here
+
 ## 8.3.1
 * Fixed privacy manifest file
 
