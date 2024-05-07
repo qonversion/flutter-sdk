@@ -1,3 +1,6 @@
+## 8.4.1
+* // Update changelog here
+
 ## 8.4.0
 * Added returning promise to the `identify` method. You may see warnings for ignoring the returned promise after updating to this version until you update the usage to asynchronous. If you don't need to know the identification result, simply ignore it.
 
