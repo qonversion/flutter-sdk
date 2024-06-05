@@ -1,5 +1,5 @@
 ## 8.5.0
-* // Update changelog here
+* Internal logic update
 
 ## 8.4.1
 * Fixed the issue with the `QRemoteConfigurationSource` parsing.
