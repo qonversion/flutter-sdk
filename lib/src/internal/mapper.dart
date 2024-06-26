@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../dto/store_product/product_inapp_details.dart';
+import '../dto/store_product/product_installment_plan_details.dart';
 import '../dto/store_product/product_offer_details.dart';
 import '../dto/store_product/product_price.dart';
 import '../dto/store_product/product_pricing_phase.dart';
@@ -263,6 +264,19 @@ class QMapper {
       return QProductPricingPhase.fromJson(map);
     } catch (e) {
       print('Could not parse QProductPricingPhase: $e');
+      return null;
+    }
+  }
+
+  static QProductInstallmentPlanDetails? productInstallmentPlanDetailsFromJson(dynamic json) {
+    if (json == null) return null;
+
+    final map = Map<String, dynamic>.from(json);
+
+    try {
+      return QProductInstallmentPlanDetails.fromJson(map);
+    } catch (e) {
+      print('Could not parse QProductInstallmentPlanDetails: $e');
       return null;
     }
   }

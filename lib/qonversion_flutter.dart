@@ -35,6 +35,7 @@ export 'src/dto/sk_product/discount_payment_mode.dart';
 export 'src/dto/sk_product/subscription_period_unit.dart';
 export 'src/dto/sku_details/sku_details.dart';
 export 'src/dto/store_product/product_inapp_details.dart';
+export 'src/dto/store_product/product_installment_plan_details.dart';
 export 'src/dto/store_product/product_offer_details.dart';
 export 'src/dto/store_product/product_price.dart';
 export 'src/dto/store_product/product_pricing_phase.dart';
