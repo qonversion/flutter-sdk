@@ -29,15 +29,3 @@ internal fun MethodChannel.Result.toJsonResultListener(): ResultListener {
         }
     }
 }
-
-internal fun MethodChannel.Result.toPurchaseResultListener(): PurchaseResultListener {
-    return object : PurchaseResultListener {
-        override fun onError(error: SandwichError, isCancelled: Boolean) {
-            purchaseError(error, isCancelled)
-        }
-
-        override fun onSuccess(data: Map<String, Any?>) {
-            success(Gson().toJson(data))
-        }
-    }
-}
