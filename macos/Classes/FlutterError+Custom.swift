@@ -22,7 +22,7 @@ extension FlutterError {
 
   static func sandwichError(_ error: SandwichError) -> FlutterError {
     return mapSandwichError(error, errorCode: error.code)
-  }f
+  }
 
   static let serializationError = FlutterError(code: "SerializationError",
                                                message: "Failed to serialize response from native bridge",
