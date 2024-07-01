@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
+import 'package:qonversion_flutter/src/dto/qonversion_error_code.dart';
 import 'package:qonversion_flutter/src/internal/mapper.dart';
 import 'package:qonversion_flutter/src/internal/utils/string.dart';
 
@@ -346,7 +347,7 @@ class QonversionInternal implements Qonversion {
         error.code,
         error.message ?? "",
         error.details,
-        isUserCancelled: error.code == "PurchaseCancelledByUser"
+        isUserCancelled: error.code == QErrorCode.purchaseCanceled.code
     );
   }
 }

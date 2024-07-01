@@ -14,8 +14,3 @@ fun MethodChannel.Result.noNecessaryDataError() {
 fun MethodChannel.Result.sandwichError(error: SandwichError) {
     return error(error.code, error.description, error.additionalMessage)
 }
-
-fun MethodChannel.Result.purchaseError(error: SandwichError, isCancelled: Boolean) {
-    val errorCode = if (isCancelled) "PurchaseCancelledByUser" else error.code
-    return error(errorCode, error.description, error.additionalMessage)
-}
