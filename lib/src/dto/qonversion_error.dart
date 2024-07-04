@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'qonversion_error_code.dart';
 
 part 'qonversion_error.g.dart';
 
@@ -6,8 +7,8 @@ part 'qonversion_error.g.dart';
 class QError {
   /// Qonversion Error Code
   /// See more in [documentation](https://documentation.qonversion.io/docs/handling-errors)
-  @JsonKey(name: 'code')
-  final String code;
+  @JsonKey(name: 'code', unknownEnumValue: QErrorCode.unknown)
+  final QErrorCode code;
 
   /// Error description
   @JsonKey(name: 'description')
