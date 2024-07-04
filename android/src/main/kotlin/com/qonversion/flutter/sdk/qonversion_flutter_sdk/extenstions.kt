@@ -2,7 +2,6 @@ package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 
 import com.google.gson.Gson
 import io.flutter.plugin.common.MethodChannel
-import io.qonversion.sandwich.PurchaseResultListener
 import io.qonversion.sandwich.ResultListener
 import io.qonversion.sandwich.SandwichError
 
