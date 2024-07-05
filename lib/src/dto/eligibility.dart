@@ -6,7 +6,7 @@ enum QEligibilityStatus {
   @JsonValue('unknown')
   unknown,
   @JsonValue('non_intro_or_trial_product')
-  nonIntroProduct,
+  nonIntroOrTrialProduct,
   @JsonValue('intro_or_trial_ineligible')
   ineligible,
   @JsonValue('intro_or_trial_eligible')

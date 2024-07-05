@@ -346,7 +346,7 @@ class QonversionInternal implements Qonversion {
         error.code,
         error.message ?? "",
         error.details,
-        isUserCancelled: error.code == "PurchaseCancelledByUser"
+        isUserCancelled: error.code == QErrorCode.purchaseCanceled.code
     );
   }
 }

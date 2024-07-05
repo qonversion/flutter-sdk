@@ -14,6 +14,8 @@ QProductOfferDetails _$QProductOfferDetailsFromJson(Map<String, dynamic> json) {
     (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
     QMapper.productPricingPhaseListFromJson(json['pricingPhases']),
     QMapper.productPricingPhaseFromJson(json['basePlan']),
+    QMapper.productInstallmentPlanDetailsFromJson(
+        json['installmentPlanDetails']),
     QMapper.productPricingPhaseFromJson(json['introPhase']),
     QMapper.productPricingPhaseFromJson(json['trialPhase']),
     json['hasTrial'] as bool,
@@ -31,6 +33,7 @@ Map<String, dynamic> _$QProductOfferDetailsToJson(
       'tags': instance.tags,
       'pricingPhases': instance.pricingPhases,
       'basePlan': instance.basePlan,
+      'installmentPlanDetails': instance.installmentPlanDetails,
       'introPhase': instance.introPhase,
       'trialPhase': instance.trialPhase,
       'hasTrial': instance.hasTrial,
