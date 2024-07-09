@@ -255,6 +255,16 @@ class QonversionInternal implements Qonversion {
     return;
   }
 
+  Future<bool> isFallbackFileAccessible() async {
+    final rawResult = await _channel.invokeMethod(Constants.mIsFallbackFileAccessible);
+    final result = QMapper.mapIsFallbackFileAccessible(rawResult);
+    if (result == null) {
+      return false;
+    }
+
+    return result;
+  }
+
   @override
   Future<void> attribution(Map<dynamic, dynamic> data, QAttributionProvider provider) {
     final args = {

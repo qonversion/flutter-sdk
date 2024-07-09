@@ -124,6 +124,14 @@ class QMapper {
     return QUserPropertyKey.custom;
   }
 
+  static bool? mapIsFallbackFileAccessible(String? jsonString) {
+    if (jsonString == null) return null;
+
+    final result = Map<String, dynamic>.from(jsonDecode(jsonString));
+
+    return result["success"];
+  }
+
   static QUserProperties? userPropertiesFromJson(String? jsonString) {
     if (jsonString == null) return null;
 

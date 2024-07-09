@@ -83,6 +83,9 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
     case "collectAppleSearchAdsAttribution":
       return collectAppleSearchAdsAttribution(result)
+        
+    case "isFallbackFileAccessible":
+      return isFallbackFileAccessible(result)
 
     case "automationsSubscribe":
       automationsPlugin?.subscribe()
@@ -355,6 +358,10 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   private func collectAppleSearchAdsAttribution(_ result: @escaping FlutterResult) {
     qonversionSandwich?.collectAppleSearchAdsAttribution()
     result(nil)
+  }
+    
+  private func isFallbackFileAccessible(_ result: @escaping FlutterResult) {
+    qonversionSandwich?.isFallbackFileAccessible(completion: getJsonCompletion(result))
   }
 
   private func presentCodeRedemptionSheet(_ result: @escaping FlutterResult) {
