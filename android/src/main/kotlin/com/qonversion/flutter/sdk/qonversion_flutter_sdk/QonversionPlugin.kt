@@ -116,6 +116,9 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "userInfo" -> {
                 return userInfo(result)
             }
+            "isFallbackFileAccessible" -> {
+                return isFallbackFileAccessible(result)
+            }
             "automationsSubscribe" -> {
                 return automationsPlugin.subscribe()
             }
@@ -217,6 +220,9 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         qonversionSandwich.userProperties(result.toJsonResultListener())
     }
 
+    private fun isFallbackFileAccessible(result: Result) {
+        qonversionSandwich.isFallbackFileAccessible(result.toJsonResultListener())
+    }
     private fun remoteConfig(contextKey: String?, result: Result) {
         qonversionSandwich.remoteConfig(contextKey, result.toJsonResultListener())
     }
