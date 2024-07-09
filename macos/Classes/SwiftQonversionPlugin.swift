@@ -62,6 +62,9 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     case "logout":
       qonversionSandwich?.logout()
       return result(nil)
+    
+    case "isFallbackFileAccessible":
+      return isFallbackFileAccessible(result)
 
     case "userInfo":
       return userInfo(result)
@@ -181,6 +184,10 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
   private func remoteConfigList(_ result: @escaping FlutterResult) {
     qonversionSandwich?.remoteConfigList(getJsonCompletion(result))
+  }
+  
+  private func isFallbackFileAccessible(_ result: @escaping FlutterResult) {
+    qonversionSandwich?.isFallbackFileAccessible(completion: getJsonCompletion(result))
   }
 
   private func remoteConfigList(_ args: [String: Any], _ result: @escaping FlutterResult) {

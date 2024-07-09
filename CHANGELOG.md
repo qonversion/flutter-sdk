@@ -1,3 +1,11 @@
+## 9.0.0
+New major release of Qonversion Flutter SDK with the new Google Play Billing Library 7 support!
+* installment plans supported for subscriptions
+* fallback files support added for improved reliability
+* several error code values updated
+
+For the migration steps and the complete list of changes, see the following [guide](https://documentation.qonversion.io/docs/android-8-migration-guide).
+
 ## 8.5.0
 * Internal logic update
 
