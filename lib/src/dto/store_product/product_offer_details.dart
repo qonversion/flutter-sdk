@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:qonversion_flutter/src/dto/store_product/product_installment_plan_details.dart';
 import 'package:qonversion_flutter/src/internal/mapper.dart';
 
 import './product_pricing_phase.dart';
@@ -34,6 +35,10 @@ class QProductOfferDetails {
   @JsonKey(name: 'basePlan', fromJson: QMapper.productPricingPhaseFromJson)
   final QProductPricingPhase? basePlan;
 
+  /// Additional details of an installment plan, if exists.
+  @JsonKey(name: 'installmentPlanDetails', fromJson: QMapper.productInstallmentPlanDetailsFromJson)
+  final QProductInstallmentPlanDetails? installmentPlanDetails;
+
   /// A trial phase details, if exists.
   @JsonKey(name: 'introPhase', fromJson: QMapper.productPricingPhaseFromJson)
   final QProductPricingPhase? introPhase;
@@ -64,6 +69,7 @@ class QProductOfferDetails {
       this.tags,
       this.pricingPhases,
       this.basePlan,
+      this.installmentPlanDetails,
       this.introPhase,
       this.trialPhase,
       this.hasTrial,

@@ -255,6 +255,16 @@ class QonversionInternal implements Qonversion {
     return;
   }
 
+  Future<bool> isFallbackFileAccessible() async {
+    final rawResult = await _channel.invokeMethod(Constants.mIsFallbackFileAccessible);
+    final result = QMapper.mapIsFallbackFileAccessible(rawResult);
+    if (result == null) {
+      return false;
+    }
+
+    return result;
+  }
+
   @override
   Future<void> attribution(Map<dynamic, dynamic> data, QAttributionProvider provider) {
     final args = {
@@ -346,7 +356,7 @@ class QonversionInternal implements Qonversion {
         error.code,
         error.message ?? "",
         error.details,
-        isUserCancelled: error.code == "PurchaseCancelledByUser"
+        isUserCancelled: error.code == QErrorCode.purchaseCanceled.code
     );
   }
 }

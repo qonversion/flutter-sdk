@@ -27,6 +27,7 @@ QProductStoreDetails _$QProductStoreDetailsFromJson(Map<String, dynamic> json) {
     json['isInApp'] as bool,
     json['isSubscription'] as bool,
     json['isPrepaid'] as bool,
+    json['isInstallment'] as bool,
   );
 }
 
@@ -51,6 +52,7 @@ Map<String, dynamic> _$QProductStoreDetailsToJson(
       'isInApp': instance.isInApp,
       'isSubscription': instance.isSubscription,
       'isPrepaid': instance.isPrepaid,
+      'isInstallment': instance.isInstallment,
     };
 
 K _$enumDecode<K, V>(

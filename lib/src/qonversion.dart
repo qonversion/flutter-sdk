@@ -196,6 +196,10 @@ abstract class Qonversion {
   /// Use this function to detach the user from the remote configuration.
   Future<void> detachUserFromRemoteConfiguration(String remoteConfigurationId);
 
+  /// Call this function to check if the fallback file is accessible.
+  /// Returns flag that indicates whether Qonversion was able to read data from the fallback file or not.
+  Future<bool> isFallbackFileAccessible();
+
   /// iOS only. Returns `null` if called on Android.
   ///
   /// Starts a promo purchase process with App Store [productId].

@@ -90,6 +90,11 @@ class QProductStoreDetails {
   @JsonKey(name: 'isPrepaid')
   final bool isPrepaid;
 
+  /// True, if the subscription product is installment, which means that users commit
+  /// to pay for a specified amount of periods every month.
+  @JsonKey(name: 'isInstallment')
+  final bool isInstallment;
+
   const QProductStoreDetails(
       this.basePlanId,
       this.productId,
@@ -107,6 +112,7 @@ class QProductStoreDetails {
       this.isInApp,
       this.isSubscription,
       this.isPrepaid,
+      this.isInstallment,
   );
 
   factory QProductStoreDetails.fromJson(Map<String, dynamic> json) =>

@@ -116,6 +116,9 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "userInfo" -> {
                 return userInfo(result)
             }
+            "isFallbackFileAccessible" -> {
+                return isFallbackFileAccessible(result)
+            }
             "automationsSubscribe" -> {
                 return automationsPlugin.subscribe()
             }
@@ -181,7 +184,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         val offerId = args["offerId"] as? String
         val applyOffer = args["applyOffer"] as? Boolean
 
-        qonversionSandwich.purchase(productId, offerId, applyOffer, result.toPurchaseResultListener())
+        qonversionSandwich.purchase(productId, offerId, applyOffer, result.toJsonResultListener())
     }
 
     private fun updatePurchase(args: Map<String, Any>, result: Result) {
@@ -197,7 +200,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             applyOffer,
             oldProductId,
             updatePolicyKey,
-            result.toPurchaseResultListener()
+            result.toJsonResultListener()
         )
     }
 
@@ -217,6 +220,9 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         qonversionSandwich.userProperties(result.toJsonResultListener())
     }
 
+    private fun isFallbackFileAccessible(result: Result) {
+        qonversionSandwich.isFallbackFileAccessible(result.toJsonResultListener())
+    }
     private fun remoteConfig(contextKey: String?, result: Result) {
         qonversionSandwich.remoteConfig(contextKey, result.toJsonResultListener())
     }

@@ -83,6 +83,9 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
     case "collectAppleSearchAdsAttribution":
       return collectAppleSearchAdsAttribution(result)
+        
+    case "isFallbackFileAccessible":
+      return isFallbackFileAccessible(result)
 
     case "automationsSubscribe":
       automationsPlugin?.subscribe()
@@ -210,7 +213,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       return result(FlutterError.noNecessaryData)
     }
     
-    qonversionSandwich?.purchase(productId, completion: getPurchaseCompletion(result))
+    qonversionSandwich?.purchase(productId, completion: getJsonCompletion(result))
   }
   
   private func promoPurchase(_ productId: String?, _ result: @escaping FlutterResult) {
@@ -218,7 +221,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       return result(FlutterError.noNecessaryData)
     }
     
-    qonversionSandwich?.promoPurchase(productId, completion: getPurchaseCompletion(result))
+    qonversionSandwich?.promoPurchase(productId, completion: getJsonCompletion(result))
   }
   
   private func checkEntitlements(_ result: @escaping FlutterResult) {
@@ -356,6 +359,10 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     qonversionSandwich?.collectAppleSearchAdsAttribution()
     result(nil)
   }
+    
+  private func isFallbackFileAccessible(_ result: @escaping FlutterResult) {
+    qonversionSandwich?.isFallbackFileAccessible(completion: getJsonCompletion(result))
+  }
 
   private func presentCodeRedemptionSheet(_ result: @escaping FlutterResult) {
     if #available(iOS 14.0, *) {
@@ -389,24 +396,6 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       }
 
       result(jsonData)
-    }
-  }
-  
-  private func getPurchaseCompletion(_ result: @escaping FlutterResult) -> BridgeCompletion {
-    return { data, error in
-      if let error = error {
-        return result(FlutterError.purchaseError(error))
-      }
-      
-        guard let data = data else {
-          return result(nil)
-        }
-
-        guard let jsonData = data.toJson() else {
-          return result(FlutterError.serializationError)
-        }
-
-        result(jsonData)
     }
   }
 }
