@@ -1,5 +1,5 @@
 ## 9.0.1
-* // Update changelog here
+* Internal SDK version fix.
 
 ## 9.0.0
 New major release of Qonversion Flutter SDK with the new Google Play Billing Library 7 support!
