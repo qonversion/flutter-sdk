@@ -1,3 +1,6 @@
+## 8.5.1
+* Fixed offline mode issue on Android
+
 ## 8.5.0
 * Internal logic update
 
