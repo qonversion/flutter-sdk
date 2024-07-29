@@ -1,5 +1,5 @@
 ## 9.0.2
-* // Update changelog here
+* Fixed bug with `checkEntitlements` calls on Android when the callback might not have been called after subscription state changes during the app session.
 
 ## 9.0.1
 * Internal SDK version fix.
