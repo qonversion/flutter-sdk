@@ -1,3 +1,6 @@
+## 8.5.2
+* Fixed bug with `checkEntitlements` calls on Android when the callback might not have been called after subscription state changes during the app session.
+
 ## 8.5.1
 * Fixed offline mode issue on Android
 
