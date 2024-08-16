@@ -405,10 +405,14 @@ extension SwiftQonversionPlugin: QonversionEventListener {
     guard let jsonData = entitlements.toJson() else {
       return
     }
-    updatedEntitlementsStreamHandler?.eventSink?(jsonData)
+    DispatchQueue.main.async {
+      self.updatedEntitlementsStreamHandler?.eventSink?(jsonData)
+    }
   }
   
   public func shouldPurchasePromoProduct(with productId: String) {
-    promoPurchasesStreamHandler?.eventSink?(productId)
+    DispatchQueue.main.async {
+      self.promoPurchasesStreamHandler?.eventSink?(productId)
+    }
   }
 }
