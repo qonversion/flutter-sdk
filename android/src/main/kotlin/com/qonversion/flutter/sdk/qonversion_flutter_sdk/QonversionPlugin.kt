@@ -183,8 +183,9 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         val productId = args["productId"] as? String ?: return result.noNecessaryDataError()
         val offerId = args["offerId"] as? String
         val applyOffer = args["applyOffer"] as? Boolean
+        val contextKeys = args["contextKeys"] as? List<String>
 
-        qonversionSandwich.purchase(productId, offerId, applyOffer, result.toJsonResultListener())
+        qonversionSandwich.purchase(productId, offerId, applyOffer, contextKeys, result.toJsonResultListener())
     }
 
     private fun updatePurchase(args: Map<String, Any>, result: Result) {
@@ -193,6 +194,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         val offerId = args["offerId"] as? String
         val applyOffer = args["applyOffer"] as? Boolean
         val updatePolicyKey = args["updatePolicyKey"] as? String
+        val contextKeys = args["contextKeys"] as? List<String>
 
         qonversionSandwich.updatePurchase(
             newProductId,
@@ -200,6 +202,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             applyOffer,
             oldProductId,
             updatePolicyKey,
+            contextKeys,
             result.toJsonResultListener()
         )
     }

@@ -32,6 +32,8 @@ class Constants {
   static const kRemoteConfigurationId = 'remoteConfigurationId';
   static const kContextKey = 'contextKey';
   static const kContextKeys = 'contextKeys';
+  static const kPurchaseContextKeys = 'contextKeys';
+  static const kPurchaseQuantity = 'quantity';
   static const kIncludeEmptyContextKey = 'includeEmptyContextKey';
 
   // MethodChannel methods names

@@ -60,6 +60,13 @@ abstract class Qonversion {
   /// See [Making Purchases](https://documentation.qonversion.io/docs/making-purchases)
   Future<Map<String, QEntitlement>> purchase(QPurchaseModel purchaseModel);
 
+  /// Make a purchase and validate it through server-to-server using Qonversion's Backend
+  /// [product] product to purchase.
+  /// [options] additional options for the purchase process.
+  /// Returns the promise with the user entitlements including the ones obtained by the purchase.
+  /// Throws [QPurchaseException] in case of error in purchase flow.
+  Future<Map<String, QEntitlement>> purchaseProduct(QProduct product, QPurchaseOptions purchaseOptions);
+
   /// Android only. Returns `null` if called on iOS.
   ///
   /// Update (upgrade/downgrade) subscription on Google Play Store and validate it through server-to-server using Qonversion's Backend

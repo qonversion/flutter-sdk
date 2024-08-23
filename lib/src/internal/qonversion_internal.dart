@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
+import 'package:qonversion_flutter/src/dto/purchase_options.dart';
 import 'package:qonversion_flutter/src/internal/mapper.dart';
 import 'package:qonversion_flutter/src/internal/utils/string.dart';
 
@@ -71,6 +72,26 @@ class QonversionInternal implements Qonversion {
             Constants.kOfferId: purchaseModel.offerId,
             Constants.kApplyOffer: purchaseModel.applyOffer
           });
+
+      final result = QMapper.entitlementsFromJson(rawResult);
+      return result;
+    } on PlatformException catch (e) {
+      throw _convertPurchaseException(e);
+    }
+  }
+
+  @override
+  Future<Map<String, QEntitlement>> purchaseProduct(QProduct product, QPurchaseOptions purchaseOptions) async {
+    try {
+      final rawResult = await _channel
+          .invokeMethod(Constants.mPurchase, {
+        Constants.kProductId: product.qonversionId,
+        Constants.kOfferId: purchaseOptions.offerId,
+        Constants.kApplyOffer: purchaseOptions.applyOffer,
+        Constants.kUpdatePolicyKey: purchaseOptions.updatePolicy,
+        Constants.kPurchaseContextKeys: purchaseOptions.contextKeys,
+        Constants.kPurchaseQuantity: purchaseOptions.quantity,
+      });
 
       final result = QMapper.entitlementsFromJson(rawResult);
       return result;
