@@ -1,4 +1,3 @@
-import '../qonversion.dart';
 import 'product.dart';
 import 'purchase_options.dart';
 import 'purchase_update_policy.dart';

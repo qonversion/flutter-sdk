@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
-import 'package:qonversion_flutter/src/dto/purchase_options.dart';
 import 'package:qonversion_flutter/src/internal/mapper.dart';
 import 'package:qonversion_flutter/src/internal/utils/string.dart';
 
