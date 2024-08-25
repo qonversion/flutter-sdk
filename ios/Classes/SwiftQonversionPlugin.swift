@@ -109,7 +109,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       return initialize(args, result)
       
     case "purchase":
-        return purchase(args["productId"] as? String, quantity: args["quantity"] as? Int, contextKeys: args["contextKeys"] as? [String], result)
+      return purchase(args["productId"] as? String, quantity: args["quantity"] as? Int, contextKeys: args["contextKeys"] as? [String], result)
 
     case "promoPurchase":
       return promoPurchase(args["productId"] as? String, result)

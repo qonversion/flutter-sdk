@@ -86,6 +86,7 @@ class QonversionInternal implements Qonversion {
       final rawResult = await _channel
           .invokeMethod(Constants.mPurchase, {
         Constants.kProductId: product.qonversionId,
+        Constants.kOldProductId: purchaseOptions.oldProduct?.qonversionId,
         Constants.kOfferId: purchaseOptions.offerId,
         Constants.kApplyOffer: purchaseOptions.applyOffer,
         Constants.kUpdatePolicyKey: purchaseOptions.updatePolicy,
@@ -110,7 +111,7 @@ class QonversionInternal implements Qonversion {
       final updatePolicy = purchaseUpdateModel.updatePolicy;
 
       final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchase, {
-        Constants.kNewProductId: purchaseUpdateModel.productId,
+        Constants.kProductId: purchaseUpdateModel.productId,
         Constants.kOfferId: purchaseUpdateModel.offerId,
         Constants.kApplyOffer: purchaseUpdateModel.applyOffer,
         Constants.kOldProductId: purchaseUpdateModel.oldProductId,
