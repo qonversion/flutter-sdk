@@ -13,6 +13,7 @@ class QPurchaseOptionsBuilder {
   List<String>? _contextKeys;
   int _quantity = 1;
 
+  /// Android only.
   /// Set the offer to the purchase.
   /// If [offer] is not specified, then the default offer will be applied. To know how we choose
   /// the default offer, see [QProductStoreDetails.defaultSubscriptionOfferDetails].
@@ -24,6 +25,7 @@ class QPurchaseOptionsBuilder {
     return this;
   }
 
+  /// Android only.
   /// Set the offer Id to the purchase.
   /// If [offerId] is not specified, then the default offer will be applied. To know how we choose
   /// the default offer, see [QProductStoreDetails.defaultSubscriptionOfferDetails].
@@ -35,6 +37,7 @@ class QPurchaseOptionsBuilder {
     return this;
   }
 
+  /// Android only.
   /// Call this function to remove any intro/trial offer from the purchase (use only a bare base plan).
   /// Returns builder instance for chain calls.
   QPurchaseOptionsBuilder removeOffer() {
@@ -42,6 +45,7 @@ class QPurchaseOptionsBuilder {
     return this;
   }
 
+  /// Android only.
   /// Set Qonversion product from which the upgrade/downgrade
   /// will be initialized.
   ///
@@ -53,6 +57,7 @@ class QPurchaseOptionsBuilder {
     return this;
   }
 
+  /// Android only.
   /// Set the update policy for the purchase.
   /// If the [updatePolicy] is not provided, then default one
   /// will be selected - [QPurchaseUpdatePolicy.withTimeProration].
