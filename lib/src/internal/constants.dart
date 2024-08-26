@@ -14,7 +14,6 @@ class Constants {
   static const kOfferId = 'offerId';
   static const kApplyOffer = 'applyOffer';
   static const kOfferingId = 'offeringId';
-  static const kNewProductId = 'newProductId';
   static const kOldProductId = 'oldProductId';
   static const kUpdatePolicyKey = 'updatePolicyKey';
   static const kError = 'error';
