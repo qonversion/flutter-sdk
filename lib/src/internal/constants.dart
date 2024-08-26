@@ -14,7 +14,6 @@ class Constants {
   static const kOfferId = 'offerId';
   static const kApplyOffer = 'applyOffer';
   static const kOfferingId = 'offeringId';
-  static const kNewProductId = 'newProductId';
   static const kOldProductId = 'oldProductId';
   static const kUpdatePolicyKey = 'updatePolicyKey';
   static const kError = 'error';
@@ -32,6 +31,8 @@ class Constants {
   static const kRemoteConfigurationId = 'remoteConfigurationId';
   static const kContextKey = 'contextKey';
   static const kContextKeys = 'contextKeys';
+  static const kPurchaseContextKeys = 'contextKeys';
+  static const kPurchaseQuantity = 'quantity';
   static const kIncludeEmptyContextKey = 'includeEmptyContextKey';
 
   // MethodChannel methods names

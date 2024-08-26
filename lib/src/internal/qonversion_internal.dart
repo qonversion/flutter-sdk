@@ -11,7 +11,7 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String _sdkVersion = "9.0.2";
+  static const String _sdkVersion = "9.1.0";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
@@ -80,6 +80,27 @@ class QonversionInternal implements Qonversion {
   }
 
   @override
+  Future<Map<String, QEntitlement>> purchaseProduct(QProduct product, QPurchaseOptions purchaseOptions) async {
+    try {
+      final rawResult = await _channel
+          .invokeMethod(Constants.mPurchase, {
+        Constants.kProductId: product.qonversionId,
+        Constants.kOldProductId: purchaseOptions.oldProduct?.qonversionId,
+        Constants.kOfferId: purchaseOptions.offerId,
+        Constants.kApplyOffer: purchaseOptions.applyOffer,
+        Constants.kUpdatePolicyKey: purchaseOptions.updatePolicy,
+        Constants.kPurchaseContextKeys: purchaseOptions.contextKeys,
+        Constants.kPurchaseQuantity: purchaseOptions.quantity,
+      });
+
+      final result = QMapper.entitlementsFromJson(rawResult);
+      return result;
+    } on PlatformException catch (e) {
+      throw _convertPurchaseException(e);
+    }
+  }
+
+  @override
   Future<Map<String, QEntitlement>?> updatePurchase(QPurchaseUpdateModel purchaseUpdateModel) async {
     if (!Platform.isAndroid) {
       return null;
@@ -89,7 +110,7 @@ class QonversionInternal implements Qonversion {
       final updatePolicy = purchaseUpdateModel.updatePolicy;
 
       final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchase, {
-        Constants.kNewProductId: purchaseUpdateModel.productId,
+        Constants.kProductId: purchaseUpdateModel.productId,
         Constants.kOfferId: purchaseUpdateModel.offerId,
         Constants.kApplyOffer: purchaseUpdateModel.applyOffer,
         Constants.kOldProductId: purchaseUpdateModel.oldProductId,

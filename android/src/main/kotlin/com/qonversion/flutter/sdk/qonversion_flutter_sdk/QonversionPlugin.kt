@@ -181,27 +181,27 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
 
     private fun purchase(args: Map<String, Any>, result: Result) {
         val productId = args["productId"] as? String ?: return result.noNecessaryDataError()
-        val offerId = args["offerId"] as? String
-        val applyOffer = args["applyOffer"] as? Boolean
-
-        qonversionSandwich.purchase(productId, offerId, applyOffer, result.toJsonResultListener())
-    }
-
-    private fun updatePurchase(args: Map<String, Any>, result: Result) {
-        val newProductId = args["newProductId"] as? String ?: return result.noNecessaryDataError()
-        val oldProductId = args["oldProductId"] as? String ?: return result.noNecessaryDataError()
+        val oldProductId = args["oldProductId"] as? String
         val offerId = args["offerId"] as? String
         val applyOffer = args["applyOffer"] as? Boolean
         val updatePolicyKey = args["updatePolicyKey"] as? String
 
-        qonversionSandwich.updatePurchase(
-            newProductId,
+        @Suppress("UNCHECKED_CAST")
+        val contextKeys = args["contextKeys"] as? List<String>
+
+        qonversionSandwich.purchase(
+            productId,
             offerId,
             applyOffer,
             oldProductId,
             updatePolicyKey,
+            contextKeys,
             result.toJsonResultListener()
         )
+    }
+
+    private fun updatePurchase(args: Map<String, Any>, result: Result) {
+        purchase(args, result)
     }
 
     private fun checkEntitlements(result: Result) {

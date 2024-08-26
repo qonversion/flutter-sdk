@@ -109,7 +109,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       return initialize(args, result)
       
     case "purchase":
-      return purchase(args["productId"] as? String, result)
+      return purchase(args["productId"] as? String, quantity: args["quantity"] as? Int, contextKeys: args["contextKeys"] as? [String], result)
 
     case "promoPurchase":
       return promoPurchase(args["productId"] as? String, result)
@@ -207,13 +207,16 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   private func products(_ result: @escaping FlutterResult) {
     qonversionSandwich?.products(getDefaultCompletion(result))
   }
-  
-  private func purchase(_ productId: String?, _ result: @escaping FlutterResult) {
+    
+  private func purchase(_ productId: String?, quantity: Int?, contextKeys: [String]?, _ result: @escaping FlutterResult) {
     guard let productId = productId else {
       return result(FlutterError.noNecessaryData)
     }
+      
+    let contextKeys = contextKeys ?? []
+    let quantity = quantity ?? 1
     
-    qonversionSandwich?.purchase(productId, completion: getJsonCompletion(result))
+    qonversionSandwich?.purchase(productId, quantity:quantity, contextKeys:contextKeys, completion: getJsonCompletion(result))
   }
   
   private func promoPurchase(_ productId: String?, _ result: @escaping FlutterResult) {
@@ -405,10 +408,14 @@ extension SwiftQonversionPlugin: QonversionEventListener {
     guard let jsonData = entitlements.toJson() else {
       return
     }
-    updatedEntitlementsStreamHandler?.eventSink?(jsonData)
+    DispatchQueue.main.async {
+      self.updatedEntitlementsStreamHandler?.eventSink?(jsonData)
+    }
   }
   
   public func shouldPurchasePromoProduct(with productId: String) {
-    promoPurchasesStreamHandler?.eventSink?(productId)
+    DispatchQueue.main.async {
+      self.promoPurchasesStreamHandler?.eventSink?(productId)
+    }
   }
 }
