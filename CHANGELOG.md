@@ -1,5 +1,6 @@
 ## 9.1.0
-* // Update changelog here
+* Added option to set context keys, quantity and other options for purchases. Context keys will allow you to associate the purchase with remote configuration if the product info was loaded from there.
+* Deprecated old purchase functions. Use new one instead.
 
 ## 9.0.2
 * Fixed bug with `checkEntitlements` calls on Android when the callback might not have been called after subscription state changes during the app session.
