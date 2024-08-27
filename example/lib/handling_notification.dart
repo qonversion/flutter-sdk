@@ -9,7 +9,7 @@ import 'constants.dart';
 
 Future<void> showNotification(RemoteMessage message) async {
   Map<String, dynamic> messageData = message.data;
-  if (messageData != null && !kIsWeb) {
+  if (!kIsWeb) {
     String jsonMessageData = jsonEncode(messageData);
 
     FlutterLocalNotificationsPlugin().show(
@@ -28,7 +28,7 @@ Future<void> showNotification(RemoteMessage message) async {
 }
 
 /// This is called when user clicks on the notification
-Future<void> onNotificationClick(Map <String, dynamic> messageData) async {
+Future<void> onNotificationClick(Map <String, dynamic>? messageData) async {
   print("onNotificationClick");
   if (messageData != null) {
     final payload = await Automations.getSharedInstance().getNotificationCustomPayload(messageData);

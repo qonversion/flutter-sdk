@@ -6,7 +6,7 @@ publish_to: 'none'
 version: 1.0.0
 
 environment:
-  sdk: ">=2.3.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
   flutter: ">=1.12.13+hotfix.6"
 
 dependencies:
@@ -14,7 +14,7 @@ dependencies:
     sdk: flutter
     
   firebase_messaging: ^11.0.0
-  flutter_local_notifications: ^9.1.0
+  flutter_local_notifications: ^17.2.2
 
 dependency_overrides:
   firebase_core_platform_interface: 4.5.1
