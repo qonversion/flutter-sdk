@@ -17,10 +17,12 @@ class ParamsView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FlatButton(
+            TextButton(
               child: Text('Get user properties'),
-              color: Colors.amber,
-              textColor: Colors.white,
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all(Colors.amber),
+                foregroundColor: WidgetStateProperty.all(Colors.white),
+              ),
               onPressed: () async {
                 try {
                   QUserProperties userProperties =
@@ -36,29 +38,35 @@ class ParamsView extends StatelessWidget {
                 }
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text('Set User ID'),
-              color: Colors.green,
-              textColor: Colors.white,
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all(Colors.green),
+                foregroundColor: WidgetStateProperty.all(Colors.white),
+              ),
               onPressed: () {
                 Qonversion.getSharedInstance().setUserProperty(QUserPropertyKey.customUserId, 'customId');
                 print('did set user id');
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text('Set User Property'),
-              color: Colors.blue,
-              textColor: Colors.white,
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all(Colors.blue),
+                foregroundColor: WidgetStateProperty.all(Colors.white),
+              ),
               onPressed: () {
                 Qonversion.getSharedInstance().setCustomUserProperty('customProperty', 'customValue');
                 print('did set user property');
               },
             ),
             for (final v in QUserPropertyKey.values)
-              FlatButton(
+              TextButton(
                 child: Text('Set ${describeEnum(v)}'),
-                color: Colors.purple,
-                textColor: Colors.white,
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all(Colors.purple),
+                  foregroundColor: WidgetStateProperty.all(Colors.white),
+                ),
                 onPressed: () {
                   Qonversion.getSharedInstance().setUserProperty(v, 'email@email.com');
                   print('did set property');
