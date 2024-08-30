@@ -1,5 +1,5 @@
 ## 9.1.1
-* // Update changelog here
+* iOS error codes improved
 
 ## 9.1.0
 * Added option to set context keys, quantity and other options for purchases. Context keys will allow you to associate the purchase with remote configuration if the product info was loaded from there.
