@@ -11,7 +11,7 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String _sdkVersion = "9.1.0";
+  static const String _sdkVersion = "9.1.1";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 

@@ -13,14 +13,14 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  Map<String, QEntitlement> _entitlements;
-  Map<String, QProduct> _products;
+  Map<String, QEntitlement>? _entitlements = null;
+  Map<String, QProduct>? _products = null;
 
-  StreamSubscription<String> _shownScreensStream;
-  StreamSubscription<ActionResult> _startedActionsStream;
-  StreamSubscription<ActionResult> _failedActionsStream;
-  StreamSubscription<ActionResult> _finishedActionsStream;
-  StreamSubscription<Null> _finishedAutomationsStream;
+  late StreamSubscription<String> _shownScreensStream;
+  late StreamSubscription<ActionResult> _startedActionsStream;
+  late StreamSubscription<ActionResult> _failedActionsStream;
+  late StreamSubscription<ActionResult> _finishedActionsStream;
+  late StreamSubscription<Null> _finishedAutomationsStream;
 
   @override
   void initState() {
@@ -31,36 +31,41 @@ class _HomeViewState extends State<HomeView> {
       showNotification(message);
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) {
       if (message != null) {
-        onNotificationClick(message?.data);
+        onNotificationClick(message.data);
       }
     });
 
     FirebaseMessaging.instance
         .getInitialMessage()
-        .then((RemoteMessage message) {
+        .then((RemoteMessage? message) {
       if (message != null) {
-        onNotificationClick(message?.data);
+        onNotificationClick(message.data);
       }
     });
 
-    _shownScreensStream = Automations.getSharedInstance().shownScreensStream.listen((event) {
+    _shownScreensStream =
+        Automations.getSharedInstance().shownScreensStream.listen((event) {
       // do any logic you need
     });
-    _startedActionsStream = Automations.getSharedInstance().startedActionsStream.listen((event) {
+    _startedActionsStream =
+        Automations.getSharedInstance().startedActionsStream.listen((event) {
       // do any logic you need or track event
     });
-    _failedActionsStream = Automations.getSharedInstance().failedActionsStream.listen((event) {
+    _failedActionsStream =
+        Automations.getSharedInstance().failedActionsStream.listen((event) {
       // do any logic you need or track event
     });
-    _finishedActionsStream = Automations.getSharedInstance().finishedActionsStream.listen((event) {
+    _finishedActionsStream =
+        Automations.getSharedInstance().finishedActionsStream.listen((event) {
       if (event.type == ActionResultType.purchase) {
         // do any logic you need
       }
     });
-    _finishedAutomationsStream =
-        Automations.getSharedInstance().finishedAutomationsStream.listen((event) {
+    _finishedAutomationsStream = Automations.getSharedInstance()
+        .finishedAutomationsStream
+        .listen((event) {
       // do any logic you need or track event
     });
   }
@@ -94,12 +99,16 @@ class _HomeViewState extends State<HomeView> {
                   ..._entitlementsFromMap(_entitlements ?? {}),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: FlatButton(
+                    child: TextButton(
                         child: Text('Set custom userId'),
-                        color: Colors.blue,
-                        textColor: Colors.white,
-                        onPressed: () => Qonversion.getSharedInstance().setUserProperty(
-                            QUserPropertyKey.customUserId, 'userId')),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all(Colors.blue),
+                          foregroundColor:
+                              WidgetStateProperty.all(Colors.white),
+                        ),
+                        onPressed: () => Qonversion.getSharedInstance()
+                            .setUserProperty(
+                                QUserPropertyKey.customUserId, 'userId')),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
@@ -107,10 +116,12 @@ class _HomeViewState extends State<HomeView> {
                       right: 8,
                       bottom: 8,
                     ),
-                    child: FlatButton(
+                    child: TextButton(
                       child: Text('Open ProductsView'),
-                      color: Colors.green,
-                      textColor: Colors.white,
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(Colors.green),
+                        foregroundColor: WidgetStateProperty.all(Colors.white),
+                      ),
                       onPressed: () =>
                           Navigator.of(context).pushNamed('products'),
                     ),
@@ -121,10 +132,12 @@ class _HomeViewState extends State<HomeView> {
                       right: 8,
                       bottom: 8,
                     ),
-                    child: FlatButton(
+                    child: TextButton(
                       child: Text('Open ParamsView'),
-                      color: Colors.brown,
-                      textColor: Colors.white,
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(Colors.brown),
+                        foregroundColor: WidgetStateProperty.all(Colors.white),
+                      ),
                       onPressed: () =>
                           Navigator.of(context).pushNamed('params'),
                     ),
@@ -136,11 +149,16 @@ class _HomeViewState extends State<HomeView> {
                         right: 8,
                         bottom: 8,
                       ),
-                      child: FlatButton(
+                      child: TextButton(
                         child: Text('Sync Purchases'),
-                        color: Colors.orange,
-                        textColor: Colors.white,
-                        onPressed: () => Qonversion.getSharedInstance().syncPurchases(),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStateProperty.all(Colors.orange),
+                          foregroundColor:
+                              WidgetStateProperty.all(Colors.white),
+                        ),
+                        onPressed: () =>
+                            Qonversion.getSharedInstance().syncPurchases(),
                       ),
                     ),
                 ],
@@ -150,11 +168,11 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Future<void> _initPlatformState() async {
-    const environment = kDebugMode ? QEnvironment.sandbox : QEnvironment.production;
+    const environment =
+        kDebugMode ? QEnvironment.sandbox : QEnvironment.production;
     final config = new QonversionConfigBuilder(
-        'PV77YHL7qnGvsdmpTs7gimsxUvY-Znl2',
-        QLaunchMode.subscriptionManagement
-    )
+            'PV77YHL7qnGvsdmpTs7gimsxUvY-Znl2',
+            QLaunchMode.subscriptionManagement)
         .setEnvironment(environment)
         .build();
     Qonversion.initialize(config);
@@ -177,7 +195,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Future<void> _sendNotificationsToken() async {
-    String deviceToken;
+    String? deviceToken;
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         {
@@ -202,47 +220,44 @@ class _HomeViewState extends State<HomeView> {
   }
 
   List<Widget> _entitlementsFromMap(Map<String, QEntitlement> entitlements) {
-    return entitlements.entries
-        .map<Widget>(
-          (e) => ListTile(
-            title: Text(e.key),
-            subtitle: Text(
-              e.value.productId ??
-                  '' + '\n' + e.value.id ??
-                  '' +
-                      '\n' +
-                      e.value.renewState.toString() +
-                      '\n' +
-                      (e.value.startedDate?.toString() ?? 'n/a') +
-                      '\n' +
-                      (e.value.expirationDate?.toString() ?? 'n/a') +
-                      '\n' +
-                      e.value.isActive.toString(),
-            ),
-          ),
-        )
-        .toList();
+    return entitlements.entries.map<Widget>((e) {
+      var title = e.value.productId +
+          '\n' + e.value.id +
+          '\n' + e.value.renewState.toString() +
+          '\n' + (e.value.startedDate?.toString() ?? 'n/a') +
+          '\n' + (e.value.expirationDate?.toString() ?? 'n/a') +
+          '\n' + e.value.isActive.toString();
+
+
+      return ListTile(
+        title: Text(e.key),
+        subtitle: Text(title),
+      );
+    }).toList();
   }
 
   List<Widget> _productsFromMap(Map<String, QProduct> products) {
-    return products.entries
-        .map<Widget>(
-          (e) => ListTile(
-            title: Text(e.key),
-            subtitle: Text(
-              e.value.qonversionId ??
-                  '' + '\n' + e.value.storeId ??
-                  '' +
-                      '\n' +
-                      e.value.subscriptionPeriod.unitCount.toString() +
-                      ' ' +
-                      e.value.subscriptionPeriod.unit.toString() +
-                      '\n' +
-                      e.value.type.toString() +
-                      '\n',
-            ),
-          ),
-        )
-        .toList();
+    return products.entries.map<Widget>((e) {
+      var title = e.value.qonversionId;
+      var storeId = e.value.storeId;
+      var subscriptionPeriod = e.value.subscriptionPeriod;
+
+      if (storeId != null) {
+        title += '\n' + storeId;
+      }
+      if (subscriptionPeriod != null) {
+        title += '\n' +
+            subscriptionPeriod.unitCount.toString() +
+            ' ' +
+            subscriptionPeriod.unit.toString() +
+            '\n' +
+            e.value.type.toString();
+      }
+
+      return ListTile(
+        title: Text(e.key),
+        subtitle: Text(title),
+      );
+    }).toList();
   }
 }

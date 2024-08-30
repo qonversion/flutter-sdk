@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
 
@@ -10,9 +11,9 @@ class ProductsView extends StatefulWidget {
 
 class _ProductsViewState extends State<ProductsView> {
   var _products = <QProduct>[];
-  QOfferings _offerings;
-  StreamSubscription<Map<String, QEntitlement>> _updatedEntitlementsStream;
-  StreamSubscription<String> _promoPurchasesStream;
+  QOfferings? _offerings = null;
+  late StreamSubscription<Map<String, QEntitlement>> _updatedEntitlementsStream;
+  late StreamSubscription<String> _promoPurchasesStream;
 
   @override
   void initState() {
@@ -27,13 +28,9 @@ class _ProductsViewState extends State<ProductsView> {
       try {
         final entitlements = await Qonversion.getSharedInstance().promoPurchase(promoPurchaseId);
         // Get Qonversion product by App Store ID
-        final qProduct = _products.firstWhere(
-            (element) => element.storeId == promoPurchaseId,
-            orElse: () => null);
+        final QProduct? qProduct = _products.firstWhereOrNull((element) => element.storeId == promoPurchaseId);
         // Get entitlement by Qonversion product
-        final entitlement = entitlements.values.firstWhere(
-            (element) => element.productId == qProduct?.qonversionId,
-            orElse: () => null);
+        final entitlement = entitlements?.values.firstWhereOrNull((element) => element.productId == qProduct?.qonversionId);
 
         print(entitlement?.isActive);
       } on QPurchaseException catch (e) {
@@ -54,43 +51,45 @@ class _ProductsViewState extends State<ProductsView> {
 
   @override
   Widget build(BuildContext context) {
+    var localOfferings = _offerings;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Products'),
       ),
       body: Center(
-        child: _products == null && _offerings == null
+        child: localOfferings == null
             ? CircularProgressIndicator()
             : ListView(
                 children: [
-                  if (_products != null)
-                    for (final p in _products) _productWidget(p),
-                  if (_offerings != null) _offeringsWidget(_offerings),
-                  if (_products != null)
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: 8,
-                        right: 8,
-                        bottom: 8,
-                      ),
-                      child: FlatButton(
-                        child: Text('Check Intro Eligibility'),
-                        color: Colors.yellow,
-                        textColor: Colors.black,
-                        onPressed: () async {
-                          try {
-                            final ids = _products.map((product) => product.qonversionId).toList();
-                            final res =
-                                await Qonversion.getSharedInstance().checkTrialIntroEligibility(ids);
-
-                            print(res.map(
-                                (key, value) => MapEntry(key, value.status)));
-                          } catch (e) {
-                            print(e);
-                          }
-                        },
-                      ),
+                  for (final p in _products) _productWidget(p),
+                  _offeringsWidget(localOfferings),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 8,
+                      right: 8,
+                      bottom: 8,
                     ),
+                    child: TextButton(
+                      child: Text('Check Intro Eligibility'),
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(Colors.yellow),
+                        foregroundColor: WidgetStateProperty.all(Colors.black),
+                      ),
+                      onPressed: () async {
+                        try {
+                          final ids = _products.map((product) => product.qonversionId).toList();
+                          final res =
+                              await Qonversion.getSharedInstance().checkTrialIntroEligibility(ids);
+
+                          print(res.map(
+                              (key, value) => MapEntry(key, value.status)));
+                        } catch (e) {
+                          print(e);
+                        }
+                      },
+                    ),
+                  ),
                 ],
               ),
       ),
@@ -109,8 +108,8 @@ class _ProductsViewState extends State<ProductsView> {
 
   Future<void> _loadProducts() async {
     try {
-      var mainOffering = _offerings.offeringForIdentifier("main");
-      _products = mainOffering.products;
+      var mainOffering = _offerings?.offeringForIdentifier("main");
+      _products = mainOffering?.products ?? [];
       setState(() {});
     } catch (e) {
       print(e);
@@ -128,18 +127,18 @@ class _ProductsViewState extends State<ProductsView> {
         ),
         Padding(
           padding: EdgeInsets.all(8),
-          child: FlatButton(
+          child: TextButton(
             child: Text('Buy'),
-            color: Colors.blue,
-            textColor: Colors.white,
+            style: ButtonStyle(
+              backgroundColor: WidgetStateProperty.all(Colors.blue),
+              foregroundColor: WidgetStateProperty.all(Colors.white),
+            ),
             onPressed: () async {
               try {
                 final purchaseModel = product.toPurchaseModel();
                 final entitlements =
                     await Qonversion.getSharedInstance().purchase(purchaseModel);
-                final entitlement = entitlements.values.firstWhere(
-                    (element) => element.productId == product.qonversionId,
-                    orElse: () => null);
+                final entitlement = entitlements.values.firstWhereOrNull((element) => element.productId == product.qonversionId);
 
                 print(entitlement?.isActive);
               } on QPurchaseException catch (e) {
@@ -165,14 +164,14 @@ class _ProductsViewState extends State<ProductsView> {
           title: Text('OFFERINGS:'),
         ),
         ..._offeringWidgets(main, true),
-        if (availableOfferings != null && availableOfferings.isNotEmpty)
+        if (availableOfferings.isNotEmpty)
           for (final offering in availableOfferings)
             ..._offeringWidgets(offering, false),
       ],
     );
   }
 
-  List<Widget> _offeringWidgets(QOffering offering, bool isMain) {
+  List<Widget> _offeringWidgets(QOffering? offering, bool isMain) {
     if (offering == null) return <Widget>[];
     return [
       if (!isMain)
