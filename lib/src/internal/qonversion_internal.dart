@@ -80,8 +80,12 @@ class QonversionInternal implements Qonversion {
   }
 
   @override
-  Future<Map<String, QEntitlement>> purchaseProduct(QProduct product, QPurchaseOptions purchaseOptions) async {
+  Future<Map<String, QEntitlement>> purchaseProduct(QProduct product, {QPurchaseOptions? purchaseOptions}) async {
     try {
+      if (purchaseOptions == null) {
+        purchaseOptions = new QPurchaseOptionsBuilder().build();
+      }
+
       final rawResult = await _channel
           .invokeMethod(Constants.mPurchase, {
         Constants.kProductId: product.qonversionId,

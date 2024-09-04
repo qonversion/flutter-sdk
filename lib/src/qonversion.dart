@@ -65,7 +65,7 @@ abstract class Qonversion {
   /// [options] additional options for the purchase process.
   /// Returns the promise with the user entitlements including the ones obtained by the purchase.
   /// Throws [QPurchaseException] in case of error in purchase flow.
-  Future<Map<String, QEntitlement>> purchaseProduct(QProduct product, QPurchaseOptions purchaseOptions);
+  Future<Map<String, QEntitlement>> purchaseProduct(QProduct product, {QPurchaseOptions? purchaseOptions});
 
   /// Android only. Returns `null` if called on iOS.
   ///
