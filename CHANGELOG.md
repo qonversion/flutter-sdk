@@ -1,5 +1,5 @@
 ## 9.1.2
-* Added ability to call purchase without providing any options.
+* Added ability to call `purchase` without providing any options.
 
 ## 9.1.1
 * iOS error codes improved
