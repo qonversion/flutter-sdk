@@ -1,3 +1,6 @@
+## 9.1.2
+* // Update changelog here
+
 ## 9.1.1
 * iOS error codes improved
 
