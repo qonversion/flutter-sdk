@@ -11,7 +11,7 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String _sdkVersion = "9.1.1";
+  static const String _sdkVersion = "9.1.2";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
@@ -80,8 +80,12 @@ class QonversionInternal implements Qonversion {
   }
 
   @override
-  Future<Map<String, QEntitlement>> purchaseProduct(QProduct product, QPurchaseOptions purchaseOptions) async {
+  Future<Map<String, QEntitlement>> purchaseProduct(QProduct product, {QPurchaseOptions? purchaseOptions}) async {
     try {
+      if (purchaseOptions == null) {
+        purchaseOptions = new QPurchaseOptionsBuilder().build();
+      }
+
       final rawResult = await _channel
           .invokeMethod(Constants.mPurchase, {
         Constants.kProductId: product.qonversionId,

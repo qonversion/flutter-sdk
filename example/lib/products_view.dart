@@ -108,7 +108,7 @@ class _ProductsViewState extends State<ProductsView> {
 
   Future<void> _loadProducts() async {
     try {
-      var mainOffering = _offerings?.offeringForIdentifier("main");
+      var mainOffering = _offerings?.main;
       _products = mainOffering?.products ?? [];
       setState(() {});
     } catch (e) {
@@ -135,9 +135,7 @@ class _ProductsViewState extends State<ProductsView> {
             ),
             onPressed: () async {
               try {
-                final purchaseModel = product.toPurchaseModel();
-                final entitlements =
-                    await Qonversion.getSharedInstance().purchase(purchaseModel);
+                final entitlements = await Qonversion.getSharedInstance().purchaseProduct(product);
                 final entitlement = entitlements.values.firstWhereOrNull((element) => element.productId == product.qonversionId);
 
                 print(entitlement?.isActive);
