@@ -1,3 +1,8 @@
+## 9.1.3
+* Updated restore logic to process huge sandbox receipts faster.
+* Fixed [products issue](https://github.com/qonversion/qonversion-ios-sdk/issues/507).
+* Fixed [bundle issue](https://github.com/qonversion/qonversion-ios-sdk/issues/458).
+
 ## 9.1.2
 * Added ability to call `purchase` without providing any options.
 
