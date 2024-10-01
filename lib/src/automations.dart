@@ -51,12 +51,14 @@ abstract class Automations {
 
   /// Set push token to Qonversion to enable Qonversion push notifications
   /// [token] Firebase device token for Android. APNs device token for iOS
+  @Deprecated("Consider removing this method calls. Qonversion is not working with push notifications anymore")
   Future<void> setNotificationsToken(String token);
 
   /// [notificationData] notification payload data
   /// See [Firebase RemoteMessage data](https://pub.dev/documentation/firebase_messaging_platform_interface/latest/firebase_messaging_platform_interface/RemoteMessage/data.html)
   /// See [APNs notification data](https://developer.apple.com/documentation/usernotifications/unnotificationcontent/1649869-userinfo)
   /// Returns true when a push notification was received from Qonversion. Otherwise returns false, so you need to handle the notification yourself
+  @Deprecated("Consider removing this method calls as they aren't needed anymore")
   Future<bool> handleNotification(Map<String, dynamic> notificationData);
 
   /// Get parsed custom payload, which you added to the notification in the dashboard
@@ -64,6 +66,7 @@ abstract class Automations {
   /// See [Firebase RemoteMessage data](https://pub.dev/documentation/firebase_messaging_platform_interface/latest/firebase_messaging_platform_interface/RemoteMessage/data.html)
   /// See [APNs notification data](https://developer.apple.com/documentation/usernotifications/unnotificationcontent/1649869-userinfo)
   /// Returns a map with custom payload from the notification or null if it's not provided.
+  @Deprecated("Consider removing this method calls. Qonversion is not working with push notifications anymore")
   Future<Map<String, dynamic>?> getNotificationCustomPayload(Map<String, dynamic> notificationData);
 
   /// Show the screen using its ID.
