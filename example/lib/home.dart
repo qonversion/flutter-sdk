@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
-import 'handling_notification.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -26,24 +24,6 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     _initPlatformState();
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      showNotification(message);
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) {
-      if (message != null) {
-        onNotificationClick(message.data);
-      }
-    });
-
-    FirebaseMessaging.instance
-        .getInitialMessage()
-        .then((RemoteMessage? message) {
-      if (message != null) {
-        onNotificationClick(message.data);
-      }
-    });
 
     _shownScreensStream =
         Automations.getSharedInstance().shownScreensStream.listen((event) {
@@ -177,7 +157,6 @@ class _HomeViewState extends State<HomeView> {
         .build();
     Qonversion.initialize(config);
     Qonversion.getSharedInstance().collectAppleSearchAdsAttribution();
-    _sendNotificationsToken();
     _loadQonversionObjects();
   }
 
@@ -192,31 +171,6 @@ class _HomeViewState extends State<HomeView> {
     }
 
     setState(() {});
-  }
-
-  Future<void> _sendNotificationsToken() async {
-    String? deviceToken;
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        {
-          deviceToken = await FirebaseMessaging.instance.getToken();
-        }
-        break;
-
-      case TargetPlatform.iOS:
-        {
-          deviceToken = await FirebaseMessaging.instance.getAPNSToken();
-        }
-        break;
-      default:
-        deviceToken = null;
-        break;
-    }
-
-    if (deviceToken != null) {
-      Automations.getSharedInstance().setNotificationsToken(deviceToken);
-      print('Device token: $deviceToken');
-    }
   }
 
   List<Widget> _entitlementsFromMap(Map<String, QEntitlement> entitlements) {

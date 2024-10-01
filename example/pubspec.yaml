@@ -13,9 +13,6 @@ dependencies:
   flutter:
     sdk: flutter
     
-  firebase_messaging: ^11.0.0
-  flutter_local_notifications: ^17.2.2
-
 dependency_overrides:
   firebase_core_platform_interface: 4.5.1
 
