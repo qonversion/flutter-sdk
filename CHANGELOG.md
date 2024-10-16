@@ -1,3 +1,7 @@
+## 9.1.4
+* Added Tenjin AIID property for Tenjin integration
+* The setNotificationToken, handleNotification, and `getNotificationCustomPayload` methods were marked as deprecated.
+
 ## 9.1.3
 * Updated restore logic to process huge sandbox receipts faster.
 * Fixed [products issue](https://github.com/qonversion/qonversion-ios-sdk/issues/507).

@@ -319,20 +319,20 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   }
 
   private func attachUserToRemoteConfiguration(_ args: [String: Any], _ result: @escaping FlutterResult) {
-      guard let remoteConfigurationId = args["remoteConfigurationId"] as? String else {
-        return result(FlutterError.noNecessaryData)
-      }
-
-      qonversionSandwich?.attachUserToRemoteConfiguration(with: remoteConfigurationId, completion: getJsonCompletion(result))
+    guard let remoteConfigurationId = args["remoteConfigurationId"] as? String else {
+      return result(FlutterError.noNecessaryData)
     }
 
-    private func detachUserFromRemoteConfiguration(_ args: [String: Any], _ result: @escaping FlutterResult) {
-      guard let remoteConfigurationId = args["remoteConfigurationId"] as? String else {
-        return result(FlutterError.noNecessaryData)
-      }
+    qonversionSandwich?.attachUserToRemoteConfiguration(with: remoteConfigurationId, completion: getJsonCompletion(result))
+  }
 
-      qonversionSandwich?.detachUserFromRemoteConfiguration(with: remoteConfigurationId, completion: getJsonCompletion(result))
+  private func detachUserFromRemoteConfiguration(_ args: [String: Any], _ result: @escaping FlutterResult) {
+    guard let remoteConfigurationId = args["remoteConfigurationId"] as? String else {
+      return result(FlutterError.noNecessaryData)
     }
+
+    qonversionSandwich?.detachUserFromRemoteConfiguration(with: remoteConfigurationId, completion: getJsonCompletion(result))
+  }
   
   private func storeSdkInfo(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let version = args["version"] as? String,
