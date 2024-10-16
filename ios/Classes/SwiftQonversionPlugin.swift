@@ -319,12 +319,12 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   }
 
   private func attachUserToRemoteConfiguration(_ args: [String: Any], _ result: @escaping FlutterResult) {
-      guard let remoteConfigurationId = args["remoteConfigurationId"] as? String else {
-        return result(FlutterError.noNecessaryData)
-      }
-
-      qonversionSandwich?.attachUserToRemoteConfiguration(with: remoteConfigurationId, completion: getJsonCompletion(result))
+    guard let remoteConfigurationId = args["remoteConfigurationId"] as? String else {
+      return result(FlutterError.noNecessaryData)
     }
+
+    qonversionSandwich?.attachUserToRemoteConfiguration(with: remoteConfigurationId, completion: getJsonCompletion(result))
+  }
 
   private func detachUserFromRemoteConfiguration(_ args: [String: Any], _ result: @escaping FlutterResult) {
     guard let remoteConfigurationId = args["remoteConfigurationId"] as? String else {
