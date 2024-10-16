@@ -13,5 +13,6 @@ enum QUserPropertyKey {
   appMetricaUserProfileId,
   pushWooshHwId,
   pushWooshUserId,
+  tenjinAnalyticsInstallationId,
   custom,
 }

@@ -119,6 +119,8 @@ class QMapper {
         return QUserPropertyKey.pushWooshHwId;
       case "_q_pushwoosh_user_id":
         return QUserPropertyKey.pushWooshUserId;
+      case "_q_tenjin_aiid":
+        return QUserPropertyKey.tenjinAnalyticsInstallationId;
     }
 
     return QUserPropertyKey.custom;
