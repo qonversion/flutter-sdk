@@ -1,3 +1,7 @@
+## 9.1.5
+* Attempt to fix crash and race conditions in the User Properties manager.
+* Fixed popover presentation style for iPad
+
 ## 9.1.4
 * Added Tenjin AIID property for Tenjin integration
 * The setNotificationToken, handleNotification, and `getNotificationCustomPayload` methods were marked as deprecated.
