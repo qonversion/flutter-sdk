@@ -1,3 +1,6 @@
+## 9.1.5
+* // Update changelog here
+
 ## 9.1.4
 * Added Tenjin AIID property for Tenjin integration
 * The setNotificationToken, handleNotification, and `getNotificationCustomPayload` methods were marked as deprecated.
