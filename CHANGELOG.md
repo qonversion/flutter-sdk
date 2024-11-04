@@ -1,5 +1,6 @@
 ## 9.1.5
-* // Update changelog here
+* Attempt to fix crash and race conditions in the User Properties manager.
+* Fixed popover presentation style for iPad
 
 ## 9.1.4
 * Added Tenjin AIID property for Tenjin integration
