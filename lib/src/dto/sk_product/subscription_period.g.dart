@@ -6,46 +6,19 @@ part of 'subscription_period.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SKProductSubscriptionPeriodWrapper _$SKProductSubscriptionPeriodWrapperFromJson(
-    Map<String, dynamic> json) {
-  return SKProductSubscriptionPeriodWrapper(
-    numberOfUnits: json['numberOfUnits'] as int,
-    unit: _$enumDecode(_$SKSubscriptionPeriodUnitEnumMap, json['unit']),
-  );
-}
+SKProductSubscriptionPeriod _$SKProductSubscriptionPeriodFromJson(
+        Map<String, dynamic> json) =>
+    SKProductSubscriptionPeriod(
+      numberOfUnits: (json['numberOfUnits'] as num).toInt(),
+      unit: $enumDecode(_$SKSubscriptionPeriodUnitEnumMap, json['unit']),
+    );
 
-Map<String, dynamic> _$SKProductSubscriptionPeriodWrapperToJson(
-        SKProductSubscriptionPeriodWrapper instance) =>
+Map<String, dynamic> _$SKProductSubscriptionPeriodToJson(
+        SKProductSubscriptionPeriod instance) =>
     <String, dynamic>{
       'numberOfUnits': instance.numberOfUnits,
-      'unit': _$SKSubscriptionPeriodUnitEnumMap[instance.unit],
+      'unit': _$SKSubscriptionPeriodUnitEnumMap[instance.unit]!,
     };
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
 
 const _$SKSubscriptionPeriodUnitEnumMap = {
   SKSubscriptionPeriodUnit.day: 0,

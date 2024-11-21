@@ -7,9 +7,9 @@ import '../internal/constants.dart';
 import 'product_type.dart';
 import 'purchase_model.dart';
 import 'purchase_update_model.dart';
-import 'sk_product/sk_product_wrapper.dart';
+import 'sk_product/sk_product.dart';
 import 'sku_details/sku_details.dart';
-import 'sk_product/discount.dart';
+import 'sk_product/sk_product_discount.dart';
 import '../internal/mapper.dart';
 import 'subscription_period.dart';
 import '../qonversion.dart';
@@ -51,7 +51,7 @@ class QProduct {
   ///
   /// Available for iOS only.
   @JsonKey(name: 'skProduct', fromJson: QMapper.skProductFromJson)
-  final SKProductWrapper? skProduct;
+  final SKProduct? skProduct;
 
   /// Associated Offering Id
   @JsonKey(name: 'offeringId')
@@ -125,7 +125,7 @@ class QProduct {
       currencyCode = skProduct.priceLocale?.currencyCode;
       price = double.tryParse(skProduct.price) ?? null;
 
-      final SKProductDiscountWrapper? introPrice = skProduct.introductoryPrice;
+      final SKProductDiscount? introPrice = skProduct.introductoryPrice;
       final String? currencySymbol = introPrice?.priceLocale?.currencySymbol;
       if (introPrice != null && currencySymbol != null) {
         prettyIntroductoryPrice = currencySymbol + introPrice.price;

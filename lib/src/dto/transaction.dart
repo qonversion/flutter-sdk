@@ -21,6 +21,10 @@ class QTransaction {
   @JsonKey(name: 'offerCode')
   final String? offerCode;
 
+  /// Promotional offer id.
+  @JsonKey(name: 'promoOfferId')
+  final String? promoOfferId;
+
   /// Transaction date.
   @JsonKey(
     name: 'transactionTimestamp',
@@ -68,6 +72,7 @@ class QTransaction {
     this.originalTransactionId,
     this.transactionId,
     this.offerCode,
+    this.promoOfferId,
     this.transactionDate,
     this.expirationDate,
     this.transactionRevocationDate,

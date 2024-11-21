@@ -51,6 +51,8 @@ abstract class Qonversion {
   /// Call this function to sync purchases if you are using StoreKit2 and our SDK in Analytics mode.
   Future<void> syncStoreKit2Purchases();
 
+  Future<QPromotionalOffer?> getPromotionalOffer(QProduct product, SKProductDiscount discount);
+
   /// Make a purchase and validate it through server-to-server using Qonversion's Backend.
   /// [purchaseModel] necessary information for purchase.
   ///

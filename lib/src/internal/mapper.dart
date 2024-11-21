@@ -9,13 +9,15 @@ import '../dto/store_product/product_store_details.dart';
 import '../dto/transaction.dart';
 
 import '../dto/entitlement_grant_type.dart';
-import '../dto/sk_product/discount.dart';
-import '../dto/sk_product/sk_product_wrapper.dart';
+import '../dto/sk_product/sk_product_discount.dart';
+import '../dto/sk_product/sk_product.dart';
+import '../dto/sk_product/sk_payment_discount.dart';
 import '../dto/sk_product/subscription_period.dart';
 import '../dto/sku_details/sku_details.dart';
 import '../dto/product.dart';
 import '../dto/entitlement.dart';
 import '../dto/offerings.dart';
+import '../dto/promotional_offer.dart';
 import '../dto/subscription_period.dart';
 import '../dto/user.dart';
 import '../dto/remote_config.dart';
@@ -80,6 +82,14 @@ class QMapper {
     return QRemoteConfigList.fromJson(remoteConfigListMap);
   }
 
+  static QPromotionalOffer? promotionalOfferFromJson(String? jsonString) {
+    if (jsonString == null) return null;
+
+    final promoOfferMap = Map<String, dynamic>.from(jsonDecode(jsonString));
+
+    return QPromotionalOffer.fromJson(promoOfferMap);
+  }
+
   static Map<String, QEligibility> eligibilityFromJson(String? jsonString) {
     if (jsonString == null) return <String, QEligibility>{};
 
@@ -142,42 +152,56 @@ class QMapper {
     return QUserProperties.fromJson(propertiesMap);
   }
 
-  static SKProductWrapper? skProductFromJson(dynamic json) {
+  static SKProduct? skProductFromJson(dynamic json) {
     if (json == null) return null;
 
     final map = Map<String, dynamic>.from(json);
 
     try {
-      return SKProductWrapper.fromJson(map);
+      return SKProduct.fromJson(map);
     } catch (e) {
       print('Could not parse SKProduct: $e');
       return null;
     }
   }
 
-  static SKPriceLocaleWrapper? skPriceLocaleFromJson(dynamic json) {
+  static SKPriceLocale? skPriceLocaleFromJson(dynamic json) {
     if (json == null) return null;
 
     final map = Map<String, dynamic>.from(json);
 
-    return SKPriceLocaleWrapper.fromJson(map);
+    return SKPriceLocale.fromJson(map);
   }
 
-  static SKProductSubscriptionPeriodWrapper?
+  static SKProductSubscriptionPeriod?
       skProductSubscriptionPeriodFromJson(dynamic json) {
     if (json == null) return null;
 
     final map = Map<String, dynamic>.from(json);
 
-    return SKProductSubscriptionPeriodWrapper.fromJson(map);
+    return SKProductSubscriptionPeriod.fromJson(map);
   }
 
-  static SKProductDiscountWrapper? skProductDiscountFromJson(dynamic json) {
+  static SKProductDiscount? skProductDiscountFromJson(dynamic json) {
     if (json == null) return null;
+
+    return requiredSkProductDiscountFromJson(json);
+  }
+
+  static SKProductDiscount requiredSkProductDiscountFromJson(dynamic json) {
+    if (json == null) throw Exception('Could not parse SKProductDiscount as json is null');
 
     final map = Map<String, dynamic>.from(json);
 
-    return SKProductDiscountWrapper.fromJson(map);
+    return SKProductDiscount.fromJson(map);
+  }
+
+  static SKPaymentDiscount skPaymentDiscountFromJson(dynamic json) {
+    if (json == null) throw Exception('Could not parse SkPaymentDiscount as json is null');
+
+    final map = Map<String, dynamic>.from(json);
+
+    return SKPaymentDiscount.fromJson(map);
   }
 
   // ignore: deprecated_member_use_from_same_package
@@ -207,6 +231,12 @@ class QMapper {
   static List<QTransaction> transactionsFromNullableValue(List<dynamic>? json) {
     if (json == null) return [];
     return json.map((e) => QTransaction.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  static List<SKProductDiscount>? skProductDiscountsFromList(List<dynamic>? json) {
+    if (json == null) return null;
+    return json.map((e) => SKProductDiscount.fromJson(e as Map<String, dynamic>))
         .toList();
   }
 

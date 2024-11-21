@@ -6,9 +6,7 @@ part of 'user.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-QUser _$QUserFromJson(Map<String, dynamic> json) {
-  return QUser(
-    json['qonversionId'] as String,
-    json['identityId'] as String?,
-  );
-}
+QUser _$QUserFromJson(Map<String, dynamic> json) => QUser(
+      json['qonversionId'] as String,
+      json['identityId'] as String?,
+    );

@@ -6,50 +6,23 @@ part of 'transaction.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-QTransaction _$QTransactionFromJson(Map<String, dynamic> json) {
-  return QTransaction(
-    json['originalTransactionId'] as String,
-    json['transactionId'] as String,
-    json['offerCode'] as String?,
-    QMapper.dateTimeFromSecondsTimestamp(json['transactionTimestamp'] as num),
-    QMapper.dateTimeFromNullableSecondsTimestamp(
-        json['expirationTimestamp'] as num?),
-    QMapper.dateTimeFromNullableSecondsTimestamp(
-        json['transactionRevocationTimestamp'] as num?),
-    _$enumDecode(_$QTransactionEnvironmentEnumMap, json['environment'],
-        unknownValue: QTransactionEnvironment.production),
-    _$enumDecode(_$QTransactionOwnershipTypeEnumMap, json['ownershipType'],
-        unknownValue: QTransactionOwnershipType.owner),
-    _$enumDecode(_$QTransactionTypeEnumMap, json['type'],
-        unknownValue: QTransactionType.unknown),
-  );
-}
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
+QTransaction _$QTransactionFromJson(Map<String, dynamic> json) => QTransaction(
+      json['originalTransactionId'] as String,
+      json['transactionId'] as String,
+      json['offerCode'] as String?,
+      json['promoOfferId'] as String?,
+      QMapper.dateTimeFromSecondsTimestamp(json['transactionTimestamp'] as num),
+      QMapper.dateTimeFromNullableSecondsTimestamp(
+          json['expirationTimestamp'] as num?),
+      QMapper.dateTimeFromNullableSecondsTimestamp(
+          json['transactionRevocationTimestamp'] as num?),
+      $enumDecode(_$QTransactionEnvironmentEnumMap, json['environment'],
+          unknownValue: QTransactionEnvironment.production),
+      $enumDecode(_$QTransactionOwnershipTypeEnumMap, json['ownershipType'],
+          unknownValue: QTransactionOwnershipType.owner),
+      $enumDecode(_$QTransactionTypeEnumMap, json['type'],
+          unknownValue: QTransactionType.unknown),
     );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
 
 const _$QTransactionEnvironmentEnumMap = {
   QTransactionEnvironment.production: 'Production',

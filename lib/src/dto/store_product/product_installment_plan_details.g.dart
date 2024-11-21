@@ -7,12 +7,11 @@ part of 'product_installment_plan_details.dart';
 // **************************************************************************
 
 QProductInstallmentPlanDetails _$QProductInstallmentPlanDetailsFromJson(
-    Map<String, dynamic> json) {
-  return QProductInstallmentPlanDetails(
-    json['commitmentPaymentsCount'] as int,
-    json['subsequentCommitmentPaymentsCount'] as int,
-  );
-}
+        Map<String, dynamic> json) =>
+    QProductInstallmentPlanDetails(
+      (json['commitmentPaymentsCount'] as num).toInt(),
+      (json['subsequentCommitmentPaymentsCount'] as num).toInt(),
+    );
 
 Map<String, dynamic> _$QProductInstallmentPlanDetailsToJson(
         QProductInstallmentPlanDetails instance) =>

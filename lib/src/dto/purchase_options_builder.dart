@@ -1,4 +1,5 @@
 import 'product.dart';
+import 'promotional_offer.dart';
 import 'purchase_options.dart';
 import 'purchase_update_policy.dart';
 import 'store_product/product_offer_details.dart';
@@ -11,6 +12,7 @@ class QPurchaseOptionsBuilder {
   QPurchaseUpdatePolicy? _updatePolicy;
   List<String>? _contextKeys;
   int _quantity = 1;
+  QPromotionalOffer? _promotionalOffer;
 
   /// Android only.
   /// Set the offer to the purchase.
@@ -86,11 +88,20 @@ class QPurchaseOptionsBuilder {
     return this;
   }
 
+  /// Set the promotional offer details.
+  ///
+  /// [promotionalOffer] promotional offer details.
+  /// Returns builder instance for chain calls.
+  QPurchaseOptionsBuilder setPromotionalOffer(QPromotionalOffer promotionalOffer) {
+    _promotionalOffer = promotionalOffer;
+    return this;
+  }
+
   /// Generate [QPurchaseOptions] instance with all the provided options.
   ///
   /// Returns the complete [QPurchaseOptions] instance.
   QPurchaseOptions build() {
-    return QPurchaseOptions(_offerId, _applyOffer, _oldProduct, _updatePolicy, _contextKeys, _quantity);
+    return QPurchaseOptions(_offerId, _applyOffer, _oldProduct, _updatePolicy, _contextKeys, _quantity, _promotionalOffer);
   }
 
 }
