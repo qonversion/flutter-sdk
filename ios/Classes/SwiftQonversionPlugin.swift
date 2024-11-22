@@ -208,10 +208,8 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   }
 
   private func getPromotionalOffer(_ args: [String: Any], _ result: @escaping FlutterResult) {
-    guard let productId = args["productId"] as? String else {
-      return result(FlutterError.noNecessaryData)
-    }
-    guard let discountId = args["discountId"] as? String else {
+    guard let productId = args["productId"] as? String,
+          let discountId = args["discountId"] as? String else {
       return result(FlutterError.noNecessaryData)
     }
 
