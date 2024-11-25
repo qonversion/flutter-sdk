@@ -6,10 +6,9 @@ part of 'user_properties.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-QUserProperties _$QUserPropertiesFromJson(Map<String, dynamic> json) {
-  return QUserProperties(
-    (json['properties'] as List<dynamic>)
-        .map((e) => QUserProperty.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
+QUserProperties _$QUserPropertiesFromJson(Map<String, dynamic> json) =>
+    QUserProperties(
+      (json['properties'] as List<dynamic>)
+          .map((e) => QUserProperty.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );

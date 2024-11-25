@@ -6,46 +6,18 @@ part of 'qonversion_error.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-QError _$QErrorFromJson(Map<String, dynamic> json) {
-  return QError(
-    _$enumDecode(_$QErrorCodeEnumMap, json['code'],
-        unknownValue: QErrorCode.unknown),
-    json['description'] as String,
-    json['additionalMessage'] as String?,
-  );
-}
+QError _$QErrorFromJson(Map<String, dynamic> json) => QError(
+      $enumDecode(_$QErrorCodeEnumMap, json['code'],
+          unknownValue: QErrorCode.unknown),
+      json['description'] as String,
+      json['additionalMessage'] as String?,
+    );
 
 Map<String, dynamic> _$QErrorToJson(QError instance) => <String, dynamic>{
-      'code': _$QErrorCodeEnumMap[instance.code],
+      'code': _$QErrorCodeEnumMap[instance.code]!,
       'description': instance.message,
       'additionalMessage': instance.details,
     };
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
 
 const _$QErrorCodeEnumMap = {
   QErrorCode.unknown: 'Unknown',

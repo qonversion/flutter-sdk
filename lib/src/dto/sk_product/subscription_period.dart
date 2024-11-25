@@ -9,8 +9,8 @@ part 'subscription_period.g.dart';
 /// A period is defined by a [numberOfUnits] and a [unit], e.g for a 3 months period [numberOfUnits] is 3 and [unit] is a month.
 /// It is used as a property in [SKProductDiscountWrapper] and [SKProductWrapper].
 @JsonSerializable()
-class SKProductSubscriptionPeriodWrapper {
-  /// Creates an [SKProductSubscriptionPeriodWrapper] for a `numberOfUnits`x`unit` period.
+class SKProductSubscriptionPeriod {
+  /// Creates an [SKProductSubscriptionPeriod] for a `numberOfUnits`x`unit` period.
 
   /// The number of [unit] units in this period.
   ///
@@ -20,22 +20,22 @@ class SKProductSubscriptionPeriodWrapper {
   /// The time unit used to specify the length of this period.
   final SKSubscriptionPeriodUnit unit;
 
-  SKProductSubscriptionPeriodWrapper({
+  SKProductSubscriptionPeriod({
     required this.numberOfUnits,
     required this.unit,
   });
 
   /// Constructing an instance from a map from the Objective-C layer.
   ///
-  /// This method should only be used with `map` values returned by [SKProductDiscountWrapper.fromJson] or [SKProductWrapper.fromJson].
+  /// This method should only be used with `map` values returned by [SKProductDiscount.fromJson] or [SKProduct.fromJson].
   /// The `map` parameter must not be null.
-  factory SKProductSubscriptionPeriodWrapper.fromJson(
+  factory SKProductSubscriptionPeriod.fromJson(
       Map<String, dynamic> map) {
-    return _$SKProductSubscriptionPeriodWrapperFromJson(map);
+    return _$SKProductSubscriptionPeriodFromJson(map);
   }
 
   Map<String, dynamic> toJson() =>
-      _$SKProductSubscriptionPeriodWrapperToJson(this);
+      _$SKProductSubscriptionPeriodToJson(this);
 
   @override
   bool operator ==(Object other) {
@@ -45,7 +45,7 @@ class SKProductSubscriptionPeriodWrapper {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is SKProductSubscriptionPeriodWrapper &&
+    return other is SKProductSubscriptionPeriod &&
         other.numberOfUnits == numberOfUnits &&
         other.unit == unit;
   }

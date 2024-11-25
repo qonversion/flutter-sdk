@@ -34,12 +34,15 @@ class Constants {
   static const kPurchaseContextKeys = 'contextKeys';
   static const kPurchaseQuantity = 'quantity';
   static const kIncludeEmptyContextKey = 'includeEmptyContextKey';
+  static const kDiscountId = 'discountId';
+  static const kPromoOffer = 'promoOffer';
 
   // MethodChannel methods names
   static const mInitialize = 'initialize';
   static const mSyncHistoricalData = 'syncHistoricalData';
   static const mSyncStoreKit2Purchases = 'syncStoreKit2Purchases';
   static const mProducts = 'products';
+  static const mGetPromotionalOffer = 'getPromotionalOffer';
   static const mPurchase = 'purchase';
   static const mPromoPurchase = 'promoPurchase';
   static const mUpdatePurchase = 'updatePurchase';

@@ -6,23 +6,23 @@ part of 'product_offer_details.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-QProductOfferDetails _$QProductOfferDetailsFromJson(Map<String, dynamic> json) {
-  return QProductOfferDetails(
-    json['basePlanId'] as String,
-    json['offerId'] as String?,
-    json['offerToken'] as String,
-    (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
-    QMapper.productPricingPhaseListFromJson(json['pricingPhases']),
-    QMapper.productPricingPhaseFromJson(json['basePlan']),
-    QMapper.productInstallmentPlanDetailsFromJson(
-        json['installmentPlanDetails']),
-    QMapper.productPricingPhaseFromJson(json['introPhase']),
-    QMapper.productPricingPhaseFromJson(json['trialPhase']),
-    json['hasTrial'] as bool,
-    json['hasIntro'] as bool,
-    json['hasTrialOrIntro'] as bool,
-  );
-}
+QProductOfferDetails _$QProductOfferDetailsFromJson(
+        Map<String, dynamic> json) =>
+    QProductOfferDetails(
+      json['basePlanId'] as String,
+      json['offerId'] as String?,
+      json['offerToken'] as String,
+      (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
+      QMapper.productPricingPhaseListFromJson(json['pricingPhases']),
+      QMapper.productPricingPhaseFromJson(json['basePlan']),
+      QMapper.productInstallmentPlanDetailsFromJson(
+          json['installmentPlanDetails']),
+      QMapper.productPricingPhaseFromJson(json['introPhase']),
+      QMapper.productPricingPhaseFromJson(json['trialPhase']),
+      json['hasTrial'] as bool,
+      json['hasIntro'] as bool,
+      json['hasTrialOrIntro'] as bool,
+    );
 
 Map<String, dynamic> _$QProductOfferDetailsToJson(
         QProductOfferDetails instance) =>

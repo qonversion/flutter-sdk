@@ -10,7 +10,7 @@ Map<String, dynamic> _$QScreenPresentationConfigToJson(
         QScreenPresentationConfig instance) =>
     <String, dynamic>{
       'presentationStyle':
-          _$QScreenPresentationStyleEnumMap[instance.presentationStyle],
+          _$QScreenPresentationStyleEnumMap[instance.presentationStyle]!,
       'animated': animatedToJson(instance.animated),
     };
 

@@ -6,15 +6,14 @@ part of 'product_price.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-QProductPrice _$QProductPriceFromJson(Map<String, dynamic> json) {
-  return QProductPrice(
-    json['priceAmountMicros'] as int,
-    json['priceCurrencyCode'] as String,
-    json['formattedPrice'] as String,
-    json['isFree'] as bool,
-    json['currencySymbol'] as String?,
-  );
-}
+QProductPrice _$QProductPriceFromJson(Map<String, dynamic> json) =>
+    QProductPrice(
+      (json['priceAmountMicros'] as num).toInt(),
+      json['priceCurrencyCode'] as String,
+      json['formattedPrice'] as String,
+      json['isFree'] as bool,
+      json['currencySymbol'] as String?,
+    );
 
 Map<String, dynamic> _$QProductPriceToJson(QProductPrice instance) =>
     <String, dynamic>{

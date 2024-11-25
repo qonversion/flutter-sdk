@@ -6,11 +6,11 @@ part of 'product_inapp_details.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-QProductInAppDetails _$QProductInAppDetailsFromJson(Map<String, dynamic> json) {
-  return QProductInAppDetails(
-    QMapper.requiredProductPriceFromJson(json['price']),
-  );
-}
+QProductInAppDetails _$QProductInAppDetailsFromJson(
+        Map<String, dynamic> json) =>
+    QProductInAppDetails(
+      QMapper.requiredProductPriceFromJson(json['price']),
+    );
 
 Map<String, dynamic> _$QProductInAppDetailsToJson(
         QProductInAppDetails instance) =>
