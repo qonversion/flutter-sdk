@@ -107,9 +107,12 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     switch call.method {
     case "initialize":
       return initialize(args, result)
+
+    case "getPromotionalOffer":
+      return getPromotionalOffer(args, result)
       
     case "purchase":
-      return purchase(args["productId"] as? String, quantity: args["quantity"] as? Int, contextKeys: args["contextKeys"] as? [String], result)
+      return purchase(args, result)
 
     case "promoPurchase":
       return promoPurchase(args["productId"] as? String, result)
@@ -204,19 +207,29 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     qonversionSandwich?.identify(userId, getDefaultCompletion(result))
   }
 
+  private func getPromotionalOffer(_ args: [String: Any], _ result: @escaping FlutterResult) {
+    guard let productId = args["productId"] as? String,
+          let discountId = args["discountId"] as? String else {
+      return result(FlutterError.noNecessaryData)
+    }
+
+    qonversionSandwich?.getPromotionalOffer(productId, productDiscountId:discountId, completion:getJsonCompletion(result))
+  }
+
   private func products(_ result: @escaping FlutterResult) {
     qonversionSandwich?.products(getDefaultCompletion(result))
   }
     
-  private func purchase(_ productId: String?, quantity: Int?, contextKeys: [String]?, _ result: @escaping FlutterResult) {
-    guard let productId = productId else {
+  private func purchase(_ args: [String: Any], _ result: @escaping FlutterResult) {
+    guard let productId = args["productId"] as? String else {
       return result(FlutterError.noNecessaryData)
     }
-      
-    let contextKeys = contextKeys ?? []
-    let quantity = quantity ?? 1
+
+    let contextKeys = args["contextKeys"] as? [String] ?? []
+    let quantity = args["quantity"] as? Int ?? 1
+    let promoOfferData = args["promoOffer"] as? [String: Any] ?? [:]
     
-    qonversionSandwich?.purchase(productId, quantity:quantity, contextKeys:contextKeys, completion: getJsonCompletion(result))
+    qonversionSandwich?.purchase(productId, quantity:quantity, contextKeys:contextKeys, promoOffer:promoOfferData, completion:getJsonCompletion(result))
   }
   
   private func promoPurchase(_ productId: String?, _ result: @escaping FlutterResult) {

@@ -6,45 +6,18 @@ part of 'event.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-AutomationsEvent _$AutomationsEventFromJson(Map<String, dynamic> json) {
-  return AutomationsEvent(
-    _$enumDecode(_$AutomationsEventTypeEnumMap, json['type'],
-        unknownValue: AutomationsEventType.unknown),
-    QMapper.dateTimeFromSecondsTimestamp(json['timestamp'] as num),
-  );
-}
+AutomationsEvent _$AutomationsEventFromJson(Map<String, dynamic> json) =>
+    AutomationsEvent(
+      $enumDecode(_$AutomationsEventTypeEnumMap, json['type'],
+          unknownValue: AutomationsEventType.unknown),
+      QMapper.dateTimeFromSecondsTimestamp(json['timestamp'] as num),
+    );
 
 Map<String, dynamic> _$AutomationsEventToJson(AutomationsEvent instance) =>
     <String, dynamic>{
-      'type': _$AutomationsEventTypeEnumMap[instance.type],
+      'type': _$AutomationsEventTypeEnumMap[instance.type]!,
       'timestamp': instance.date.toIso8601String(),
     };
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
 
 const _$AutomationsEventTypeEnumMap = {
   AutomationsEventType.unknown: 'unknown',

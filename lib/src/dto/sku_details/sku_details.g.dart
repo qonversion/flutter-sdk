@@ -7,27 +7,28 @@ part of 'sku_details.dart';
 // **************************************************************************
 
 // ignore: deprecated_member_use_from_same_package
-SkuDetailsWrapper _$SkuDetailsWrapperFromJson(Map<String, dynamic> json) {
-  // ignore: deprecated_member_use_from_same_package
-  return SkuDetailsWrapper(
-    description: json['description'] as String,
-    freeTrialPeriod: json['freeTrialPeriod'] as String,
-    introductoryPrice: json['introductoryPrice'] as String,
-    introductoryPriceAmountMicros: json['introductoryPriceAmountMicros'] as int,
-    introductoryPriceCycles: json['introductoryPriceCycles'] as int,
-    introductoryPricePeriod: json['introductoryPricePeriod'] as String,
-    price: json['price'] as String,
-    priceAmountMicros: json['priceAmountMicros'] as int,
-    priceCurrencyCode: json['priceCurrencyCode'] as String,
-    sku: json['sku'] as String,
-    subscriptionPeriod: json['subscriptionPeriod'] as String,
-    title: json['title'] as String,
-    type: _$enumDecode(_$SkuTypeEnumMap, json['type']),
-    originalPrice: json['originalPrice'] as String,
-    originalPriceAmountMicros: json['originalPriceAmountMicros'] as int,
-    originalJson: json['originalJson'] as String,
-  );
-}
+SkuDetailsWrapper _$SkuDetailsWrapperFromJson(Map<String, dynamic> json) =>
+    // ignore: deprecated_member_use_from_same_package
+    SkuDetailsWrapper(
+      description: json['description'] as String,
+      freeTrialPeriod: json['freeTrialPeriod'] as String,
+      introductoryPrice: json['introductoryPrice'] as String,
+      introductoryPriceAmountMicros:
+          (json['introductoryPriceAmountMicros'] as num).toInt(),
+      introductoryPriceCycles: (json['introductoryPriceCycles'] as num).toInt(),
+      introductoryPricePeriod: json['introductoryPricePeriod'] as String,
+      price: json['price'] as String,
+      priceAmountMicros: (json['priceAmountMicros'] as num).toInt(),
+      priceCurrencyCode: json['priceCurrencyCode'] as String,
+      sku: json['sku'] as String,
+      subscriptionPeriod: json['subscriptionPeriod'] as String,
+      title: json['title'] as String,
+      type: $enumDecode(_$SkuTypeEnumMap, json['type']),
+      originalPrice: json['originalPrice'] as String,
+      originalPriceAmountMicros:
+          (json['originalPriceAmountMicros'] as num).toInt(),
+      originalJson: json['originalJson'] as String,
+    );
 
 // ignore: deprecated_member_use_from_same_package
 Map<String, dynamic> _$SkuDetailsWrapperToJson(SkuDetailsWrapper instance) =>
@@ -44,37 +45,11 @@ Map<String, dynamic> _$SkuDetailsWrapperToJson(SkuDetailsWrapper instance) =>
       'sku': instance.sku,
       'subscriptionPeriod': instance.subscriptionPeriod,
       'title': instance.title,
-      'type': _$SkuTypeEnumMap[instance.type],
+      'type': _$SkuTypeEnumMap[instance.type]!,
       'originalPrice': instance.originalPrice,
       'originalPriceAmountMicros': instance.originalPriceAmountMicros,
       'originalJson': instance.originalJson,
     };
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
 
 const _$SkuTypeEnumMap = {
   SkuType.inapp: 'inapp',

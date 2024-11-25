@@ -11,7 +11,7 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String _sdkVersion = "9.1.5";
+  static const String _sdkVersion = "9.2.0";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
@@ -63,6 +63,23 @@ class QonversionInternal implements Qonversion {
   }
 
   @override
+  Future<QPromotionalOffer?> getPromotionalOffer(QProduct product, SKProductDiscount discount) async {
+    if (Platform.isAndroid) {
+      return null;
+    }
+
+    final promotionalOfferJson = await _channel.invokeMethod(
+      Constants.mGetPromotionalOffer, {
+        Constants.kProductId: product.qonversionId,
+        Constants.kDiscountId: discount.identifier,
+      }
+    );
+
+    final result = QMapper.promotionalOfferFromJson(promotionalOfferJson);
+    return result;
+  }
+
+  @override
   Future<Map<String, QEntitlement>> purchase(QPurchaseModel purchaseModel) async {
     try {
       final rawResult = await _channel
@@ -86,6 +103,15 @@ class QonversionInternal implements Qonversion {
         purchaseOptions = new QPurchaseOptionsBuilder().build();
       }
 
+      final Map<String, dynamic> promoOfferData = new Map<String, dynamic>();
+      if (purchaseOptions.promotionalOffer != null) {
+        promoOfferData['productDiscountId'] = purchaseOptions.promotionalOffer?.productDiscount.identifier;
+        promoOfferData['keyIdentifier'] = purchaseOptions.promotionalOffer?.paymentDiscount.keyIdentifier;
+        promoOfferData['nonce'] = purchaseOptions.promotionalOffer?.paymentDiscount.nonce;
+        promoOfferData['signature'] = purchaseOptions.promotionalOffer?.paymentDiscount.signature;
+        promoOfferData['timestamp'] = purchaseOptions.promotionalOffer?.paymentDiscount.timestamp;
+      }
+
       final rawResult = await _channel
           .invokeMethod(Constants.mPurchase, {
         Constants.kProductId: product.qonversionId,
@@ -95,6 +121,7 @@ class QonversionInternal implements Qonversion {
         Constants.kUpdatePolicyKey: purchaseOptions.updatePolicy,
         Constants.kPurchaseContextKeys: purchaseOptions.contextKeys,
         Constants.kPurchaseQuantity: purchaseOptions.quantity,
+        Constants.kPromoOffer: promoOfferData,
       });
 
       final result = QMapper.entitlementsFromJson(rawResult);

@@ -2,22 +2,24 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:qonversion_flutter/src/internal/mapper.dart';
 
 import 'discount_payment_mode.dart';
-import 'sk_product_wrapper.dart';
+import 'sk_product.dart';
 import 'subscription_period.dart';
 
-part 'discount.g.dart';
+part 'sk_product_discount.g.dart';
 
 /// Dart wrapper around StoreKit's [SKProductDiscount](https://developer.apple.com/documentation/storekit/skproductdiscount?language=objc).
 ///
-/// It is used as a property in [SKProductWrapper].
+/// It is used as a property in [SKProduct].
 @JsonSerializable()
-class SKProductDiscountWrapper {
+class SKProductDiscount {
+  final String? identifier;
+
   /// The discounted price, in the currency that is defined in [priceLocale].
   final String price;
 
   /// Includes locale information about the price, e.g. `$` as the currency symbol for US locale.
   @JsonKey(fromJson: QMapper.skPriceLocaleFromJson)
-  final SKPriceLocaleWrapper? priceLocale;
+  final SKPriceLocale? priceLocale;
 
   /// The object represent the discount period length.
   ///
@@ -32,10 +34,11 @@ class SKProductDiscountWrapper {
   /// The [subscriptionPeriod] of the discount is independent of the product's [subscriptionPeriod],
   /// and their units and duration do not have to be matched.
   @JsonKey(fromJson: QMapper.skProductSubscriptionPeriodFromJson)
-  final SKProductSubscriptionPeriodWrapper? subscriptionPeriod;
+  final SKProductSubscriptionPeriod? subscriptionPeriod;
 
-  /// Creates an [SKProductDiscountWrapper] with the given discount details.
-  SKProductDiscountWrapper({
+  /// Creates an [SKProductDiscount] with the given discount details.
+  SKProductDiscount({
+    required this.identifier,
     required this.price,
     required this.priceLocale,
     required this.numberOfPeriods,
@@ -45,13 +48,13 @@ class SKProductDiscountWrapper {
 
   /// Constructing an instance from a map from the Objective-C layer.
   ///
-  /// This method should only be used with `map` values returned by [SKProductWrapper.fromJson].
+  /// This method should only be used with `map` values returned by [SKProduct.fromJson].
   /// The `map` parameter must not be null.
-  factory SKProductDiscountWrapper.fromJson(Map<String, dynamic> map) {
-    return _$SKProductDiscountWrapperFromJson(map);
+  factory SKProductDiscount.fromJson(Map<String, dynamic> map) {
+    return _$SKProductDiscountFromJson(map);
   }
 
-  Map<String, dynamic> toJson() => _$SKProductDiscountWrapperToJson(this);
+  Map<String, dynamic> toJson() => _$SKProductDiscountToJson(this);
 
   @override
   bool operator ==(Object other) {
@@ -61,7 +64,8 @@ class SKProductDiscountWrapper {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is SKProductDiscountWrapper &&
+    return other is SKProductDiscount &&
+        other.identifier == identifier &&
         other.price == price &&
         other.priceLocale == priceLocale &&
         other.numberOfPeriods == numberOfPeriods &&
@@ -70,6 +74,6 @@ class SKProductDiscountWrapper {
   }
 
   @override
-  int get hashCode => Object.hash(this.price, this.priceLocale,
+  int get hashCode => Object.hash(this.identifier, this.price, this.priceLocale,
       this.numberOfPeriods, this.paymentMode, this.subscriptionPeriod);
 }
