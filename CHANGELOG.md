@@ -1,3 +1,6 @@
+## 9.2.0
+* // Update changelog here
+
 ## 9.1.5
 * Attempt to fix crash and race conditions in the User Properties manager.
 * Fixed popover presentation style for iPad
