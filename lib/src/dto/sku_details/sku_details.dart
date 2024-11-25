@@ -108,7 +108,7 @@ class SkuDetailsWrapper {
   Map<String, dynamic> toJson() => _$SkuDetailsWrapperToJson(this);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (other.runtimeType != runtimeType) {
       return false;
     }
