@@ -83,23 +83,23 @@ class QProduct {
   final String? prettyPrice;
 
   /// Localized price of the product
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   double? price;
 
   /// Store Product currency code, such as USD
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String? currencyCode;
 
   /// Store product title
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String? storeTitle;
 
   /// Store product description
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String? storeDescription;
 
   /// Formatted introductory price of the subscription, including its currency sign, such as €2.99
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String? prettyIntroductoryPrice;
 
   QProduct(
