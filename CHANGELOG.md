@@ -1,5 +1,6 @@
 ## 9.2.0
-* // Update changelog here
+* iOS promotional offers supported. For the details see the [documentation](https://documentation.qonversion.io/docs/apple-promotional-offers).
+* Minimal supported Dart SDK version is bumped to 2.14.0.
 
 ## 9.1.5
 * Attempt to fix crash and race conditions in the User Properties manager.
@@ -21,8 +22,8 @@
 * iOS error codes improved
 
 ## 9.1.0
-* Added option to set context keys, quantity and other options for purchases. Context keys will allow you to associate the purchase with remote configuration if the product info was loaded from there.
-* Deprecated old purchase functions. Use new one instead.
+* Added option to set context keys, quantity, and other options for purchases. Context keys will allow you to associate the purchase with remote configuration if the product info was loaded from there.
+* Deprecated old purchase functions. Use the new one instead.
 
 ## 9.0.2
 * Fixed bug with `checkEntitlements` calls on Android when the callback might not have been called after subscription state changes during the app session.
