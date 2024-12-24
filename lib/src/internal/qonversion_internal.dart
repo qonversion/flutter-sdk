@@ -112,13 +112,16 @@ class QonversionInternal implements Qonversion {
         promoOfferData['timestamp'] = purchaseOptions.promotionalOffer?.paymentDiscount.timestamp;
       }
 
+      final updatePolicy = purchaseOptions.updatePolicy;
       final rawResult = await _channel
           .invokeMethod(Constants.mPurchase, {
         Constants.kProductId: product.qonversionId,
         Constants.kOldProductId: purchaseOptions.oldProduct?.qonversionId,
         Constants.kOfferId: purchaseOptions.offerId,
         Constants.kApplyOffer: purchaseOptions.applyOffer,
-        Constants.kUpdatePolicyKey: purchaseOptions.updatePolicy,
+        Constants.kUpdatePolicyKey: updatePolicy != null
+            ? StringUtils.capitalize(describeEnum(updatePolicy))
+            : null,
         Constants.kPurchaseContextKeys: purchaseOptions.contextKeys,
         Constants.kPurchaseQuantity: purchaseOptions.quantity,
         Constants.kPromoOffer: promoOfferData,
