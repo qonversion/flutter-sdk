@@ -1,3 +1,6 @@
+## 9.2.1
+* Fixed update policy issue for purchase with options.
+
 ## 9.2.0
 * iOS promotional offers supported. For the details see the [documentation](https://documentation.qonversion.io/docs/apple-promotional-offers).
 * Minimal supported Dart SDK version is bumped to 2.14.0.
