@@ -1,5 +1,7 @@
 ## 9.3.0
-* // Update changelog here
+* Flutter version 3.29 supported.
+* Deprecated Android Embedding v1 is no longer supported.
+* Sample app gradle versions upgraded.
 
 ## 9.2.1
 * Fixed update policy issue for purchase with options.
