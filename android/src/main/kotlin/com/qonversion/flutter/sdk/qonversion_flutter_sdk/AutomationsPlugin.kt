@@ -1,11 +1,8 @@
 package com.qonversion.flutter.sdk.qonversion_flutter_sdk
 
 import com.google.gson.Gson
-import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.BinaryMessenger
-import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.PluginRegistry
 import io.qonversion.sandwich.AutomationsEventListener
 import io.qonversion.sandwich.AutomationsSandwich
 import io.qonversion.sandwich.BridgeData

@@ -11,7 +11,6 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.qonversion.sandwich.ActivityProvider
 import io.qonversion.sandwich.BridgeData
 import io.qonversion.sandwich.QonversionEventsListener
@@ -49,15 +48,6 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         private const val METHOD_CHANNEL = "qonversion_plugin"
         private const val EVENT_CHANNEL_PROMO_PURCHASES = "promo_purchases"
         private const val EVENT_CHANNEL_UPDATED_ENTITLEMENTS = "updated_entitlements"
-
-        // Used for compatibility with the apps, which don't use Android Embedding v2.
-        @Suppress("DEPRECATION", "unused")
-        @JvmStatic
-        fun registerWith(registrar: Registrar) {
-            val instance = QonversionPlugin()
-            instance.setup(registrar.messenger(), registrar.context().applicationContext as Application)
-            instance.activity = registrar.activity()
-        }
     }
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
