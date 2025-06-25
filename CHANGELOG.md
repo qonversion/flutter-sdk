@@ -1,3 +1,6 @@
+## 9.3.1
+* // Update changelog here
+
 ## 9.3.0
 * Flutter version 3.29 supported.
 * Deprecated Android Embedding v1 is no longer supported.
