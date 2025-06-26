@@ -1,5 +1,5 @@
 ## 9.3.1
-* // Update changelog here
+* Android and iOS stability improvements.
 
 ## 9.3.0
 * Flutter version 3.29 supported.
