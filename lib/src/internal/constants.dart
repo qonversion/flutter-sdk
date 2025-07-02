@@ -21,11 +21,7 @@ class Constants {
   static const kEntitlements = 'entitlements';
   static const kProperty = 'property';
   static const kValue = 'value';
-  static const kNotificationsToken = 'notificationsToken';
-  static const kNotificationData = 'notificationData';
   static const kLifetime = 'lifetime';
-  static const kScreenId = 'screenId';
-  static const kConfigData = 'configData';
   static const kExperimentId = 'experimentId';
   static const kGroupId = 'groupId';
   static const kRemoteConfigurationId = 'remoteConfigurationId';
@@ -72,12 +68,6 @@ class Constants {
   static const mDetachUserFromRemoteConfiguration = 'detachUserFromRemoteConfiguration';
   static const mCollectAppleSearchAdsAttribution = 'collectAppleSearchAdsAttribution';
   static const mPresentCodeRedemptionSheet = 'presentCodeRedemptionSheet';
-  static const mSubscribeAutomations = 'automationsSubscribe';
-  static const mSetNotificationsToken = 'automationsSetNotificationsToken';
-  static const mHandleNotification = 'automationsHandleNotification';
-  static const mGetNotificationCustomPayload = 'automationsGetNotificationCustomPayload';
-  static const mShowScreen = 'automationsShowScreen';
-  static const mSetScreenPresentationConfig = 'setScreenPresentationConfig';
 
   // Numeric constants
   static const skuDetailsPriceRatio = 1000000;
