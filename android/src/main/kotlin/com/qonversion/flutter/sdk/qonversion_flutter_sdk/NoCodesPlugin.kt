@@ -68,7 +68,7 @@ class NoCodesPlugin(private val messenger: BinaryMessenger, private val context:
             noCodesSandwich?.setDelegate(this)
             result.success(null)
         } else {
-            result.error("NoNecessaryDataError", "Could not find necessary arguments", "Make sure you pass correct call arguments")
+            result.noNecessaryDataError()
         }
     }
 
@@ -77,7 +77,7 @@ class NoCodesPlugin(private val messenger: BinaryMessenger, private val context:
             noCodesSandwich?.setScreenPresentationConfig(config, contextKey)
             result.success(null)
         } else {
-            result.error("NoNecessaryDataError", "Could not find necessary arguments", "Make sure you pass correct call arguments")
+            result.noNecessaryDataError()
         }
     }
 
@@ -86,7 +86,7 @@ class NoCodesPlugin(private val messenger: BinaryMessenger, private val context:
             noCodesSandwich?.showScreen(contextKey)
             result.success(null)
         } else {
-            result.error("NoNecessaryDataError", "Could not find necessary arguments", "Make sure you pass correct call arguments")
+            result.noNecessaryDataError()
         }
     }
 

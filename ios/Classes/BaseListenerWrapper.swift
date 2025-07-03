@@ -27,7 +27,6 @@ class FlutterListenerWrapper<T>: NSObject where T: EventStreamHandler {
   
   func register(_ codec: MethodCodec? = nil, completion: ((T?) -> Void)? = nil) {
     guard eventStreamHandler == nil else {
-      print("FlutterListenerWrapper: already registered, skipping")
       return
     }
     
@@ -38,11 +37,9 @@ class FlutterListenerWrapper<T>: NSObject where T: EventStreamHandler {
       messenger = binding.messenger()
     #endif
     
-    print("FlutterListenerWrapper: creating eventStreamHandler for \(T.self)")
     eventStreamHandler = T()
     
     let channelName = "qonversion_flutter_\(eventChannelPostfix)"
-    print("FlutterListenerWrapper: creating eventChannel with name: \(channelName)")
     
     if let codec = codec {
       eventChannel = FlutterEventChannel(name: channelName,
@@ -53,10 +50,8 @@ class FlutterListenerWrapper<T>: NSObject where T: EventStreamHandler {
                                          binaryMessenger: messenger)
     }
     
-    print("FlutterListenerWrapper: setting stream handler")
     eventChannel?.setStreamHandler(eventStreamHandler)
     
-    print("FlutterListenerWrapper: calling completion")
     completion?(eventStreamHandler)
   }
   
