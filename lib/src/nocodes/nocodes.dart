@@ -4,23 +4,20 @@ import 'nocodes_config.dart';
 import 'nocodes_internal.dart';
 import 'presentation_config.dart';
 
-/// Main NoCodes API class
+/// Main No-Codes API class
 /// 
 /// **Platform Support:**
 /// - ✅ iOS: Full support
 /// - ✅ Android: Full support
 /// - ❌ macOS: Not supported (returns empty streams and no-op methods)
-/// 
-/// NoCodes is a feature for A/B testing and user experience optimization.
-/// It allows you to show different screens to users based on experiments.
 abstract class NoCodes {
   static NoCodes? _backingInstance;
 
-  /// Use this variable to get a current initialized instance of the NoCodes SDK.
+  /// Use this variable to get a current initialized instance of the No-Codes SDK.
   /// Please, use the property only after calling [NoCodes.initialize].
   /// Otherwise, trying to access the variable will cause an exception.
   ///
-  /// Returns current initialized instance of the NoCodes SDK.
+  /// Returns current initialized instance of the No-Codes SDK.
   /// Throws exception if the instance has not been initialized
   static NoCodes getSharedInstance() {
     NoCodes? instance = _backingInstance;
@@ -33,21 +30,21 @@ abstract class NoCodes {
     return instance;
   }
 
-  /// An entry point to use NoCodes SDK. Call to initialize NoCodes SDK with required config.
-  /// The function is the best way to set additional configs you need to use NoCodes SDK.
+  /// An entry point to use No-Codes SDK. Call to initialize No-Codes SDK with required config.
+  /// The function is the best way to set additional configs you need to use No-Codes SDK.
   ///
   /// **Platform Support:** iOS and Android. On macOS, this will initialize but functionality will be limited.
   ///
   /// [config] a config that contains key SDK settings.
   /// Call [NoCodesConfigBuilder.build] to configure and create a [NoCodesConfig] instance.
-  /// Returns initialized instance of the NoCodes SDK.
+  /// Returns initialized instance of the No-Codes SDK.
   static NoCodes initialize(NoCodesConfig config) {
     NoCodes instance = NoCodesInternal(config);
     _backingInstance = instance;
     return instance;
   }
 
-  /// Initialize NoCodes with project key (for backward compatibility)
+  /// Initialize No-Codes with project key (for backward compatibility)
   /// 
   /// **Platform Support:** iOS and Android. On macOS, this will initialize but functionality will be limited.
   static Future<void> initializeWithProjectKey(String projectKey) async {
@@ -93,12 +90,12 @@ abstract class NoCodes {
     String? contextKey,
   });
 
-  /// Show NoCodes screen with context key
+  /// Show No-Codes screen with context key
   /// 
   /// **Platform Support:** iOS and Android. No-op on macOS.
   Future<void> showScreen(String contextKey);
 
-  /// Close NoCodes screen
+  /// Close No-Codes screen
   /// 
   /// **Platform Support:** iOS and Android. No-op on macOS.
   Future<void> close();
