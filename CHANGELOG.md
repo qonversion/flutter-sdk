@@ -1,3 +1,6 @@
+## 9.3.2
+* // Update changelog here
+
 ## 9.3.1
 * Android and iOS stability improvements.
 
