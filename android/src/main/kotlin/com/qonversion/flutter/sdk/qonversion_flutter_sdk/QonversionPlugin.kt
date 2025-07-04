@@ -111,6 +111,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "remoteConfigList" -> {
                 return remoteConfigList(result)
             }
+            "closeNoCodes" -> noCodesPlugin?.closeNoCodes(result)
         }
 
         // Methods with args
@@ -135,7 +136,6 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "initializeNoCodes" -> noCodesPlugin?.initializeNoCodes(args["projectKey"] as? String ?: "", result)
             "setScreenPresentationConfig" -> noCodesPlugin?.setScreenPresentationConfig(args["config"] as? Map<String, Any>, args["contextKey"] as? String, result)
             "showNoCodesScreen" -> noCodesPlugin?.showNoCodesScreen(args["contextKey"] as? String, result)
-            "closeNoCodes" -> noCodesPlugin?.closeNoCodes(result)
             else -> result.notImplemented()
         }
     }

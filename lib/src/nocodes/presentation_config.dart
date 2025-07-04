@@ -1,3 +1,9 @@
+static const kPush = 'Push';
+static const kFullScreen = 'FullScreen';
+static const kPopover = 'Popover';
+static const kAnimated = 'animated';
+static const kPresentationStyle = 'presentationStyle';
+
 /// Presentation style for NoCodes screens
 enum NoCodesPresentationStyle {
   push,
@@ -16,17 +22,17 @@ class NoCodesPresentationConfig {
   });
 
   factory NoCodesPresentationConfig.fromMap(Map<String, dynamic> map) {
-    final presentationStyleString = map['presentationStyle'] as String?;
+    final presentationStyleString = map[kPresentationStyle] as String?;
     NoCodesPresentationStyle presentationStyle;
     
     switch (presentationStyleString) {
-      case 'Push':
+      case kPush:
         presentationStyle = NoCodesPresentationStyle.push;
         break;
-      case 'FullScreen':
+      case kFullScreen:
         presentationStyle = NoCodesPresentationStyle.fullScreen;
         break;
-      case 'Popover':
+      case kPopover:
         presentationStyle = NoCodesPresentationStyle.popover;
         break;
       default:
@@ -34,7 +40,7 @@ class NoCodesPresentationConfig {
     }
 
     return NoCodesPresentationConfig(
-      animated: map['animated'] as bool? ?? true,
+      animated: map[kAnimated] as bool? ?? true,
       presentationStyle: presentationStyle,
     );
   }
@@ -43,19 +49,19 @@ class NoCodesPresentationConfig {
     String presentationStyleString;
     switch (presentationStyle) {
       case NoCodesPresentationStyle.push:
-        presentationStyleString = 'Push';
+        presentationStyleString = kPush;
         break;
       case NoCodesPresentationStyle.fullScreen:
-        presentationStyleString = 'FullScreen';
+        presentationStyleString = kFullScreen;
         break;
       case NoCodesPresentationStyle.popover:
-        presentationStyleString = 'Popover';
+        presentationStyleString = kPopover;
         break;
     }
 
     return {
-      'animated': animated,
-      'presentationStyle': presentationStyleString,
+      kAnimated: animated,
+      kPresentationStyle: presentationStyleString,
     };
   }
 

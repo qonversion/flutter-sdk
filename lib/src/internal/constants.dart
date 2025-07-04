@@ -32,6 +32,7 @@ class Constants {
   static const kIncludeEmptyContextKey = 'includeEmptyContextKey';
   static const kDiscountId = 'discountId';
   static const kPromoOffer = 'promoOffer';
+  static const kConfig = 'config';
 
   // MethodChannel methods names
   static const mInitialize = 'initialize';
@@ -68,6 +69,10 @@ class Constants {
   static const mDetachUserFromRemoteConfiguration = 'detachUserFromRemoteConfiguration';
   static const mCollectAppleSearchAdsAttribution = 'collectAppleSearchAdsAttribution';
   static const mPresentCodeRedemptionSheet = 'presentCodeRedemptionSheet';
+  static const mInitializeNoCodes = 'initializeNoCodes';
+  static const mSetScreenPresentationConfig = 'setScreenPresentationConfig';
+  static const mShowNoCodesScreen = 'showNoCodesScreen';
+  static const mCloseNoCodes = 'closeNoCodes';
 
   // Numeric constants
   static const skuDetailsPriceRatio = 1000000;

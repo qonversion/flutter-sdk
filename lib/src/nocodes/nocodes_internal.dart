@@ -6,6 +6,7 @@ import 'nocodes_config.dart';
 import 'nocodes.dart';
 import 'presentation_config.dart';
 import 'dart:convert';
+import '../internal/constants.dart';
 
 class NoCodesInternal implements NoCodes {
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
@@ -25,14 +26,13 @@ class NoCodesInternal implements NoCodes {
   void _initialize(NoCodesConfig config) {
     // NoCodes is not supported on macOS
     if (Platform.isMacOS) {
-      print('NoCodes is not supported on macOS');
       return;
     }
     
     final args = {
-      'projectKey': config.projectKey,
+      Constants.kProjectKey: config.projectKey,
     };
-    _channel.invokeMethod('initializeNoCodes', args);
+    _channel.invokeMethod(Constants.mInitializeNoCodes, args);
   }
 
   @override
@@ -125,44 +125,31 @@ class NoCodesInternal implements NoCodes {
     String? contextKey,
   }) async {
     if (Platform.isMacOS) {
-      print('NoCodes is not supported on macOS');
       return;
     }
     
     final args = {
-      'config': config.toMap(),
-      if (contextKey != null) 'contextKey': contextKey,
+      Constants.kConfig: config.toMap(),
+      if (contextKey != null) Constants.kContextKey: contextKey,
     };
-    await _channel.invokeMethod('setScreenPresentationConfig', args);
+    await _channel.invokeMethod(Constants.mSetScreenPresentationConfig, args);
   }
 
   @override
   Future<void> showScreen(String contextKey) async {
     if (Platform.isMacOS) {
-      print('NoCodes is not supported on macOS');
       return;
     }
     
-    await _channel.invokeMethod('showNoCodesScreen', {'contextKey': contextKey});
+    await _channel.invokeMethod(Constants.mShowNoCodesScreen, {Constants.kContextKey: contextKey});
   }
 
   @override
   Future<void> close() async {
     if (Platform.isMacOS) {
-      print('NoCodes is not supported on macOS');
       return;
     }
     
-    await _channel.invokeMethod('closeNoCodes');
-  }
-
-  @override
-  Future<List<String>> getAvailableEvents() async {
-    if (Platform.isMacOS) {
-      return [];
-    }
-    
-    final result = await _channel.invokeMethod('getAvailableEvents');
-    return List<String>.from(result ?? []);
+    await _channel.invokeMethod(Constants.mCloseNoCodes);
   }
 } 

@@ -100,8 +100,4 @@ abstract class NoCodes {
   /// **Platform Support:** iOS and Android. No-op on macOS.
   Future<void> close();
 
-  /// Get available events
-  /// 
-  /// **Platform Support:** iOS and Android. Returns empty list on macOS.
-  Future<List<String>> getAvailableEvents();
 } 

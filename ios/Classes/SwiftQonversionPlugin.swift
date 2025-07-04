@@ -165,10 +165,6 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     case "showNoCodesScreen":
       noCodesPlugin?.showScreen(args, result)
       return
-      
-    case "getAvailableNoCodesEvents":
-      noCodesPlugin?.getAvailableEvents(result)
-      return
 
     default:
       return result(FlutterMethodNotImplemented)

@@ -1,9 +1,9 @@
-/// Base class for all NoCodes events
+/// Base class for all No-Codes events
 abstract class NoCodesEvent {
   const NoCodesEvent();
 }
 
-/// Event when NoCodes screen is shown
+/// Event when No-Codes screen is shown
 class NoCodesScreenShownEvent extends NoCodesEvent {
   final Map<String, dynamic>? payload;
 

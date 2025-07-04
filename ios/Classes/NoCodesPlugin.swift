@@ -11,6 +11,13 @@ import Flutter
 import QonversionSandwich
 
 public class NoCodesPlugin: NSObject {
+    // Event type constants
+    private let eventScreenShown = "nocodes_screen_shown"
+    private let eventFinished = "nocodes_finished"
+    private let eventActionStarted = "nocodes_action_started"
+    private let eventActionFailed = "nocodes_action_failed"
+    private let eventActionFinished = "nocodes_action_finished"
+    private let eventScreenFailedToLoad = "nocodes_screen_failed_to_load"
     private var screenShownEventStreamHandler: BaseEventStreamHandler?
     private var finishedEventStreamHandler: BaseEventStreamHandler?
     private var actionStartedEventStreamHandler: BaseEventStreamHandler?
@@ -22,32 +29,32 @@ public class NoCodesPlugin: NSObject {
     public func register(_ registrar: FlutterPluginRegistrar) {
         
         // Register separate event channels for each event type
-        let screenShownListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "nocodes_screen_shown")
+        let screenShownListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: eventScreenShown)
         screenShownListener.register() { eventStreamHandler in
             self.screenShownEventStreamHandler = eventStreamHandler
         }
         
-        let finishedListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "nocodes_finished")
+        let finishedListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: eventFinished)
         finishedListener.register() { eventStreamHandler in
             self.finishedEventStreamHandler = eventStreamHandler
         }
         
-        let actionStartedListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "nocodes_action_started")
+        let actionStartedListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: eventActionStarted)
         actionStartedListener.register() { eventStreamHandler in
             self.actionStartedEventStreamHandler = eventStreamHandler
         }
         
-        let actionFailedListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "nocodes_action_failed")
+        let actionFailedListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: eventActionFailed)
         actionFailedListener.register() { eventStreamHandler in
             self.actionFailedEventStreamHandler = eventStreamHandler
         }
         
-        let actionFinishedListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "nocodes_action_finished")
+        let actionFinishedListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: eventActionFinished)
         actionFinishedListener.register() { eventStreamHandler in
             self.actionFinishedEventStreamHandler = eventStreamHandler
         }
         
-        let screenFailedToLoadListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "nocodes_screen_failed_to_load")
+        let screenFailedToLoadListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: eventScreenFailedToLoad)
         screenFailedToLoadListener.register() { eventStreamHandler in
             self.screenFailedToLoadEventStreamHandler = eventStreamHandler
         }
@@ -94,11 +101,6 @@ public class NoCodesPlugin: NSObject {
         noCodesSandwich?.close()
         result(nil)
     }
-    
-    public func getAvailableEvents(_ result: @escaping FlutterResult) {
-        let events = noCodesSandwich?.getAvailableEvents() ?? []
-        result(events)
-    }
 }
 
 extension NoCodesPlugin: NoCodesEventListener {
@@ -117,22 +119,22 @@ extension NoCodesPlugin: NoCodesEventListener {
         
         DispatchQueue.main.async {
             switch event {
-            case "nocodes_screen_shown":
+            case eventScreenShown:
                 self.screenShownEventStreamHandler?.eventSink?(jsonString)
                 
-            case "nocodes_finished":
+            case eventFinished:
                 self.finishedEventStreamHandler?.eventSink?(jsonString)
                 
-            case "nocodes_action_started":
+            case eventActionStarted:
                 self.actionStartedEventStreamHandler?.eventSink?(jsonString)
                 
-            case "nocodes_action_failed":
+            case eventActionFailed:
                 self.actionFailedEventStreamHandler?.eventSink?(jsonString)
                 
-            case "nocodes_action_finished":
+            case eventActionFinished:
                 self.actionFinishedEventStreamHandler?.eventSink?(jsonString)
                 
-            case "nocodes_screen_failed_to_load":
+            case eventScreenFailedToLoad:
                 self.screenFailedToLoadEventStreamHandler?.eventSink?(jsonString)
                 
             default:
