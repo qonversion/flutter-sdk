@@ -14,51 +14,10 @@ class _HomeViewState extends State<HomeView> {
   Map<String, QEntitlement>? _entitlements = null;
   Map<String, QProduct>? _products = null;
 
-  late StreamSubscription<String> _shownScreensStream;
-  late StreamSubscription<ActionResult> _startedActionsStream;
-  late StreamSubscription<ActionResult> _failedActionsStream;
-  late StreamSubscription<ActionResult> _finishedActionsStream;
-  late StreamSubscription<Null> _finishedAutomationsStream;
-
   @override
   void initState() {
     super.initState();
     _initPlatformState();
-
-    _shownScreensStream =
-        Automations.getSharedInstance().shownScreensStream.listen((event) {
-      // do any logic you need
-    });
-    _startedActionsStream =
-        Automations.getSharedInstance().startedActionsStream.listen((event) {
-      // do any logic you need or track event
-    });
-    _failedActionsStream =
-        Automations.getSharedInstance().failedActionsStream.listen((event) {
-      // do any logic you need or track event
-    });
-    _finishedActionsStream =
-        Automations.getSharedInstance().finishedActionsStream.listen((event) {
-      if (event.type == ActionResultType.purchase) {
-        // do any logic you need
-      }
-    });
-    _finishedAutomationsStream = Automations.getSharedInstance()
-        .finishedAutomationsStream
-        .listen((event) {
-      // do any logic you need or track event
-    });
-  }
-
-  @override
-  void dispose() {
-    _shownScreensStream.cancel();
-    _startedActionsStream.cancel();
-    _failedActionsStream.cancel();
-    _finishedActionsStream.cancel();
-    _finishedAutomationsStream.cancel();
-
-    super.dispose();
   }
 
   @override
@@ -122,6 +81,22 @@ class _HomeViewState extends State<HomeView> {
                           Navigator.of(context).pushNamed('params'),
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 8,
+                      right: 8,
+                      bottom: 8,
+                    ),
+                    child: TextButton(
+                      child: Text('Open NoCodesView'),
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(Colors.purple),
+                        foregroundColor: WidgetStateProperty.all(Colors.white),
+                      ),
+                      onPressed: () =>
+                          Navigator.of(context).pushNamed('nocodes'),
+                    ),
+                  ),
                   if (Platform.isAndroid)
                     Padding(
                       padding: const EdgeInsets.only(
@@ -150,13 +125,20 @@ class _HomeViewState extends State<HomeView> {
   Future<void> _initPlatformState() async {
     const environment =
         kDebugMode ? QEnvironment.sandbox : QEnvironment.production;
+    const projectKey = 'PV77YHL7qnGvsdmpTs7gimsxUvY-Znl2';
+    
     final config = new QonversionConfigBuilder(
-            'PV77YHL7qnGvsdmpTs7gimsxUvY-Znl2',
+            projectKey,
             QLaunchMode.subscriptionManagement)
         .setEnvironment(environment)
         .build();
     Qonversion.initialize(config);
     Qonversion.getSharedInstance().collectAppleSearchAdsAttribution();
+
+    // Initialize NoCodes with the same project key using config builder
+    final noCodesConfig = new NoCodesConfigBuilder(projectKey).build();
+    NoCodes.initialize(noCodesConfig);
+    
     _loadQonversionObjects();
   }
 

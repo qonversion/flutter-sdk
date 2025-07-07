@@ -10,7 +10,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   var updatedEntitlementsStreamHandler: BaseEventStreamHandler?
   var promoPurchasesStreamHandler: BaseEventStreamHandler?
   var qonversionSandwich: QonversionSandwich?
-  private var automationsPlugin: AutomationsPlugin?
+  var noCodesPlugin: NoCodesPlugin?
   
   public static func register(with registrar: FlutterPluginRegistrar) {
     let messenger: FlutterBinaryMessenger
@@ -35,11 +35,12 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     let sandwichInstance = QonversionSandwich.init(qonversionEventListener: instance)
     instance.qonversionSandwich = sandwichInstance
     
-    instance.automationsPlugin = AutomationsPlugin()
-    instance.automationsPlugin?.register(registrar)
+    // Initialize NoCodesPlugin and register it
+    instance.noCodesPlugin = NoCodesPlugin()
+    instance.noCodesPlugin?.register(registrar)
   }
   
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    @MainActor public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     
     // MARK: - Calls without arguments
     
@@ -87,12 +88,12 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     case "isFallbackFileAccessible":
       return isFallbackFileAccessible(result)
 
-    case "automationsSubscribe":
-      automationsPlugin?.subscribe()
-      return result(nil)
-
     case "remoteConfigList":
       return remoteConfigList(result)
+        
+    case "closeNoCodes":
+      noCodesPlugin?.close(result)
+      return result(nil)
       
     default:
       break
@@ -153,24 +154,16 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     case "detachUserFromRemoteConfiguration":
         return detachUserFromRemoteConfiguration(args, result)
 
-    case "automationsSetNotificationsToken":
-      automationsPlugin?.setNotificationsToken(args["notificationsToken"] as? String, result)
+    case "initializeNoCodes":
+      noCodesPlugin?.initialize(args, result)
       return
       
-    case "automationsHandleNotification":
-      automationsPlugin?.handleNotification(args, result)
-      return
-      
-    case "automationsGetNotificationCustomPayload":
-      automationsPlugin?.getNotificationCustomPayload(args, result)
-      return
-      
-    case "automationsShowScreen":
-      automationsPlugin?.showScreen(args["screenId"] as? String, result)
-      return
-
     case "setScreenPresentationConfig":
-      automationsPlugin?.setScreenPresentationConfig(args["configData"] as? [String: Any], args["screenId"] as? String, result)
+      noCodesPlugin?.setScreenPresentationConfig(args, result)
+      return
+      
+    case "showNoCodesScreen":
+      noCodesPlugin?.showScreen(args, result)
       return
 
     default:

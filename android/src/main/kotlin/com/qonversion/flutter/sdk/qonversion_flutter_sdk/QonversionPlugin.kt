@@ -17,13 +17,14 @@ import io.qonversion.sandwich.QonversionEventsListener
 import io.qonversion.sandwich.QonversionSandwich
 
 class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
-    private var activity: Activity? = null
     private var application: Application? = null
+    private var activity: Activity? = null
     private var channel: MethodChannel? = null
     private var updatedEntitlementsStreamHandler: BaseEventStreamHandler? = null
+    private var noCodesPlugin: NoCodesPlugin? = null
 
     private val qonversionSandwich by lazy {
-        application?.let {
+        application?.let { 
             QonversionSandwich(
                 it,
                 object : ActivityProvider {
@@ -34,8 +35,6 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             )
         } ?: throw IllegalStateException("Failed to initialize Qonversion Sandwich. Application is null.")
     }
-
-    private lateinit var automationsPlugin: AutomationsPlugin
 
     private val qonversionEventsListener: QonversionEventsListener = object : QonversionEventsListener {
         override fun onEntitlementsUpdated(entitlements: BridgeData) {
@@ -109,12 +108,10 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "isFallbackFileAccessible" -> {
                 return isFallbackFileAccessible(result)
             }
-            "automationsSubscribe" -> {
-                return automationsPlugin.subscribe()
-            }
             "remoteConfigList" -> {
                 return remoteConfigList(result)
             }
+            "closeNoCodes" -> noCodesPlugin?.closeNoCodes(result)
         }
 
         // Methods with args
@@ -135,15 +132,10 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "detachUserFromRemoteConfiguration" -> detachUserFromRemoteConfiguration(args, result)
             "storeSdkInfo" -> storeSdkInfo(args, result)
             "identify" -> identify(args["userId"] as? String, result)
-            "automationsSetNotificationsToken" -> automationsPlugin.setNotificationsToken(args["notificationsToken"] as? String, result)
-            "automationsHandleNotification" -> automationsPlugin.handleNotification(args, result)
-            "automationsGetNotificationCustomPayload" -> automationsPlugin.getNotificationCustomPayload(args, result)
-            "automationsShowScreen" -> automationsPlugin.showScreen(args["screenId"] as? String, result)
-            "setScreenPresentationConfig" -> automationsPlugin.setScreenPresentationConfig(
-                args["configData"] as? Map<String, Any>,
-                args["screenId"] as? String,
-                result
-            )
+            // NoCodes methods
+            "initializeNoCodes" -> noCodesPlugin?.initializeNoCodes(args["projectKey"] as? String ?: "", result)
+            "setScreenPresentationConfig" -> noCodesPlugin?.setScreenPresentationConfig(args["config"] as? Map<String, Any>, args["contextKey"] as? String, result)
+            "showNoCodesScreen" -> noCodesPlugin?.showNoCodesScreen(args["contextKey"] as? String, result)
             else -> result.notImplemented()
         }
     }
@@ -317,6 +309,13 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         channel = MethodChannel(messenger, METHOD_CHANNEL)
         channel?.setMethodCallHandler(this)
 
+        // Register NoCodes plugin
+        try {
+            noCodesPlugin = NoCodesPlugin(messenger, application)
+        } catch (e: Exception) {
+            println("Failed to initialize NoCodesPlugin: ${e.message}")
+        }
+
         // Register entitlements update events
         val updatedEntitlementsListener = BaseListenerWrapper(messenger, EVENT_CHANNEL_UPDATED_ENTITLEMENTS)
         updatedEntitlementsListener.register()
@@ -325,14 +324,13 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         // Register promo purchases events. Android SDK does not generate any promo purchases yet
         val promoPurchasesListener = BaseListenerWrapper(messenger, EVENT_CHANNEL_PROMO_PURCHASES)
         promoPurchasesListener.register()
-
-        automationsPlugin = AutomationsPlugin(messenger)
     }
 
     private fun tearDown() {
         channel?.setMethodCallHandler(null)
         channel = null
         this.updatedEntitlementsStreamHandler = null
+        this.noCodesPlugin = null
         this.application = null
     }
 }
