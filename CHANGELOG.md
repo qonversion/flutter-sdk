@@ -1,7 +1,4 @@
 ## 10.0.0
-* // Update changelog here
-
-## 10.0.0
 ### Introducing Qonversion No-Codes Beta!
 
 **Qonversion No-Codes** is a product designed to help you **build and customize** paywall screens **without writing code**.
