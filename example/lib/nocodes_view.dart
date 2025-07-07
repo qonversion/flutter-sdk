@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
 
+const String CONTEXT_KEY = 'your_context_key';
+
 class NoCodesView extends StatefulWidget {
   @override
   _NoCodesViewState createState() => _NoCodesViewState();
@@ -81,10 +83,10 @@ class _NoCodesViewState extends State<NoCodesView> {
         presentationStyle: NoCodesPresentationStyle.fullScreen,
       );
 
-      await NoCodes.getSharedInstance().setScreenPresentationConfig(config, contextKey: 'your_context_key');
+      await NoCodes.getSharedInstance().setScreenPresentationConfig(config, contextKey: CONTEXT_KEY);
       _addEvent('Presentation config set');
       
-      await NoCodes.getSharedInstance().showScreen('your_context_key');
+      await NoCodes.getSharedInstance().showScreen(CONTEXT_KEY);
     } catch (e) {
       print('Error showing screen: $e');
       _addEvent('Error showing screen: $e');

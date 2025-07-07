@@ -1,3 +1,12 @@
+## 10.0.0
+### Introducing Qonversion No-Codes Beta!
+
+**Qonversion No-Codes** is a product designed to help you **build and customize** paywall screens **without writing code**.
+It allows seamless integration of pre-built subscription UI components, enabling a faster and more flexible way to design paywalls directly within your app. 
+See more in the [documentation](https://documentation.qonversion.io/docs/getting-started-with-no-code-screens/).
+
+With this update, we are **removing** deprecated **Automations**, so we encourage you to transition your paywalls to the new Qonversion No-Codes.
+
 ## 9.3.1
 * Android and iOS stability improvements.
 
