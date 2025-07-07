@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'home.dart';
 import 'params_view.dart';
 import 'products_view.dart';
+import 'nocodes_view.dart';
 import 'dart:async';
 
 Future<void> main() async {
@@ -20,7 +21,8 @@ class SampleApp extends StatelessWidget {
       routes: {
         '/': (_) => HomeView(),
         'products': (_) => ProductsView(),
-        'params': (_) => ParamsView()
+        'params': (_) => ParamsView(),
+        'nocodes': (_) => NoCodesView(),
       },
     );
   }

@@ -38,12 +38,15 @@ class FlutterListenerWrapper<T>: NSObject where T: EventStreamHandler {
     #endif
     
     eventStreamHandler = T()
+    
+    let channelName = "qonversion_flutter_\(eventChannelPostfix)"
+    
     if let codec = codec {
-      eventChannel = FlutterEventChannel(name: "qonversion_flutter_\(eventChannelPostfix)",
+      eventChannel = FlutterEventChannel(name: channelName,
                                          binaryMessenger: messenger,
                                          codec: codec)
     } else {
-      eventChannel = FlutterEventChannel(name: "qonversion_flutter_\(eventChannelPostfix)",
+      eventChannel = FlutterEventChannel(name: channelName,
                                          binaryMessenger: messenger)
     }
     
