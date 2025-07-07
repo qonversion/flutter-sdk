@@ -60,7 +60,7 @@ class _NoCodesViewState extends State<NoCodesView> {
     
     _screenFailedToLoadStream = NoCodes.getSharedInstance().screenFailedToLoadStream.listen((event) {
       _addEvent('Screen Failed to Load: ${event.payload}');
-      // NoCodes.getSharedInstance().close();
+      NoCodes.getSharedInstance().close();
     });
   }
 
@@ -78,13 +78,13 @@ class _NoCodesViewState extends State<NoCodesView> {
       // Set presentation style config before showing screen
       final config = NoCodesPresentationConfig(
         animated: true,
-        presentationStyle: NoCodesPresentationStyle.push,
+        presentationStyle: NoCodesPresentationStyle.fullScreen,
       );
 
-      await NoCodes.getSharedInstance().setScreenPresentationConfig(config, contextKey: 'kamo_test');
+      await NoCodes.getSharedInstance().setScreenPresentationConfig(config, contextKey: 'your_context_key');
       _addEvent('Presentation config set');
       
-      await NoCodes.getSharedInstance().showScreen('kamo_test');
+      await NoCodes.getSharedInstance().showScreen('your_context_key');
     } catch (e) {
       print('Error showing screen: $e');
       _addEvent('Error showing screen: $e');

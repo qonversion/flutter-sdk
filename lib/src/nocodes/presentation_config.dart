@@ -1,9 +1,3 @@
-static const kPush = 'Push';
-static const kFullScreen = 'FullScreen';
-static const kPopover = 'Popover';
-static const kAnimated = 'animated';
-static const kPresentationStyle = 'presentationStyle';
-
 /// Presentation style for NoCodes screens
 enum NoCodesPresentationStyle {
   push,
@@ -13,6 +7,12 @@ enum NoCodesPresentationStyle {
 
 /// Configuration for NoCodes screen presentation
 class NoCodesPresentationConfig {
+  static const kPush = 'Push';
+  static const kFullScreen = 'FullScreen';
+  static const kPopover = 'Popover';
+  static const kAnimated = 'animated';
+  static const kPresentationStyle = 'presentationStyle';
+
   final bool animated;
   final NoCodesPresentationStyle presentationStyle;
 

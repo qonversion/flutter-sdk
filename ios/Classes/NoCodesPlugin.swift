@@ -119,22 +119,22 @@ extension NoCodesPlugin: NoCodesEventListener {
         
         DispatchQueue.main.async {
             switch event {
-            case eventScreenShown:
+            case self.eventScreenShown:
                 self.screenShownEventStreamHandler?.eventSink?(jsonString)
                 
-            case eventFinished:
+            case self.eventFinished:
                 self.finishedEventStreamHandler?.eventSink?(jsonString)
                 
-            case eventActionStarted:
+            case self.eventActionStarted:
                 self.actionStartedEventStreamHandler?.eventSink?(jsonString)
                 
-            case eventActionFailed:
+            case self.eventActionFailed:
                 self.actionFailedEventStreamHandler?.eventSink?(jsonString)
                 
-            case eventActionFinished:
+            case self.eventActionFinished:
                 self.actionFinishedEventStreamHandler?.eventSink?(jsonString)
                 
-            case eventScreenFailedToLoad:
+            case self.eventScreenFailedToLoad:
                 self.screenFailedToLoadEventStreamHandler?.eventSink?(jsonString)
                 
             default:
