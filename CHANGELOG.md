@@ -1,3 +1,6 @@
+## 10.0.1
+* // Update changelog here
+
 ## 10.0.0
 ### Introducing Qonversion No-Codes Beta!
 
