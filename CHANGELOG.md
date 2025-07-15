@@ -1,5 +1,5 @@
 ## 10.0.1
-* // Update changelog here
+* Fixed no-code screen action bar appearance issue.
 
 ## 10.0.0
 ### Introducing Qonversion No-Codes Beta!
