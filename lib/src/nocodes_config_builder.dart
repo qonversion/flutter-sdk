@@ -1,6 +1,6 @@
 import 'nocodes_config.dart';
 
-/// Builder for NoCodes configuration
+/// Builder for No-Codes configuration
 class NoCodesConfigBuilder {
   final String projectKey;
 
