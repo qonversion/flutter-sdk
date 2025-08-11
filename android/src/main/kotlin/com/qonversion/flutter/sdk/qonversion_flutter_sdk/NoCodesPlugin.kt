@@ -60,10 +60,17 @@ class NoCodesPlugin(private val messenger: BinaryMessenger, private val context:
         this.screenFailedToLoadEventStreamHandler = screenFailedToLoadListener.eventStreamHandler
     }
 
-    fun initializeNoCodes(projectKey: String, result: Result) {
+    fun initializeNoCodes(args: Map<String, Any>, result: Result) {
+        val projectKey = args["projectKey"] as? String ?: return result.noNecessaryDataError()
+        val version = args["version"] as? String ?: return result.noNecessaryDataError()
+        val source = args["source"] as? String ?: return result.noNecessaryDataError()
+
         if (projectKey.isNotEmpty()) {
             // Initialize NoCodes Sandwich
             noCodesSandwich = NoCodesSandwich()
+
+            noCodesSandwich?.storeSdkInfo(context, source, version)
+
             noCodesSandwich?.initialize(context, projectKey)
             noCodesSandwich?.setDelegate(this)
             result.success(null)

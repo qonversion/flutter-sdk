@@ -1,9 +1,4 @@
-/// Configuration for NoCodes initialization
-class NoCodesConfig {
-  final String projectKey;
-
-  const NoCodesConfig(this.projectKey);
-}
+import 'nocodes_config.dart';
 
 /// Builder for NoCodes configuration
 class NoCodesConfigBuilder {
@@ -17,4 +12,4 @@ class NoCodesConfigBuilder {
   NoCodesConfig build() {
     return NoCodesConfig(projectKey);
   }
-} 
+}
