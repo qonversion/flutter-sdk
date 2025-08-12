@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/services.dart';
-import 'nocodes_events.dart';
-import 'nocodes_config.dart';
-import 'nocodes.dart';
-import 'presentation_config.dart';
+import 'package:qonversion_flutter/src/internal/qonversion_internal.dart';
+import '../dto/nocodes_events.dart';
+import '../dto/presentation_config.dart';
+import '../nocodes_config.dart';
+import '../nocodes.dart';
 import 'dart:convert';
 import '../internal/constants.dart';
 
@@ -28,9 +29,11 @@ class NoCodesInternal implements NoCodes {
     if (Platform.isMacOS) {
       return;
     }
-    
+
     final args = {
       Constants.kProjectKey: config.projectKey,
+      Constants.kVersion: QonversionInternal.sdkVersion,
+      Constants.kSource: Constants.sdkSource,
     };
     _channel.invokeMethod(Constants.mInitializeNoCodes, args);
   }
@@ -152,4 +155,4 @@ class NoCodesInternal implements NoCodes {
     
     await _channel.invokeMethod(Constants.mCloseNoCodes);
   }
-} 
+}

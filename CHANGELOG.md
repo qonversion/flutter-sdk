@@ -1,3 +1,6 @@
+## 10.0.2
+* Fixed No-Codes source and version tracking for internal purposes.
+
 ## 10.0.1
 * Fixed no-code screen action bar appearance issue.
 

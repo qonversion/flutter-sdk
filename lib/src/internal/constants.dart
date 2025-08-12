@@ -33,6 +33,8 @@ class Constants {
   static const kDiscountId = 'discountId';
   static const kPromoOffer = 'promoOffer';
   static const kConfig = 'config';
+  static const kVersion = 'version';
+  static const kSource = 'source';
 
   // MethodChannel methods names
   static const mInitialize = 'initialize';
@@ -74,6 +76,7 @@ class Constants {
   static const mShowNoCodesScreen = 'showNoCodesScreen';
   static const mCloseNoCodes = 'closeNoCodes';
 
-  // Numeric constants
+  // Other constants
   static const skuDetailsPriceRatio = 1000000;
+  static const sdkSource = "flutter";
 }

@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'nocodes_events.dart';
+import 'dto/nocodes_events.dart';
+import 'dto/presentation_config.dart';
 import 'nocodes_config.dart';
-import 'nocodes_internal.dart';
-import 'presentation_config.dart';
+import 'internal/nocodes_internal.dart';
 
 /// Main No-Codes API class
 /// 
