@@ -133,7 +133,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "storeSdkInfo" -> storeSdkInfo(args, result)
             "identify" -> identify(args["userId"] as? String, result)
             // NoCodes methods
-            "initializeNoCodes" -> noCodesPlugin?.initializeNoCodes(args["projectKey"] as? String ?: "", result)
+            "initializeNoCodes" -> noCodesPlugin?.initializeNoCodes(args, result)
             "setScreenPresentationConfig" -> noCodesPlugin?.setScreenPresentationConfig(args["config"] as? Map<String, Any>, args["contextKey"] as? String, result)
             "showNoCodesScreen" -> noCodesPlugin?.showNoCodesScreen(args["contextKey"] as? String, result)
             else -> result.notImplemented()

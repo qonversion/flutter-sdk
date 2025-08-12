@@ -53,6 +53,6 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "io.qonversion:sandwich:6.0.9"
+    implementation "io.qonversion:sandwich:6.0.10"
     implementation 'com.google.code.gson:gson:2.9.0'
 }
