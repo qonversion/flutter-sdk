@@ -11,7 +11,7 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String _sdkVersion = "10.0.2";
+  static const String sdkVersion = "10.0.2";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
@@ -402,8 +402,8 @@ class QonversionInternal implements Qonversion {
   // Private methods
   Future<void> _storeSdkInfo() =>
       _channel.invokeMethod(Constants.mStoreSdkInfo, {
-        "version": _sdkVersion,
-        "source": "flutter",
+        Constants.kVersion: sdkVersion,
+        Constants.kSource: Constants.sdkSource,
       });
 
   static QPurchaseException _convertPurchaseException(PlatformException error) {
