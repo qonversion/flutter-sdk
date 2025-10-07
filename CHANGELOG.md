@@ -1,8 +1,11 @@
+## 10.0.3
+* Fixed `Purchase` action type for No-Codes event on Android.
+
 ## 10.0.2
 * Fixed No-Codes source and version tracking for internal purposes.
 
 ## 10.0.1
-* Fixed no-code screen action bar appearance issue.
+* Fixed No-Code screen action bar appearance issue.
 
 ## 10.0.0
 ### Introducing Qonversion No-Codes Beta!
