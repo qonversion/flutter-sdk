@@ -1,5 +1,5 @@
 ## 10.0.3
-* // Update changelog here
+* Fixed `Purchase` action type for No-Codes event on Android.
 
 ## 10.0.2
 * Fixed No-Codes source and version tracking for internal purposes.
