@@ -1,3 +1,6 @@
+## 10.0.4
+* // Update changelog here
+
 ## 10.0.3
 * Fixed `Purchase` action type for No-Codes event on Android.
 
