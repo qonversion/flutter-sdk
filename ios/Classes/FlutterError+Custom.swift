@@ -29,13 +29,6 @@ extension FlutterError {
                                                details: "")
   
   private static func mapSandwichError(_ error: SandwichError, errorCode: String, errorMessage: String? = nil) -> FlutterError {
-    var message = ""
-    
-    if let errorMessage = errorMessage {
-      message = errorMessage + ". "
-    }
-    message += error.details
-    
     var details = "Qonversion Error Code: \(error.code)"
     
     if let additionalMessage = error.additionalMessage {
@@ -43,7 +36,7 @@ extension FlutterError {
     }
     
     return FlutterError(code: errorCode,
-                        message: message,
+                        message: error.details,
                         details: details)
   }
 }

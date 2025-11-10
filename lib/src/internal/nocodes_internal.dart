@@ -34,6 +34,7 @@ class NoCodesInternal implements NoCodes {
       Constants.kProjectKey: config.projectKey,
       Constants.kVersion: QonversionInternal.sdkVersion,
       Constants.kSource: Constants.sdkSource,
+      if (config.proxyUrl != null) Constants.kProxyUrl: config.proxyUrl,
     };
     _channel.invokeMethod(Constants.mInitializeNoCodes, args);
   }

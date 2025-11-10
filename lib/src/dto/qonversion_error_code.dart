@@ -83,6 +83,10 @@ enum QErrorCode {
   @JsonValue('OfferingsNotFound')
   offeringsNotFound,
 
+  /// Offerings are not available
+  @JsonValue('OfferingsNotAvailable')
+  offeringsNotAvailable,
+
   /// Purchase identifier was invalid, etc.
   @JsonValue('PaymentInvalid')
   paymentInvalid,
@@ -177,6 +181,7 @@ const _codes = {
   QErrorCode.launchError: 'LaunchError',
   QErrorCode.networkConnectionFailed: 'NetworkConnectionFailed',
   QErrorCode.offeringsNotFound: 'OfferingsNotFound',
+  QErrorCode.offeringsNotAvailable: 'OfferingsNotAvailable',
   QErrorCode.paymentInvalid: 'PaymentInvalid',
   QErrorCode.paymentNotAllowed: 'PaymentNotAllowed',
   QErrorCode.playStoreError: 'PlayStoreError',

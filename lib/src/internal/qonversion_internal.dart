@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
 import 'package:qonversion_flutter/src/internal/mapper.dart';
@@ -27,9 +26,9 @@ class QonversionInternal implements Qonversion {
 
     final args = {
       Constants.kProjectKey: config.projectKey,
-      Constants.kLaunchMode: StringUtils.capitalize(describeEnum(config.launchMode)),
-      Constants.kEnvironment: StringUtils.capitalize(describeEnum(config.environment)),
-      Constants.kEntitlementsCacheLifetime: StringUtils.capitalize(describeEnum(config.entitlementsCacheLifetime)),
+      Constants.kLaunchMode: StringUtils.capitalize(config.launchMode.name),
+      Constants.kEnvironment: StringUtils.capitalize(config.environment.name),
+      Constants.kEntitlementsCacheLifetime: StringUtils.capitalize(config.entitlementsCacheLifetime.name),
       Constants.kProxyUrl: config.proxyUrl,
       Constants.kKidsMode: config.kidsMode,
     };
@@ -120,7 +119,7 @@ class QonversionInternal implements Qonversion {
         Constants.kOfferId: purchaseOptions.offerId,
         Constants.kApplyOffer: purchaseOptions.applyOffer,
         Constants.kUpdatePolicyKey: updatePolicy != null
-            ? StringUtils.capitalize(describeEnum(updatePolicy))
+            ? StringUtils.capitalize(updatePolicy.name)
             : null,
         Constants.kPurchaseContextKeys: purchaseOptions.contextKeys,
         Constants.kPurchaseQuantity: purchaseOptions.quantity,
@@ -149,7 +148,7 @@ class QonversionInternal implements Qonversion {
         Constants.kApplyOffer: purchaseUpdateModel.applyOffer,
         Constants.kOldProductId: purchaseUpdateModel.oldProductId,
         Constants.kUpdatePolicyKey: updatePolicy != null
-            ? StringUtils.capitalize(describeEnum(updatePolicy))
+            ? StringUtils.capitalize(updatePolicy.name)
             : null,
       });
       final result = QMapper.entitlementsFromJson(rawResult);
@@ -324,7 +323,7 @@ class QonversionInternal implements Qonversion {
   Future<void> attribution(Map<dynamic, dynamic> data, QAttributionProvider provider) {
     final args = {
       Constants.kData: data,
-      Constants.kProvider: StringUtils.capitalize(describeEnum(provider)),
+      Constants.kProvider: StringUtils.capitalize(provider.name),
     };
 
     return _channel.invokeMethod(Constants.mAddAttributionData, args);
@@ -339,7 +338,7 @@ class QonversionInternal implements Qonversion {
     }
 
     _channel.invokeMethod(Constants.mSetDefinedUserProperty, {
-      Constants.kProperty: StringUtils.capitalize(describeEnum(property)),
+      Constants.kProperty: StringUtils.capitalize(property.name),
       Constants.kValue: value,
     });
   }

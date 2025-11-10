@@ -1,37 +1,26 @@
 {
   "project_info": {
-    "project_number": "11599271839",
-    "firebase_url": "https://qonversion-sample-app.firebaseio.com",
-    "project_id": "qonversion-sample-app",
-    "storage_bucket": "qonversion-sample-app.appspot.com"
+    "project_number": "176235602178",
+    "project_id": "qonversion-sample-applic-eb8a7",
+    "storage_bucket": "qonversion-sample-applic-eb8a7.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:11599271839:android:134918dd6bba6f6970cfaa",
+        "mobilesdk_app_id": "1:176235602178:android:b090da6fa0510c7192621b",
         "android_client_info": {
-          "package_name": "com.qonversion.sample"
+          "package_name": "io.qonversion.sampleapp"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "11599271839-jg1njos9hp2d07jg7d3oqi523io0pdr6.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyClJuW1Z3_lUnvnsCtjDl-P2vgTLMK39OA"
+          "current_key": "AIzaSyA0fYxEeTDdoXZopKU54FtsN75FAcmZE9U"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "11599271839-jg1njos9hp2d07jg7d3oqi523io0pdr6.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
