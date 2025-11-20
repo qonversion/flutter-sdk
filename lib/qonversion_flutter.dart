@@ -19,6 +19,7 @@ export 'src/dto/purchase_options_builder.dart';
 export 'src/dto/purchase_update_model.dart';
 export 'src/dto/purchase_update_policy.dart';
 export 'src/dto/purchase_exception.dart';
+export 'src/dto/qonversion_exception.dart';
 export 'src/dto/subscription_period.dart';
 export 'src/dto/qonversion_error.dart';
 export 'src/dto/qonversion_error_code.dart';

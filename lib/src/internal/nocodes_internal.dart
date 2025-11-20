@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:qonversion_flutter/src/dto/qonversion_exception.dart';
 import 'package:qonversion_flutter/src/internal/qonversion_internal.dart';
 import '../dto/nocodes_events.dart';
 import '../dto/presentation_config.dart';
@@ -36,7 +37,10 @@ class NoCodesInternal implements NoCodes {
       Constants.kSource: Constants.sdkSource,
       if (config.proxyUrl != null) Constants.kProxyUrl: config.proxyUrl,
     };
-    _channel.invokeMethod(Constants.mInitializeNoCodes, args);
+    // Initialize is fire-and-forget, errors will be handled in subsequent calls
+    _channel.invokeMethod(Constants.mInitializeNoCodes, args).catchError((error) {
+      // Silently ignore initialization errors
+    });
   }
 
   @override
@@ -132,11 +136,19 @@ class NoCodesInternal implements NoCodes {
       return;
     }
     
-    final args = {
-      Constants.kConfig: config.toMap(),
-      if (contextKey != null) Constants.kContextKey: contextKey,
-    };
-    await _channel.invokeMethod(Constants.mSetScreenPresentationConfig, args);
+    try {
+      final args = {
+        Constants.kConfig: config.toMap(),
+        if (contextKey != null) Constants.kContextKey: contextKey,
+      };
+      await _channel.invokeMethod(Constants.mSetScreenPresentationConfig, args);
+    } on PlatformException catch (e) {
+      throw QonversionException(
+        e.code,
+        e.message ?? "",
+        e.details,
+      );
+    }
   }
 
   @override
@@ -145,7 +157,15 @@ class NoCodesInternal implements NoCodes {
       return;
     }
     
-    await _channel.invokeMethod(Constants.mShowNoCodesScreen, {Constants.kContextKey: contextKey});
+    try {
+      await _channel.invokeMethod(Constants.mShowNoCodesScreen, {Constants.kContextKey: contextKey});
+    } on PlatformException catch (e) {
+      throw QonversionException(
+        e.code,
+        e.message ?? "",
+        e.details,
+      );
+    }
   }
 
   @override
@@ -154,6 +174,14 @@ class NoCodesInternal implements NoCodes {
       return;
     }
     
-    await _channel.invokeMethod(Constants.mCloseNoCodes);
+    try {
+      await _channel.invokeMethod(Constants.mCloseNoCodes);
+    } on PlatformException catch (e) {
+      throw QonversionException(
+        e.code,
+        e.message ?? "",
+        e.details,
+      );
+    }
   }
 }
