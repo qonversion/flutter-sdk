@@ -208,7 +208,11 @@ class QonversionInternal implements Qonversion {
 
     final result = QMapper.userFromJson(rawResult);
     if (result == null) {
-      throw new Exception("User deserialization failed");
+      throw QonversionException(
+        QErrorCode.internalError.code,
+        "User deserialization failed",
+        null,
+      );
     }
     return result;
   }
@@ -224,7 +228,11 @@ class QonversionInternal implements Qonversion {
 
     final result = QMapper.userFromJson(rawResult);
     if (result == null) {
-      throw new Exception("User deserialization failed");
+      throw QonversionException(
+        QErrorCode.internalError.code,
+        "User deserialization failed",
+        null,
+      );
     }
     return result;
   }
@@ -238,7 +246,11 @@ class QonversionInternal implements Qonversion {
 
     final result = QMapper.remoteConfigFromJson(rawResult);
     if (result == null) {
-      throw new Exception("Remote config deserialization failed");
+      throw QonversionException(
+        QErrorCode.internalError.code,
+        "Remote config deserialization failed",
+        null,
+      );
     }
     return result;
   }
@@ -249,7 +261,11 @@ class QonversionInternal implements Qonversion {
 
     final result = QMapper.remoteConfigListFromJson(rawResult);
     if (result == null) {
-      throw new Exception("Remote config list deserialization failed");
+      throw QonversionException(
+        QErrorCode.internalError.code,
+        "Remote config list deserialization failed",
+        null,
+      );
     }
     return result;
   }
@@ -267,7 +283,11 @@ class QonversionInternal implements Qonversion {
 
     final result = QMapper.remoteConfigListFromJson(rawResult);
     if (result == null) {
-      throw new Exception("Remote config list deserialization failed");
+      throw QonversionException(
+        QErrorCode.internalError.code,
+        "Remote config list deserialization failed",
+        null,
+      );
     }
     return result;
   }
@@ -351,7 +371,11 @@ class QonversionInternal implements Qonversion {
 
     final result = QMapper.userPropertiesFromJson(rawResult);
     if (result == null) {
-      throw new Exception("User properties deserialization failed");
+      throw QonversionException(
+        QErrorCode.internalError.code,
+        "User properties deserialization failed",
+        null,
+      );
     }
     return result;
   }
