@@ -33,6 +33,7 @@ class QonversionInternal implements Qonversion {
       Constants.kProxyUrl: config.proxyUrl,
       Constants.kKidsMode: config.kidsMode,
     };
+    // Initialize is fire-and-forget, errors will be handled in subsequent calls
     _channel.invokeMethod(Constants.mInitialize, args).catchError((error) {
       // Silently ignore initialization errors
     });
@@ -56,21 +57,13 @@ class QonversionInternal implements Qonversion {
 
   @override
   Future<void> syncHistoricalData() async {
-    try {
-      return await _channel.invokeMethod(Constants.mSyncHistoricalData);
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
-    }
+    return await _invokeMethod(Constants.mSyncHistoricalData);
   }
 
   @override
   Future<void> syncStoreKit2Purchases() async {
     if (Platform.isIOS) {
-      try {
-        return await _channel.invokeMethod(Constants.mSyncStoreKit2Purchases);
-      } on PlatformException catch (e) {
-        throw _convertPlatformException(e);
-      }
+      return await _invokeMethod(Constants.mSyncStoreKit2Purchases);
     }
   }
 
@@ -80,74 +73,60 @@ class QonversionInternal implements Qonversion {
       return null;
     }
 
-    try {
-      final promotionalOfferJson = await _channel.invokeMethod(
-        Constants.mGetPromotionalOffer, {
-          Constants.kProductId: product.qonversionId,
-          Constants.kDiscountId: discount.identifier,
-        }
-      );
+    final promotionalOfferJson = await _invokeMethod(
+      Constants.mGetPromotionalOffer, {
+        Constants.kProductId: product.qonversionId,
+        Constants.kDiscountId: discount.identifier,
+      }
+    );
 
-      final result = QMapper.promotionalOfferFromJson(promotionalOfferJson);
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
-    }
+    final result = QMapper.promotionalOfferFromJson(promotionalOfferJson);
+    return result;
   }
 
   @override
   Future<Map<String, QEntitlement>> purchase(QPurchaseModel purchaseModel) async {
-    try {
-      final rawResult = await _channel
-          .invokeMethod(Constants.mPurchase, {
-            Constants.kProductId: purchaseModel.productId,
-            Constants.kOfferId: purchaseModel.offerId,
-            Constants.kApplyOffer: purchaseModel.applyOffer
-          });
+    final rawResult = await _invokePurchaseMethod(Constants.mPurchase, {
+      Constants.kProductId: purchaseModel.productId,
+      Constants.kOfferId: purchaseModel.offerId,
+      Constants.kApplyOffer: purchaseModel.applyOffer
+    });
 
-      final result = QMapper.entitlementsFromJson(rawResult);
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPurchaseException(e);
-    }
+    final result = QMapper.entitlementsFromJson(rawResult);
+    return result;
   }
 
   @override
   Future<Map<String, QEntitlement>> purchaseProduct(QProduct product, {QPurchaseOptions? purchaseOptions}) async {
-    try {
-      if (purchaseOptions == null) {
-        purchaseOptions = new QPurchaseOptionsBuilder().build();
-      }
-
-      final Map<String, dynamic> promoOfferData = new Map<String, dynamic>();
-      if (purchaseOptions.promotionalOffer != null) {
-        promoOfferData['productDiscountId'] = purchaseOptions.promotionalOffer?.productDiscount.identifier;
-        promoOfferData['keyIdentifier'] = purchaseOptions.promotionalOffer?.paymentDiscount.keyIdentifier;
-        promoOfferData['nonce'] = purchaseOptions.promotionalOffer?.paymentDiscount.nonce;
-        promoOfferData['signature'] = purchaseOptions.promotionalOffer?.paymentDiscount.signature;
-        promoOfferData['timestamp'] = purchaseOptions.promotionalOffer?.paymentDiscount.timestamp;
-      }
-
-      final updatePolicy = purchaseOptions.updatePolicy;
-      final rawResult = await _channel
-          .invokeMethod(Constants.mPurchase, {
-        Constants.kProductId: product.qonversionId,
-        Constants.kOldProductId: purchaseOptions.oldProduct?.qonversionId,
-        Constants.kOfferId: purchaseOptions.offerId,
-        Constants.kApplyOffer: purchaseOptions.applyOffer,
-        Constants.kUpdatePolicyKey: updatePolicy != null
-            ? StringUtils.capitalize(updatePolicy.name)
-            : null,
-        Constants.kPurchaseContextKeys: purchaseOptions.contextKeys,
-        Constants.kPurchaseQuantity: purchaseOptions.quantity,
-        Constants.kPromoOffer: promoOfferData,
-      });
-
-      final result = QMapper.entitlementsFromJson(rawResult);
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPurchaseException(e);
+    if (purchaseOptions == null) {
+      purchaseOptions = new QPurchaseOptionsBuilder().build();
     }
+
+    final Map<String, dynamic> promoOfferData = new Map<String, dynamic>();
+    if (purchaseOptions.promotionalOffer != null) {
+      promoOfferData['productDiscountId'] = purchaseOptions.promotionalOffer?.productDiscount.identifier;
+      promoOfferData['keyIdentifier'] = purchaseOptions.promotionalOffer?.paymentDiscount.keyIdentifier;
+      promoOfferData['nonce'] = purchaseOptions.promotionalOffer?.paymentDiscount.nonce;
+      promoOfferData['signature'] = purchaseOptions.promotionalOffer?.paymentDiscount.signature;
+      promoOfferData['timestamp'] = purchaseOptions.promotionalOffer?.paymentDiscount.timestamp;
+    }
+
+    final updatePolicy = purchaseOptions.updatePolicy;
+    final rawResult = await _invokePurchaseMethod(Constants.mPurchase, {
+      Constants.kProductId: product.qonversionId,
+      Constants.kOldProductId: purchaseOptions.oldProduct?.qonversionId,
+      Constants.kOfferId: purchaseOptions.offerId,
+      Constants.kApplyOffer: purchaseOptions.applyOffer,
+      Constants.kUpdatePolicyKey: updatePolicy != null
+          ? StringUtils.capitalize(updatePolicy.name)
+          : null,
+      Constants.kPurchaseContextKeys: purchaseOptions.contextKeys,
+      Constants.kPurchaseQuantity: purchaseOptions.quantity,
+      Constants.kPromoOffer: promoOfferData,
+    });
+
+    final result = QMapper.entitlementsFromJson(rawResult);
+    return result;
   }
 
   @override
@@ -156,167 +135,119 @@ class QonversionInternal implements Qonversion {
       return null;
     }
 
-    try {
-      final updatePolicy = purchaseUpdateModel.updatePolicy;
+    final updatePolicy = purchaseUpdateModel.updatePolicy;
 
-      final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchase, {
-        Constants.kProductId: purchaseUpdateModel.productId,
-        Constants.kOfferId: purchaseUpdateModel.offerId,
-        Constants.kApplyOffer: purchaseUpdateModel.applyOffer,
-        Constants.kOldProductId: purchaseUpdateModel.oldProductId,
-        Constants.kUpdatePolicyKey: updatePolicy != null
-            ? StringUtils.capitalize(updatePolicy.name)
-            : null,
-      });
-      final result = QMapper.entitlementsFromJson(rawResult);
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPurchaseException(e);
-    }
+    final rawResult = await _invokePurchaseMethod(Constants.mUpdatePurchase, {
+      Constants.kProductId: purchaseUpdateModel.productId,
+      Constants.kOfferId: purchaseUpdateModel.offerId,
+      Constants.kApplyOffer: purchaseUpdateModel.applyOffer,
+      Constants.kOldProductId: purchaseUpdateModel.oldProductId,
+      Constants.kUpdatePolicyKey: updatePolicy != null
+          ? StringUtils.capitalize(updatePolicy.name)
+          : null,
+    });
+    final result = QMapper.entitlementsFromJson(rawResult);
+    return result;
   }
 
   @override
   Future<Map<String, QProduct>> products() async {
-    try {
-      final rawResult = await _channel.invokeMethod(Constants.mProducts);
+    final rawResult = await _invokeMethod(Constants.mProducts);
 
-      final result = QMapper.productsFromJson(rawResult);
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
-    }
+    final result = QMapper.productsFromJson(rawResult);
+    return result;
   }
 
   @override
   Future<QOfferings> offerings() async {
-    try {
-      final offeringsString = await _channel.invokeMethod<String>(Constants.mOfferings);
+    final offeringsString = await _invokeMethod(Constants.mOfferings) as String;
 
-      final result = QMapper.offeringsFromJson(offeringsString);
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
-    }
+    final result = QMapper.offeringsFromJson(offeringsString);
+    return result;
   }
 
   @override
   Future<Map<String, QEligibility>> checkTrialIntroEligibility(List<String> ids) async {
-    try {
-      final eligibilitiesString = await _channel.invokeMethod<String>(
-          Constants.mCheckTrialIntroEligibility, {"ids": ids});
+    final eligibilitiesString = await _invokeMethod(
+        Constants.mCheckTrialIntroEligibility, {"ids": ids}) as String;
 
-      final result = QMapper.eligibilityFromJson(eligibilitiesString);
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
-    }
+    final result = QMapper.eligibilityFromJson(eligibilitiesString);
+    return result;
   }
 
   @override
   Future<Map<String, QEntitlement>> checkEntitlements() async {
-    try {
-      final rawResult = await _channel.invokeMethod(Constants.mCheckEntitlements);
+    final rawResult = await _invokeMethod(Constants.mCheckEntitlements);
 
-      final result = QMapper.entitlementsFromJson(rawResult);
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
-    }
+    final result = QMapper.entitlementsFromJson(rawResult);
+    return result;
   }
 
   @override
   Future<Map<String, QEntitlement>> restore() async {
-    try {
-      final rawResult = await _channel.invokeMethod(Constants.mRestore);
+    final rawResult = await _invokeMethod(Constants.mRestore);
 
-      final result = QMapper.entitlementsFromJson(rawResult);
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
-    }
+    final result = QMapper.entitlementsFromJson(rawResult);
+    return result;
   }
 
   @override
   Future<void> syncPurchases() async {
     if (Platform.isAndroid) {
-      try {
-        return await _channel.invokeMethod(Constants.mSyncPurchases);
-      } on PlatformException catch (e) {
-        throw _convertPlatformException(e);
-      }
+      return await _invokeMethod(Constants.mSyncPurchases);
     }
   }
 
   @override
   Future<QUser> identify(String userId) async {
-    try {
-      final rawResult = await _channel.invokeMethod(Constants.mIdentify, {Constants.kUserId: userId});
+    final rawResult = await _invokeMethod(Constants.mIdentify, {Constants.kUserId: userId});
 
-      final result = QMapper.userFromJson(rawResult);
-      if (result == null) {
-        throw new Exception("User deserialization failed");
-      }
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
+    final result = QMapper.userFromJson(rawResult);
+    if (result == null) {
+      throw new Exception("User deserialization failed");
     }
+    return result;
   }
 
   @override
   Future<void> logout() async {
-    try {
-      return await _channel.invokeMethod(Constants.mLogout);
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
-    }
+    return await _invokeMethod(Constants.mLogout);
   }
 
   @override
   Future<QUser> userInfo() async {
-    try {
-      final rawResult = await _channel.invokeMethod(Constants.mUserInfo);
+    final rawResult = await _invokeMethod(Constants.mUserInfo);
 
-      final result = QMapper.userFromJson(rawResult);
-      if (result == null) {
-        throw new Exception("User deserialization failed");
-      }
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
+    final result = QMapper.userFromJson(rawResult);
+    if (result == null) {
+      throw new Exception("User deserialization failed");
     }
+    return result;
   }
 
   @override
   Future<QRemoteConfig> remoteConfig({String? contextKey}) async {
-    try {
-      final args = {
-        Constants.kContextKey: contextKey,
-      };
-      final rawResult = await _channel.invokeMethod(Constants.mRemoteConfig, args);
+    final args = {
+      Constants.kContextKey: contextKey,
+    };
+    final rawResult = await _invokeMethod(Constants.mRemoteConfig, args);
 
-      final result = QMapper.remoteConfigFromJson(rawResult);
-      if (result == null) {
-        throw new Exception("Remote config deserialization failed");
-      }
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
+    final result = QMapper.remoteConfigFromJson(rawResult);
+    if (result == null) {
+      throw new Exception("Remote config deserialization failed");
     }
+    return result;
   }
 
   @override
   Future<QRemoteConfigList> remoteConfigList() async {
-    try {
-      final rawResult = await _channel.invokeMethod(Constants.mRemoteConfigList);
+    final rawResult = await _invokeMethod(Constants.mRemoteConfigList);
 
-      final result = QMapper.remoteConfigListFromJson(rawResult);
-      if (result == null) {
-        throw new Exception("Remote config list deserialization failed");
-      }
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
+    final result = QMapper.remoteConfigListFromJson(rawResult);
+    if (result == null) {
+      throw new Exception("Remote config list deserialization failed");
     }
+    return result;
   }
 
   @override
@@ -324,100 +255,68 @@ class QonversionInternal implements Qonversion {
       List<String> contextKeys,
       bool includeEmptyContextKey
   ) async {
-    try {
-      final args = {
-        Constants.kContextKeys: contextKeys,
-        Constants.kIncludeEmptyContextKey: includeEmptyContextKey,
-      };
-      final rawResult = await _channel.invokeMethod(Constants.mRemoteConfigListForContextKeys, args);
+    final args = {
+      Constants.kContextKeys: contextKeys,
+      Constants.kIncludeEmptyContextKey: includeEmptyContextKey,
+    };
+    final rawResult = await _invokeMethod(Constants.mRemoteConfigListForContextKeys, args);
 
-      final result = QMapper.remoteConfigListFromJson(rawResult);
-      if (result == null) {
-        throw new Exception("Remote config list deserialization failed");
-      }
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
+    final result = QMapper.remoteConfigListFromJson(rawResult);
+    if (result == null) {
+      throw new Exception("Remote config list deserialization failed");
     }
+    return result;
   }
 
   @override
   Future<void> attachUserToExperiment(String experimentId, String groupId) async {
-    try {
-      final args = {
-        Constants.kExperimentId: experimentId,
-        Constants.kGroupId: groupId,
-      };
-      await _channel.invokeMethod(Constants.mAttachUserToExperiment, args);
-      return;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
-    }
+    final args = {
+      Constants.kExperimentId: experimentId,
+      Constants.kGroupId: groupId,
+    };
+    await _invokeMethod(Constants.mAttachUserToExperiment, args);
   }
 
   @override
   Future<void> detachUserFromExperiment(String experimentId) async {
-    try {
-      final args = {
-        Constants.kExperimentId: experimentId,
-      };
-      await _channel.invokeMethod(Constants.mDetachUserFromExperiment, args);
-      return;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
-    }
+    final args = {
+      Constants.kExperimentId: experimentId,
+    };
+    await _invokeMethod(Constants.mDetachUserFromExperiment, args);
   }
 
   Future<void> attachUserToRemoteConfiguration(String remoteConfigurationId) async {
-    try {
-      final args = {
-        Constants.kRemoteConfigurationId: remoteConfigurationId,
-      };
-      await _channel.invokeMethod(Constants.mAttachUserToRemoteConfiguration, args);
-      return;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
-    }
+    final args = {
+      Constants.kRemoteConfigurationId: remoteConfigurationId,
+    };
+    await _invokeMethod(Constants.mAttachUserToRemoteConfiguration, args);
   }
 
   Future<void> detachUserFromRemoteConfiguration(String remoteConfigurationId) async {
-    try {
-      final args = {
-        Constants.kRemoteConfigurationId: remoteConfigurationId,
-      };
-      await _channel.invokeMethod(Constants.mDetachUserFromRemoteConfiguration, args);
-      return;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
-    }
+    final args = {
+      Constants.kRemoteConfigurationId: remoteConfigurationId,
+    };
+    await _invokeMethod(Constants.mDetachUserFromRemoteConfiguration, args);
   }
 
   Future<bool> isFallbackFileAccessible() async {
-    try {
-      final rawResult = await _channel.invokeMethod(Constants.mIsFallbackFileAccessible);
-      final result = QMapper.mapIsFallbackFileAccessible(rawResult);
-      if (result == null) {
-        return false;
-      }
-
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
+    final rawResult = await _invokeMethod(Constants.mIsFallbackFileAccessible);
+    final result = QMapper.mapIsFallbackFileAccessible(rawResult);
+    if (result == null) {
+      return false;
     }
+
+    return result;
   }
 
   @override
   Future<void> attribution(Map<dynamic, dynamic> data, QAttributionProvider provider) async {
-    try {
-      final args = {
-        Constants.kData: data,
-        Constants.kProvider: StringUtils.capitalize(provider.name),
-      };
+    final args = {
+      Constants.kData: data,
+      Constants.kProvider: StringUtils.capitalize(provider.name),
+    };
 
-      return await _channel.invokeMethod(Constants.mAddAttributionData, args);
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
-    }
+    return await _invokeMethod(Constants.mAddAttributionData, args);
   }
 
   @override
@@ -428,73 +327,49 @@ class QonversionInternal implements Qonversion {
       return;
     }
 
-    try {
-      await _channel.invokeMethod(Constants.mSetDefinedUserProperty, {
-        Constants.kProperty: StringUtils.capitalize(property.name),
-        Constants.kValue: value,
-      });
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
-    }
+    await _invokeMethod(Constants.mSetDefinedUserProperty, {
+      Constants.kProperty: StringUtils.capitalize(property.name),
+      Constants.kValue: value,
+    });
   }
 
   @override
   Future<void> setCustomUserProperty(String property, String value) async {
-    try {
-      return await _channel.invokeMethod(Constants.mSetCustomUserProperty, {
-        Constants.kProperty: property,
-        Constants.kValue: value,
-      });
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
-    }
+    return await _invokeMethod(Constants.mSetCustomUserProperty, {
+      Constants.kProperty: property,
+      Constants.kValue: value,
+    });
   }
 
   @override
   Future<QUserProperties> userProperties() async {
-    try {
-      final rawResult = await _channel.invokeMethod(Constants.mUserProperties);
+    final rawResult = await _invokeMethod(Constants.mUserProperties);
 
-      final result = QMapper.userPropertiesFromJson(rawResult);
-      if (result == null) {
-        throw new Exception("User properties deserialization failed");
-      }
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPlatformException(e);
+    final result = QMapper.userPropertiesFromJson(rawResult);
+    if (result == null) {
+      throw new Exception("User properties deserialization failed");
     }
+    return result;
   }
 
   @override
   Future<void> collectAdvertisingId() async {
     if (Platform.isIOS) {
-      try {
-        return await _channel.invokeMethod(Constants.mCollectAdvertisingId);
-      } on PlatformException catch (e) {
-        throw _convertPlatformException(e);
-      }
+      return await _invokeMethod(Constants.mCollectAdvertisingId);
     }
   }
 
   @override
   Future<void> collectAppleSearchAdsAttribution() async {
     if (Platform.isIOS) {
-      try {
-        return await _channel.invokeMethod(Constants.mCollectAppleSearchAdsAttribution);
-      } on PlatformException catch (e) {
-        throw _convertPlatformException(e);
-      }
+      return await _invokeMethod(Constants.mCollectAppleSearchAdsAttribution);
     }
   }
 
   @override
   Future<void> presentCodeRedemptionSheet() async {
     if (Platform.isIOS) {
-      try {
-        return await _channel.invokeMethod(Constants.mPresentCodeRedemptionSheet);
-      } on PlatformException catch (e) {
-        throw _convertPlatformException(e);
-      }
+      return await _invokeMethod(Constants.mPresentCodeRedemptionSheet);
     }
   }
 
@@ -504,14 +379,10 @@ class QonversionInternal implements Qonversion {
       return null;
     }
 
-    try {
-      final rawResult = await _channel.invokeMethod(
-          Constants.mPromoPurchase, {Constants.kProductId: productId});
-      final result = QMapper.entitlementsFromJson(rawResult);
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPurchaseException(e);
-    }
+    final rawResult = await _invokePurchaseMethod(
+        Constants.mPromoPurchase, {Constants.kProductId: productId});
+    final result = QMapper.entitlementsFromJson(rawResult);
+    return result;
   }
 
   // Private methods
@@ -523,6 +394,25 @@ class QonversionInternal implements Qonversion {
       });
     } on PlatformException catch (e) {
       // Silently ignore errors in SDK info storage
+    }
+  }
+
+  /// Invokes a method on the platform channel and converts PlatformException to QonversionException
+  Future<dynamic> _invokeMethod(String method, [Map<String, dynamic>? arguments]) async {
+    try {
+      return await _channel.invokeMethod(method, arguments);
+    } on PlatformException catch (e) {
+      throw _convertPlatformException(e);
+    }
+  }
+
+  /// Invokes a method on the platform channel and converts PlatformException to QPurchaseException
+  /// Use this for purchase-related methods
+  Future<dynamic> _invokePurchaseMethod(String method, [Map<String, dynamic>? arguments]) async {
+    try {
+      return await _channel.invokeMethod(method, arguments);
+    } on PlatformException catch (e) {
+      throw _convertPurchaseException(e);
     }
   }
 

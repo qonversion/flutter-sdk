@@ -136,19 +136,11 @@ class NoCodesInternal implements NoCodes {
       return;
     }
     
-    try {
-      final args = {
-        Constants.kConfig: config.toMap(),
-        if (contextKey != null) Constants.kContextKey: contextKey,
-      };
-      await _channel.invokeMethod(Constants.mSetScreenPresentationConfig, args);
-    } on PlatformException catch (e) {
-      throw QonversionException(
-        e.code,
-        e.message ?? "",
-        e.details,
-      );
-    }
+    final args = {
+      Constants.kConfig: config.toMap(),
+      if (contextKey != null) Constants.kContextKey: contextKey,
+    };
+    await _invokeMethod(Constants.mSetScreenPresentationConfig, args);
   }
 
   @override
@@ -157,15 +149,7 @@ class NoCodesInternal implements NoCodes {
       return;
     }
     
-    try {
-      await _channel.invokeMethod(Constants.mShowNoCodesScreen, {Constants.kContextKey: contextKey});
-    } on PlatformException catch (e) {
-      throw QonversionException(
-        e.code,
-        e.message ?? "",
-        e.details,
-      );
-    }
+    await _invokeMethod(Constants.mShowNoCodesScreen, {Constants.kContextKey: contextKey});
   }
 
   @override
@@ -174,8 +158,13 @@ class NoCodesInternal implements NoCodes {
       return;
     }
     
+    await _invokeMethod(Constants.mCloseNoCodes);
+  }
+
+  /// Invokes a method on the platform channel and converts PlatformException to QonversionException
+  Future<dynamic> _invokeMethod(String method, [Map<String, dynamic>? arguments]) async {
     try {
-      await _channel.invokeMethod(Constants.mCloseNoCodes);
+      return await _channel.invokeMethod(method, arguments);
     } on PlatformException catch (e) {
       throw QonversionException(
         e.code,
