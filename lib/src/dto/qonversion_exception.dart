@@ -1,5 +1,3 @@
-import 'qonversion_error_code.dart';
-
 /// General Qonversion exception for all non-purchase related errors
 class QonversionException implements Exception {
   /// Qonversion Error Code

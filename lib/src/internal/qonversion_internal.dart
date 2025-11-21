@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer' as developer;
 import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
-import 'package:qonversion_flutter/src/dto/qonversion_exception.dart';
 import 'package:qonversion_flutter/src/internal/mapper.dart';
 import 'package:qonversion_flutter/src/internal/utils/string.dart';
 
@@ -35,7 +35,11 @@ class QonversionInternal implements Qonversion {
     };
     // Initialize is fire-and-forget, errors will be handled in subsequent calls
     _channel.invokeMethod(Constants.mInitialize, args).catchError((error) {
-      // Silently ignore initialization errors
+      developer.log(
+        'Failed to initialize Qonversion: $error',
+        name: 'QonversionFlutter',
+        error: error,
+      );
     });
   }
 
@@ -392,7 +396,7 @@ class QonversionInternal implements Qonversion {
         Constants.kVersion: sdkVersion,
         Constants.kSource: Constants.sdkSource,
       });
-    } on PlatformException catch (e) {
+    } on PlatformException {
       // Silently ignore errors in SDK info storage
     }
   }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:qonversion_flutter/src/dto/qonversion_exception.dart';
@@ -39,7 +40,11 @@ class NoCodesInternal implements NoCodes {
     };
     // Initialize is fire-and-forget, errors will be handled in subsequent calls
     _channel.invokeMethod(Constants.mInitializeNoCodes, args).catchError((error) {
-      // Silently ignore initialization errors
+      developer.log(
+        'Failed to initialize NoCodes: $error',
+        name: 'QonversionFlutter',
+        error: error,
+      );
     });
   }
 
