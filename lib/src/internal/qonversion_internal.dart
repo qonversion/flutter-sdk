@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer' as developer;
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
 import 'package:qonversion_flutter/src/internal/mapper.dart';
@@ -27,13 +27,20 @@ class QonversionInternal implements Qonversion {
 
     final args = {
       Constants.kProjectKey: config.projectKey,
-      Constants.kLaunchMode: StringUtils.capitalize(describeEnum(config.launchMode)),
-      Constants.kEnvironment: StringUtils.capitalize(describeEnum(config.environment)),
-      Constants.kEntitlementsCacheLifetime: StringUtils.capitalize(describeEnum(config.entitlementsCacheLifetime)),
+      Constants.kLaunchMode: StringUtils.capitalize(config.launchMode.name),
+      Constants.kEnvironment: StringUtils.capitalize(config.environment.name),
+      Constants.kEntitlementsCacheLifetime: StringUtils.capitalize(config.entitlementsCacheLifetime.name),
       Constants.kProxyUrl: config.proxyUrl,
       Constants.kKidsMode: config.kidsMode,
     };
-    _channel.invokeMethod(Constants.mInitialize, args);
+    // Initialize is fire-and-forget, errors will be handled in subsequent calls
+    _channel.invokeMethod(Constants.mInitialize, args).catchError((error) {
+      developer.log(
+        'Failed to initialize Qonversion: $error',
+        name: 'QonversionFlutter',
+        error: error,
+      );
+    });
   }
 
   @override
@@ -53,12 +60,14 @@ class QonversionInternal implements Qonversion {
       _promoPurchasesEventChannel.receiveBroadcastStream().cast<String>();
 
   @override
-  Future<void> syncHistoricalData() => _channel.invokeMethod(Constants.mSyncHistoricalData);
+  Future<void> syncHistoricalData() async {
+    return await _invokeMethod(Constants.mSyncHistoricalData);
+  }
 
   @override
   Future<void> syncStoreKit2Purchases() async {
     if (Platform.isIOS) {
-      return _channel.invokeMethod(Constants.mSyncStoreKit2Purchases);
+      return await _invokeMethod(Constants.mSyncStoreKit2Purchases);
     }
   }
 
@@ -68,7 +77,7 @@ class QonversionInternal implements Qonversion {
       return null;
     }
 
-    final promotionalOfferJson = await _channel.invokeMethod(
+    final promotionalOfferJson = await _invokeMethod(
       Constants.mGetPromotionalOffer, {
         Constants.kProductId: product.qonversionId,
         Constants.kDiscountId: discount.identifier,
@@ -81,57 +90,47 @@ class QonversionInternal implements Qonversion {
 
   @override
   Future<Map<String, QEntitlement>> purchase(QPurchaseModel purchaseModel) async {
-    try {
-      final rawResult = await _channel
-          .invokeMethod(Constants.mPurchase, {
-            Constants.kProductId: purchaseModel.productId,
-            Constants.kOfferId: purchaseModel.offerId,
-            Constants.kApplyOffer: purchaseModel.applyOffer
-          });
+    final rawResult = await _invokePurchaseMethod(Constants.mPurchase, {
+      Constants.kProductId: purchaseModel.productId,
+      Constants.kOfferId: purchaseModel.offerId,
+      Constants.kApplyOffer: purchaseModel.applyOffer
+    });
 
-      final result = QMapper.entitlementsFromJson(rawResult);
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPurchaseException(e);
-    }
+    final result = QMapper.entitlementsFromJson(rawResult);
+    return result;
   }
 
   @override
   Future<Map<String, QEntitlement>> purchaseProduct(QProduct product, {QPurchaseOptions? purchaseOptions}) async {
-    try {
-      if (purchaseOptions == null) {
-        purchaseOptions = new QPurchaseOptionsBuilder().build();
-      }
-
-      final Map<String, dynamic> promoOfferData = new Map<String, dynamic>();
-      if (purchaseOptions.promotionalOffer != null) {
-        promoOfferData['productDiscountId'] = purchaseOptions.promotionalOffer?.productDiscount.identifier;
-        promoOfferData['keyIdentifier'] = purchaseOptions.promotionalOffer?.paymentDiscount.keyIdentifier;
-        promoOfferData['nonce'] = purchaseOptions.promotionalOffer?.paymentDiscount.nonce;
-        promoOfferData['signature'] = purchaseOptions.promotionalOffer?.paymentDiscount.signature;
-        promoOfferData['timestamp'] = purchaseOptions.promotionalOffer?.paymentDiscount.timestamp;
-      }
-
-      final updatePolicy = purchaseOptions.updatePolicy;
-      final rawResult = await _channel
-          .invokeMethod(Constants.mPurchase, {
-        Constants.kProductId: product.qonversionId,
-        Constants.kOldProductId: purchaseOptions.oldProduct?.qonversionId,
-        Constants.kOfferId: purchaseOptions.offerId,
-        Constants.kApplyOffer: purchaseOptions.applyOffer,
-        Constants.kUpdatePolicyKey: updatePolicy != null
-            ? StringUtils.capitalize(describeEnum(updatePolicy))
-            : null,
-        Constants.kPurchaseContextKeys: purchaseOptions.contextKeys,
-        Constants.kPurchaseQuantity: purchaseOptions.quantity,
-        Constants.kPromoOffer: promoOfferData,
-      });
-
-      final result = QMapper.entitlementsFromJson(rawResult);
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPurchaseException(e);
+    if (purchaseOptions == null) {
+      purchaseOptions = new QPurchaseOptionsBuilder().build();
     }
+
+    final Map<String, dynamic> promoOfferData = new Map<String, dynamic>();
+    if (purchaseOptions.promotionalOffer != null) {
+      promoOfferData['productDiscountId'] = purchaseOptions.promotionalOffer?.productDiscount.identifier;
+      promoOfferData['keyIdentifier'] = purchaseOptions.promotionalOffer?.paymentDiscount.keyIdentifier;
+      promoOfferData['nonce'] = purchaseOptions.promotionalOffer?.paymentDiscount.nonce;
+      promoOfferData['signature'] = purchaseOptions.promotionalOffer?.paymentDiscount.signature;
+      promoOfferData['timestamp'] = purchaseOptions.promotionalOffer?.paymentDiscount.timestamp;
+    }
+
+    final updatePolicy = purchaseOptions.updatePolicy;
+    final rawResult = await _invokePurchaseMethod(Constants.mPurchase, {
+      Constants.kProductId: product.qonversionId,
+      Constants.kOldProductId: purchaseOptions.oldProduct?.qonversionId,
+      Constants.kOfferId: purchaseOptions.offerId,
+      Constants.kApplyOffer: purchaseOptions.applyOffer,
+      Constants.kUpdatePolicyKey: updatePolicy != null
+          ? StringUtils.capitalize(updatePolicy.name)
+          : null,
+      Constants.kPurchaseContextKeys: purchaseOptions.contextKeys,
+      Constants.kPurchaseQuantity: purchaseOptions.quantity,
+      Constants.kPromoOffer: promoOfferData,
+    });
+
+    final result = QMapper.entitlementsFromJson(rawResult);
+    return result;
   }
 
   @override
@@ -140,28 +139,24 @@ class QonversionInternal implements Qonversion {
       return null;
     }
 
-    try {
-      final updatePolicy = purchaseUpdateModel.updatePolicy;
+    final updatePolicy = purchaseUpdateModel.updatePolicy;
 
-      final rawResult = await _channel.invokeMethod(Constants.mUpdatePurchase, {
-        Constants.kProductId: purchaseUpdateModel.productId,
-        Constants.kOfferId: purchaseUpdateModel.offerId,
-        Constants.kApplyOffer: purchaseUpdateModel.applyOffer,
-        Constants.kOldProductId: purchaseUpdateModel.oldProductId,
-        Constants.kUpdatePolicyKey: updatePolicy != null
-            ? StringUtils.capitalize(describeEnum(updatePolicy))
-            : null,
-      });
-      final result = QMapper.entitlementsFromJson(rawResult);
-      return result;
-    } on PlatformException catch (e) {
-      throw _convertPurchaseException(e);
-    }
+    final rawResult = await _invokePurchaseMethod(Constants.mUpdatePurchase, {
+      Constants.kProductId: purchaseUpdateModel.productId,
+      Constants.kOfferId: purchaseUpdateModel.offerId,
+      Constants.kApplyOffer: purchaseUpdateModel.applyOffer,
+      Constants.kOldProductId: purchaseUpdateModel.oldProductId,
+      Constants.kUpdatePolicyKey: updatePolicy != null
+          ? StringUtils.capitalize(updatePolicy.name)
+          : null,
+    });
+    final result = QMapper.entitlementsFromJson(rawResult);
+    return result;
   }
 
   @override
   Future<Map<String, QProduct>> products() async {
-    final rawResult = await _channel.invokeMethod(Constants.mProducts);
+    final rawResult = await _invokeMethod(Constants.mProducts);
 
     final result = QMapper.productsFromJson(rawResult);
     return result;
@@ -169,7 +164,7 @@ class QonversionInternal implements Qonversion {
 
   @override
   Future<QOfferings> offerings() async {
-    final offeringsString = await _channel.invokeMethod<String>(Constants.mOfferings);
+    final offeringsString = await _invokeMethod(Constants.mOfferings) as String;
 
     final result = QMapper.offeringsFromJson(offeringsString);
     return result;
@@ -177,8 +172,8 @@ class QonversionInternal implements Qonversion {
 
   @override
   Future<Map<String, QEligibility>> checkTrialIntroEligibility(List<String> ids) async {
-    final eligibilitiesString = await _channel.invokeMethod<String>(
-        Constants.mCheckTrialIntroEligibility, {"ids": ids});
+    final eligibilitiesString = await _invokeMethod(
+        Constants.mCheckTrialIntroEligibility, {"ids": ids}) as String;
 
     final result = QMapper.eligibilityFromJson(eligibilitiesString);
     return result;
@@ -186,7 +181,7 @@ class QonversionInternal implements Qonversion {
 
   @override
   Future<Map<String, QEntitlement>> checkEntitlements() async {
-    final rawResult = await _channel.invokeMethod(Constants.mCheckEntitlements);
+    final rawResult = await _invokeMethod(Constants.mCheckEntitlements);
 
     final result = QMapper.entitlementsFromJson(rawResult);
     return result;
@@ -194,7 +189,7 @@ class QonversionInternal implements Qonversion {
 
   @override
   Future<Map<String, QEntitlement>> restore() async {
-    final rawResult = await _channel.invokeMethod(Constants.mRestore);
+    final rawResult = await _invokeMethod(Constants.mRestore);
 
     final result = QMapper.entitlementsFromJson(rawResult);
     return result;
@@ -203,31 +198,41 @@ class QonversionInternal implements Qonversion {
   @override
   Future<void> syncPurchases() async {
     if (Platform.isAndroid) {
-      return _channel.invokeMethod(Constants.mSyncPurchases);
+      return await _invokeMethod(Constants.mSyncPurchases);
     }
   }
 
   @override
   Future<QUser> identify(String userId) async {
-    final rawResult = await _channel.invokeMethod(Constants.mIdentify, {Constants.kUserId: userId});
+    final rawResult = await _invokeMethod(Constants.mIdentify, {Constants.kUserId: userId});
 
     final result = QMapper.userFromJson(rawResult);
     if (result == null) {
-      throw new Exception("User deserialization failed");
+      throw QonversionException(
+        QErrorCode.internalError.code,
+        "User deserialization failed",
+        null,
+      );
     }
     return result;
   }
 
   @override
-  Future<void> logout() => _channel.invokeMethod(Constants.mLogout);
+  Future<void> logout() async {
+    return await _invokeMethod(Constants.mLogout);
+  }
 
   @override
   Future<QUser> userInfo() async {
-    final rawResult = await _channel.invokeMethod(Constants.mUserInfo);
+    final rawResult = await _invokeMethod(Constants.mUserInfo);
 
     final result = QMapper.userFromJson(rawResult);
     if (result == null) {
-      throw new Exception("User deserialization failed");
+      throw QonversionException(
+        QErrorCode.internalError.code,
+        "User deserialization failed",
+        null,
+      );
     }
     return result;
   }
@@ -237,22 +242,30 @@ class QonversionInternal implements Qonversion {
     final args = {
       Constants.kContextKey: contextKey,
     };
-    final rawResult = await _channel.invokeMethod(Constants.mRemoteConfig, args);
+    final rawResult = await _invokeMethod(Constants.mRemoteConfig, args);
 
     final result = QMapper.remoteConfigFromJson(rawResult);
     if (result == null) {
-      throw new Exception("Remote config deserialization failed");
+      throw QonversionException(
+        QErrorCode.internalError.code,
+        "Remote config deserialization failed",
+        null,
+      );
     }
     return result;
   }
 
   @override
   Future<QRemoteConfigList> remoteConfigList() async {
-    final rawResult = await _channel.invokeMethod(Constants.mRemoteConfigList);
+    final rawResult = await _invokeMethod(Constants.mRemoteConfigList);
 
     final result = QMapper.remoteConfigListFromJson(rawResult);
     if (result == null) {
-      throw new Exception("Remote config list deserialization failed");
+      throw QonversionException(
+        QErrorCode.internalError.code,
+        "Remote config list deserialization failed",
+        null,
+      );
     }
     return result;
   }
@@ -266,11 +279,15 @@ class QonversionInternal implements Qonversion {
       Constants.kContextKeys: contextKeys,
       Constants.kIncludeEmptyContextKey: includeEmptyContextKey,
     };
-    final rawResult = await _channel.invokeMethod(Constants.mRemoteConfigListForContextKeys, args);
+    final rawResult = await _invokeMethod(Constants.mRemoteConfigListForContextKeys, args);
 
     final result = QMapper.remoteConfigListFromJson(rawResult);
     if (result == null) {
-      throw new Exception("Remote config list deserialization failed");
+      throw QonversionException(
+        QErrorCode.internalError.code,
+        "Remote config list deserialization failed",
+        null,
+      );
     }
     return result;
   }
@@ -281,8 +298,7 @@ class QonversionInternal implements Qonversion {
       Constants.kExperimentId: experimentId,
       Constants.kGroupId: groupId,
     };
-    await _channel.invokeMethod(Constants.mAttachUserToExperiment, args);
-    return;
+    await _invokeMethod(Constants.mAttachUserToExperiment, args);
   }
 
   @override
@@ -290,28 +306,25 @@ class QonversionInternal implements Qonversion {
     final args = {
       Constants.kExperimentId: experimentId,
     };
-    await _channel.invokeMethod(Constants.mDetachUserFromExperiment, args);
-    return;
+    await _invokeMethod(Constants.mDetachUserFromExperiment, args);
   }
 
   Future<void> attachUserToRemoteConfiguration(String remoteConfigurationId) async {
     final args = {
       Constants.kRemoteConfigurationId: remoteConfigurationId,
     };
-    await _channel.invokeMethod(Constants.mAttachUserToRemoteConfiguration, args);
-    return;
+    await _invokeMethod(Constants.mAttachUserToRemoteConfiguration, args);
   }
 
   Future<void> detachUserFromRemoteConfiguration(String remoteConfigurationId) async {
     final args = {
       Constants.kRemoteConfigurationId: remoteConfigurationId,
     };
-    await _channel.invokeMethod(Constants.mDetachUserFromRemoteConfiguration, args);
-    return;
+    await _invokeMethod(Constants.mDetachUserFromRemoteConfiguration, args);
   }
 
   Future<bool> isFallbackFileAccessible() async {
-    final rawResult = await _channel.invokeMethod(Constants.mIsFallbackFileAccessible);
+    final rawResult = await _invokeMethod(Constants.mIsFallbackFileAccessible);
     final result = QMapper.mapIsFallbackFileAccessible(rawResult);
     if (result == null) {
       return false;
@@ -321,13 +334,13 @@ class QonversionInternal implements Qonversion {
   }
 
   @override
-  Future<void> attribution(Map<dynamic, dynamic> data, QAttributionProvider provider) {
+  Future<void> attribution(Map<dynamic, dynamic> data, QAttributionProvider provider) async {
     final args = {
       Constants.kData: data,
-      Constants.kProvider: StringUtils.capitalize(describeEnum(provider)),
+      Constants.kProvider: StringUtils.capitalize(provider.name),
     };
 
-    return _channel.invokeMethod(Constants.mAddAttributionData, args);
+    return await _invokeMethod(Constants.mAddAttributionData, args);
   }
 
   @override
@@ -338,26 +351,31 @@ class QonversionInternal implements Qonversion {
       return;
     }
 
-    _channel.invokeMethod(Constants.mSetDefinedUserProperty, {
-      Constants.kProperty: StringUtils.capitalize(describeEnum(property)),
+    await _invokeMethod(Constants.mSetDefinedUserProperty, {
+      Constants.kProperty: StringUtils.capitalize(property.name),
       Constants.kValue: value,
     });
   }
 
   @override
-  Future<void> setCustomUserProperty(String property, String value) =>
-      _channel.invokeMethod(Constants.mSetCustomUserProperty, {
-        Constants.kProperty: property,
-        Constants.kValue: value,
-      });
+  Future<void> setCustomUserProperty(String property, String value) async {
+    return await _invokeMethod(Constants.mSetCustomUserProperty, {
+      Constants.kProperty: property,
+      Constants.kValue: value,
+    });
+  }
 
   @override
   Future<QUserProperties> userProperties() async {
-    final rawResult = await _channel.invokeMethod(Constants.mUserProperties);
+    final rawResult = await _invokeMethod(Constants.mUserProperties);
 
     final result = QMapper.userPropertiesFromJson(rawResult);
     if (result == null) {
-      throw new Exception("User properties deserialization failed");
+      throw QonversionException(
+        QErrorCode.internalError.code,
+        "User properties deserialization failed",
+        null,
+      );
     }
     return result;
   }
@@ -365,21 +383,21 @@ class QonversionInternal implements Qonversion {
   @override
   Future<void> collectAdvertisingId() async {
     if (Platform.isIOS) {
-      return _channel.invokeMethod(Constants.mCollectAdvertisingId);
+      return await _invokeMethod(Constants.mCollectAdvertisingId);
     }
   }
 
   @override
   Future<void> collectAppleSearchAdsAttribution() async {
     if (Platform.isIOS) {
-      return _channel.invokeMethod(Constants.mCollectAppleSearchAdsAttribution);
+      return await _invokeMethod(Constants.mCollectAppleSearchAdsAttribution);
     }
   }
 
   @override
   Future<void> presentCodeRedemptionSheet() async {
     if (Platform.isIOS) {
-      return _channel.invokeMethod(Constants.mPresentCodeRedemptionSheet);
+      return await _invokeMethod(Constants.mPresentCodeRedemptionSheet);
     }
   }
 
@@ -389,22 +407,42 @@ class QonversionInternal implements Qonversion {
       return null;
     }
 
+    final rawResult = await _invokePurchaseMethod(
+        Constants.mPromoPurchase, {Constants.kProductId: productId});
+    final result = QMapper.entitlementsFromJson(rawResult);
+    return result;
+  }
+
+  // Private methods
+  Future<void> _storeSdkInfo() async {
     try {
-      final rawResult = await _channel.invokeMethod(
-          Constants.mPromoPurchase, {Constants.kProductId: productId});
-      final result = QMapper.entitlementsFromJson(rawResult);
-      return result;
+      await _channel.invokeMethod(Constants.mStoreSdkInfo, {
+        Constants.kVersion: sdkVersion,
+        Constants.kSource: Constants.sdkSource,
+      });
+    } on PlatformException {
+      // Silently ignore errors in SDK info storage
+    }
+  }
+
+  /// Invokes a method on the platform channel and converts PlatformException to QonversionException
+  Future<dynamic> _invokeMethod(String method, [Map<String, dynamic>? arguments]) async {
+    try {
+      return await _channel.invokeMethod(method, arguments);
+    } on PlatformException catch (e) {
+      throw _convertPlatformException(e);
+    }
+  }
+
+  /// Invokes a method on the platform channel and converts PlatformException to QPurchaseException
+  /// Use this for purchase-related methods
+  Future<dynamic> _invokePurchaseMethod(String method, [Map<String, dynamic>? arguments]) async {
+    try {
+      return await _channel.invokeMethod(method, arguments);
     } on PlatformException catch (e) {
       throw _convertPurchaseException(e);
     }
   }
-
-  // Private methods
-  Future<void> _storeSdkInfo() =>
-      _channel.invokeMethod(Constants.mStoreSdkInfo, {
-        Constants.kVersion: sdkVersion,
-        Constants.kSource: Constants.sdkSource,
-      });
 
   static QPurchaseException _convertPurchaseException(PlatformException error) {
     return QPurchaseException(
@@ -412,6 +450,14 @@ class QonversionInternal implements Qonversion {
         error.message ?? "",
         error.details,
         isUserCancelled: error.code == QErrorCode.purchaseCanceled.code
+    );
+  }
+
+  static QonversionException _convertPlatformException(PlatformException error) {
+    return QonversionException(
+        error.code,
+        error.message ?? "",
+        error.details,
     );
   }
 }

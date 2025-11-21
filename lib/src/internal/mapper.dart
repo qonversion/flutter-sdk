@@ -13,7 +13,6 @@ import '../dto/sk_product/sk_product_discount.dart';
 import '../dto/sk_product/sk_product.dart';
 import '../dto/sk_product/sk_payment_discount.dart';
 import '../dto/sk_product/subscription_period.dart';
-import '../dto/sku_details/sku_details.dart';
 import '../dto/product.dart';
 import '../dto/entitlement.dart';
 import '../dto/offerings.dart';
@@ -202,21 +201,6 @@ class QMapper {
     final map = Map<String, dynamic>.from(json);
 
     return SKPaymentDiscount.fromJson(map);
-  }
-
-  // ignore: deprecated_member_use_from_same_package
-  static SkuDetailsWrapper? skuDetailsFromJson(dynamic json) {
-    if (json == null) return null;
-
-    final map = Map<String, dynamic>.from(json);
-
-    try {
-      // ignore: deprecated_member_use_from_same_package
-      return SkuDetailsWrapper.fromJson(map);
-    } catch (e) {
-      print('Could not parse SkuDetails: $e');
-      return null;
-    }
   }
 
   static QEntitlementGrantType grantTypeFromNullableValue(String? value) {

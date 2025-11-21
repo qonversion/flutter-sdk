@@ -62,9 +62,9 @@
    "type": 2
   },
   {
-   "id": "subs_plus_trial",
+   "id": "semi-premium",
    "duration": 1,
-   "store_id": "gp5_test_subscription_4",
+   "store_id": "semi_premium",
    "type": 0
   },
   {
@@ -138,8 +138,9 @@
    "plus"
   ],
   "consumable": [],
-  "subs_plus_trial": [
-   "standart"
+  "semi-premium": [
+   "premium",
+   "semi_premium"
   ],
   "annual": [
    "standart",

@@ -41,6 +41,7 @@ const _$QErrorCodeEnumMap = {
   QErrorCode.launchError: 'LaunchError',
   QErrorCode.networkConnectionFailed: 'NetworkConnectionFailed',
   QErrorCode.offeringsNotFound: 'OfferingsNotFound',
+  QErrorCode.offeringsNotAvailable: 'OfferingsNotAvailable',
   QErrorCode.paymentInvalid: 'PaymentInvalid',
   QErrorCode.paymentNotAllowed: 'PaymentNotAllowed',
   QErrorCode.playStoreError: 'PlayStoreError',

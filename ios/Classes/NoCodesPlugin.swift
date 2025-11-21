@@ -71,7 +71,8 @@ public class NoCodesPlugin: NSObject {
             noCodesSandwich = NoCodesSandwich(noCodesEventListener: self)
         }
         
-        noCodesSandwich?.initialize(projectKey: projectKey)
+        let proxyUrl = args["proxyUrl"] as? String
+        noCodesSandwich?.initialize(projectKey: projectKey, proxyUrl: proxyUrl)
         result(nil)
     }
     
