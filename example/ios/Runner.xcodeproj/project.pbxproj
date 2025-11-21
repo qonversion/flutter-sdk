@@ -267,14 +267,12 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/NoCodes/NoCodes.framework",
 				"${BUILT_PRODUCTS_DIR}/Qonversion/Qonversion.framework",
 				"${BUILT_PRODUCTS_DIR}/QonversionSandwich/QonversionSandwich.framework",
 				"${BUILT_PRODUCTS_DIR}/qonversion_flutter/qonversion_flutter.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NoCodes.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Qonversion.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QonversionSandwich.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/qonversion_flutter.framework",

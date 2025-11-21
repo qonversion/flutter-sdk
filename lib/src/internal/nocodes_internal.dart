@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:qonversion_flutter/src/dto/qonversion_exception.dart';
 import 'package:qonversion_flutter/src/internal/qonversion_internal.dart';
 import '../dto/nocodes_events.dart';
 import '../dto/presentation_config.dart';
@@ -34,8 +36,16 @@ class NoCodesInternal implements NoCodes {
       Constants.kProjectKey: config.projectKey,
       Constants.kVersion: QonversionInternal.sdkVersion,
       Constants.kSource: Constants.sdkSource,
+      if (config.proxyUrl != null) Constants.kProxyUrl: config.proxyUrl,
     };
-    _channel.invokeMethod(Constants.mInitializeNoCodes, args);
+    // Initialize is fire-and-forget, errors will be handled in subsequent calls
+    _channel.invokeMethod(Constants.mInitializeNoCodes, args).catchError((error) {
+      developer.log(
+        'Failed to initialize NoCodes: $error',
+        name: 'QonversionFlutter',
+        error: error,
+      );
+    });
   }
 
   @override
@@ -135,7 +145,7 @@ class NoCodesInternal implements NoCodes {
       Constants.kConfig: config.toMap(),
       if (contextKey != null) Constants.kContextKey: contextKey,
     };
-    await _channel.invokeMethod(Constants.mSetScreenPresentationConfig, args);
+    await _invokeMethod(Constants.mSetScreenPresentationConfig, args);
   }
 
   @override
@@ -144,7 +154,7 @@ class NoCodesInternal implements NoCodes {
       return;
     }
     
-    await _channel.invokeMethod(Constants.mShowNoCodesScreen, {Constants.kContextKey: contextKey});
+    await _invokeMethod(Constants.mShowNoCodesScreen, {Constants.kContextKey: contextKey});
   }
 
   @override
@@ -153,6 +163,19 @@ class NoCodesInternal implements NoCodes {
       return;
     }
     
-    await _channel.invokeMethod(Constants.mCloseNoCodes);
+    await _invokeMethod(Constants.mCloseNoCodes);
+  }
+
+  /// Invokes a method on the platform channel and converts PlatformException to QonversionException
+  Future<dynamic> _invokeMethod(String method, [Map<String, dynamic>? arguments]) async {
+    try {
+      return await _channel.invokeMethod(method, arguments);
+    } on PlatformException catch (e) {
+      throw QonversionException(
+        e.code,
+        e.message ?? "",
+        e.details,
+      );
+    }
   }
 }

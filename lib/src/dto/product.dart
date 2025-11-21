@@ -8,7 +8,6 @@ import 'product_type.dart';
 import 'purchase_model.dart';
 import 'purchase_update_model.dart';
 import 'sk_product/sk_product.dart';
-import 'sku_details/sku_details.dart';
 import 'sk_product/sk_product_discount.dart';
 import '../internal/mapper.dart';
 import 'subscription_period.dart';
@@ -36,14 +35,6 @@ class QProduct {
 
   /// Google Play Store details of this product.
   /// Android only. Null for iOS, or if the product was not found.
-  /// Doesn't take into account [basePlanId].
-  /// @deprecated Consider using [storeDetails] instead.
-  @JsonKey(name: 'skuDetails', fromJson: QMapper.skuDetailsFromJson)
-  // ignore: deprecated_member_use_from_same_package
-  final SkuDetailsWrapper? skuDetails;
-
-  /// Google Play Store details of this product.
-  /// Android only. Null for iOS, or if the product was not found.
   @JsonKey(name: 'storeDetails', fromJson: QMapper.storeProductDetailsFromJson)
   final QProductStoreDetails? storeDetails;
 
@@ -57,8 +48,7 @@ class QProduct {
   @JsonKey(name: 'offeringId')
   final String? offeringId;
 
-  /// For Android - the subscription base plan duration. If the [basePlanId] is not specified,
-  /// the duration is calculated using the deprecated [skuDetails].
+  /// For Android - the subscription base plan duration from [storeDetails].
   /// For iOS - the duration of the [skProduct].
   /// Null, if it's not a subscription product or the product was not found in the store.
   @JsonKey(name: 'subscriptionPeriod', fromJson: QMapper.subscriptionPeriodFromJson)
@@ -72,8 +62,7 @@ class QProduct {
   final QSubscriptionPeriod? trialPeriod;
 
   /// The calculated type of this product based on the store information.
-  /// On Android uses deprecated [skuDetails] for the old subscription products
-  /// where [basePlanId] is not specified, and [storeDetails] for all the other products.
+  /// On Android uses [storeDetails] for product information.
   /// On iOS uses [skProduct] information.
   @JsonKey(name: 'type', unknownEnumValue: QProductType.unknown)
   final QProductType type;
@@ -106,7 +95,6 @@ class QProduct {
       this.qonversionId,
       this.storeId,
       this.basePlanId,
-      this.skuDetails,
       this.storeDetails,
       this.skProduct,
       this.offeringId,
@@ -115,7 +103,6 @@ class QProduct {
       this.type,
       this.prettyPrice,
     ) {
-    final skuDetails = this.skuDetails;
     final storeDetails = this.storeDetails;
     final skProduct = this.skProduct;
 
@@ -130,38 +117,21 @@ class QProduct {
       if (introPrice != null && currencySymbol != null) {
         prettyIntroductoryPrice = currencySymbol + introPrice.price;
       }
-    } else {
+    } else if (storeDetails != null) {
+      storeTitle = storeDetails.title;
+      storeDescription = storeDetails.description;
+
+      final QProductOfferDetails? defaultOffer = storeDetails.defaultSubscriptionOfferDetails;
+      final QProductInAppDetails? inAppOffer = storeDetails.inAppOfferDetails;
       var priceMicros;
-      if (skuDetails != null) {
-        storeTitle = skuDetails.title;
-        storeDescription = skuDetails.description;
-
-        priceMicros = skuDetails.priceAmountMicros;
-        currencyCode = skuDetails.priceCurrencyCode;
-
-        final String? introPrice = skuDetails.introductoryPrice;
-        if (introPrice != null && introPrice.isEmpty) {
-          prettyIntroductoryPrice = null;
-        } else {
-          prettyIntroductoryPrice = introPrice;
-        }
-      }
-
-      if (storeDetails != null) {
-        storeTitle = storeDetails.title;
-        storeDescription = storeDetails.description;
-
-        final QProductOfferDetails? defaultOffer = storeDetails.defaultSubscriptionOfferDetails;
-        final QProductInAppDetails? inAppOffer = storeDetails.inAppOfferDetails;
-        if (defaultOffer != null) {
-          priceMicros = defaultOffer.basePlan?.price.priceAmountMicros;
-          currencyCode = defaultOffer.basePlan?.price.priceCurrencyCode;
-          prettyIntroductoryPrice = defaultOffer.introPhase?.price.formattedPrice;
-        } else if (inAppOffer != null) {
-          priceMicros = inAppOffer.price.priceAmountMicros;
-          currencyCode = inAppOffer.price.priceCurrencyCode;
-          prettyIntroductoryPrice = null;
-        }
+      if (defaultOffer != null) {
+        priceMicros = defaultOffer.basePlan?.price.priceAmountMicros;
+        currencyCode = defaultOffer.basePlan?.price.priceCurrencyCode;
+        prettyIntroductoryPrice = defaultOffer.introPhase?.price.formattedPrice;
+      } else if (inAppOffer != null) {
+        priceMicros = inAppOffer.price.priceAmountMicros;
+        currencyCode = inAppOffer.price.priceCurrencyCode;
+        prettyIntroductoryPrice = null;
       }
 
       price = priceMicros == null

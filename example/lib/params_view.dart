@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qonversion_flutter/qonversion_flutter.dart';
 
@@ -62,7 +61,7 @@ class ParamsView extends StatelessWidget {
             ),
             for (final v in QUserPropertyKey.values)
               TextButton(
-                child: Text('Set ${describeEnum(v)}'),
+                child: Text('Set ${v.name}'),
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all(Colors.purple),
                   foregroundColor: WidgetStateProperty.all(Colors.white),

@@ -8,3 +8,7 @@ build/
 .idea
 
 lib/*.jar
+
+# Local configuration files
+local.properties
+**/local.properties
