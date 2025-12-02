@@ -1,3 +1,12 @@
+## 11.0.0
+* No-Codes are now stable! This release brings lots of crucial features: 
+    * [No-Code screens preloading](https://documentation.qonversion.io/update/docs/screens-preloading#/) support,
+    * [Fallback files](https://documentation.qonversion.io/update/docs/fallbacks#/) support,
+    * Skeleton loading support for both platforms,
+    * Proxy URL support for No-Code requests.
+* Custom `QonversionException` added for all the Qonversion and No-Codes calls.
+* Upgraded Google Billing version to 8.1.0
+
 ## 10.0.3
 * Fixed `Purchase` action type for No-Codes event on Android.
 

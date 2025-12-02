@@ -1,7 +1,7 @@
 def update_dart(new_version)
   path = Dir['../lib/**/qonversion_internal.dart'].first
-  regex = /static const String _sdkVersion = ".*";/
-  result_value = "static const String _sdkVersion = \"#{new_version}\";"
+  regex = /static const String sdkVersion = ".*";/
+  result_value = "static const String sdkVersion = \"#{new_version}\";"
 
   update_file(path, regex, result_value)
 end
