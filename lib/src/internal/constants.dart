@@ -43,6 +43,7 @@ class Constants {
   static const mProducts = 'products';
   static const mGetPromotionalOffer = 'getPromotionalOffer';
   static const mPurchase = 'purchase';
+  static const mPurchaseWithResult = 'purchaseWithResult';
   static const mPromoPurchase = 'promoPurchase';
   static const mUpdatePurchase = 'updatePurchase';
   static const mCheckEntitlements = 'checkEntitlements';

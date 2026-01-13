@@ -115,6 +115,9 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     case "purchase":
       return purchase(args, result)
 
+    case "purchaseWithResult":
+      return purchaseWithResult(args, result)
+
     case "promoPurchase":
       return promoPurchase(args["productId"] as? String, result)
 
@@ -223,6 +226,18 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     let promoOfferData = args["promoOffer"] as? [String: Any] ?? [:]
     
     qonversionSandwich?.purchase(productId, quantity:quantity, contextKeys:contextKeys, promoOffer:promoOfferData, completion:getJsonCompletion(result))
+  }
+  
+  private func purchaseWithResult(_ args: [String: Any], _ result: @escaping FlutterResult) {
+    guard let productId = args["productId"] as? String else {
+      return result(FlutterError.noNecessaryData)
+    }
+
+    let contextKeys = args["contextKeys"] as? [String] ?? []
+    let quantity = args["quantity"] as? Int ?? 1
+    let promoOfferData = args["promoOffer"] as? [String: Any] ?? [:]
+    
+    qonversionSandwich?.purchaseWithResult(productId, quantity:quantity, contextKeys:contextKeys, promoOffer:promoOfferData, completion:getJsonCompletion(result))
   }
   
   private func promoPurchase(_ productId: String?, _ result: @escaping FlutterResult) {
