@@ -61,12 +61,32 @@ abstract class Qonversion {
   Future<QPromotionalOffer?> getPromotionalOffer(QProduct product, SKProductDiscount discount);
 
   /// Make a purchase and validate it through server-to-server using Qonversion's Backend.
+  /// This method returns a [QPurchaseResult] containing detailed information about the purchase,
+  /// including the status, entitlements, error (if any), and store transaction details.
+  ///
+  /// [product] product to purchase.
+  /// [options] additional options for the purchase process.
+  ///
+  /// Returns [QPurchaseResult] containing:
+  /// - [QPurchaseResult.status] - the status of the purchase (success, userCanceled, pending, error)
+  /// - [QPurchaseResult.entitlements] - the user's entitlements after the purchase
+  /// - [QPurchaseResult.error] - error details if the purchase failed
+  /// - [QPurchaseResult.storeTransaction] - raw store transaction information
+  ///
+  /// Unlike [purchaseProduct], this method does not throw exceptions for purchase errors.
+  /// Instead, check [QPurchaseResult.status] to determine the outcome.
+  ///
+  /// See [Making Purchases](https://documentation.qonversion.io/docs/making-purchases)
+  Future<QPurchaseResult> purchaseWithResult(QProduct product, {QPurchaseOptions? purchaseOptions});
+
+  /// Make a purchase and validate it through server-to-server using Qonversion's Backend.
   /// [purchaseModel] necessary information for purchase.
   ///
   /// Returns the promise with the user entitlements including the ones obtained by the purchase.
   /// Throws [QPurchaseException] in case of error in purchase flow.
   ///
   /// See [Making Purchases](https://documentation.qonversion.io/docs/making-purchases)
+  @Deprecated('Use purchaseWithResult instead')
   Future<Map<String, QEntitlement>> purchase(QPurchaseModel purchaseModel);
 
   /// Make a purchase and validate it through server-to-server using Qonversion's Backend
@@ -74,6 +94,7 @@ abstract class Qonversion {
   /// [options] additional options for the purchase process.
   /// Returns the promise with the user entitlements including the ones obtained by the purchase.
   /// Throws [QPurchaseException] in case of error in purchase flow.
+  @Deprecated('Use purchaseWithResult instead')
   Future<Map<String, QEntitlement>> purchaseProduct(QProduct product, {QPurchaseOptions? purchaseOptions});
 
   /// Android only. Returns `null` if called on iOS.

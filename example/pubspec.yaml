@@ -1,5 +1,5 @@
 name: qonversion_example
-description: Demonstrates how to use the qonversion plugin.
+description: Demonstrates how to use the Qonversion SDK.
 
 publish_to: 'none'
 
@@ -12,16 +12,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-    
+  provider: ^6.1.2
+  qonversion_flutter:
+    path: ../
+
 dependency_overrides:
   firebase_core_platform_interface: 4.5.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  qonversion_flutter:
-    path: ../
 
 flutter:
   uses-material-design: true
