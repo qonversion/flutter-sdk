@@ -17,6 +17,7 @@ class Constants {
   static const kOldProductId = 'oldProductId';
   static const kUpdatePolicyKey = 'updatePolicyKey';
   static const kError = 'error';
+  static const kErrorMessage = 'errorMessage';
   static const kIsCancelled = 'is_cancelled';
   static const kEntitlements = 'entitlements';
   static const kProperty = 'property';
@@ -78,6 +79,11 @@ class Constants {
   static const mShowNoCodesScreen = 'showNoCodesScreen';
   static const mCloseNoCodes = 'closeNoCodes';
   static const mSetNoCodesLocale = 'setNoCodesLocale';
+  static const mSetNoCodesPurchaseDelegate = 'setNoCodesPurchaseDelegate';
+  static const mDelegatedPurchaseCompleted = 'delegatedPurchaseCompleted';
+  static const mDelegatedPurchaseFailed = 'delegatedPurchaseFailed';
+  static const mDelegatedRestoreCompleted = 'delegatedRestoreCompleted';
+  static const mDelegatedRestoreFailed = 'delegatedRestoreFailed';
 
   // Other constants
   static const skuDetailsPriceRatio = 1000000;

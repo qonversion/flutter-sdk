@@ -51,6 +51,7 @@ export 'src/dto/store_product/product_store_details.dart';
 export 'src/nocodes.dart';
 export 'src/nocodes_config.dart';
 export 'src/nocodes_config_builder.dart';
+export 'src/nocodes_purchase_delegate.dart';
 export 'src/qonversion.dart';
 export 'src/qonversion_config.dart';
 export 'src/qonversion_config_builder.dart';

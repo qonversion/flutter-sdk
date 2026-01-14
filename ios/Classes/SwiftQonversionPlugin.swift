@@ -95,6 +95,18 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       noCodesPlugin?.close(result)
       return result(nil)
       
+    case "setNoCodesPurchaseDelegate":
+      noCodesPlugin?.setPurchaseDelegate(result)
+      return
+      
+    case "delegatedPurchaseCompleted":
+      noCodesPlugin?.delegatedPurchaseCompleted(result)
+      return
+      
+    case "delegatedRestoreCompleted":
+      noCodesPlugin?.delegatedRestoreCompleted(result)
+      return
+      
     default:
       break
     }
@@ -171,6 +183,14 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       
     case "setNoCodesLocale":
       noCodesPlugin?.setLocale(args["locale"] as? String, result)
+      return
+      
+    case "delegatedPurchaseFailed":
+      noCodesPlugin?.delegatedPurchaseFailed(args, result)
+      return
+      
+    case "delegatedRestoreFailed":
+      noCodesPlugin?.delegatedRestoreFailed(args, result)
       return
 
     default:
