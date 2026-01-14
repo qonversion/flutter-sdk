@@ -1,3 +1,9 @@
+## 11.1.0
+* No-Codes can now be used with your [custom purchase system](https://documentation.qonversion.io/docs/using-no-codes-with-custom-purchases-handling), even if you use Qonversion in Analytics mode,
+* You can now provide a custom locale to No-Codes to override the system one,
+* The new purchase method with comprehensive results added - with the status, entitlements, and store transaction info. Consider upgrading your purchases to the new method,
+* The sample application was fully reworked and became more comprehensive and useful.
+
 ## 11.0.0
 * No-Codes are now stable! This release brings lots of crucial features: 
     * [No-Code screens preloading](https://documentation.qonversion.io/update/docs/screens-preloading#/) support,
