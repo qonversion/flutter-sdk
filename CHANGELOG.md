@@ -1,3 +1,6 @@
+## 11.1.0
+* // Update changelog here
+
 ## 11.0.0
 * No-Codes are now stable! This release brings lots of crucial features: 
     * [No-Code screens preloading](https://documentation.qonversion.io/update/docs/screens-preloading#/) support,
