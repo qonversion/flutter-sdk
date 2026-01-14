@@ -111,7 +111,23 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "remoteConfigList" -> {
                 return remoteConfigList(result)
             }
-            "closeNoCodes" -> noCodesPlugin?.closeNoCodes(result)
+            "closeNoCodes" -> {
+                noCodesPlugin?.closeNoCodes(result)
+                return
+            }
+            // NoCodes Purchase Delegate methods without args
+            "setNoCodesPurchaseDelegate" -> {
+                noCodesPlugin?.setPurchaseDelegate(result)
+                return
+            }
+            "delegatedPurchaseCompleted" -> {
+                noCodesPlugin?.delegatedPurchaseCompleted(result)
+                return
+            }
+            "delegatedRestoreCompleted" -> {
+                noCodesPlugin?.delegatedRestoreCompleted(result)
+                return
+            }
         }
 
         // Methods with args
@@ -119,6 +135,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         when (call.method) {
             "initialize" -> initialize(args, result)
             "purchase" -> purchase(args, result)
+            "purchaseWithResult" -> purchaseWithResult(args, result)
             "updatePurchase" -> updatePurchase(args, result)
             "remoteConfig" -> remoteConfig(args["contextKey"] as? String, result)
             "remoteConfigListForContextKeys" -> remoteConfigList(args, result)
@@ -136,6 +153,10 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "initializeNoCodes" -> noCodesPlugin?.initializeNoCodes(args, result)
             "setScreenPresentationConfig" -> noCodesPlugin?.setScreenPresentationConfig(args["config"] as? Map<String, Any>, args["contextKey"] as? String, result)
             "showNoCodesScreen" -> noCodesPlugin?.showNoCodesScreen(args["contextKey"] as? String, result)
+            "setNoCodesLocale" -> noCodesPlugin?.setLocale(args["locale"] as? String, result)
+            // NoCodes Purchase Delegate methods
+            "delegatedPurchaseFailed" -> noCodesPlugin?.delegatedPurchaseFailed(args["errorMessage"] as? String, result)
+            "delegatedRestoreFailed" -> noCodesPlugin?.delegatedRestoreFailed(args["errorMessage"] as? String, result)
             else -> result.notImplemented()
         }
     }
@@ -172,6 +193,27 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         val contextKeys = args["contextKeys"] as? List<String>
 
         qonversionSandwich.purchase(
+            productId,
+            offerId,
+            applyOffer,
+            oldProductId,
+            updatePolicyKey,
+            contextKeys,
+            result.toJsonResultListener()
+        )
+    }
+
+    private fun purchaseWithResult(args: Map<String, Any>, result: Result) {
+        val productId = args["productId"] as? String ?: return result.noNecessaryDataError()
+        val oldProductId = args["oldProductId"] as? String
+        val offerId = args["offerId"] as? String
+        val applyOffer = args["applyOffer"] as? Boolean
+        val updatePolicyKey = args["updatePolicyKey"] as? String
+
+        @Suppress("UNCHECKED_CAST")
+        val contextKeys = args["contextKeys"] as? List<String>
+
+        qonversionSandwich.purchaseWithResult(
             productId,
             offerId,
             applyOffer,

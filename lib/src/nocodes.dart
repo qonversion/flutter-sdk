@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dto/nocodes_events.dart';
 import 'dto/presentation_config.dart';
 import 'nocodes_config.dart';
+import 'nocodes_purchase_delegate.dart';
 import 'internal/nocodes_internal.dart';
 
 /// Main No-Codes API class
@@ -99,5 +100,26 @@ abstract class NoCodes {
   /// 
   /// **Platform Support:** iOS and Android. No-op on macOS.
   Future<void> close();
+
+  /// Set the locale for No-Code screens.
+  /// Use this to override the device locale for the No-Codes SDK.
+  /// Pass null to reset to the device default locale.
+  ///
+  /// **Platform Support:** iOS and Android. No-op on macOS.
+  ///
+  /// [locale] the locale to use (e.g. "en", "de", "fr"), or null to reset to device default.
+  Future<void> setLocale(String? locale);
+
+  /// Set a delegate for custom purchase and restore handling.
+  /// When this delegate is provided, it replaces the default Qonversion SDK purchase flow.
+  ///
+  /// The delegate's [NoCodesPurchaseDelegate.purchase] method will be called when a purchase
+  /// is initiated from a No-Code screen. The delegate's [NoCodesPurchaseDelegate.restore]
+  /// method will be called when a restore is initiated from a No-Code screen.
+  ///
+  /// **Platform Support:** iOS and Android. No-op on macOS.
+  ///
+  /// [delegate] the delegate to handle purchase and restore operations.
+  Future<void> setPurchaseDelegate(NoCodesPurchaseDelegate delegate);
 
 } 

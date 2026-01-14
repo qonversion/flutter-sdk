@@ -18,12 +18,18 @@ public class NoCodesPlugin: NSObject {
     private let eventActionFailed = "nocodes_action_failed"
     private let eventActionFinished = "nocodes_action_finished"
     private let eventScreenFailedToLoad = "nocodes_screen_failed_to_load"
+    private let eventPurchase = "nocodes_purchase"
+    private let eventRestore = "nocodes_restore"
+    
     private var screenShownEventStreamHandler: BaseEventStreamHandler?
     private var finishedEventStreamHandler: BaseEventStreamHandler?
     private var actionStartedEventStreamHandler: BaseEventStreamHandler?
     private var actionFailedEventStreamHandler: BaseEventStreamHandler?
     private var actionFinishedEventStreamHandler: BaseEventStreamHandler?
     private var screenFailedToLoadEventStreamHandler: BaseEventStreamHandler?
+    private var purchaseEventStreamHandler: BaseEventStreamHandler?
+    private var restoreEventStreamHandler: BaseEventStreamHandler?
+    
     private var noCodesSandwich: NoCodesSandwich?
     
     public func register(_ registrar: FlutterPluginRegistrar) {
@@ -59,6 +65,17 @@ public class NoCodesPlugin: NSObject {
             self.screenFailedToLoadEventStreamHandler = eventStreamHandler
         }
         
+        // Register purchase delegate event channels
+        let purchaseListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: eventPurchase)
+        purchaseListener.register() { eventStreamHandler in
+            self.purchaseEventStreamHandler = eventStreamHandler
+        }
+        
+        let restoreListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: eventRestore)
+        restoreListener.register() { eventStreamHandler in
+            self.restoreEventStreamHandler = eventStreamHandler
+        }
+        
     }
     
     public func initialize(_ args: [String: Any]?, _ result: @escaping FlutterResult) {
@@ -72,7 +89,8 @@ public class NoCodesPlugin: NSObject {
         }
         
         let proxyUrl = args["proxyUrl"] as? String
-        noCodesSandwich?.initialize(projectKey: projectKey, proxyUrl: proxyUrl)
+        let locale = args["locale"] as? String
+        noCodesSandwich?.initialize(projectKey: projectKey, proxyUrl: proxyUrl, locale: locale)
         result(nil)
     }
     
@@ -100,6 +118,40 @@ public class NoCodesPlugin: NSObject {
     
     @MainActor public func close(_ result: @escaping FlutterResult) {
         noCodesSandwich?.close()
+        result(nil)
+    }
+    
+    public func setLocale(_ locale: String?, _ result: @escaping FlutterResult) {
+        noCodesSandwich?.setLocale(locale)
+        result(nil)
+    }
+    
+    // MARK: - Purchase Delegate Methods
+    
+    public func setPurchaseDelegate(_ result: @escaping FlutterResult) {
+        noCodesSandwich?.setPurchaseDelegate(self)
+        result(nil)
+    }
+    
+    public func delegatedPurchaseCompleted(_ result: @escaping FlutterResult) {
+        noCodesSandwich?.delegatedPurchaseCompleted()
+        result(nil)
+    }
+    
+    public func delegatedPurchaseFailed(_ args: [String: Any]?, _ result: @escaping FlutterResult) {
+        let errorMessage = args?["errorMessage"] as? String ?? "Unknown error"
+        noCodesSandwich?.delegatedPurchaseFailed(errorMessage)
+        result(nil)
+    }
+    
+    public func delegatedRestoreCompleted(_ result: @escaping FlutterResult) {
+        noCodesSandwich?.delegatedRestoreCompleted()
+        result(nil)
+    }
+    
+    public func delegatedRestoreFailed(_ args: [String: Any]?, _ result: @escaping FlutterResult) {
+        let errorMessage = args?["errorMessage"] as? String ?? "Unknown error"
+        noCodesSandwich?.delegatedRestoreFailed(errorMessage)
         result(nil)
     }
 }
@@ -143,4 +195,25 @@ extension NoCodesPlugin: NoCodesEventListener {
             }
         }
     }
-} 
+}
+
+extension NoCodesPlugin: NoCodesPurchaseDelegateBridge {
+    public func purchase(_ product: [String: Any]) {
+        // Convert product to JSON string and send to Flutter
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: product),
+              let jsonString = String(data: jsonData, encoding: .utf8) else {
+            print("NoCodesPlugin: Failed to serialize product data to JSON")
+            return
+        }
+        
+        DispatchQueue.main.async {
+            self.purchaseEventStreamHandler?.eventSink?(jsonString)
+        }
+    }
+    
+    public func restore() {
+        DispatchQueue.main.async {
+            self.restoreEventStreamHandler?.eventSink?("restore")
+        }
+    }
+}

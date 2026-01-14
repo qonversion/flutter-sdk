@@ -11,7 +11,7 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String sdkVersion = "11.0.0";
+  static const String sdkVersion = "11.1.0";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
@@ -88,6 +88,7 @@ class QonversionInternal implements Qonversion {
     return result;
   }
 
+  @Deprecated('Use purchaseWithResult instead')
   @override
   Future<Map<String, QEntitlement>> purchase(QPurchaseModel purchaseModel) async {
     final rawResult = await _invokePurchaseMethod(Constants.mPurchase, {
@@ -100,6 +101,7 @@ class QonversionInternal implements Qonversion {
     return result;
   }
 
+  @Deprecated('Use purchaseWithResult instead')
   @override
   Future<Map<String, QEntitlement>> purchaseProduct(QProduct product, {QPurchaseOptions? purchaseOptions}) async {
     if (purchaseOptions == null) {
@@ -130,6 +132,46 @@ class QonversionInternal implements Qonversion {
     });
 
     final result = QMapper.entitlementsFromJson(rawResult);
+    return result;
+  }
+
+  @override
+  Future<QPurchaseResult> purchaseWithResult(QProduct product, {QPurchaseOptions? purchaseOptions}) async {
+    if (purchaseOptions == null) {
+      purchaseOptions = new QPurchaseOptionsBuilder().build();
+    }
+
+    final Map<String, dynamic> promoOfferData = new Map<String, dynamic>();
+    if (purchaseOptions.promotionalOffer != null) {
+      promoOfferData['productDiscountId'] = purchaseOptions.promotionalOffer?.productDiscount.identifier;
+      promoOfferData['keyIdentifier'] = purchaseOptions.promotionalOffer?.paymentDiscount.keyIdentifier;
+      promoOfferData['nonce'] = purchaseOptions.promotionalOffer?.paymentDiscount.nonce;
+      promoOfferData['signature'] = purchaseOptions.promotionalOffer?.paymentDiscount.signature;
+      promoOfferData['timestamp'] = purchaseOptions.promotionalOffer?.paymentDiscount.timestamp;
+    }
+
+    final updatePolicy = purchaseOptions.updatePolicy;
+    final rawResult = await _invokeMethod(Constants.mPurchaseWithResult, {
+      Constants.kProductId: product.qonversionId,
+      Constants.kOldProductId: purchaseOptions.oldProduct?.qonversionId,
+      Constants.kOfferId: purchaseOptions.offerId,
+      Constants.kApplyOffer: purchaseOptions.applyOffer,
+      Constants.kUpdatePolicyKey: updatePolicy != null
+          ? StringUtils.capitalize(updatePolicy.name)
+          : null,
+      Constants.kPurchaseContextKeys: purchaseOptions.contextKeys,
+      Constants.kPurchaseQuantity: purchaseOptions.quantity,
+      Constants.kPromoOffer: promoOfferData,
+    });
+
+    final result = QMapper.purchaseResultFromJson(rawResult);
+    if (result == null) {
+      throw QonversionException(
+        QErrorCode.internalError.code,
+        "PurchaseResult deserialization failed",
+        null,
+      );
+    }
     return result;
   }
 

@@ -2,7 +2,7 @@ group 'com.qonversion.flutter.sdk.qonversion_flutter_sdk'
 version '5.0.0'
 
 buildscript {
-    ext.kotlin_version = '1.6.10'
+    ext.kotlin_version = '1.9.25'
     repositories {
         google()
         mavenCentral()
@@ -51,6 +51,6 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "io.qonversion:sandwich:7.1.0"
+    implementation "io.qonversion:sandwich:7.3.0"
     implementation 'com.google.code.gson:gson:2.9.0'
 }

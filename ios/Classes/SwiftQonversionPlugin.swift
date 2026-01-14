@@ -95,6 +95,18 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       noCodesPlugin?.close(result)
       return result(nil)
       
+    case "setNoCodesPurchaseDelegate":
+      noCodesPlugin?.setPurchaseDelegate(result)
+      return
+      
+    case "delegatedPurchaseCompleted":
+      noCodesPlugin?.delegatedPurchaseCompleted(result)
+      return
+      
+    case "delegatedRestoreCompleted":
+      noCodesPlugin?.delegatedRestoreCompleted(result)
+      return
+      
     default:
       break
     }
@@ -114,6 +126,9 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       
     case "purchase":
       return purchase(args, result)
+
+    case "purchaseWithResult":
+      return purchaseWithResult(args, result)
 
     case "promoPurchase":
       return promoPurchase(args["productId"] as? String, result)
@@ -164,6 +179,18 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       
     case "showNoCodesScreen":
       noCodesPlugin?.showScreen(args, result)
+      return
+      
+    case "setNoCodesLocale":
+      noCodesPlugin?.setLocale(args["locale"] as? String, result)
+      return
+      
+    case "delegatedPurchaseFailed":
+      noCodesPlugin?.delegatedPurchaseFailed(args, result)
+      return
+      
+    case "delegatedRestoreFailed":
+      noCodesPlugin?.delegatedRestoreFailed(args, result)
       return
 
     default:
@@ -223,6 +250,18 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     let promoOfferData = args["promoOffer"] as? [String: Any] ?? [:]
     
     qonversionSandwich?.purchase(productId, quantity:quantity, contextKeys:contextKeys, promoOffer:promoOfferData, completion:getJsonCompletion(result))
+  }
+  
+  private func purchaseWithResult(_ args: [String: Any], _ result: @escaping FlutterResult) {
+    guard let productId = args["productId"] as? String else {
+      return result(FlutterError.noNecessaryData)
+    }
+
+    let contextKeys = args["contextKeys"] as? [String] ?? []
+    let quantity = args["quantity"] as? Int ?? 1
+    let promoOfferData = args["promoOffer"] as? [String: Any] ?? [:]
+    
+    qonversionSandwich?.purchaseWithResult(productId, quantity:quantity, contextKeys:contextKeys, promoOffer:promoOfferData, completion:getJsonCompletion(result))
   }
   
   private func promoPurchase(_ productId: String?, _ result: @escaping FlutterResult) {

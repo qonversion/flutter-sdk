@@ -17,6 +17,10 @@ import '../dto/product.dart';
 import '../dto/entitlement.dart';
 import '../dto/offerings.dart';
 import '../dto/promotional_offer.dart';
+import '../dto/purchase_result.dart';
+import '../dto/purchase_result_source.dart';
+import '../dto/purchase_result_status.dart';
+import '../dto/store_transaction.dart';
 import '../dto/subscription_period.dart';
 import '../dto/user.dart';
 import '../dto/remote_config.dart';
@@ -42,6 +46,17 @@ class QMapper {
     if (jsonString == null) return <String, QEntitlement>{};
 
     final entitlementsMap = Map<String, dynamic>.from(jsonDecode(jsonString));
+
+    return entitlementsMap.map((key, value) {
+      final entitlementMap = Map<String, dynamic>.from(value);
+      return MapEntry(key, QEntitlement.fromJson(entitlementMap));
+    });
+  }
+
+  static Map<String, QEntitlement>? entitlementsFromNullableMap(dynamic json) {
+    if (json == null) return null;
+
+    final entitlementsMap = Map<String, dynamic>.from(json);
 
     return entitlementsMap.map((key, value) {
       final entitlementMap = Map<String, dynamic>.from(value);
@@ -384,4 +399,62 @@ class QMapper {
     'OfferCode': QEntitlementGrantType.offerCode,
     'Manual': QEntitlementGrantType.manual,
   };
+
+  // PurchaseResult mappers
+
+  static QPurchaseResult? purchaseResultFromJson(String? jsonString) {
+    if (jsonString == null) return null;
+
+    final purchaseResultMap = Map<String, dynamic>.from(jsonDecode(jsonString));
+
+    try {
+      return QPurchaseResult.fromJson(purchaseResultMap);
+    } catch (e) {
+      print('Could not parse QPurchaseResult: $e');
+      return null;
+    }
+  }
+
+  static QPurchaseResultStatus purchaseResultStatusFromString(String? value) {
+    switch (value) {
+      case 'Success':
+        return QPurchaseResultStatus.success;
+      case 'UserCanceled':
+        return QPurchaseResultStatus.userCanceled;
+      case 'Pending':
+        return QPurchaseResultStatus.pending;
+      case 'Error':
+      default:
+        return QPurchaseResultStatus.error;
+    }
+  }
+
+  static QPurchaseResultSource purchaseResultSourceFromString(String? value) {
+    switch (value) {
+      case 'Local':
+        return QPurchaseResultSource.local;
+      case 'Api':
+      default:
+        return QPurchaseResultSource.api;
+    }
+  }
+
+  static QStoreTransaction? storeTransactionFromJson(dynamic json) {
+    if (json == null) return null;
+
+    final map = Map<String, dynamic>.from(json);
+
+    try {
+      return QStoreTransaction.fromJson(map);
+    } catch (e) {
+      print('Could not parse QStoreTransaction: $e');
+      return null;
+    }
+  }
+
+  static DateTime? dateTimeFromNullableMillisTimestamp(num? timestamp) {
+    if (timestamp == null) return null;
+
+    return DateTime.fromMillisecondsSinceEpoch(timestamp.toInt());
+  }
 }
