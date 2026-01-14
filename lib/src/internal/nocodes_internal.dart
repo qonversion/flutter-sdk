@@ -6,8 +6,10 @@ import 'package:qonversion_flutter/src/dto/qonversion_exception.dart';
 import 'package:qonversion_flutter/src/internal/qonversion_internal.dart';
 import '../dto/nocodes_events.dart';
 import '../dto/presentation_config.dart';
+import '../dto/product.dart';
 import '../nocodes_config.dart';
 import '../nocodes.dart';
+import '../nocodes_purchase_delegate.dart';
 import 'dart:convert';
 import '../internal/constants.dart';
 
@@ -21,6 +23,14 @@ class NoCodesInternal implements NoCodes {
   final EventChannel _actionFailedEventChannel = EventChannel('qonversion_flutter_nocodes_action_failed');
   final EventChannel _actionFinishedEventChannel = EventChannel('qonversion_flutter_nocodes_action_finished');
   final EventChannel _screenFailedToLoadEventChannel = EventChannel('qonversion_flutter_nocodes_screen_failed_to_load');
+  
+  // Event channels for purchase delegate
+  final EventChannel _purchaseEventChannel = EventChannel('qonversion_flutter_nocodes_purchase');
+  final EventChannel _restoreEventChannel = EventChannel('qonversion_flutter_nocodes_restore');
+
+  NoCodesPurchaseDelegate? _purchaseDelegate;
+  StreamSubscription? _purchaseSubscription;
+  StreamSubscription? _restoreSubscription;
 
   NoCodesInternal(NoCodesConfig config) {
     _initialize(config);
@@ -47,6 +57,11 @@ class NoCodesInternal implements NoCodes {
         error: error,
       );
     });
+
+    // Set purchase delegate if provided in config
+    if (config.purchaseDelegate != null) {
+      setPurchaseDelegate(config.purchaseDelegate!);
+    }
   }
 
   @override
@@ -174,6 +189,88 @@ class NoCodesInternal implements NoCodes {
     }
     
     await _invokeMethod(Constants.mSetNoCodesLocale, {Constants.kLocale: locale});
+  }
+
+  @override
+  Future<void> setPurchaseDelegate(NoCodesPurchaseDelegate delegate) async {
+    if (Platform.isMacOS) {
+      return;
+    }
+
+    _purchaseDelegate = delegate;
+
+    // Subscribe to purchase events from native
+    _purchaseSubscription?.cancel();
+    _purchaseSubscription = _purchaseEventChannel
+        .receiveBroadcastStream()
+        .cast<String>()
+        .listen(_handlePurchaseEvent);
+
+    // Subscribe to restore events from native
+    _restoreSubscription?.cancel();
+    _restoreSubscription = _restoreEventChannel
+        .receiveBroadcastStream()
+        .listen((_) => _handleRestoreEvent());
+
+    // Notify native side that purchase delegate is set
+    await _invokeMethod(Constants.mSetNoCodesPurchaseDelegate);
+  }
+
+  void _handlePurchaseEvent(String productJson) async {
+    if (_purchaseDelegate == null) {
+      developer.log(
+        'PurchaseDelegate is not set but purchase event received',
+        name: 'QonversionFlutter',
+      );
+      await _invokeMethod(Constants.mDelegatedPurchaseFailed, {
+        Constants.kErrorMessage: 'PurchaseDelegate is not set',
+      });
+      return;
+    }
+
+    try {
+      final Map<String, dynamic> productData = jsonDecode(productJson);
+      final product = QProduct.fromJson(productData);
+      
+      await _purchaseDelegate!.purchase(product);
+      await _invokeMethod(Constants.mDelegatedPurchaseCompleted);
+    } catch (e) {
+      developer.log(
+        'Purchase delegate failed: $e',
+        name: 'QonversionFlutter',
+        error: e,
+      );
+      await _invokeMethod(Constants.mDelegatedPurchaseFailed, {
+        Constants.kErrorMessage: e.toString(),
+      });
+    }
+  }
+
+  void _handleRestoreEvent() async {
+    if (_purchaseDelegate == null) {
+      developer.log(
+        'PurchaseDelegate is not set but restore event received',
+        name: 'QonversionFlutter',
+      );
+      await _invokeMethod(Constants.mDelegatedRestoreFailed, {
+        Constants.kErrorMessage: 'PurchaseDelegate is not set',
+      });
+      return;
+    }
+
+    try {
+      await _purchaseDelegate!.restore();
+      await _invokeMethod(Constants.mDelegatedRestoreCompleted);
+    } catch (e) {
+      developer.log(
+        'Restore delegate failed: $e',
+        name: 'QonversionFlutter',
+        error: e,
+      );
+      await _invokeMethod(Constants.mDelegatedRestoreFailed, {
+        Constants.kErrorMessage: e.toString(),
+      });
+    }
   }
 
   /// Invokes a method on the platform channel and converts PlatformException to QonversionException
