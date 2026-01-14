@@ -116,22 +116,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
       debugPrint('🔄 [Qonversion] Purchasing product: ${product.qonversionId}...');
       final result = await Qonversion.getSharedInstance().purchaseWithResult(product);
       
+      // Show full PurchaseResult details
+      _showPurchaseResultDialog(result);
+      
       if (result.isSuccess) {
         debugPrint('✅ [Qonversion] Purchase successful!');
-        debugPrint('   Transaction ID: ${result.storeTransaction?.transactionId}');
-        _showSuccess('Purchase successful!');
-        
         // Update entitlements
         appState.setEntitlements(result.entitlements);
-      } else if (result.isCanceled) {
-        debugPrint('ℹ️ [Qonversion] Purchase canceled by user');
-        _showInfo('Purchase canceled');
-      } else if (result.isPending) {
-        debugPrint('ℹ️ [Qonversion] Purchase pending');
-        _showInfo('Purchase is pending');
-      } else if (result.isError) {
-        debugPrint('❌ [Qonversion] Purchase failed: ${result.error?.message}');
-        _showError('Purchase failed: ${result.error?.message}');
       }
     } catch (e) {
       debugPrint('❌ [Qonversion] Purchase error: $e');
@@ -139,6 +130,92 @@ class _ProductsScreenState extends State<ProductsScreen> {
     } finally {
       appState.setLoading(false);
     }
+  }
+
+  void _showPurchaseResultDialog(QPurchaseResult result) {
+    final tx = result.storeTransaction;
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(
+              result.isSuccess ? Icons.check_circle : 
+              result.isCanceled ? Icons.cancel : 
+              result.isPending ? Icons.pending : Icons.error,
+              color: result.isSuccess ? Colors.green : 
+                     result.isCanceled ? Colors.orange : 
+                     result.isPending ? Colors.blue : Colors.red,
+            ),
+            const SizedBox(width: 8),
+            Text('Purchase Result'),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildResultRow('Status', result.status.name),
+              _buildResultRow('Source', result.source.name),
+              _buildResultRow('Is Fallback', result.isFallbackGenerated.toString()),
+              if (result.error != null) ...[
+                const Divider(),
+                _buildResultRow('Error Code', result.error!.code.toString()),
+                _buildResultRow('Error Message', result.error!.message ?? 'N/A'),
+              ],
+              if (tx != null) ...[
+                const Divider(),
+                const Text('Store Transaction:', style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                _buildResultRow('Transaction ID', tx.transactionId ?? 'N/A'),
+                _buildResultRow('Original TX ID', tx.originalTransactionId ?? 'N/A'),
+                _buildResultRow('Product ID', tx.productId ?? 'N/A'),
+                _buildResultRow('Quantity', tx.quantity?.toString() ?? 'N/A'),
+                _buildResultRow('TX Date', tx.transactionDate?.toIso8601String() ?? 'N/A'),
+                _buildResultRow('Promo Offer ID', tx.promoOfferId ?? 'N/A'),
+                _buildResultRow('Purchase Token', tx.purchaseToken != null 
+                    ? '${tx.purchaseToken!.substring(0, 20)}...' 
+                    : 'N/A'),
+              ],
+              if (result.entitlements != null && result.entitlements!.isNotEmpty) ...[
+                const Divider(),
+                Text('Entitlements (${result.entitlements!.length}):', 
+                     style: const TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                ...result.entitlements!.values.map((e) => Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Text('• ${e.id} (active: ${e.isActive})'),
+                )),
+              ],
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildResultRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 110,
+            child: Text('$label:', style: const TextStyle(fontWeight: FontWeight.w500)),
+          ),
+          Expanded(child: Text(value, style: const TextStyle(fontFamily: 'monospace'))),
+        ],
+      ),
+    );
   }
 
   void _showSuccess(String message) {
