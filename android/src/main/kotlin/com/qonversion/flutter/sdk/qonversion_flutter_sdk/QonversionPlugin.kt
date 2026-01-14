@@ -137,6 +137,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "initializeNoCodes" -> noCodesPlugin?.initializeNoCodes(args, result)
             "setScreenPresentationConfig" -> noCodesPlugin?.setScreenPresentationConfig(args["config"] as? Map<String, Any>, args["contextKey"] as? String, result)
             "showNoCodesScreen" -> noCodesPlugin?.showNoCodesScreen(args["contextKey"] as? String, result)
+            "setNoCodesLocale" -> noCodesPlugin?.setLocale(args["locale"] as? String, result)
             else -> result.notImplemented()
         }
     }

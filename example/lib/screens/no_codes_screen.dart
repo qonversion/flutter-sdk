@@ -16,6 +16,7 @@ class NoCodesScreen extends StatefulWidget {
 
 class _NoCodesScreenState extends State<NoCodesScreen> {
   final _contextKeyController = TextEditingController(text: 'kamo_test');
+  final _localeController = TextEditingController();
   
   NoCodesPresentationStyle _presentationStyle = NoCodesPresentationStyle.fullScreen;
   bool _animated = true;
@@ -23,6 +24,7 @@ class _NoCodesScreenState extends State<NoCodesScreen> {
   @override
   void dispose() {
     _contextKeyController.dispose();
+    _localeController.dispose();
     super.dispose();
   }
 
@@ -52,6 +54,8 @@ class _NoCodesScreenState extends State<NoCodesScreen> {
                 _buildShowScreenSection(),
                 const SizedBox(height: 16),
                 _buildPresentationConfigSection(),
+                const SizedBox(height: 16),
+                _buildLocaleSection(),
                 const SizedBox(height: 16),
                 _buildActionsSection(),
                 const SizedBox(height: 16),
@@ -149,6 +153,36 @@ class _NoCodesScreenState extends State<NoCodesScreen> {
     );
   }
 
+  Widget _buildLocaleSection() {
+    return SectionCard(
+      title: 'Locale',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TextField(
+            controller: _localeController,
+            decoration: const InputDecoration(
+              hintText: 'e.g. en, de, fr',
+              labelText: 'Locale code',
+            ),
+          ),
+          const SizedBox(height: 12),
+          ElevatedButton.icon(
+            onPressed: _setLocale,
+            icon: const Icon(Icons.language),
+            label: const Text('Set Locale'),
+          ),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: _resetLocale,
+            icon: const Icon(Icons.refresh),
+            label: const Text('Reset to Device Default'),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildActionsSection() {
     return SectionCard(
       title: 'Actions',
@@ -243,6 +277,34 @@ class _NoCodesScreenState extends State<NoCodesScreen> {
     } catch (e) {
       debugPrint('❌ [NoCodes] Failed to close: $e');
       _showError('Failed to close: $e');
+    }
+  }
+
+  void _setLocale() async {
+    final locale = _localeController.text.trim();
+    final localeValue = locale.isEmpty ? null : locale;
+    
+    try {
+      debugPrint('🔄 [NoCodes] Setting locale: $localeValue');
+      await NoCodes.getSharedInstance().setLocale(localeValue);
+      debugPrint('✅ [NoCodes] Locale set');
+      _showSuccess(localeValue != null ? 'Locale set to: $localeValue' : 'Locale reset to device default');
+    } catch (e) {
+      debugPrint('❌ [NoCodes] Failed to set locale: $e');
+      _showError('Failed to set locale: $e');
+    }
+  }
+
+  void _resetLocale() async {
+    try {
+      debugPrint('🔄 [NoCodes] Resetting locale to device default...');
+      await NoCodes.getSharedInstance().setLocale(null);
+      _localeController.clear();
+      debugPrint('✅ [NoCodes] Locale reset');
+      _showSuccess('Locale reset to device default');
+    } catch (e) {
+      debugPrint('❌ [NoCodes] Failed to reset locale: $e');
+      _showError('Failed to reset locale: $e');
     }
   }
 

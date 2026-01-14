@@ -37,6 +37,7 @@ class NoCodesInternal implements NoCodes {
       Constants.kVersion: QonversionInternal.sdkVersion,
       Constants.kSource: Constants.sdkSource,
       if (config.proxyUrl != null) Constants.kProxyUrl: config.proxyUrl,
+      if (config.locale != null) Constants.kLocale: config.locale,
     };
     // Initialize is fire-and-forget, errors will be handled in subsequent calls
     _channel.invokeMethod(Constants.mInitializeNoCodes, args).catchError((error) {
@@ -164,6 +165,15 @@ class NoCodesInternal implements NoCodes {
     }
     
     await _invokeMethod(Constants.mCloseNoCodes);
+  }
+
+  @override
+  Future<void> setLocale(String? locale) async {
+    if (Platform.isMacOS) {
+      return;
+    }
+    
+    await _invokeMethod(Constants.mSetNoCodesLocale, {Constants.kLocale: locale});
   }
 
   /// Invokes a method on the platform channel and converts PlatformException to QonversionException

@@ -100,4 +100,13 @@ abstract class NoCodes {
   /// **Platform Support:** iOS and Android. No-op on macOS.
   Future<void> close();
 
+  /// Set the locale for No-Code screens.
+  /// Use this to override the device locale for the No-Codes SDK.
+  /// Pass null to reset to the device default locale.
+  ///
+  /// **Platform Support:** iOS and Android. No-op on macOS.
+  ///
+  /// [locale] the locale to use (e.g. "en", "de", "fr"), or null to reset to device default.
+  Future<void> setLocale(String? locale);
+
 } 
