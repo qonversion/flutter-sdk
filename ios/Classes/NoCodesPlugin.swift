@@ -72,7 +72,8 @@ public class NoCodesPlugin: NSObject {
         }
         
         let proxyUrl = args["proxyUrl"] as? String
-        noCodesSandwich?.initialize(projectKey: projectKey, proxyUrl: proxyUrl)
+        let locale = args["locale"] as? String
+        noCodesSandwich?.initialize(projectKey: projectKey, proxyUrl: proxyUrl, locale: locale)
         result(nil)
     }
     
@@ -100,6 +101,11 @@ public class NoCodesPlugin: NSObject {
     
     @MainActor public func close(_ result: @escaping FlutterResult) {
         noCodesSandwich?.close()
+        result(nil)
+    }
+    
+    public func setLocale(_ locale: String?, _ result: @escaping FlutterResult) {
+        noCodesSandwich?.setLocale(locale)
         result(nil)
     }
 }

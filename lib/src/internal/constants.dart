@@ -35,6 +35,7 @@ class Constants {
   static const kConfig = 'config';
   static const kVersion = 'version';
   static const kSource = 'source';
+  static const kLocale = 'locale';
 
   // MethodChannel methods names
   static const mInitialize = 'initialize';
@@ -76,6 +77,7 @@ class Constants {
   static const mSetScreenPresentationConfig = 'setScreenPresentationConfig';
   static const mShowNoCodesScreen = 'showNoCodesScreen';
   static const mCloseNoCodes = 'closeNoCodes';
+  static const mSetNoCodesLocale = 'setNoCodesLocale';
 
   // Other constants
   static const skuDetailsPriceRatio = 1000000;
