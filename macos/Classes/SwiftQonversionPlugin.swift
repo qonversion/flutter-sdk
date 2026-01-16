@@ -30,18 +30,18 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     instance.qonversionSandwich = sandwichInstance
   }
 
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+  @MainActor public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
 
     // MARK: - Calls without arguments
 
     switch (call.method) {
     case "syncHistoricalData":
-        qonversionSandwich?.syncHistoricalData()
-        return result(nil)
+      qonversionSandwich?.syncHistoricalData()
+      return result(nil)
 
     case "syncStoreKit2Purchases":
-        qonversionSandwich?.syncStoreKit2Purchases()
-        return result(nil)
+      qonversionSandwich?.syncStoreKit2Purchases()
+      return result(nil)
 
     case "products":
       return products(result)
@@ -62,9 +62,6 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     case "logout":
       qonversionSandwich?.logout()
       return result(nil)
-    
-    case "isFallbackFileAccessible":
-      return isFallbackFileAccessible(result)
 
     case "userInfo":
       return userInfo(result)
@@ -72,8 +69,14 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     case "userProperties":
       return userProperties(result)
 
+    case "isFallbackFileAccessible":
+      return isFallbackFileAccessible(result)
+
     case "remoteConfigList":
       return remoteConfigList(result)
+
+    case "collectAppleSearchAdsAttribution":
+      return collectAppleSearchAdsAttribution(result)
 
     default:
       break
@@ -94,6 +97,9 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
     case "purchase":
       return purchase(args, result)
+
+    case "purchaseWithResult":
+      return purchaseWithResult(args, result)
 
     case "remoteConfig":
       return remoteConfig(args["contextKey"] as? String, result)
@@ -118,10 +124,10 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
     case "identify":
       return identify(args["userId"] as? String, result)
-      
+
     case "attachUserToExperiment":
       return attachUserToExperiment(args, result)
-      
+
     case "detachUserFromExperiment":
       return detachUserFromExperiment(args, result)
 
@@ -171,7 +177,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       return result(FlutterError.noNecessaryData)
     }
 
-    qonversionSandwich?.getPromotionalOffer(productId, productDiscountId:discountId, completion:getDefaultCompletion(result))
+    qonversionSandwich?.getPromotionalOffer(productId, productDiscountId:discountId, completion:getJsonCompletion(result))
   }
 
   private func products(_ result: @escaping FlutterResult) {
@@ -190,6 +196,18 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     qonversionSandwich?.purchase(productId, quantity:quantity, contextKeys:contextKeys, promoOffer:promoOfferData, completion:getJsonCompletion(result))
   }
 
+  private func purchaseWithResult(_ args: [String: Any], _ result: @escaping FlutterResult) {
+    guard let productId = args["productId"] as? String else {
+      return result(FlutterError.noNecessaryData)
+    }
+
+    let contextKeys = args["contextKeys"] as? [String] ?? []
+    let quantity = args["quantity"] as? Int ?? 1
+    let promoOfferData = args["promoOffer"] as? [String: Any] ?? [:]
+
+    qonversionSandwich?.purchaseWithResult(productId, quantity:quantity, contextKeys:contextKeys, promoOffer:promoOfferData, completion:getJsonCompletion(result))
+  }
+
   private func checkEntitlements(_ result: @escaping FlutterResult) {
     qonversionSandwich?.checkEntitlements(getJsonCompletion(result))
   }
@@ -204,6 +222,11 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   
   private func isFallbackFileAccessible(_ result: @escaping FlutterResult) {
     qonversionSandwich?.isFallbackFileAccessible(completion: getJsonCompletion(result))
+  }
+
+  private func collectAppleSearchAdsAttribution(_ result: @escaping FlutterResult) {
+    qonversionSandwich?.collectAppleSearchAdsAttribution()
+    result(nil)
   }
 
   private func remoteConfigList(_ args: [String: Any], _ result: @escaping FlutterResult) {
