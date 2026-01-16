@@ -1,5 +1,6 @@
 ## 11.1.1
-* // Update changelog here
+* Fixed bug when No-Codes screen on iOS was closing after the user canceled the purchase flow
+* Small MacOS support fixes
 
 ## 11.1.0
 * No-Codes can now be used with your [custom purchase system](https://documentation.qonversion.io/docs/using-no-codes-with-custom-purchases-handling), even if you use Qonversion in Analytics mode,
