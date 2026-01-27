@@ -81,6 +81,7 @@ class NoCodesPlugin(private val messenger: BinaryMessenger, private val context:
         val version = args["version"] as? String ?: return result.noNecessaryDataError()
         val source = args["source"] as? String ?: return result.noNecessaryDataError()
         val locale = args["locale"] as? String
+        val theme = args["theme"] as? String
 
         if (projectKey.isNotEmpty()) {
             // Initialize NoCodes Sandwich
@@ -88,7 +89,7 @@ class NoCodesPlugin(private val messenger: BinaryMessenger, private val context:
 
             noCodesSandwich?.storeSdkInfo(context, source, version)
 
-            noCodesSandwich?.initialize(context, projectKey, null, null, null, locale)
+            noCodesSandwich?.initialize(context, projectKey, null, null, null, locale, theme)
             noCodesSandwich?.setDelegate(this)
             result.success(null)
         } else {
@@ -121,6 +122,11 @@ class NoCodesPlugin(private val messenger: BinaryMessenger, private val context:
 
     fun setLocale(locale: String?, result: Result) {
         noCodesSandwich?.setLocale(locale)
+        result.success(null)
+    }
+
+    fun setTheme(theme: String?, result: Result) {
+        noCodesSandwich?.setTheme(theme)
         result.success(null)
     }
 
