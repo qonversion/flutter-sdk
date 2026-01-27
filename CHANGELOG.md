@@ -1,3 +1,6 @@
+## 11.2.0
+* // Update changelog here
+
 ## 11.1.1
 * Fixed bug when No-Codes screen on iOS was closing after the user canceled the purchase flow
 * Small MacOS support fixes
