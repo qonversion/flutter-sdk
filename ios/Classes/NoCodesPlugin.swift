@@ -90,7 +90,8 @@ public class NoCodesPlugin: NSObject {
         
         let proxyUrl = args["proxyUrl"] as? String
         let locale = args["locale"] as? String
-        noCodesSandwich?.initialize(projectKey: projectKey, proxyUrl: proxyUrl, locale: locale)
+        let theme = args["theme"] as? String
+        noCodesSandwich?.initialize(projectKey: projectKey, proxyUrl: proxyUrl, locale: locale, theme: theme)
         result(nil)
     }
     
@@ -123,6 +124,11 @@ public class NoCodesPlugin: NSObject {
     
     public func setLocale(_ locale: String?, _ result: @escaping FlutterResult) {
         noCodesSandwich?.setLocale(locale)
+        result(nil)
+    }
+    
+    public func setTheme(_ theme: String?, _ result: @escaping FlutterResult) {
+        noCodesSandwich?.setTheme(theme)
         result(nil)
     }
     

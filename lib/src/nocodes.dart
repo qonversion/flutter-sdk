@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dto/nocodes_events.dart';
+import 'dto/nocodes_theme.dart';
 import 'dto/presentation_config.dart';
 import 'nocodes_config.dart';
 import 'nocodes_purchase_delegate.dart';
@@ -121,5 +122,14 @@ abstract class NoCodes {
   ///
   /// [delegate] the delegate to handle purchase and restore operations.
   Future<void> setPurchaseDelegate(NoCodesPurchaseDelegate delegate);
+
+  /// Set the theme mode for No-Code screens.
+  /// Controls how screens adapt to light/dark themes.
+  ///
+  /// **Platform Support:** iOS and Android. No-op on macOS.
+  ///
+  /// [theme] the desired theme mode. Use [NoCodesTheme.auto] to follow device settings,
+  ///         [NoCodesTheme.light] to force light theme, or [NoCodesTheme.dark] to force dark theme.
+  Future<void> setTheme(NoCodesTheme theme);
 
 } 

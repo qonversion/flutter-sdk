@@ -7,6 +7,7 @@ import 'package:qonversion_flutter/src/internal/qonversion_internal.dart';
 import '../dto/nocodes_events.dart';
 import '../dto/presentation_config.dart';
 import '../dto/product.dart';
+import '../dto/nocodes_theme.dart';
 import '../nocodes_config.dart';
 import '../nocodes.dart';
 import '../nocodes_purchase_delegate.dart';
@@ -48,6 +49,7 @@ class NoCodesInternal implements NoCodes {
       Constants.kSource: Constants.sdkSource,
       if (config.proxyUrl != null) Constants.kProxyUrl: config.proxyUrl,
       if (config.locale != null) Constants.kLocale: config.locale,
+      if (config.theme != null) Constants.kTheme: config.theme!.name,
     };
     // Initialize is fire-and-forget, errors will be handled in subsequent calls
     _channel.invokeMethod(Constants.mInitializeNoCodes, args).catchError((error) {
@@ -189,6 +191,15 @@ class NoCodesInternal implements NoCodes {
     }
     
     await _invokeMethod(Constants.mSetNoCodesLocale, {Constants.kLocale: locale});
+  }
+
+  @override
+  Future<void> setTheme(NoCodesTheme theme) async {
+    if (Platform.isMacOS) {
+      return;
+    }
+    
+    await _invokeMethod(Constants.mSetNoCodesTheme, {Constants.kTheme: theme.name});
   }
 
   @override

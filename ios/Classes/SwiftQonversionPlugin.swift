@@ -185,6 +185,10 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       noCodesPlugin?.setLocale(args["locale"] as? String, result)
       return
       
+    case "setNoCodesTheme":
+      noCodesPlugin?.setTheme(args["theme"] as? String, result)
+      return
+      
     case "delegatedPurchaseFailed":
       noCodesPlugin?.delegatedPurchaseFailed(args, result)
       return

@@ -8,6 +8,7 @@ export 'src/dto/entitlements_cache_lifetime.dart';
 export 'src/dto/environment.dart';
 export 'src/dto/launch_mode.dart';
 export 'src/dto/nocodes_events.dart';
+export 'src/dto/nocodes_theme.dart';
 export 'src/dto/offerings.dart';
 export 'src/dto/presentation_config.dart';
 export 'src/dto/product.dart';
