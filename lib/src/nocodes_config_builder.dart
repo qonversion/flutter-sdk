@@ -1,3 +1,4 @@
+import 'dto/nocodes_theme.dart';
 import 'nocodes_config.dart';
 import 'nocodes_purchase_delegate.dart';
 
@@ -6,6 +7,7 @@ class NoCodesConfigBuilder {
   final String projectKey;
   String? proxyUrl;
   String? locale;
+  NoCodesTheme? theme;
   NoCodesPurchaseDelegate? purchaseDelegate;
 
   NoCodesConfigBuilder(this.projectKey);
@@ -29,6 +31,17 @@ class NoCodesConfigBuilder {
     return this;
   }
 
+  /// Set the theme mode for No-Code screens.
+  /// Controls how screens adapt to light/dark themes.
+  ///
+  /// [theme] the desired theme mode. Use [NoCodesTheme.auto] to follow device settings,
+  ///         [NoCodesTheme.light] to force light theme, or [NoCodesTheme.dark] to force dark theme.
+  /// Returns the builder instance for method chaining.
+  NoCodesConfigBuilder setTheme(NoCodesTheme theme) {
+    this.theme = theme;
+    return this;
+  }
+
   /// Provide a delegate for custom purchase and restore handling.
   /// When this delegate is provided, it replaces the default Qonversion SDK purchase flow.
   ///
@@ -47,6 +60,7 @@ class NoCodesConfigBuilder {
       projectKey,
       proxyUrl: proxyUrl,
       locale: locale,
+      theme: theme,
       purchaseDelegate: purchaseDelegate,
     );
   }

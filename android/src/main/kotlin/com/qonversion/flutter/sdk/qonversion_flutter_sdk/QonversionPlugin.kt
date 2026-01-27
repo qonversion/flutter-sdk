@@ -154,6 +154,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "setScreenPresentationConfig" -> noCodesPlugin?.setScreenPresentationConfig(args["config"] as? Map<String, Any>, args["contextKey"] as? String, result)
             "showNoCodesScreen" -> noCodesPlugin?.showNoCodesScreen(args["contextKey"] as? String, result)
             "setNoCodesLocale" -> noCodesPlugin?.setLocale(args["locale"] as? String, result)
+            "setNoCodesTheme" -> noCodesPlugin?.setTheme(args["theme"] as? String, result)
             // NoCodes Purchase Delegate methods
             "delegatedPurchaseFailed" -> noCodesPlugin?.delegatedPurchaseFailed(args["errorMessage"] as? String, result)
             "delegatedRestoreFailed" -> noCodesPlugin?.delegatedRestoreFailed(args["errorMessage"] as? String, result)

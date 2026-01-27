@@ -37,6 +37,7 @@ class Constants {
   static const kVersion = 'version';
   static const kSource = 'source';
   static const kLocale = 'locale';
+  static const kTheme = 'theme';
 
   // MethodChannel methods names
   static const mInitialize = 'initialize';
@@ -79,6 +80,7 @@ class Constants {
   static const mShowNoCodesScreen = 'showNoCodesScreen';
   static const mCloseNoCodes = 'closeNoCodes';
   static const mSetNoCodesLocale = 'setNoCodesLocale';
+  static const mSetNoCodesTheme = 'setNoCodesTheme';
   static const mSetNoCodesPurchaseDelegate = 'setNoCodesPurchaseDelegate';
   static const mDelegatedPurchaseCompleted = 'delegatedPurchaseCompleted';
   static const mDelegatedPurchaseFailed = 'delegatedPurchaseFailed';

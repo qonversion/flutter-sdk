@@ -92,6 +92,7 @@ class _NoCodesScreenState extends State<NoCodesScreen> {
   bool _animated = true;
   bool _purchaseDelegateEnabled = false;
   SamplePurchaseDelegate? _purchaseDelegate;
+  NoCodesTheme _selectedTheme = NoCodesTheme.auto;
 
   @override
   void dispose() {
@@ -130,6 +131,8 @@ class _NoCodesScreenState extends State<NoCodesScreen> {
                 _buildPresentationConfigSection(),
                 const SizedBox(height: 16),
                 _buildLocaleSection(),
+                const SizedBox(height: 16),
+                _buildThemeSection(),
                 const SizedBox(height: 16),
                 _buildActionsSection(),
                 const SizedBox(height: 16),
@@ -346,6 +349,36 @@ class _NoCodesScreenState extends State<NoCodesScreen> {
     );
   }
 
+  Widget _buildThemeSection() {
+    return SectionCard(
+      title: 'Theme',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Select theme mode',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey.shade700,
+            ),
+          ),
+          const SizedBox(height: 8),
+          ...NoCodesTheme.values.map((theme) => _buildRadioTile(
+            title: theme.name,
+            value: theme,
+            groupValue: _selectedTheme,
+            onChanged: (value) {
+              if (value != null) {
+                _setTheme(value);
+              }
+            },
+          )),
+        ],
+      ),
+    );
+  }
+
   Widget _buildActionsSection() {
     return SectionCard(
       title: 'Actions',
@@ -504,6 +537,21 @@ class _NoCodesScreenState extends State<NoCodesScreen> {
     } catch (e) {
       debugPrint('❌ [NoCodes] Failed to reset locale: $e');
       _showError('Failed to reset locale: $e');
+    }
+  }
+
+  void _setTheme(NoCodesTheme theme) async {
+    try {
+      debugPrint('🔄 [NoCodes] Setting theme: ${theme.name}');
+      await NoCodes.getSharedInstance().setTheme(theme);
+      setState(() {
+        _selectedTheme = theme;
+      });
+      debugPrint('✅ [NoCodes] Theme set');
+      _showSuccess('Theme set to: ${theme.name}');
+    } catch (e) {
+      debugPrint('❌ [NoCodes] Failed to set theme: $e');
+      _showError('Failed to set theme: $e');
     }
   }
 
