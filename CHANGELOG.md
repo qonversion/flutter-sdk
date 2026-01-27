@@ -1,3 +1,7 @@
+## 11.2.0
+- Faster screen loading — No-Code screens now preload images together with content, dramatically improving display speed. Don't forget to enable preloading in the screen settings in the No-Code builder.
+- Theme customization — Set your preferred appearance for No-Codes: system default, light, or dark mode. This currently styles the loading skeleton view, with full screen theming support coming soon in the No-Code builder.
+
 ## 11.1.1
 * Fixed bug when No-Codes screen on iOS was closing after the user canceled the purchase flow
 * Small MacOS support fixes
