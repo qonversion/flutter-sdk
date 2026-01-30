@@ -1,5 +1,5 @@
 ## 11.3.0
-* // Update changelog here
+* Success/failure actions supported for No-Code screens.
 
 ## 11.2.0
 - Faster screen loading — No-Code screens now preload images together with content, dramatically improving display speed. Don't forget to enable preloading in the screen settings in the No-Code builder.
