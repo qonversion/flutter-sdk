@@ -8,6 +8,7 @@ import QonversionSandwich
 
 public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   var updatedEntitlementsStreamHandler: BaseEventStreamHandler?
+  var deferredPurchaseStreamHandler: BaseEventStreamHandler?
   var qonversionSandwich: QonversionSandwich?
 
   public static func register(with registrar: FlutterPluginRegistrar) {
@@ -24,6 +25,10 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     // Register updated entitlements events
     let updatedEntitlementsListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "updated_entitlements")
     updatedEntitlementsListener.register() { instance.updatedEntitlementsStreamHandler = $0 }
+
+    // Register deferred purchase events
+    let deferredPurchaseListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "deferred_purchase")
+    deferredPurchaseListener.register() { instance.deferredPurchaseStreamHandler = $0 }
 
     // Register sandwich
     let sandwichInstance = QonversionSandwich.init(qonversionEventListener: instance)
@@ -384,6 +389,15 @@ extension SwiftQonversionPlugin: QonversionEventListener {
     }
     DispatchQueue.main.async {
       self.updatedEntitlementsStreamHandler?.eventSink?(jsonData)
+    }
+  }
+
+  public func qonversionDidCompleteDeferredPurchase(_ transaction: [String : Any]) {
+    guard let jsonData = transaction.toJson() else {
+      return
+    }
+    DispatchQueue.main.async {
+      self.deferredPurchaseStreamHandler?.eventSink?(jsonData)
     }
   }
 

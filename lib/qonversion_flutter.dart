@@ -1,4 +1,5 @@
 export 'src/dto/attribution_provider.dart';
+export 'src/dto/deferred_transaction.dart';
 export 'src/dto/eligibility.dart';
 export 'src/dto/entitlement.dart';
 export 'src/dto/entitlement_grant_type.dart';

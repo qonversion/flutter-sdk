@@ -21,6 +21,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
     private var activity: Activity? = null
     private var channel: MethodChannel? = null
     private var updatedEntitlementsStreamHandler: BaseEventStreamHandler? = null
+    private var deferredPurchaseStreamHandler: BaseEventStreamHandler? = null
     private var noCodesPlugin: NoCodesPlugin? = null
 
     private val qonversionSandwich by lazy {
@@ -41,12 +42,18 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             val payload = Gson().toJson(entitlements)
             updatedEntitlementsStreamHandler?.eventSink?.success(payload)
         }
+
+        override fun onDeferredPurchaseCompleted(transaction: BridgeData) {
+            val payload = Gson().toJson(transaction)
+            deferredPurchaseStreamHandler?.eventSink?.success(payload)
+        }
     }
 
     companion object {
         private const val METHOD_CHANNEL = "qonversion_plugin"
         private const val EVENT_CHANNEL_PROMO_PURCHASES = "promo_purchases"
         private const val EVENT_CHANNEL_UPDATED_ENTITLEMENTS = "updated_entitlements"
+        private const val EVENT_CHANNEL_DEFERRED_PURCHASE = "deferred_purchase"
     }
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -364,6 +371,11 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         updatedEntitlementsListener.register()
         this.updatedEntitlementsStreamHandler = updatedEntitlementsListener.eventStreamHandler
 
+        // Register deferred purchase events
+        val deferredPurchaseListener = BaseListenerWrapper(messenger, EVENT_CHANNEL_DEFERRED_PURCHASE)
+        deferredPurchaseListener.register()
+        this.deferredPurchaseStreamHandler = deferredPurchaseListener.eventStreamHandler
+
         // Register promo purchases events. Android SDK does not generate any promo purchases yet
         val promoPurchasesListener = BaseListenerWrapper(messenger, EVENT_CHANNEL_PROMO_PURCHASES)
         promoPurchasesListener.register()
@@ -373,6 +385,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
         channel?.setMethodCallHandler(null)
         channel = null
         this.updatedEntitlementsStreamHandler = null
+        this.deferredPurchaseStreamHandler = null
         this.noCodesPlugin = null
         this.application = null
     }
