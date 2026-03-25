@@ -1,3 +1,6 @@
+## 11.4.0
+* // Update changelog here
+
 ## 11.3.1
 * Added user switching support in restore flow.
 * Enhanced non-consumable purchases support on Android - in-app purchases are now acknowledged (instead of consumption) if they are marked as lifetime products in the Qonversion dashboard.
