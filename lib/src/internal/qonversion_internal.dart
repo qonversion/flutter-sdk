@@ -59,13 +59,13 @@ class QonversionInternal implements Qonversion {
       });
 
   @override
-  Stream<QDeferredTransaction> get deferredPurchaseStream =>
+  Stream<QPurchaseResult> get deferredPurchaseStream =>
       _deferredPurchaseEventChannel
           .receiveBroadcastStream()
           .cast<String>()
           .map((event) {
         final Map<String, dynamic> decodedEvent = jsonDecode(event);
-        return QDeferredTransaction.fromJson(decodedEvent);
+        return QPurchaseResult.fromJson(decodedEvent);
       });
 
   @override

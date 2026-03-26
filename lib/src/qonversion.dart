@@ -41,8 +41,8 @@ abstract class Qonversion {
 
   /// Yields an event each time a deferred purchase completes.
   /// For example, when pending purchases like SCA, Ask to Buy, etc., are approved.
-  /// Provides full transaction details, including for consumable products without entitlements.
-  Stream<QDeferredTransaction> get deferredPurchaseStream;
+  /// Provides the full purchase result with entitlements and store transaction details.
+  Stream<QPurchaseResult> get deferredPurchaseStream;
 
   /// Yields an event each time a promo transaction happens on iOS.
   /// Returns App Store product ID
