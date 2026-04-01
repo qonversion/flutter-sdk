@@ -43,8 +43,8 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             updatedEntitlementsStreamHandler?.eventSink?.success(payload)
         }
 
-        override fun onDeferredPurchaseCompleted(transaction: BridgeData) {
-            val payload = Gson().toJson(transaction)
+        override fun onDeferredPurchaseCompleted(purchaseResult: BridgeData) {
+            val payload = Gson().toJson(purchaseResult)
             deferredPurchaseStreamHandler?.eventSink?.success(payload)
         }
     }

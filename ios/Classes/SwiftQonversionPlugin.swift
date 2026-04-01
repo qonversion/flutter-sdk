@@ -467,8 +467,8 @@ extension SwiftQonversionPlugin: QonversionEventListener {
     }
   }
   
-  public func qonversionDidCompleteDeferredPurchase(_ transaction: [String : Any]) {
-    guard let jsonData = transaction.toJson() else {
+  public func qonversionDidCompleteDeferredPurchase(_ purchaseResult: [String : Any]) {
+    guard let jsonData = purchaseResult.toJson() else {
       return
     }
     DispatchQueue.main.async {
