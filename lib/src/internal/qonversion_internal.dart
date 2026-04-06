@@ -11,12 +11,15 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String sdkVersion = "11.5.0";
+  static const String sdkVersion = "11.6.0";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
   final _updatedEntitlementsEventChannel =
       EventChannel('qonversion_flutter_updated_entitlements');
+
+  final _deferredPurchaseEventChannel =
+      EventChannel('qonversion_flutter_deferred_purchase');
 
   final _promoPurchasesEventChannel =
       EventChannel('qonversion_flutter_promo_purchases');
@@ -53,6 +56,16 @@ class QonversionInternal implements Qonversion {
 
         return decodedEvent
             .map((key, value) => MapEntry(key, QEntitlement.fromJson(value)));
+      });
+
+  @override
+  Stream<QPurchaseResult> get deferredPurchaseStream =>
+      _deferredPurchaseEventChannel
+          .receiveBroadcastStream()
+          .cast<String>()
+          .map((event) {
+        final Map<String, dynamic> decodedEvent = jsonDecode(event);
+        return QPurchaseResult.fromJson(decodedEvent);
       });
 
   @override
