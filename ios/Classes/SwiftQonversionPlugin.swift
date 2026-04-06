@@ -8,6 +8,7 @@ import QonversionSandwich
 
 public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   var updatedEntitlementsStreamHandler: BaseEventStreamHandler?
+  var deferredPurchaseStreamHandler: BaseEventStreamHandler?
   var promoPurchasesStreamHandler: BaseEventStreamHandler?
   var qonversionSandwich: QonversionSandwich?
   var noCodesPlugin: NoCodesPlugin?
@@ -27,6 +28,10 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     let updatedEntitlementsListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "updated_entitlements")
     updatedEntitlementsListener.register() { instance.updatedEntitlementsStreamHandler = $0 }
     
+    // Register deferred purchase events
+    let deferredPurchaseListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "deferred_purchase")
+    deferredPurchaseListener.register() { instance.deferredPurchaseStreamHandler = $0 }
+
     // Register promo purchases events
     let promoPurchasesListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: "promo_purchases")
     promoPurchasesListener.register() { instance.promoPurchasesStreamHandler = $0 }
@@ -462,6 +467,15 @@ extension SwiftQonversionPlugin: QonversionEventListener {
     }
   }
   
+  public func qonversionDidCompleteDeferredPurchase(_ purchaseResult: [String : Any]) {
+    guard let jsonData = purchaseResult.toJson() else {
+      return
+    }
+    DispatchQueue.main.async {
+      self.deferredPurchaseStreamHandler?.eventSink?(jsonData)
+    }
+  }
+
   public func shouldPurchasePromoProduct(with productId: String) {
     DispatchQueue.main.async {
       self.promoPurchasesStreamHandler?.eventSink?(productId)

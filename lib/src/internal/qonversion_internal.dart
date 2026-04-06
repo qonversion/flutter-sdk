@@ -18,6 +18,9 @@ class QonversionInternal implements Qonversion {
   final _updatedEntitlementsEventChannel =
       EventChannel('qonversion_flutter_updated_entitlements');
 
+  final _deferredPurchaseEventChannel =
+      EventChannel('qonversion_flutter_deferred_purchase');
+
   final _promoPurchasesEventChannel =
       EventChannel('qonversion_flutter_promo_purchases');
 
@@ -53,6 +56,16 @@ class QonversionInternal implements Qonversion {
 
         return decodedEvent
             .map((key, value) => MapEntry(key, QEntitlement.fromJson(value)));
+      });
+
+  @override
+  Stream<QPurchaseResult> get deferredPurchaseStream =>
+      _deferredPurchaseEventChannel
+          .receiveBroadcastStream()
+          .cast<String>()
+          .map((event) {
+        final Map<String, dynamic> decodedEvent = jsonDecode(event);
+        return QPurchaseResult.fromJson(decodedEvent);
       });
 
   @override
