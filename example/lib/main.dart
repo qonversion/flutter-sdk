@@ -57,14 +57,17 @@ class _QonversionDemoAppState extends State<QonversionDemoApp> {
           .setEntitlementsCacheLifetime(QEntitlementsCacheLifetime.month)
           .build();
       
-      Qonversion.initialize(config);
+      final qonversion = Qonversion.initialize(config);
       debugPrint('✅ [Qonversion] SDK initialized successfully');
-      
+
+      // Subscribe to deferred purchase events (e.g. SCA, Ask to Buy)
+      _subscribeToDeferredPurchases(qonversion, appState);
+
       // Initialize No-Codes
       final noCodesConfig = NoCodesConfigBuilder(projectKey).build();
       final noCodes = NoCodes.initialize(noCodesConfig);
       debugPrint('✅ [NoCodes] SDK initialized successfully');
-      
+
       // Subscribe to No-Codes events
       _subscribeToNoCodesEvents(noCodes, appState);
       
@@ -76,6 +79,18 @@ class _QonversionDemoAppState extends State<QonversionDemoApp> {
       debugPrint('❌ [Qonversion] SDK initialization failed: $e');
       appState.setInitStatus('error');
     }
+  }
+
+  void _subscribeToDeferredPurchases(Qonversion qonversion, AppState appState) {
+    qonversion.deferredPurchaseStream.listen((QPurchaseResult result) {
+      final productId = result.storeTransaction?.productId ?? 'unknown';
+      debugPrint('📡 [Qonversion] Deferred purchase: ${result.status.name} for $productId');
+      appState.addDeferredPurchaseEvent('Deferred purchase ${result.status.name}: $productId');
+
+      if (result.isSuccess && result.entitlements != null) {
+        appState.setEntitlements(result.entitlements);
+      }
+    });
   }
 
   void _subscribeToNoCodesEvents(NoCodes noCodes, AppState appState) {

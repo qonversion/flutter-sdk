@@ -28,7 +28,10 @@ class AppState extends ChangeNotifier {
   
   // No-Codes events
   List<String> _noCodesEvents = [];
-  
+
+  // Deferred purchase events (e.g. SCA, Ask to Buy)
+  List<String> _deferredPurchaseEvents = [];
+
   // Getters
   bool get isInitialized => _isInitialized;
   String get initStatus => _initStatus;
@@ -40,6 +43,7 @@ class AppState extends ChangeNotifier {
   QRemoteConfigList? get remoteConfigs => _remoteConfigs;
   QUserProperties? get userProperties => _userProperties;
   List<String> get noCodesEvents => _noCodesEvents;
+  List<String> get deferredPurchaseEvents => _deferredPurchaseEvents;
   
   // Setters with notification
   void setInitStatus(String status) {
@@ -95,6 +99,19 @@ class AppState extends ChangeNotifier {
   
   void clearNoCodesEvents() {
     _noCodesEvents.clear();
+    notifyListeners();
+  }
+
+  void addDeferredPurchaseEvent(String event) {
+    _deferredPurchaseEvents.insert(0, '${DateTime.now().toString().substring(11, 19)}: $event');
+    if (_deferredPurchaseEvents.length > 50) {
+      _deferredPurchaseEvents.removeLast();
+    }
+    notifyListeners();
+  }
+
+  void clearDeferredPurchaseEvents() {
+    _deferredPurchaseEvents.clear();
     notifyListeners();
   }
 }
