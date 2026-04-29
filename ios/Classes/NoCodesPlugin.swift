@@ -112,8 +112,10 @@ public class NoCodesPlugin: NSObject {
               let contextKey = args["contextKey"] as? String else {
             return result(FlutterError.noNecessaryData)
         }
-        
-        noCodesSandwich?.showScreen(contextKey)
+
+        let customVariables = args["customVariables"] as? [String: String]
+
+        noCodesSandwich?.showScreen(contextKey, customVariables: customVariables)
         result(nil)
     }
     

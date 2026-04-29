@@ -105,6 +105,9 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "userProperties" -> {
                 return userProperties(result)
             }
+            "forceSendProperties" -> {
+                return forceSendProperties(result)
+            }
             "logout" -> {
                 qonversionSandwich.logout()
                 return result.success(null)
@@ -159,7 +162,7 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             // NoCodes methods
             "initializeNoCodes" -> noCodesPlugin?.initializeNoCodes(args, result)
             "setScreenPresentationConfig" -> noCodesPlugin?.setScreenPresentationConfig(args["config"] as? Map<String, Any>, args["contextKey"] as? String, result)
-            "showNoCodesScreen" -> noCodesPlugin?.showNoCodesScreen(args["contextKey"] as? String, result)
+            "showNoCodesScreen" -> noCodesPlugin?.showNoCodesScreen(args["contextKey"] as? String, args["customVariables"] as? Map<String, String>, result)
             "setNoCodesLocale" -> noCodesPlugin?.setLocale(args["locale"] as? String, result)
             "setNoCodesTheme" -> noCodesPlugin?.setTheme(args["theme"] as? String, result)
             // NoCodes Purchase Delegate methods
@@ -250,6 +253,12 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
 
     private fun userProperties(result: Result) {
         qonversionSandwich.userProperties(result.toJsonResultListener())
+    }
+
+    private fun forceSendProperties(result: Result) {
+        qonversionSandwich.forceSendProperties {
+            result.success(null)
+        }
     }
 
     private fun isFallbackFileAccessible(result: Result) {

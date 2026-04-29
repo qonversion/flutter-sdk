@@ -191,6 +191,11 @@ abstract class Qonversion {
   /// in the result.
   Future<QUserProperties> userProperties();
 
+  /// Force-flushes any pending user property updates to the server immediately.
+  /// Use this when you need to ensure all previously set properties have been sent
+  /// before performing an operation that depends on them.
+  Future<void> forceSendProperties();
+
   /// iOS only. Does nothing, if called on Android.
   ///
   /// On iOS 14.5+, after requesting the app tracking entitlement using ATT, you need to notify Qonversion if tracking is allowed and IDFA is available.
