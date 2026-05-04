@@ -38,6 +38,7 @@ class Constants {
   static const kSource = 'source';
   static const kLocale = 'locale';
   static const kTheme = 'theme';
+  static const kCustomVariables = 'customVariables';
 
   // MethodChannel methods names
   static const mInitialize = 'initialize';
@@ -54,6 +55,7 @@ class Constants {
   static const mSetDefinedUserProperty = 'setDefinedUserProperty';
   static const mSetCustomUserProperty = 'setCustomUserProperty';
   static const mUserProperties = 'userProperties';
+  static const mForceSendProperties = 'forceSendProperties';
   static const mSetEntitlementsCacheLifetime = 'setEntitlementsCacheLifetime';
   static const mSyncPurchases = 'syncPurchases';
   static const mAddAttributionData = 'addAttributionData';

@@ -421,6 +421,11 @@ class QonversionInternal implements Qonversion {
   }
 
   @override
+  Future<void> forceSendProperties() async {
+    await _invokeMethod(Constants.mForceSendProperties);
+  }
+
+  @override
   Future<QUserProperties> userProperties() async {
     final rawResult = await _invokeMethod(Constants.mUserProperties);
 

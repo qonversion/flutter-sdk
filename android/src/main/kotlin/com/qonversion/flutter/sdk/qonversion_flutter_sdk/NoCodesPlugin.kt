@@ -106,9 +106,9 @@ class NoCodesPlugin(private val messenger: BinaryMessenger, private val context:
         }
     }
 
-    fun showNoCodesScreen(contextKey: String?, result: Result) {
+    fun showNoCodesScreen(contextKey: String?, customVariables: Map<String, String>?, result: Result) {
         if (contextKey != null) {
-            noCodesSandwich?.showScreen(contextKey)
+            noCodesSandwich?.showScreen(contextKey, customVariables)
             result.success(null)
         } else {
             result.noNecessaryDataError()

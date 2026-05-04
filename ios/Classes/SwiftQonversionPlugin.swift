@@ -84,6 +84,9 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     case "userProperties":
       return userProperties(result)
 
+    case "forceSendProperties":
+      return forceSendProperties(result)
+
     case "presentCodeRedemptionSheet":
       return presentCodeRedemptionSheet(result)
 
@@ -311,6 +314,12 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
 
   private func userProperties(_ result: @escaping FlutterResult) {
     qonversionSandwich?.userProperties(getJsonCompletion(result))
+  }
+
+  private func forceSendProperties(_ result: @escaping FlutterResult) {
+    qonversionSandwich?.forceSendProperties {
+      result(nil)
+    }
   }
   
   private func restore(_ result: @escaping FlutterResult) {
