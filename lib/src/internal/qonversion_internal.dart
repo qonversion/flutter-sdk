@@ -11,7 +11,7 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String sdkVersion = "11.6.0";
+  static const String sdkVersion = "11.7.0";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
@@ -418,6 +418,11 @@ class QonversionInternal implements Qonversion {
       Constants.kProperty: property,
       Constants.kValue: value,
     });
+  }
+
+  @override
+  Future<void> forceSendProperties() async {
+    await _invokeMethod(Constants.mForceSendProperties);
   }
 
   @override

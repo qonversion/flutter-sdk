@@ -167,12 +167,16 @@ class NoCodesInternal implements NoCodes {
   }
 
   @override
-  Future<void> showScreen(String contextKey) async {
+  Future<void> showScreen(String contextKey, {Map<String, String>? customVariables}) async {
     if (Platform.isMacOS) {
       return;
     }
-    
-    await _invokeMethod(Constants.mShowNoCodesScreen, {Constants.kContextKey: contextKey});
+
+    final args = <String, dynamic>{
+      Constants.kContextKey: contextKey,
+      if (customVariables != null) Constants.kCustomVariables: customVariables,
+    };
+    await _invokeMethod(Constants.mShowNoCodesScreen, args);
   }
 
   @override

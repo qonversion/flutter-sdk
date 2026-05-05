@@ -92,10 +92,14 @@ abstract class NoCodes {
     String? contextKey,
   });
 
-  /// Show No-Codes screen with context key
-  /// 
+  /// Show No-Codes screen with context key.
+  ///
+  /// Optionally pass [customVariables] — a map of custom variables that will be
+  /// injected into the screen's JavaScript context. Variables are scoped to the
+  /// provided [contextKey] and only applied to that screen.
+  ///
   /// **Platform Support:** iOS and Android. No-op on macOS.
-  Future<void> showScreen(String contextKey);
+  Future<void> showScreen(String contextKey, {Map<String, String>? customVariables});
 
   /// Close No-Codes screen
   /// 
