@@ -1,3 +1,6 @@
+## 11.7.1
+* Fix Android crash that could occur when a No-Code screen activity was restored after process death, before the host app had re-run initialization. Fixes #450.
+
 ## 11.7.0
 * // Update changelog here
 
