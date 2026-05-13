@@ -1,4 +1,4 @@
-#import "QonversionPlugin.h"
+#import <qonversion_flutter/QonversionPlugin.h>
 #if __has_include(<qonversion_flutter/qonversion_flutter-Swift.h>)
 #import <qonversion_flutter/qonversion_flutter-Swift.h>
 #else
