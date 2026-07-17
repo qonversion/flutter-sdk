@@ -1,3 +1,14 @@
+## 11.8.0
+* No-Codes: new `loadScreen` method — loads a screen without presenting it and returns a typed `QNoCodeScreen` with id, context key, default selected product id and typed default variables.
+* No-Codes: new `customActionStream` delivering custom actions configured in the builder.
+* No-Codes: support for custom purchase loaders — if one is set in the builder, the SDK won't show the native spinner.
+* No-Codes: fixed original error details being lost when wrapping client errors.
+* Updated native SDKs: iOS Qonversion 6.13.0, Android No-Codes 1.10.0.
+* Note: the `NoCodes` interface gained two new abstract members (`loadScreen`, `customActionStream`) — custom mocks and implementations must add them.
+
+## 11.7.1
+* Fix Android crash that could occur when a No-Code screen activity was restored after process death, before the host app had re-run initialization. Fixes #450.
+
 ## 11.7.0
 * // Update changelog here
 
