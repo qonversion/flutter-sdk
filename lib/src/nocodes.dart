@@ -88,6 +88,10 @@ abstract class NoCodes {
   /// Stream of custom action events. A custom action configured in the builder is
   /// delivered here with its value — the SDK does not execute anything itself.
   ///
+  /// Like the other No-Codes event streams, this is backed by a single native event
+  /// channel: only one active subscription is supported at a time — a new listener
+  /// replaces the previous one.
+  ///
   /// **Platform Support:** iOS and Android. Returns empty stream on macOS.
   Stream<NoCodesCustomActionEvent> get customActionStream;
 

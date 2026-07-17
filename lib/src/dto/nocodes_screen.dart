@@ -44,7 +44,8 @@ class QScreenVariable {
   /// Authored value type: `"boolean"`, `"string"` or `"number"`.
   final String type;
 
-  /// The configured default value, preserving its native type.
+  /// The configured default value, preserving its native type
+  /// (bool / String / double). Numbers are always [double].
   /// Null when no default value was authored.
   final Object? value;
 
@@ -62,11 +63,15 @@ class QScreenVariable {
   });
 
   factory QScreenVariable.fromMap(Map<String, dynamic> map) {
+    final rawValue = map['value'];
+    // The Android bridge serializes numbers as double while iOS emits integral
+    // numbers as int — normalize so numeric values always come as double.
+    final value = rawValue is int ? rawValue.toDouble() : rawValue;
     return QScreenVariable(
       kind: _screenVariableKindFromKey(map['kind'] as String?),
       key: map['key'] as String? ?? '',
       type: map['type'] as String? ?? '',
-      value: map['value'],
+      value: value,
       stringValue: map['stringValue'] as String? ?? '',
     );
   }

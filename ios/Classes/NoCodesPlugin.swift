@@ -133,7 +133,9 @@ public class NoCodesPlugin: NSObject {
         }
 
         guard let noCodesSandwich = noCodesSandwich else {
-            return result(FlutterError.noNecessaryData)
+            return result(FlutterError(code: "SDKInitializationError",
+                                       message: "No-Codes SDK is not initialized",
+                                       details: nil))
         }
 
         noCodesSandwich.loadScreen(contextKey) { data, error in

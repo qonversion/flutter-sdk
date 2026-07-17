@@ -125,7 +125,8 @@ class NoCodesPlugin(private val messenger: BinaryMessenger, private val context:
         if (contextKey == null) {
             return result.noNecessaryDataError()
         }
-        val sandwich = noCodesSandwich ?: return result.noNecessaryDataError()
+        val sandwich = noCodesSandwich
+            ?: return result.error("SDKInitializationError", "No-Codes SDK is not initialized", null)
         sandwich.loadScreen(contextKey, result.toJsonResultListener())
     }
 
