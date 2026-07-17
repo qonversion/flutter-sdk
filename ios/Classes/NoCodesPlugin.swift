@@ -18,6 +18,7 @@ public class NoCodesPlugin: NSObject {
     private let eventActionFailed = "nocodes_action_failed"
     private let eventActionFinished = "nocodes_action_finished"
     private let eventScreenFailedToLoad = "nocodes_screen_failed_to_load"
+    private let eventCustomAction = "nocodes_custom_action"
     private let eventPurchase = "nocodes_purchase"
     private let eventRestore = "nocodes_restore"
     
@@ -27,6 +28,7 @@ public class NoCodesPlugin: NSObject {
     private var actionFailedEventStreamHandler: BaseEventStreamHandler?
     private var actionFinishedEventStreamHandler: BaseEventStreamHandler?
     private var screenFailedToLoadEventStreamHandler: BaseEventStreamHandler?
+    private var customActionEventStreamHandler: BaseEventStreamHandler?
     private var purchaseEventStreamHandler: BaseEventStreamHandler?
     private var restoreEventStreamHandler: BaseEventStreamHandler?
     
@@ -63,6 +65,11 @@ public class NoCodesPlugin: NSObject {
         let screenFailedToLoadListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: eventScreenFailedToLoad)
         screenFailedToLoadListener.register() { eventStreamHandler in
             self.screenFailedToLoadEventStreamHandler = eventStreamHandler
+        }
+
+        let customActionListener = FlutterListenerWrapper<BaseEventStreamHandler>(registrar, postfix: eventCustomAction)
+        customActionListener.register() { eventStreamHandler in
+            self.customActionEventStreamHandler = eventStreamHandler
         }
         
         // Register purchase delegate event channels
@@ -119,6 +126,31 @@ public class NoCodesPlugin: NSObject {
         result(nil)
     }
     
+    @MainActor public func loadScreen(_ args: [String: Any]?, _ result: @escaping FlutterResult) {
+        guard let args = args,
+              let contextKey = args["contextKey"] as? String else {
+            return result(FlutterError.noNecessaryData)
+        }
+
+        guard let noCodesSandwich = noCodesSandwich else {
+            return result(FlutterError.noNecessaryData)
+        }
+
+        noCodesSandwich.loadScreen(contextKey) { data, error in
+            if let error = error {
+                return result(FlutterError.sandwichError(error))
+            }
+
+            guard let data = data,
+                  let jsonData = try? JSONSerialization.data(withJSONObject: data),
+                  let jsonString = String(data: jsonData, encoding: .utf8) else {
+                return result(FlutterError.serializationError)
+            }
+
+            result(jsonString)
+        }
+    }
+
     @MainActor public func close(_ result: @escaping FlutterResult) {
         noCodesSandwich?.close()
         result(nil)
@@ -197,7 +229,10 @@ extension NoCodesPlugin: NoCodesEventListener {
                 
             case self.eventScreenFailedToLoad:
                 self.screenFailedToLoadEventStreamHandler?.eventSink?(jsonString)
-                
+
+            case self.eventCustomAction:
+                self.customActionEventStreamHandler?.eventSink?(jsonString)
+
             default:
                 print("NoCodesPlugin: unknown event type: \(event)")
             }

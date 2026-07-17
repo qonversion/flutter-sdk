@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:qonversion_flutter/src/dto/qonversion_exception.dart';
 import 'package:qonversion_flutter/src/internal/qonversion_internal.dart';
 import '../dto/nocodes_events.dart';
+import '../dto/nocodes_screen.dart';
 import '../dto/presentation_config.dart';
 import '../dto/product.dart';
 import '../dto/nocodes_theme.dart';
@@ -24,6 +25,7 @@ class NoCodesInternal implements NoCodes {
   final EventChannel _actionFailedEventChannel = EventChannel('qonversion_flutter_nocodes_action_failed');
   final EventChannel _actionFinishedEventChannel = EventChannel('qonversion_flutter_nocodes_action_finished');
   final EventChannel _screenFailedToLoadEventChannel = EventChannel('qonversion_flutter_nocodes_screen_failed_to_load');
+  final EventChannel _customActionEventChannel = EventChannel('qonversion_flutter_nocodes_custom_action');
   
   // Event channels for purchase delegate
   final EventChannel _purchaseEventChannel = EventChannel('qonversion_flutter_nocodes_purchase');
@@ -151,6 +153,20 @@ class NoCodesInternal implements NoCodes {
   }
 
   @override
+  Stream<NoCodesCustomActionEvent> get customActionStream {
+    if (Platform.isMacOS) {
+      return Stream.empty();
+    }
+    return _customActionEventChannel
+        .receiveBroadcastStream()
+        .cast<String>()
+        .map((event) {
+      final Map<String, dynamic> decodedEvent = jsonDecode(event);
+      return NoCodesCustomActionEvent.fromMap(decodedEvent);
+    });
+  }
+
+  @override
   Future<void> setScreenPresentationConfig(
     NoCodesPresentationConfig config, {
     String? contextKey,
@@ -177,6 +193,22 @@ class NoCodesInternal implements NoCodes {
       if (customVariables != null) Constants.kCustomVariables: customVariables,
     };
     await _invokeMethod(Constants.mShowNoCodesScreen, args);
+  }
+
+  @override
+  Future<QNoCodeScreen> loadScreen(String contextKey) async {
+    if (Platform.isMacOS) {
+      throw QonversionException(
+        'MacOSNotSupported',
+        'No-Codes is not supported on macOS',
+        null,
+      );
+    }
+
+    final args = {Constants.kContextKey: contextKey};
+    final rawResult = await _invokeMethod(Constants.mLoadNoCodesScreen, args);
+    final Map<String, dynamic> screenData = jsonDecode(rawResult as String);
+    return QNoCodeScreen.fromMap(screenData);
   }
 
   @override

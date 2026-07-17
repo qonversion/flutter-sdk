@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dto/nocodes_events.dart';
+import 'dto/nocodes_screen.dart';
 import 'dto/nocodes_theme.dart';
 import 'dto/presentation_config.dart';
 import 'nocodes_config.dart';
@@ -80,9 +81,15 @@ abstract class NoCodes {
   Stream<NoCodesActionFinishedEvent> get actionFinishedStream;
 
   /// Stream of screen failed to load events
-  /// 
+  ///
   /// **Platform Support:** iOS and Android. Returns empty stream on macOS.
   Stream<NoCodesScreenFailedToLoadEvent> get screenFailedToLoadStream;
+
+  /// Stream of custom action events. A custom action configured in the builder is
+  /// delivered here with its value — the SDK does not execute anything itself.
+  ///
+  /// **Platform Support:** iOS and Android. Returns empty stream on macOS.
+  Stream<NoCodesCustomActionEvent> get customActionStream;
 
   /// Set screen presentation configuration
   /// 
@@ -100,6 +107,18 @@ abstract class NoCodes {
   ///
   /// **Platform Support:** iOS and Android. No-op on macOS.
   Future<void> showScreen(String contextKey, {Map<String, String>? customVariables});
+
+  /// Load a No-Code screen (from cache or network) without presenting it, so you can decide
+  /// whether to present it or show your own fallback UI before any SDK screen appears.
+  /// Present the screen with [showScreen] — the loaded content is served from cache.
+  ///
+  /// The returned [QNoCodeScreen] exposes the typed default variables configured
+  /// in the builder and the default selected product id.
+  ///
+  /// **Platform Support:** iOS and Android. Throws on macOS.
+  ///
+  /// [contextKey] the context key of the screen to load.
+  Future<QNoCodeScreen> loadScreen(String contextKey);
 
   /// Close No-Codes screen
   /// 

@@ -20,7 +20,8 @@ class NoCodesPlugin(private val messenger: BinaryMessenger, private val context:
     private var actionFailedEventStreamHandler: BaseEventStreamHandler? = null
     private var actionFinishedEventStreamHandler: BaseEventStreamHandler? = null
     private var screenFailedToLoadEventStreamHandler: BaseEventStreamHandler? = null
-    
+    private var customActionEventStreamHandler: BaseEventStreamHandler? = null
+
     // Purchase delegate event stream handlers
     private var purchaseEventStreamHandler: BaseEventStreamHandler? = null
     private var restoreEventStreamHandler: BaseEventStreamHandler? = null
@@ -32,6 +33,7 @@ class NoCodesPlugin(private val messenger: BinaryMessenger, private val context:
         private const val ACTION_FAILED_EVENT_CHANNEL = "nocodes_action_failed"
         private const val ACTION_FINISHED_EVENT_CHANNEL = "nocodes_action_finished"
         private const val SCREEN_FAILED_TO_LOAD_EVENT_CHANNEL = "nocodes_screen_failed_to_load"
+        private const val CUSTOM_ACTION_EVENT_CHANNEL = "nocodes_custom_action"
         private const val PURCHASE_EVENT_CHANNEL = "nocodes_purchase"
         private const val RESTORE_EVENT_CHANNEL = "nocodes_restore"
     }
@@ -65,6 +67,10 @@ class NoCodesPlugin(private val messenger: BinaryMessenger, private val context:
         val screenFailedToLoadListener = BaseListenerWrapper(messenger, SCREEN_FAILED_TO_LOAD_EVENT_CHANNEL)
         screenFailedToLoadListener.register()
         this.screenFailedToLoadEventStreamHandler = screenFailedToLoadListener.eventStreamHandler
+
+        val customActionListener = BaseListenerWrapper(messenger, CUSTOM_ACTION_EVENT_CHANNEL)
+        customActionListener.register()
+        this.customActionEventStreamHandler = customActionListener.eventStreamHandler
         
         // Register purchase delegate event channels
         val purchaseListener = BaseListenerWrapper(messenger, PURCHASE_EVENT_CHANNEL)
@@ -113,6 +119,14 @@ class NoCodesPlugin(private val messenger: BinaryMessenger, private val context:
         } else {
             result.noNecessaryDataError()
         }
+    }
+
+    fun loadScreen(contextKey: String?, result: Result) {
+        if (contextKey == null) {
+            return result.noNecessaryDataError()
+        }
+        val sandwich = noCodesSandwich ?: return result.noNecessaryDataError()
+        sandwich.loadScreen(contextKey, result.toJsonResultListener())
     }
 
     fun closeNoCodes(result: Result) {
@@ -182,6 +196,9 @@ class NoCodesPlugin(private val messenger: BinaryMessenger, private val context:
             }
             NoCodesEventListener.Event.ScreenFailedToLoad -> {
                 screenFailedToLoadEventStreamHandler?.eventSink?.success(jsonString)
+            }
+            NoCodesEventListener.Event.CustomAction -> {
+                customActionEventStreamHandler?.eventSink?.success(jsonString)
             }
         }
     }

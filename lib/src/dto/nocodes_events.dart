@@ -151,4 +151,35 @@ class NoCodesScreenFailedToLoadEvent extends NoCodesEvent {
   String toString() {
     return 'NoCodesScreenFailedToLoadEvent(payload: $payload)';
   }
+}
+
+/// Event when a custom action configured in the builder is triggered on the screen.
+/// The No-Codes SDK does not execute anything itself — handle [value] in your app code.
+/// The screen stays open; close it using [NoCodes.close] if needed.
+class NoCodesCustomActionEvent extends NoCodesEvent {
+  final Map<String, dynamic>? payload;
+
+  const NoCodesCustomActionEvent({this.payload});
+
+  /// The string value configured for the custom action in the builder,
+  /// or an empty string if no value was configured.
+  String get value => payload?['value'] as String? ?? '';
+
+  factory NoCodesCustomActionEvent.fromMap(Map<String, dynamic> map) {
+    return NoCodesCustomActionEvent(
+      payload: map['payload'] as Map<String, dynamic>?,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'type': 'nocodes_custom_action',
+      'payload': payload,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'NoCodesCustomActionEvent(payload: $payload)';
+  }
 } 
