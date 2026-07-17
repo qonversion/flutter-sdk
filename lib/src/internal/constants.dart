@@ -80,6 +80,7 @@ class Constants {
   static const mInitializeNoCodes = 'initializeNoCodes';
   static const mSetScreenPresentationConfig = 'setScreenPresentationConfig';
   static const mShowNoCodesScreen = 'showNoCodesScreen';
+  static const mLoadNoCodesScreen = 'loadNoCodesScreen';
   static const mCloseNoCodes = 'closeNoCodes';
   static const mSetNoCodesLocale = 'setNoCodesLocale';
   static const mSetNoCodesTheme = 'setNoCodesTheme';

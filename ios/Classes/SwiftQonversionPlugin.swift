@@ -188,7 +188,15 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     case "showNoCodesScreen":
       noCodesPlugin?.showScreen(args, result)
       return
-      
+
+    case "loadNoCodesScreen":
+      if let noCodesPlugin = noCodesPlugin {
+        noCodesPlugin.loadScreen(args, result)
+      } else {
+        result(FlutterMethodNotImplemented)
+      }
+      return
+
     case "setNoCodesLocale":
       noCodesPlugin?.setLocale(args["locale"] as? String, result)
       return
