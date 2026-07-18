@@ -123,7 +123,7 @@ abstract class Qonversion {
   /// For example, you can offer one set of products on a paywall immediately after onboarding and another set of products with discounts later on if a user has not converted.
   /// Offerings allow changing the products offered remotely without releasing app updates.
   ///
-  /// See [Offerings](https://documentation.qonversion.io/docs/migrate-offerings-to-remote-configs) for more details.
+  /// See [Migrate Offerings to Remote Configs](https://documentation.qonversion.io/docs/migrate-offerings-to-remote-configs) for more details.
   @Deprecated('Offerings are deprecated. Manage paywall products with Remote Configs instead: https://documentation.qonversion.io/docs/migrate-offerings-to-remote-configs')
   Future<QOfferings> offerings();
 
