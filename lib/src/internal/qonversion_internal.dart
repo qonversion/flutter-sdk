@@ -217,6 +217,7 @@ class QonversionInternal implements Qonversion {
     return result;
   }
 
+  @Deprecated('Offerings are deprecated. Manage paywall products with Remote Configs instead: https://documentation.qonversion.io/docs/migrate-offerings-to-remote-configs')
   @override
   Future<QOfferings> offerings() async {
     final offeringsString = await _invokeMethod(Constants.mOfferings) as String;
