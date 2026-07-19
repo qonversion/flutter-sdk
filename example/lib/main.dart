@@ -7,7 +7,6 @@ import 'theme.dart';
 import 'screens/main_screen.dart';
 import 'screens/products_screen.dart';
 import 'screens/entitlements_screen.dart';
-import 'screens/offerings_screen.dart';
 import 'screens/remote_configs_screen.dart';
 import 'screens/user_screen.dart';
 import 'screens/no_codes_screen.dart';
@@ -138,7 +137,6 @@ class _QonversionDemoAppState extends State<QonversionDemoApp> {
         '/': (_) => const MainScreen(),
         '/products': (_) => const ProductsScreen(),
         '/entitlements': (_) => const EntitlementsScreen(),
-        '/offerings': (_) => const OfferingsScreen(),
         '/remote-configs': (_) => const RemoteConfigsScreen(),
         '/user': (_) => const UserScreen(),
         '/no-codes': (_) => const NoCodesScreen(),
