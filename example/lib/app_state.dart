@@ -13,10 +13,9 @@ class AppState extends ChangeNotifier {
   // User info
   QUser? _userInfo;
   
-  // Products and offerings
+  // Products
   Map<String, QProduct>? _products;
-  QOfferings? _offerings;
-  
+
   // Entitlements
   Map<String, QEntitlement>? _entitlements;
   
@@ -35,7 +34,6 @@ class AppState extends ChangeNotifier {
   bool get isLoading => _isLoading;
   QUser? get userInfo => _userInfo;
   Map<String, QProduct>? get products => _products;
-  QOfferings? get offerings => _offerings;
   Map<String, QEntitlement>? get entitlements => _entitlements;
   QRemoteConfigList? get remoteConfigs => _remoteConfigs;
   QUserProperties? get userProperties => _userProperties;
@@ -62,11 +60,6 @@ class AppState extends ChangeNotifier {
   
   void setProducts(Map<String, QProduct>? products) {
     _products = products;
-    notifyListeners();
-  }
-  
-  void setOfferings(QOfferings? offerings) {
-    _offerings = offerings;
     notifyListeners();
   }
   
