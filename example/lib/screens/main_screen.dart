@@ -246,13 +246,6 @@ class MainScreen extends StatelessWidget {
         color: Colors.green,
       ),
       _MenuItem(
-        icon: Icons.local_offer,
-        title: 'Offerings',
-        subtitle: 'Browse available offerings',
-        route: '/offerings',
-        color: Colors.orange,
-      ),
-      _MenuItem(
         icon: Icons.cloud_sync,
         title: 'Remote Configs',
         subtitle: 'Load and view remote configs',

@@ -11,7 +11,7 @@ import 'package:qonversion_flutter/src/internal/utils/string.dart';
 import 'constants.dart';
 
 class QonversionInternal implements Qonversion {
-  static const String sdkVersion = "11.8.0";
+  static const String sdkVersion = "11.9.0";
 
   final MethodChannel _channel = MethodChannel('qonversion_plugin');
 
@@ -217,6 +217,7 @@ class QonversionInternal implements Qonversion {
     return result;
   }
 
+  @Deprecated('Offerings are deprecated. Manage paywall products with Remote Configs instead: https://documentation.qonversion.io/docs/migrate-offerings-to-remote-configs')
   @override
   Future<QOfferings> offerings() async {
     final offeringsString = await _invokeMethod(Constants.mOfferings) as String;
