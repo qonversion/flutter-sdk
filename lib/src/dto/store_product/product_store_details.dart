@@ -10,10 +10,15 @@ part 'product_store_details.g.dart';
 /// either subscription or in-app. In case of a subscription also determines concrete base plan.
 @JsonSerializable()
 class QProductStoreDetails {
-  /// Identifier of the base plan to which these details relate.
-  /// Null for in-app products.
+  /// Identifier of the base plan for a Google Play subscription product.
+  /// Null for one-time products - use [purchaseOptionId] for those.
   @JsonKey(name: 'basePlanId')
   final String? basePlanId;
+
+  /// Identifier of the Google Play purchase option for a one-time (in-app) product.
+  /// Null for subscription products - use [basePlanId] for those.
+  @JsonKey(name: 'purchaseOptionId')
+  final String? purchaseOptionId;
 
   /// Identifier of the subscription or the in-app product.
   @JsonKey(name: 'productId')
@@ -97,6 +102,7 @@ class QProductStoreDetails {
 
   const QProductStoreDetails(
       this.basePlanId,
+      this.purchaseOptionId,
       this.productId,
       this.name,
       this.title,
