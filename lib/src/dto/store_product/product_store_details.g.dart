@@ -10,6 +10,7 @@ QProductStoreDetails _$QProductStoreDetailsFromJson(
         Map<String, dynamic> json) =>
     QProductStoreDetails(
       json['basePlanId'] as String?,
+      json['purchaseOptionId'] as String?,
       json['productId'] as String,
       json['name'] as String,
       json['title'] as String,
@@ -35,6 +36,7 @@ Map<String, dynamic> _$QProductStoreDetailsToJson(
         QProductStoreDetails instance) =>
     <String, dynamic>{
       'basePlanId': instance.basePlanId,
+      'purchaseOptionId': instance.purchaseOptionId,
       'productId': instance.productId,
       'name': instance.name,
       'title': instance.title,

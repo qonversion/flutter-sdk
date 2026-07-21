@@ -29,9 +29,15 @@ class QProduct {
   @JsonKey(name: 'storeId')
   final String? storeId;
 
-  /// Identifier of the base plan for Google product.
+  /// Identifier of the base plan for a Google Play subscription product.
+  /// Android only. Null for one-time products — use [purchaseOptionId] for those.
   @JsonKey(name: 'basePlanId')
   final String? basePlanId;
+
+  /// Identifier of the Google Play purchase option for a one-time (in-app) product.
+  /// Android only. Null for subscription products — use [basePlanId] for those.
+  @JsonKey(name: 'purchaseOptionId')
+  final String? purchaseOptionId;
 
   /// Google Play Store details of this product.
   /// Android only. Null for iOS, or if the product was not found.
@@ -95,6 +101,7 @@ class QProduct {
       this.qonversionId,
       this.storeId,
       this.basePlanId,
+      this.purchaseOptionId,
       this.storeDetails,
       this.skProduct,
       this.offeringId,
