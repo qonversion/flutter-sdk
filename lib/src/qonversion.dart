@@ -241,7 +241,14 @@ abstract class Qonversion {
   /// reflected immediately, for example after setting a batch of user
   /// properties your remote config targeting depends on. You do NOT need to
   /// call it after [identify] - the SDK invalidates the cache on identity
-  /// changes automatically. Call it after [Qonversion.initialize].
+  /// changes automatically.
+  ///
+  /// If the re-issued load fails, the previously received evaluation is
+  /// delivered instead of an error - the call never degrades below the
+  /// pre-invalidation result.
+  ///
+  /// Call it after [Qonversion.initialize]: calling before initialization
+  /// throws on Android and does nothing on iOS.
   Future<void> invalidateRemoteConfigsCache();
 
   /// This function should be used for the test purposes only. Do not forget to delete the usage of this function before the release.

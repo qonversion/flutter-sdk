@@ -77,6 +77,10 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
     case "isFallbackFileAccessible":
       return isFallbackFileAccessible(result)
 
+    case "invalidateRemoteConfigsCache":
+      qonversionSandwich?.invalidateRemoteConfigsCache()
+      return result(nil)
+
     case "remoteConfigList":
       return remoteConfigList(result)
 
