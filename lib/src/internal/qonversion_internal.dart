@@ -349,6 +349,11 @@ class QonversionInternal implements Qonversion {
   }
 
   @override
+  Future<void> invalidateRemoteConfigsCache() async {
+    return _invokeMethod(Constants.mInvalidateRemoteConfigsCache);
+  }
+
+  @override
   Future<void> attachUserToExperiment(String experimentId, String groupId) async {
     final args = {
       Constants.kExperimentId: experimentId,
