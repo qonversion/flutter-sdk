@@ -118,6 +118,10 @@ class QonversionPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
             "isFallbackFileAccessible" -> {
                 return isFallbackFileAccessible(result)
             }
+            "invalidateRemoteConfigsCache" -> {
+                qonversionSandwich.invalidateRemoteConfigsCache()
+                return result.success(null)
+            }
             "remoteConfigList" -> {
                 return remoteConfigList(result)
             }

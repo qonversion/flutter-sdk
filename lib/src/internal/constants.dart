@@ -71,6 +71,7 @@ class Constants {
   static const mRemoteConfig = 'remoteConfig';
   static const mRemoteConfigList = 'remoteConfigList';
   static const mRemoteConfigListForContextKeys = 'remoteConfigListForContextKeys';
+  static const mInvalidateRemoteConfigsCache = 'invalidateRemoteConfigsCache';
   static const mAttachUserToExperiment = 'attachUserToExperiment';
   static const mDetachUserFromExperiment = 'detachUserFromExperiment';
   static const mAttachUserToRemoteConfiguration = 'attachUserToRemoteConfiguration';
