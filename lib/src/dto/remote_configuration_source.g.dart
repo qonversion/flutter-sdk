@@ -32,4 +32,5 @@ const _$QRemoteConfigurationAssignmentTypeEnumMap = {
   QRemoteConfigurationAssignmentType.unknown: 'unknown',
   QRemoteConfigurationAssignmentType.auto: 'auto',
   QRemoteConfigurationAssignmentType.manual: 'manual',
+  QRemoteConfigurationAssignmentType.frozen: 'frozen',
 };

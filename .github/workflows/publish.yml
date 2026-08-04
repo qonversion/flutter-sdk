@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -22,7 +22,7 @@ jobs:
         run: flutter --version
 
       - name: Cache pub dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.FLUTTER_HOME }}/.pub-cache
           key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
@@ -31,10 +31,13 @@ jobs:
       - name: Download pub dependencies
         run: flutter pub get
 
+      - name: Verify frozen assignment mapping
+        run: flutter test test/qonversion.dart
+
       - name: Setup Pub Credentials
         run: |
-          mkdir -p $HOME/.config/dart
-          cat <<EOF > $HOME/.config/dart/pub-credentials.json
+          mkdir -p "$HOME/.config/dart"
+          cat <<EOF > "$HOME/.config/dart/pub-credentials.json"
           {
             "accessToken": "${{ secrets.PUB_DEV_PUBLISH_ACCESS_TOKEN }}",
             "refreshToken": "${{ secrets.PUB_DEV_PUBLISH_REFRESH_TOKEN }}",
