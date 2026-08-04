@@ -12,4 +12,8 @@ enum QRemoteConfigurationAssignmentType {
   /// Manual
   @JsonValue('manual')
   manual,
+
+  /// Pinned automatically by Remote Config Freeze assignments.
+  @JsonValue('frozen')
+  frozen,
 }
