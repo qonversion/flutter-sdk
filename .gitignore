@@ -12,3 +12,8 @@ lib/*.jar
 # Local configuration files
 local.properties
 **/local.properties
+
+# SwiftPM
+.build/
+.swiftpm/
+Package.resolved

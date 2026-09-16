@@ -13,10 +13,10 @@ Pod::Spec.new do |s|
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Qonversion Inc.' => 'hi@qonversion.io' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  s.source_files = 'qonversion_flutter/Sources/qonversion_flutter/**/*.swift'
   s.dependency 'FlutterMacOS'
-  s.platform = :osx, '10.12'
-  s.dependency "QonversionSandwich", "7.12.0"
+  s.platform = :osx, '10.15'
+  s.dependency "QonversionSandwich", "7.13.0"
 
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   s.swift_version = '5.0'

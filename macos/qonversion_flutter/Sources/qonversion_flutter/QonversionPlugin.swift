@@ -6,7 +6,7 @@ import Flutter
 
 import QonversionSandwich
 
-public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
+public class QonversionPlugin: NSObject, FlutterPlugin {
   var updatedEntitlementsStreamHandler: BaseEventStreamHandler?
   var deferredPurchaseStreamHandler: BaseEventStreamHandler?
   var qonversionSandwich: QonversionSandwich?
@@ -19,7 +19,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
       messenger = registrar.messenger()
     #endif
     let channel = FlutterMethodChannel(name: "qonversion_plugin", binaryMessenger: messenger)
-    let instance = SwiftQonversionPlugin()
+    let instance = QonversionPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
 
     // Register updated entitlements events
@@ -386,7 +386,7 @@ public class SwiftQonversionPlugin: NSObject, FlutterPlugin {
   }
 }
 
-extension SwiftQonversionPlugin: QonversionEventListener {
+extension QonversionPlugin: QonversionEventListener {
   public func qonversionDidReceiveUpdatedEntitlements(_ entitlements: [String : Any]) {
     guard let jsonData = entitlements.toJson() else {
       return

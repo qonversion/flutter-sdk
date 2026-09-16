@@ -1,3 +1,7 @@
+## Unreleased
+* iOS/macOS: Swift Package Manager support. With SwiftPM enabled (the default since Flutter 3.44) the plugin is consumed as a Swift package; CocoaPods projects keep working unchanged. macOS via SwiftPM needs Flutter 3.32+ and `MACOSX_DEPLOYMENT_TARGET` 10.15+.
+* Updated native SDKs via QonversionSandwich 7.13.0: iOS Qonversion 6.15.0.
+
 ## 11.10.0
 * // Update changelog here
 
