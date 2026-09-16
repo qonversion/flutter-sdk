@@ -37,22 +37,32 @@ def update_changelog(new_version)
 end
 
 def upgrade_sandwich_android(new_version)
-  path = "../android/build.gradle"
   common_part = "implementation \"io.qonversion:sandwich:"
-  regex = /#{common_part}.*"/
-  result_value = "#{common_part}#{new_version}\""
-
-  update_file(path, regex, result_value)
+  update_file_strict("../android/build.gradle", /#{common_part}.*"/, "#{common_part}#{new_version}\"")
 end
 
 # The sandwich pin lives in two manifests per platform (podspec for CocoaPods, Package.swift for SwiftPM);
 # they must always match.
 def upgrade_sandwich_apple(platform, new_version)
-  UI.user_error!("Pass version:x.y.z") unless new_version.to_s.match?(/\A\d+\.\d+\.\d+\z/)
-
   common_part = "s.dependency \"QonversionSandwich\", \""
   update_file_strict("../#{platform}/qonversion_flutter.podspec", /#{common_part}.*"/, "#{common_part}#{new_version}\"")
   update_file_strict("../#{platform}/qonversion_flutter/Package.swift", /sandwich-sdk.git", exact: ".*"\)/, "sandwich-sdk.git\", exact: \"#{new_version}\")")
+end
+
+# Every manifest the sandwich pin lives in, with the pattern that must match exactly once.
+SANDWICH_PIN_FILES = {
+  "../android/build.gradle" => /implementation "io.qonversion:sandwich:.*"/,
+  "../ios/qonversion_flutter.podspec" => /s.dependency "QonversionSandwich", ".*"/,
+  "../ios/qonversion_flutter/Package.swift" => /sandwich-sdk.git", exact: ".*"\)/,
+  "../macos/qonversion_flutter.podspec" => /s.dependency "QonversionSandwich", ".*"/,
+  "../macos/qonversion_flutter/Package.swift" => /sandwich-sdk.git", exact: ".*"\)/,
+}
+
+def assert_sandwich_pins_updatable
+  SANDWICH_PIN_FILES.each do |path, regex|
+    matches = File.read(path).scan(regex).length
+    UI.user_error!("#{path}: expected exactly one match for #{regex.inspect}, found #{matches}") unless matches == 1
+  end
 end
 
 # Like update_file, but fails loudly unless the pattern matches exactly once —
@@ -127,6 +137,7 @@ end
 
 lane :bump do |options|
   new_version = options[:version]
+  UI.user_error!("Pass version:x.y.z") unless new_version.to_s.match?(/\A\d+\.\d+\.\d+\z/)
 
   update_dart(new_version)
   update_yaml(new_version)
@@ -136,6 +147,8 @@ end
 lane :upgrade_sandwich do |options|
   new_version = options[:version]
   UI.user_error!("Pass version:x.y.z") unless new_version.to_s.match?(/\A\d+\.\d+\.\d+\z/)
+  # Check every manifest first so a broken pattern cannot leave the tree half-bumped.
+  assert_sandwich_pins_updatable
 
   upgrade_sandwich_android(new_version)
   upgrade_sandwich_apple("ios", new_version)

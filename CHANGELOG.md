@@ -1,12 +1,18 @@
 ## Unreleased
-* iOS/macOS: Swift Package Manager support. With SwiftPM enabled (the default since Flutter 3.44) the plugin is consumed as a Swift package; CocoaPods projects keep working unchanged. macOS via SwiftPM needs Flutter 3.32+ and `MACOSX_DEPLOYMENT_TARGET` 10.15+.
-* Updated native SDKs via QonversionSandwich 7.13.0: iOS Qonversion 6.15.0.
+* iOS/macOS: Swift Package Manager support. The plugin ships `Package.swift` manifests, so with SwiftPM enabled (opt-in since Flutter 3.24, on by default since 3.44) it is consumed as a Swift package together with QonversionSandwich/Qonversion; projects that stay on CocoaPods (Flutter < 3.24, SwiftPM disabled, add-to-app modules) keep resolving it through the podspec, unchanged.
+* Minimum OS versions stay iOS 13.0 / macOS 10.15 with both package managers (the macOS podspec now states 10.15 explicitly — the effective minimum through QonversionSandwich since 11.1.0). On Flutter 3.24–3.34 with SwiftPM enabled, build with `flutter build` / `flutter run`, or run `flutter build ios|macos --config-only` before building from Xcode, so Flutter raises the generated plugin package to your deployment target; otherwise Xcode reports "The package product 'qonversion-flutter' requires minimum platform version 13.0/10.15". Flutter 3.35+ needs nothing.
+* The Objective-C shim `QonversionPlugin.h/.m` is gone and the Swift class `SwiftQonversionPlugin` is now `QonversionPlugin`. Generated registrants are unaffected; hand-written native code must switch to `@import qonversion_flutter;` / `QonversionPlugin`. If your Podfile also declares `pod 'Qonversion'`, remove it or pin 6.15.0 — with SwiftPM the native SDK arrives through the Swift package.
+* Updated native SDKs via QonversionSandwich 7.13.0: iOS Qonversion 6.15.0 (the bridge uses public SDK API only, no behaviour change for Flutter apps); Android SDK unchanged.
 
 ## 11.10.0
-* // Update changelog here
+* New public API `invalidateRemoteConfigsCache` — invalidates the remote configs cache so the next `remoteConfig` / `remoteConfigList` call fetches a fresh targeting evaluation (no network request itself; not needed after `identify`).
+* Native SDKs updated via QonversionSandwich 7.12.0: Android 9.7.0 and iOS 6.14.0 — automatic remote configs cache invalidation on same-uid `identify`, never-worse re-issue of superseded in-flight remote config loads, uncached bundled fallbacks with rate-limit tolerance.
+* macOS is carried in lockstep: the new method channel case and the macOS sandwich pin are included.
+* Breaking: the abstract `Qonversion` class gained a new required member — custom implementations and mocks must add `invalidateRemoteConfigsCache`. Apps that also declare the `Qonversion` pod directly must move to 6.14.0.
 
 ## 11.9.0
-* // Update changelog here
+* Added a separate `purchaseOptionId` field on `Product` and `ProductStoreDetails` for Google Play one-time products (`basePlanId` now stays dedicated to subscription base plans).
+* Deprecated the Offerings API. Manage paywall products with Remote Configs instead.
 
 ## 11.8.0
 * No-Codes: new `loadScreen` method — loads a screen without presenting it and returns a typed `QNoCodeScreen` with id, context key, default selected product id and typed default variables.

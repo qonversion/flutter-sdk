@@ -39,14 +39,15 @@ jobs:
       - name: Check the QonversionSandwich pins match
         run: |
           pins=""
+          pins="$pins $(grep -oE 'io.qonversion:sandwich:[0-9.]+' android/build.gradle | grep -oE '[0-9.]+$' || true)"
           for f in ios/qonversion_flutter.podspec macos/qonversion_flutter.podspec; do
-            pins="$pins $(grep -oE 's.dependency "QonversionSandwich", "[0-9.]+"' "$f" | grep -oE '"[0-9.]+"$' | tr -d '"')"
+            pins="$pins $(grep -oE 's.dependency "QonversionSandwich", "[0-9.]+"' "$f" | grep -oE '"[0-9.]+"$' | tr -d '"' || true)"
           done
           for f in ios/qonversion_flutter/Package.swift macos/qonversion_flutter/Package.swift; do
-            pins="$pins $(grep -oE 'sandwich-sdk.git", exact: "[0-9.]+"' "$f" | grep -oE '"[0-9.]+"$' | tr -d '"')"
+            pins="$pins $(grep -oE 'sandwich-sdk.git", exact: "[0-9.]+"' "$f" | grep -oE '"[0-9.]+"$' | tr -d '"' || true)"
           done
-          echo "pins:$pins"
-          [ "$(echo $pins | wc -w)" -eq 4 ] && [ "$(echo $pins | tr ' ' '\n' | sort -u | wc -l)" -eq 1 ] || { echo "::error::QonversionSandwich pins differ between the podspecs and Package.swift files"; exit 1; }
+          echo "pins (gradle, ios podspec, macos podspec, ios Package.swift, macos Package.swift):$pins"
+          [ "$(echo $pins | wc -w)" -eq 5 ] && [ "$(echo $pins | tr ' ' '\n' | sort -u | wc -l)" -eq 1 ] || { echo "::error::QonversionSandwich pins differ between android/build.gradle, the podspecs and the Package.swift files"; exit 1; }
 
   # Builds the example app on both Apple platforms with each package manager the plugin supports.
   example:
