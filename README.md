@@ -17,7 +17,7 @@ Qonversion - In-app subscription monetization: implement subscriptions and grow 
 </p>
 
 [![pub](https://img.shields.io/pub/v/qonversion_flutter)](https://pub.dev/packages/qonversion_flutter)
-[![MIT License](https://img.shields.io/cocoapods/l/Qonversion.svg?style=flat)](https://qonversion.io)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 
 ## In-App Subscription Implementation & Management
@@ -96,6 +96,12 @@ Send user-level subscription data to your favorite platforms.
 * **Customer support.** You can always reach out to our customer support and get the help required.
 
 Convinced? Let's go!
+
+## Installation
+
+Follow the [installation guide](https://documentation.qonversion.io/docs/flutter-sdk). The iOS and macOS native dependency is resolved through Swift Package Manager when it is enabled in Flutter (opt-in since Flutter 3.24, on by default since 3.44) and through CocoaPods otherwise — see [iOS and macOS native dependencies](https://documentation.qonversion.io/docs/flutter-sdk#ios-and-macos-native-dependencies).
+
+> CocoaPods trunk becomes read-only on December 2, 2026 — see the [CocoaPods → Swift Package Manager migration guide](https://documentation.qonversion.io/docs/dec-2026-migration-guide-cocoapods-to-spm).
 
 ## Documentation
 
