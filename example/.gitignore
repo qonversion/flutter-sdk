@@ -33,6 +33,7 @@ pubspec.lock
 
 # iOS related
 ios/Podfile.lock
+macos/Podfile.lock
 
 # Android related
 android/keystore/

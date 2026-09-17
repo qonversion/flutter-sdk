@@ -1,16 +1,11 @@
-# qonversion_flutter_sdk_example
+# qonversion_flutter example
 
-Demonstrates how to use the qonversion_flutter_sdk plugin.
+Demonstrates how to use the `qonversion_flutter` plugin on Android, iOS and macOS.
 
-## Getting Started
+## Requirements
 
-This project is a starting point for a Flutter application.
+- Flutter 3.27+ (the iOS and macOS runners are integrated with Swift Package Manager; on Flutter 3.27–3.34 build with `flutter build` / `flutter run` so Flutter raises the generated plugin package to the app's deployment target).
+- iOS 13.0+ / macOS 10.15+ — the minimums of the plugin with both package managers.
+- To build with CocoaPods instead of Swift Package Manager: `flutter config --no-enable-swift-package-manager`, then `flutter clean` and build again.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The iOS and macOS runners share the bundle id `io.qonversion.sample`, which the example's Qonversion project and its StoreKit products are configured for.
