@@ -16,7 +16,7 @@ let package = Package(
     // ship no FlutterFramework package next to them, so declaring it would break SwiftPM resolution for those
     // users. Flutter's first-party plugins do the same. Revisit once the supported Flutter floor is >= 3.41.
     dependencies: [
-        .package(url: "https://github.com/qonversion/sandwich-sdk.git", exact: "7.13.0")
+        .package(url: "https://github.com/qonversion/sandwich-sdk.git", exact: "7.13.1")
     ],
     targets: [
         .target(
