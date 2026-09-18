@@ -1,3 +1,6 @@
+## Unreleased
+* macOS: `forceSendProperties()` no longer throws `MissingPluginException` — the macOS plugin had fallen behind the iOS one and did not handle the method. A CI check now keeps the two plugins' method-channel surfaces in sync (iOS-only methods — No-Codes, promoted purchases, offer-code redemption — stay guarded on the Dart side).
+
 ## 11.11.0
 * iOS/macOS: Swift Package Manager support. The plugin ships `Package.swift` manifests, so with SwiftPM enabled (opt-in since Flutter 3.24, on by default since 3.44) it is consumed as a Swift package together with QonversionSandwich/Qonversion; projects that stay on CocoaPods (Flutter < 3.24, SwiftPM disabled, add-to-app modules) keep resolving it through the podspec, unchanged.
 * Minimum OS versions stay iOS 13.0 / macOS 10.15 with both package managers (the macOS podspec now states 10.15 explicitly — the effective minimum through QonversionSandwich since 11.1.0). On Flutter 3.24–3.34 with SwiftPM enabled, build with `flutter build` / `flutter run`, or run `flutter build ios|macos --config-only` before building from Xcode, so Flutter raises the generated plugin package to your deployment target; otherwise Xcode reports "The package product 'qonversion-flutter' requires minimum platform version 13.0/10.15". Flutter 3.35+ needs nothing.
