@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -259,13 +261,15 @@ class MainScreen extends StatelessWidget {
         route: '/user',
         color: Colors.teal,
       ),
-      _MenuItem(
-        icon: Icons.code,
-        title: 'No-Codes',
-        subtitle: 'Test no-code screens',
-        route: '/no-codes',
-        color: Colors.pink,
-      ),
+      // No-Codes is available on iOS and Android only (the macOS plugin has no No-Codes bridge).
+      if (Platform.isIOS || Platform.isAndroid)
+        _MenuItem(
+          icon: Icons.code,
+          title: 'No-Codes',
+          subtitle: 'Test no-code screens',
+          route: '/no-codes',
+          color: Colors.pink,
+        ),
       _MenuItem(
         icon: Icons.more_horiz,
         title: 'Other',

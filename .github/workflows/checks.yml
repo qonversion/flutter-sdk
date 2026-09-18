@@ -49,6 +49,15 @@ jobs:
           echo "pins (gradle, ios podspec, macos podspec, ios Package.swift, macos Package.swift):$pins"
           [ "$(echo $pins | wc -w)" -eq 5 ] && [ "$(echo $pins | tr ' ' '\n' | sort -u | wc -l)" -eq 1 ] || { echo "::error::QonversionSandwich pins differ between android/build.gradle, the podspecs and the Package.swift files"; exit 1; }
 
+  # The macOS plugin is a hand-maintained copy of the iOS one; this keeps their method-channel surfaces in sync.
+  apple-parity:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the iOS and macOS plugins handle the same method-channel methods
+        run: bash scripts/check_apple_plugin_parity.sh
+
   # Builds the example app on both Apple platforms with each package manager the plugin supports.
   example:
     name: example (${{ matrix.package_manager }})

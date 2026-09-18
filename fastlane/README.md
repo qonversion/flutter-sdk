@@ -13,22 +13,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-### patch
-
-```sh
-[bundle exec] fastlane patch
-```
-
-
-
-### minor
-
-```sh
-[bundle exec] fastlane minor
-```
-
-
-
 ### bump
 
 ```sh

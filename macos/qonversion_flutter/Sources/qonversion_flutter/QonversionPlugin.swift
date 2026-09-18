@@ -84,6 +84,9 @@ public class QonversionPlugin: NSObject, FlutterPlugin {
     case "remoteConfigList":
       return remoteConfigList(result)
 
+    case "forceSendProperties":
+      return forceSendProperties(result)
+
     case "collectAppleSearchAdsAttribution":
       return collectAppleSearchAdsAttribution(result)
 
@@ -256,6 +259,12 @@ public class QonversionPlugin: NSObject, FlutterPlugin {
 
   private func userProperties(_ result: @escaping FlutterResult) {
     qonversionSandwich?.userProperties(getJsonCompletion(result))
+  }
+
+  private func forceSendProperties(_ result: @escaping FlutterResult) {
+    qonversionSandwich?.forceSendProperties {
+      result(nil)
+    }
   }
 
   private func restore(_ result: @escaping FlutterResult) {
