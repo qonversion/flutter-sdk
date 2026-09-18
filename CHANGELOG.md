@@ -1,4 +1,4 @@
-## Unreleased
+## 11.11.1
 * macOS: `forceSendProperties()` no longer fails with `NoNecessaryDataError` ("Could not find necessary arguments") — the macOS plugin had fallen behind the iOS one and did not handle the method. A CI check now keeps the two plugins' method-channel surfaces in sync (iOS-only methods — No-Codes, promoted purchases, offer-code redemption — stay guarded on the Dart side).
 
 ## 11.11.0
