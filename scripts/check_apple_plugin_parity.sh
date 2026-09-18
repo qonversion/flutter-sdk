@@ -32,8 +32,8 @@ promoPurchase'
 
 cases() { grep -oE 'case "[A-Za-z0-9_]+"' "$1" | sed -E 's/case "([A-Za-z0-9_]+)"/\1/' | sort -u; }
 
-ios_cases=$(cases "$ios")
-macos_cases=$(cases "$macos")
+ios_cases=$(cases "$ios" || true)
+macos_cases=$(cases "$macos" || true)
 allow=$(echo "$ios_only" | sort -u)
 
 missing=$(comm -23 <(echo "$ios_cases") <(echo "$macos_cases") | comm -23 - <(echo "$allow") || true)
@@ -53,8 +53,8 @@ if [ -n "$stale" ]; then
   echo "::error::ios_only in $0 lists methods the iOS plugin no longer handles:"
   echo "$stale"; status=1
 fi
-shared=$(echo "$macos_cases" | wc -l | tr -d ' ')
-if [ "$shared" -eq 0 ]; then
+shared=$(echo "$macos_cases" | grep -c . || true)
+if [ -z "$macos_cases" ] || [ -z "$ios_cases" ]; then
   echo "::error::no method-channel cases found in $macos — is the file layout unchanged?"; status=1
 fi
 [ "$status" -eq 0 ] || exit "$status"
