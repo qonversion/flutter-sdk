@@ -46,4 +46,5 @@ const _$QEntitlementSourceEnumMap = {
   QEntitlementSource.playStore: 'PlayStore',
   QEntitlementSource.stripe: 'Stripe',
   QEntitlementSource.manual: 'Manual',
+  QEntitlementSource.paddle: 'Paddle',
 };

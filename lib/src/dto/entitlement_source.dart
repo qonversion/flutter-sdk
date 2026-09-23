@@ -15,4 +15,7 @@ enum QEntitlementSource {
 
   @JsonValue("Manual")
   manual,
+
+  @JsonValue("Paddle")
+  paddle,
 }
