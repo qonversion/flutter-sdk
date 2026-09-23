@@ -1,3 +1,6 @@
+## 11.12.0
+* // Update changelog here
+
 ## 11.11.2
 * // Update changelog here
 
