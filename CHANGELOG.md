@@ -1,4 +1,4 @@
-## Unreleased
+## 11.12.1
 * Android: support AGP 9 built-in Kotlin while retaining the standalone Kotlin plugin for AGP 8 and AGP 9 with `android.builtInKotlin=false`. Minimum Flutter/Dart versions and JVM bytecode target are unchanged.
 
 ## 11.12.0
