@@ -1,0 +1,11 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'qonversion-gradle-compatibility'
+include ':plugin'
+project(':plugin').projectDir = file('../../android')

@@ -1,0 +1,34 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:${project.property('testAgp')}"
+        if (project.property('testKgp') != 'none') {
+            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${project.property('testKgp')}"
+        }
+    }
+}
+
+def flutterJar = file("${System.getenv('FLUTTER_ROOT')}/bin/cache/artifacts/engine/android-x64/flutter.jar")
+if (!flutterJar.isFile()) {
+    throw new GradleException('Set FLUTTER_ROOT and run flutter precache --android first')
+}
+
+subprojects {
+    afterEvaluate {
+        dependencies {
+            compileOnly files(flutterJar)
+        }
+
+        tasks.register('verifyKotlinMode') {
+            doLast {
+                def expectedLegacy = project.property('testLegacyKotlin').toBoolean()
+                assert plugins.hasPlugin('kotlin-android') == expectedLegacy
+                assert tasks.findByName('compileDebugKotlin') != null
+                println "Verified legacy KGP=${expectedLegacy}"
+            }
+        }
+    }
+}

@@ -23,31 +23,41 @@ rootProject.allprojects {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
+
+// AGP 9 enables built-in Kotlin by default, but Flutter apps can opt out while
+// migrating. Older AGP versions always need the standalone Kotlin plugin.
+def agpMajor = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')[0].toInteger()
+def builtInKotlin = agpMajor >= 9 &&
+        (project.findProperty('android.builtInKotlin') ?: 'true').toString().toBoolean()
+if (!builtInKotlin) {
+    pluginManager.apply('kotlin-android')
+}
 
 android {
-    compileSdk 34
-    namespace "com.qonversion.flutter.sdk.qonversion_flutter_sdk"
+    compileSdk = 34
+    namespace = "com.qonversion.flutter.sdk.qonversion_flutter_sdk"
 
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 34
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        minSdk = 21
+        targetSdk = 34
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-    lintOptions {
+    lint {
         disable 'InvalidPackage'
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
+}
+
+if (!builtInKotlin) {
+    android.kotlinOptions {
         jvmTarget = '1.8'
     }
 }
+// Built-in Kotlin inherits jvmTarget from android.compileOptions. Keeping the
+// legacy DSL above also supports KGP versions predating compilerOptions.
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
