@@ -19,7 +19,7 @@ concurrency:
 jobs:
   android:
     name: Android (AGP ${{ matrix.agp }}, Kotlin ${{ matrix.built_in }}, DSL ${{ matrix.new_dsl }})
-    runs-on: ${{ vars.CI_RUNNER_LIGHT || vars.CI_RUNNER || 'ubuntu-latest' }}
+    runs-on: ${{ vars.CI_RUNNER_PROTECTED || 'ubuntu-latest' }}
     timeout-minutes: 15
     strategy:
       fail-fast: false
@@ -42,6 +42,8 @@ jobs:
           flutter-version: ${{ matrix.flutter }}
           channel: 'stable'
       - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools'
       - run: sdkmanager 'platforms;android-34' 'build-tools;34.0.0'
       - uses: gradle/actions/setup-gradle@v4
         with:
