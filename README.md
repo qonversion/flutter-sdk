@@ -146,6 +146,7 @@ The plugin's own `android/build.gradle` declares `minSdkVersion 21`, but it depe
 The plugin uses the standalone Kotlin Gradle Plugin on AGP 8. On AGP 9 it uses
 built-in Kotlin by default, and keeps the standalone plugin when the host app sets
 `android.builtInKotlin=false`. The minimum Flutter/Dart versions above are unchanged.
+The host application continues to choose its Android target SDK.
 
 Enabling built-in Kotlin in a Flutter app requires Flutter 3.47 or later and migration
 of the app and its other plugins. Apps using AGP 9 in legacy mode must also set

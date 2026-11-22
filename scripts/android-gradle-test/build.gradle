@@ -28,6 +28,7 @@ subprojects {
                 assert plugins.hasPlugin('kotlin-android') == expectedLegacy
                 assert tasks.findByName('compileDebugKotlin') != null
                 println "Verified legacy KGP=${expectedLegacy}"
+                println "Android DSL=${android.class.name}, newDsl=${project.property('android.newDsl')}"
             }
         }
     }
